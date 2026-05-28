@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.0] - 2026-05-28
+### Added
+- **Prisma 7 Upgrade:** Vollständiges Upgrade auf Prisma 7.8 unter Verwendung des neuen `@prisma/adapter-libsql` für verbesserte Performance, "Rust-free" Execution und Zukunftssicherheit.
+- **Node 22:** Upgrade des Docker-Basis-Images auf Node 22 (Alpine) für Prisma 7 Kompatibilität und besseren Support für GitHub Actions.
+
+### Removed
+- Alte `schema.prisma` inline URL-Konfiguration entfernt. Konfiguration erfolgt nun zentral über `prisma.config.ts`.
+
+## [0.2.3] - 2026-05-28
+### Fixed
+- **Docker Deployment:** Fix für einen Crash beim ersten Start des Docker-Containers, der durch eine Versionsinkompatibilität der Prisma-CLI (v7 vs v6) ausgelöst wurde.
+
 ## [0.2.2] - 2026-05-28
 ### Changed
 - **Standard-Port:** Der Default-Port wurde von `3000` auf `8666` geändert, um Konflikte mit anderen Self-Hosted-Apps zu vermeiden.

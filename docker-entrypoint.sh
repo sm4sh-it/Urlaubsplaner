@@ -2,7 +2,7 @@
 set -e
 
 echo "Pushing Prisma schema to database..."
-npx prisma db push --accept-data-loss
+npx -y prisma db push --accept-data-loss
 
 echo "Starting Next.js server..."
 exec "$@"
