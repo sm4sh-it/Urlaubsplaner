@@ -26,10 +26,14 @@ services:
     ports:
       - "8666:8666"
     volumes:
-      # Die Datenbank lokal im Ordner 'data' speichern, damit Daten bei Updates erhalten bleiben!
-      - ./data:/app/data
+      # Die Datenbank in einem benannten Volume speichern, damit Daten bei Updates erhalten bleiben
+      # und die Dateirechte unter Linux-Hosts korrekt gesetzt werden!
+      - urlaubsplaner_data:/app/data
     environment:
       - APP_PASSWORD=Familie123 # ÄNDERE DIESES PASSWORT
+
+volumes:
+  urlaubsplaner_data:
 ```
 
 Starte den Container mit:
