@@ -8,7 +8,7 @@ services:
     container_name: sm4sh-urlaubsplaner
     restart: always
     ports:
-      - "8666:3000"
+      - "8666:8666"
     volumes:
-      # Mount the database so it persists across container restarts
-      - ./prisma/dev.db:/app/prisma/dev.db
+      # Mount the database directory so it persists across container restarts
+      - ./data:/app/data

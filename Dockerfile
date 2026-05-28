@@ -31,7 +31,7 @@ WORKDIR /app
 
 ENV NODE_ENV production
 ENV NEXT_TELEMETRY_DISABLED 1
-ENV DATABASE_URL="file:/app/prisma/dev.db"
+ENV DATABASE_URL="file:/app/data/dev.db"
 
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
@@ -42,9 +42,9 @@ RUN npm install dotenv && \
 
 COPY --from=builder /app/public ./public
 
-# Set the correct permission for prerender cache
-RUN mkdir .next
-RUN chown nextjs:nodejs .next
+# Set the correct permission for prerender cache and data folder
+RUN mkdir -p .next /app/data
+RUN chown -R nextjs:nodejs .next /app/data
 
 # Automatically leverage output traces to reduce image size
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./

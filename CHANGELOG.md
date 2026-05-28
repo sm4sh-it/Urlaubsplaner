@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.4] - 2026-05-28
+### Fixed
+- **Docker Port-Mapping:** Die Portweiterleitung in `docker-compose.yml` wurde auf `8666:8666` korrigiert, damit das lokale Compose-Setup wieder erreichbar ist (Next.js lauscht containerintern auf Port `8666`).
+- **Datenbank-Persistence & Volume-Mounts:** Der Pfad zur SQLite-Datenbank im Dockerfile wurde auf `/app/data/dev.db` festgelegt und in `docker-compose.yml` durch ein robusteres Verzeichnis-Volume (`./data:/app/data`) gemountet. Dadurch werden Datenverlust und Docker-Dateiberechtigungsfehler zuverlässig verhindert.
+
 ## [0.3.3] - 2026-05-28
 ### Fixed
 - **Docker SQLite Path:** Der Pfad zur Datenbank im `Dockerfile` wurde von `/app/data/dev.db` wieder auf `/app/prisma/dev.db` zurückgesetzt, damit die existierenden Volume-Mounts (`./prisma/dev.db:/app/prisma/dev.db`) weiterhin sauber funktionieren und keine "unable to open database file" Permission-Fehler mehr auftreten.

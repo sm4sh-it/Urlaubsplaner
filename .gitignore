@@ -43,3 +43,6 @@ next-env.d.ts
 # Prisma SQLite DB
 prisma/dev.db
 prisma/dev.db-journal
+
+# Docker SQLite data folder
+/data
