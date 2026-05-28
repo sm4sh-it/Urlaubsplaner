@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.8] - 2026-05-28
+### Fixed
+- **Datenbank Fehler:** Ein Fehler (ERROR 1139987765) beim Hinzufügen von Urlauben nach einem Datenbank-Reset wurde behoben. Der Browser merkt sich nun nicht länger veraltete Profil-IDs, die nach einer Neuinstallation der Datenbank in Konflikte ("Foreign key constraint violated") führten.
+- **Verschwindende Profile (Caching):** Es wurde ein Fehler behoben, durch den neu angelegte oder geänderte Profile nicht auf dem Dashboard angezeigt wurden. Alle datenverändernden Aktionen invalidieren nun explizit den Next.js App Router Cache (`revalidatePath`).
+
 ## [0.3.7] - 2026-05-28
 ### Fixed
 - **Dokumentation:** Die Installationsanleitung in der `README.md` wurde aktualisiert, sodass der Code-Schnipsel für `docker-compose.yml` nun korrekt die benannten Volumes (`urlaubsplaner_data:/app/data`) anstelle der fehleranfälligen lokalen Ordner (`./data:/app/data`) verwendet.

@@ -39,6 +39,7 @@ export interface StoreState {
   setProfiles: (profiles: Profile[]) => void
   setOverrides: (overrides: ProfileYearOverride[]) => void
   toggleActiveProfile: (id: string) => void
+  setActiveProfileIds: (ids: string[]) => void
   setEntries: (entries: CalendarEntry[]) => void
   addOrUpdateEntry: (entry: CalendarEntry) => void
   removeEntry: (id: string) => void

@@ -19,6 +19,8 @@ export const useStore = create<StoreState>((set) => ({
       : [...state.activeProfileIds, id]
   })),
   
+  setActiveProfileIds: (ids) => set({ activeProfileIds: ids }),
+  
   setEntries: (entries) => set({ entries }),
   
   addOrUpdateEntry: (entry) => set((state) => {

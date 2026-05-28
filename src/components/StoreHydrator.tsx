@@ -23,8 +23,15 @@ export default function StoreHydrator({
       useStore.getState().setEntries(entries)
       useStore.getState().setOverrides(overrides)
       // Set the first profile as active by default if none is selected
+      // Also prune any invalid active profiles (e.g. deleted from DB or DB was reset)
       const currentActive = useStore.getState().activeProfileIds
-      if (currentActive.length === 0 && profiles.length > 0) {
+      const validActive = currentActive.filter(id => profiles.some(p => p.id === id))
+      
+      if (validActive.length !== currentActive.length) {
+        useStore.getState().setActiveProfileIds(validActive)
+      }
+
+      if (validActive.length === 0 && profiles.length > 0) {
         useStore.getState().toggleActiveProfile(profiles[0].id)
       }
       isHydrated.current = true

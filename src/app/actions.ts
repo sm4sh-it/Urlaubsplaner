@@ -1,5 +1,6 @@
 "use server"
 
+import { revalidatePath } from 'next/cache'
 import { prisma } from '@/lib/prisma'
 import { EntryType, Profile } from '@/types'
 import { z } from 'zod'
@@ -59,6 +60,7 @@ export async function toggleEntry(date: string, type: EntryType | null, profileI
         profileId: parsedProfileId
       }
     })
+    revalidatePath('/', 'layout')
     return { success: true, action: 'deleted' }
   }
 
@@ -72,18 +74,24 @@ export async function toggleEntry(date: string, type: EntryType | null, profileI
     }
   })
 
+  let action = ''
+  let entry = null
+
   if (existing) {
-    const updated = await prisma.entry.update({
+    entry = await prisma.entry.update({
       where: { id: existing.id },
       data: { type: parsedType }
     })
-    return { success: true, action: 'updated', entry: updated }
+    action = 'updated'
   } else {
-    const created = await prisma.entry.create({
+    entry = await prisma.entry.create({
       data: { date: parsedDate, type: parsedType, profileId: parsedProfileId }
     })
-    return { success: true, action: 'created', entry: created }
+    action = 'created'
   }
+
+  revalidatePath('/', 'layout')
+  return { success: true, action, entry }
 }
 
 export async function createProfile(data: Omit<Profile, 'id'>) {
@@ -91,6 +99,7 @@ export async function createProfile(data: Omit<Profile, 'id'>) {
   const profile = await prisma.profile.create({
     data: parsedData
   })
+  revalidatePath('/', 'layout')
   return { success: true, profile }
 }
 
@@ -101,6 +110,7 @@ export async function updateProfile(id: string, data: Omit<Profile, 'id'>) {
     where: { id: parsedId },
     data: parsedData
   })
+  revalidatePath('/', 'layout')
   return { success: true, profile }
 }
 
@@ -109,6 +119,7 @@ export async function deleteProfile(id: string) {
   await prisma.profile.delete({
     where: { id: parsedId }
   })
+  revalidatePath('/', 'layout')
   return { success: true }
 }
 
