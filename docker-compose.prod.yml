@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  urlaubsplaner:
+    # Dieses Image wird von der GitHub Action automatisch gebaut
+    image: ghcr.io/sm4sh-it/urlaubsplaner:latest
+    container_name: sm4sh-urlaubsplaner
+    restart: always
+    ports:
+      - "3000:3000"
+    volumes:
+      # Mount the database so it persists across container restarts and updates
+      - ./data/dev.db:/app/prisma/dev.db
+    environment:
+      # Optionales Passwort für globalen Schutz
+      - APP_PASSWORD=DeinSicheresPasswort123

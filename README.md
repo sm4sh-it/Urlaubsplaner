@@ -1,36 +1,54 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# sm4shReisen - Urlaubsplaner
 
-## Getting Started
+Ein moderner, interaktiver Single-Page Urlaubsplaner für Familien und kleine Teams. 
 
-First, run the development server:
+## Features
+- **Alles auf einen Blick:** Jahresübersicht, die ohne Scrollen komplett auf einen Desktop-Monitor passt.
+- **Tastaturgesteuert:** Superschnelle Eingabe von Urlauben durch einen Klick auf den Kalendertag in Kombination mit einem Tastendruck (z.B. `U` für Urlaub, `K` für Krank).
+- **Multi-User fähig:** Profile für verschiedene Personen mit eigenen Farben anlegen und gleichzeitig anzeigen.
+- **Auto-Sync:** Feiertage und Schulferien werden automatisch basierend auf dem gewählten deutschen Bundesland geladen.
+- **Resturlaub:** Komplexe Übertragung von Resturlaub ins Folgejahr inkl. Verfallsdatum-Warnung.
+- **Sicher:** Optionaler globaler Passwortschutz für Self-Hosting.
+- **Modern:** Dark/Light-Mode und Responsive Design.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Installation via Docker Compose (Empfohlen)
+
+Die einfachste Möglichkeit, den Urlaubsplaner zu betreiben, ist über Docker. Kopiere die Datei `docker-compose.prod.yml` aus diesem Repository (und benenne sie ggf. in `docker-compose.yml` um) oder nutze diesen Schnipsel:
+
+```yaml
+version: '3.8'
+
+services:
+  urlaubsplaner:
+    image: ghcr.io/sm4sh-it/urlaubsplaner:latest
+    container_name: sm4sh-urlaubsplaner
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    volumes:
+      # Die Datenbank lokal speichern, damit Daten bei Updates erhalten bleiben!
+      - ./data/dev.db:/app/prisma/dev.db
+    environment:
+      - APP_PASSWORD=Familie123 # ÄNDERE DIESES PASSWORT
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Starte den Container mit:
+```bash
+docker compose up -d
+```
+Die App ist nun unter `http://localhost:3000` erreichbar.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Absicherung (Globales Passwort)
+Wenn du die App von außen erreichbar machst, solltest du unbedingt die Umgebungsvariable `APP_PASSWORD` in deiner Docker-Umgebung setzen.
+Lässt du sie komplett weg oder leer, ist die App für **jeden** im Netzwerk frei zugänglich.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Entwicklung (Lokal)
+Falls du am Code mitarbeiten möchtest:
 
-## Learn More
+1. Repository klonen: `git clone https://github.com/sm4sh-it/Urlaubsplaner.git`
+2. Abhängigkeiten installieren: `npm install`
+3. Datenbank initialisieren: `npx prisma db push`
+4. Server starten: `npm run dev`
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Lizenz
+Dieses Projekt steht unter der [MIT Lizenz](LICENSE). Du darfst es frei verwenden und anpassen.

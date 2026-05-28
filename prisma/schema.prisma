@@ -1,0 +1,69 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Profile {
+  id                       String   @id @default(uuid())
+  name                     String
+  color                    String
+  annualLeave              Float
+  remainingLeave           Float
+  additionalLeave          Float
+  remainingLeaveExpiryDate String
+  stateCode                String
+  startYear                Int      @default(2026)
+  
+  entries                  Entry[]
+  overrides                ProfileYearOverride[]
+  
+  createdAt                DateTime @default(now())
+  updatedAt                DateTime @updatedAt
+}
+
+model ProfileYearOverride {
+  id               String   @id @default(uuid())
+  year             Int
+  annualLeave      Float?   
+  additionalLeave  Float?   
+  remainingLeave   Float?   
+
+  profileId        String
+  profile          Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  @@unique([profileId, year])
+}
+
+model Entry {
+  id        String   @id @default(uuid())
+  date      String
+  type      String
+  
+  profileId String
+  profile   Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  @@unique([date, profileId])
+}
+
+model HolidayCache {
+  id        String   @id @default(cuid())
+  date      String
+  name      String
+  stateCode String
+  year      Int
+
+  @@unique([date, stateCode])
+}
+
+model VacationCache {
+  id        String   @id @default(cuid())
+  startDate String
+  endDate   String
+  name      String
+  stateCode String
+  year      Int
+}
