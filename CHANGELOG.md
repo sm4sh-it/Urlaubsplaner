@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.5] - 2026-05-28
+### Fixed
+- **HTTP/HTTPS Cookie-Fix:** Das Cookie-Attribut `secure` wurde in der `authenticate`-Aktion deaktiviert (auf `false` gesetzt), da der standardmäßige Passwortschutz bei Self-Hosting über HTTP in lokalen Netzwerken (z. B. auf einem Raspberry Pi) sonst vom Browser blockiert und verworfen wird.
+
+
 ## [0.3.4] - 2026-05-28
 ### Fixed
 - **Docker Port-Mapping:** Die Portweiterleitung in `docker-compose.yml` wurde auf `8666:8666` korrigiert, damit das lokale Compose-Setup wieder erreichbar ist (Next.js lauscht containerintern auf Port `8666`).
