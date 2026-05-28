@@ -1,6 +1,8 @@
 import { prisma } from '@/lib/prisma'
 import SettingsClient from './SettingsClient'
 
+export const dynamic = 'force-dynamic'
+
 export default async function SettingsPage() {
   const profiles = await prisma.profile.findMany()
   

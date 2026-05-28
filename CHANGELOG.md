@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.9] - 2026-05-28
+### Fixed
+- **Docker Build-Cache:** Seiten werden nun im Next.js App Router zwingend dynamisch gerendert (`force-dynamic`). Dies behebt einen tiefgreifenden Fehler, bei dem während des Docker-Builds erstellte Standard-Profil-IDs (UUIDs) fest ins HTML eingebrannt wurden und bei Container-Start mit der Laufzeit-Datenbank kollidierten (ERROR P2003 Foreign Key Violation).
+
 ## [0.3.8] - 2026-05-28
 ### Fixed
 - **Datenbank Fehler:** Ein Fehler (ERROR 1139987765) beim Hinzufügen von Urlauben nach einem Datenbank-Reset wurde behoben. Der Browser merkt sich nun nicht länger veraltete Profil-IDs, die nach einer Neuinstallation der Datenbank in Konflikte ("Foreign key constraint violated") führten.

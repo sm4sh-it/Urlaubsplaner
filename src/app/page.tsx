@@ -5,6 +5,8 @@ import Statistics from '@/components/Statistics'
 import StoreHydrator from '@/components/StoreHydrator'
 import { CalendarEntry, EntryType } from '@/types'
 
+export const dynamic = 'force-dynamic'
+
 export default async function Home() {
   let profilesRaw = await prisma.profile.findMany()
   
