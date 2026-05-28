@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.3] - 2026-05-28
+### Fixed
+- **Docker SQLite Path:** Der Pfad zur Datenbank im `Dockerfile` wurde von `/app/data/dev.db` wieder auf `/app/prisma/dev.db` zurückgesetzt, damit die existierenden Volume-Mounts (`./prisma/dev.db:/app/prisma/dev.db`) weiterhin sauber funktionieren und keine "unable to open database file" Permission-Fehler mehr auftreten.
+- **Docker Port:** Die `docker-compose.yml` wurde nun final auf den Port `8666` angepasst.
+
 ## [0.3.2] - 2026-05-28
 ### Fixed
 - **Docker Runtime:** Fehlende Module (`dotenv`, `@prisma/config`) für die Laufzeit-Ausführung der `prisma.config.ts` wurden im Dockerfile zur Runner-Stage hinzugefügt bzw. aus der Config entfernt, sodass der Container nun einwandfrei startet.
