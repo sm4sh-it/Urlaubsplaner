@@ -1,4 +1,5 @@
 import Link from "next/link"
+import packageJson from "../../package.json"
 
 export default function Footer() {
   return (
@@ -7,7 +8,7 @@ export default function Footer() {
         Urlaubsplaner by <a href="https://sm4sh.it" target="_blank" rel="noopener noreferrer" className="font-medium text-brand-600 dark:text-brand-500 hover:underline">sm4sh.it</a>
       </div>
       <div className="flex items-center gap-4">
-        <span>Version: 0.2.0</span>
+        <span>Version: {packageJson.version}</span>
         <Link href="/about" className="hover:text-slate-900 dark:hover:text-slate-100 transition-colors">
           About
         </Link>

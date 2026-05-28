@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.2] - 2026-05-28
+### Fixed
+- **Docker Runtime:** Fehlende Module (`dotenv`, `@prisma/config`) für die Laufzeit-Ausführung der `prisma.config.ts` wurden im Dockerfile zur Runner-Stage hinzugefügt bzw. aus der Config entfernt, sodass der Container nun einwandfrei startet.
+
 ## [0.3.1] - 2026-05-28
 ### Fixed
 - **Docker Runtime:** Die Datei `prisma.config.ts` wird nun korrekt in das Production-Image kopiert, um den Fehler `The datasource.url property is required` beim Container-Start zu beheben.
