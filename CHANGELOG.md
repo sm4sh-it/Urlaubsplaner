@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.2] - 2026-05-28
+### Changed
+- **Standard-Port:** Der Default-Port wurde von `3000` auf `8666` geändert, um Konflikte mit anderen Self-Hosted-Apps zu vermeiden.
+- **Docker Build:** Anpassung der Build-Pipeline für Next.js Prerendering und Node 24 Action-Kompatibilität.
+
+## [0.2.1] - 2026-05-28
+### Added
+- **GitHub Actions:** CI/CD Pipeline für automatische Docker-Image Builds über ghcr.io hinzugefügt.
+- **Docker Compose:** Bereitstellung einer `docker-compose.prod.yml` Vorlage.
+
 ## [0.2.0] - 2026-05-28
 ### Added
 - **Security & Validation:** Globaler Passwortschutz via Next.js Proxy und strikte Zod-Input-Validation.

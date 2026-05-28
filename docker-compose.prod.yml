@@ -7,7 +7,7 @@ services:
     container_name: sm4sh-urlaubsplaner
     restart: always
     ports:
-      - "3000:3000"
+      - "8666:8666"
     volumes:
       # Mount the database directory so it persists across container restarts and updates
       - ./data:/app/data

@@ -24,7 +24,7 @@ services:
     container_name: sm4sh-urlaubsplaner
     restart: unless-stopped
     ports:
-      - "3000:3000"
+      - "8666:8666"
     volumes:
       # Die Datenbank lokal im Ordner 'data' speichern, damit Daten bei Updates erhalten bleiben!
       - ./data:/app/data
@@ -36,7 +36,7 @@ Starte den Container mit:
 ```bash
 docker compose up -d
 ```
-Die App ist nun unter `http://localhost:3000` erreichbar.
+Die App ist nun unter `http://localhost:8666` erreichbar.
 
 ## Absicherung (Globales Passwort)
 Wenn du die App von außen erreichbar machst, solltest du unbedingt die Umgebungsvariable `APP_PASSWORD` in deiner Docker-Umgebung setzen.

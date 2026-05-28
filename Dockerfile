@@ -15,9 +15,10 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# Initialize Prisma client
+# Initialize Prisma client and create a temporary DB for Next.js build prerendering
 ENV DATABASE_URL="file:./dev.db"
 RUN npx prisma generate
+RUN npx prisma db push --accept-data-loss
 
 # Next.js telemetry is disabled
 ENV NEXT_TELEMETRY_DISABLED 1
@@ -58,9 +59,9 @@ RUN chmod +x docker-entrypoint.sh
 
 USER nextjs
 
-EXPOSE 3000
+EXPOSE 8666
 
-ENV PORT 3000
+ENV PORT 8666
 ENV HOSTNAME "0.0.0.0"
 
 ENTRYPOINT ["./docker-entrypoint.sh"]
