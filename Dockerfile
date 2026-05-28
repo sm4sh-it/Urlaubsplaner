@@ -50,8 +50,9 @@ RUN chown nextjs:nodejs /app/data
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
-# We need the prisma schema for runtime db push
+# We need the prisma schema and config for runtime db push
 COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
+COPY --from=builder --chown=nextjs:nodejs /app/prisma.config.ts ./
 
 # Copy docker-entrypoint
 COPY --chown=nextjs:nodejs docker-entrypoint.sh ./

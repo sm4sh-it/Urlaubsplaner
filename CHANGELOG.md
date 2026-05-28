@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.1] - 2026-05-28
+### Fixed
+- **Docker Runtime:** Die Datei `prisma.config.ts` wird nun korrekt in das Production-Image kopiert, um den Fehler `The datasource.url property is required` beim Container-Start zu beheben.
+
 ## [0.3.0] - 2026-05-28
 ### Added
 - **Prisma 7 Upgrade:** Vollständiges Upgrade auf Prisma 7.8 unter Verwendung des neuen `@prisma/adapter-libsql` für verbesserte Performance, "Rust-free" Execution und Zukunftssicherheit.
