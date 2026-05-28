@@ -9,8 +9,8 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      # Mount the database so it persists across container restarts and updates
-      - ./data/dev.db:/app/prisma/dev.db
+      # Mount the database directory so it persists across container restarts and updates
+      - ./data:/app/data
     environment:
       # Optionales Passwort für globalen Schutz
       - APP_PASSWORD=DeinSicheresPasswort123

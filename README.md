@@ -26,8 +26,8 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      # Die Datenbank lokal speichern, damit Daten bei Updates erhalten bleiben!
-      - ./data/dev.db:/app/prisma/dev.db
+      # Die Datenbank lokal im Ordner 'data' speichern, damit Daten bei Updates erhalten bleiben!
+      - ./data:/app/data
     environment:
       - APP_PASSWORD=Familie123 # ÄNDERE DIESES PASSWORT
 ```
