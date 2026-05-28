@@ -10,7 +10,10 @@ services:
       - "8666:8666"
     volumes:
       # Mount the database directory so it persists across container restarts and updates
-      - ./data:/app/data
+      - urlaubsplaner_data:/app/data
     environment:
       # Optionales Passwort für globalen Schutz
       - APP_PASSWORD=DeinSicheresPasswort123
+
+volumes:
+  urlaubsplaner_data:

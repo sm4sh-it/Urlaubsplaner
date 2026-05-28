@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.6] - 2026-05-28
+### Fixed
+- **Docker Datenbank Permissions:** Der SQLite Datenbank-Mount in den `docker-compose`-Dateien wurde von einem lokalen Verzeichnis (`./data:/app/data`) auf ein benanntes Docker-Volume (`urlaubsplaner_data:/app/data`) umgestellt. Dies verhindert das bekannte "unable to open database file"-Problem auf Linux-Docker-Hosts, bei dem Host-Mounts standardmäßig dem Root-User zugeordnet werden und somit die Dateizugriffsrechte für den internen Container-Nutzer blockieren.
+
 ## [0.3.5] - 2026-05-28
 ### Fixed
 - **HTTP/HTTPS Cookie-Fix:** Das Cookie-Attribut `secure` wurde in der `authenticate`-Aktion deaktiviert (auf `false` gesetzt), da der standardmäßige Passwortschutz bei Self-Hosting über HTTP in lokalen Netzwerken (z. B. auf einem Raspberry Pi) sonst vom Browser blockiert und verworfen wird.

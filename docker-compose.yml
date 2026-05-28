@@ -11,4 +11,7 @@ services:
       - "8666:8666"
     volumes:
       # Mount the database directory so it persists across container restarts
-      - ./data:/app/data
+      - urlaubsplaner_data:/app/data
+
+volumes:
+  urlaubsplaner_data:
