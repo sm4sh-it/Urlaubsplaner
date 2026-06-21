@@ -27,12 +27,37 @@ export default function AboutPage() {
           </h2>
 
           <div className="space-y-8">
-            {/* V 0.3.9 */}
+            {/* V 0.5.0 */}
             <div className="relative pl-6 border-l-2 border-brand-500">
                <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-white dark:bg-slate-900 border-2 border-brand-500" />
                <div className="flex items-center gap-3 mb-2">
-                 <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 m-0">Version 0.3.9</h3>
+                 <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 m-0">Version 0.5.0</h3>
                  <span className="text-xs px-2 py-1 bg-brand-100 dark:bg-brand-900/30 text-brand-700 dark:text-brand-300 rounded font-medium">Aktuell</span>
+               </div>
+               <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
+                 <li><strong>Premium UI:</strong> Neues Kachel-Design mit abgerundeten Ecken, Glassmorphism-Elementen und subtilem Glow im Darkmode für ein hochwertigeres Look & Feel.</li>
+                 <li><strong>Mobiles Arbeiten:</strong> Home-Office (`M`) und halbe Home-Office-Tage (`Shift+M`) können nun im Kalender eingetragen und in der Statistik separat erfasst werden.</li>
+                 <li><strong>Ergonomie & Layout:</strong> Statistiken und Legende lassen sich nun individuell ein- und ausklappen. Das Profil-Menü wurde linksbündig ausgerichtet und alle Farbcodes global über CSS-Variablen harmonisiert.</li>
+               </ul>
+            </div>
+
+            {/* V 0.4.0 */}
+            <div className="relative pl-6 border-l-2 border-slate-200 dark:border-slate-700">
+               <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-white dark:bg-slate-900 border-2 border-slate-300 dark:border-slate-600" />
+               <div className="flex items-center gap-3 mb-2">
+                 <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 m-0">Version 0.4.0</h3>
+               </div>
+               <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
+                 <li><strong>Layout:</strong> Die Seitenleiste (Statistik & Legende) ist nun über einen mittig platzierten, deutlich sichtbaren Pfeil-Button einklappbar, um mehr Platz für den Kalender zu bieten.</li>
+                 <li><strong>Neue Kürzel:</strong> Halbtage für Urlaub (Shift+U), Krankheit (Shift+K) und Überstunden (Shift+Ü) lassen sich nun intuitiver eintragen und werden mit U/2, K/2 und Ü/2 (im helleren Farbton) im Kalender angezeigt.</li>
+               </ul>
+            </div>
+
+            {/* V 0.3.9 */}
+            <div className="relative pl-6 border-l-2 border-slate-200 dark:border-slate-700">
+               <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-white dark:bg-slate-900 border-2 border-slate-300 dark:border-slate-600" />
+               <div className="flex items-center gap-3 mb-2">
+                 <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 m-0">Version 0.3.9</h3>
                </div>
                <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
                  <li><strong>Docker Build-Cache:</strong> Ein kritischer Fehler wurde behoben, bei dem Next.js während des Docker-Builds Standardprofile generierte und diese fest ins Cache-HTML einbrannte, was nach dem Start zu unsichtbaren Profilen oder "Foreign Key"-Fehlern beim Eintragen von Urlauben führte.</li>

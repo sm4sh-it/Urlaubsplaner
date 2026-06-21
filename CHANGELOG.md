@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.5.0] - 2026-06-21
+### Added
+- **Premium Design Update:** Komplettes Re-Design der UI mit einem modernen "Dashboard"-Look, sanften Kacheln, feinen Transparenzen und einem subtilen Background-Glow im Darkmode.
+- **Mobiles Arbeiten:** Unterstützung für Home-Office (`M`) sowie halbe Tage Mobiles Arbeiten (`Shift+m`). In der Statistik (rechte Spalte) wird dies nun ebenfalls separat erfasst.
+- **CSS Variablen:** Dynamische Farbsteuerung (Surface, Backgrounds, Brand-Colors) nun effizient über CSS Variablen mit direkter Tailwind-Anbindung.
+
+### Changed
+- **Kalender Layout:** Der Kalender verzichtet auf harte 1-Pixel Gitterlinien zugunsten von weich abgerundeten Einzel-Zellen mit Abständen (`gap`).
+- **Feiertage & Ferien:** Gesetzliche Feiertage erhalten eine orangefarbene "Top-Border", Schulferien werden durch eine dezente Leiste am Zellenende markiert, welche die Profil-Einträge nicht mehr verdeckt.
+- **Profil Auswahl:** Das Dropdown-Menü für die Profilauswahl richtet sich nun linksbündig unter dem Button aus.
+- **Legende:** Verschlanktes Layout im Grid-Design ohne Platzverschwendung, sodass die Statistik auf kleinen Bildschirmen direkt im Sichtbereich bleibt. Die Hilfe-Texte zur Tastaturnutzung wurden vereinfacht.
+
+## [0.4.0] - 2026-06-01
+### Added
+- **Einklappbare Seitenleiste:** Die Seitenleiste auf dem Dashboard (Legende und Statistik) lässt sich nun über einen auffälligen Pfeil-Button ein- und ausklappen, um mehr Platz für den Kalender zu schaffen.
+- **Halbe Überstunden:** Überstunden können nun auch halbtags erfasst werden (`Shift+ü`).
+
+### Changed
+- **Tastenbelegung für halbe Tage:** Halbe Tage können nun intuitiver mit `Shift+u` (Urlaub), `Shift+k` (Krankheit) und `Shift+ü` (Überstunden) eingetragen werden. 
+- **Kalender-Kürzel:** Halbe Tage werden im Kalender zur besseren Unterscheidbarkeit als `U/2`, `K/2` und `Ü/2` angezeigt.
+- **Legende:** Die Legende wurde an die neuen Kürzel angepasst und der Hinweis-Text ist im Dark Mode nun besser lesbar.
+
 ## [0.3.9] - 2026-05-28
 ### Fixed
 - **Docker Build-Cache:** Seiten werden nun im Next.js App Router zwingend dynamisch gerendert (`force-dynamic`). Dies behebt einen tiefgreifenden Fehler, bei dem während des Docker-Builds erstellte Standard-Profil-IDs (UUIDs) fest ins HTML eingebrannt wurden und bei Container-Start mit der Laufzeit-Datenbank kollidierten (ERROR P2003 Foreign Key Violation).

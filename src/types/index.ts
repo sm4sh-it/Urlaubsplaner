@@ -1,4 +1,4 @@
-export type EntryType = 'U' | '2' | 'K' | '3' | 'Ü' | 'G' | 'D' | 'S' | 'X'
+export type EntryType = 'U' | '2' | 'K' | '3' | 'Ü' | '4' | 'G' | 'D' | 'S' | 'X' | 'M' | '5'
 
 export interface Profile {
   id: string
@@ -34,6 +34,8 @@ export interface StoreState {
   entries: CalendarEntry[]
   overrides: ProfileYearOverride[]
   selectedYear: number
+  isSidebarOpen: boolean
+  activeSidebarPanel: 'legend' | 'statistics'
   
   // Actions
   setProfiles: (profiles: Profile[]) => void
@@ -44,4 +46,6 @@ export interface StoreState {
   addOrUpdateEntry: (entry: CalendarEntry) => void
   removeEntry: (id: string) => void
   setSelectedYear: (year: number) => void
+  toggleSidebar: () => void
+  setActiveSidebarPanel: (panel: 'legend' | 'statistics') => void
 }

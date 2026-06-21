@@ -9,6 +9,8 @@ export const useStore = create<StoreState>((set) => ({
   entries: [],
   overrides: [],
   selectedYear: new Date().getFullYear(),
+  isSidebarOpen: true,
+  activeSidebarPanel: 'statistics',
 
   setProfiles: (profiles) => set({ profiles }),
   setOverrides: (overrides) => set({ overrides }),
@@ -42,5 +44,9 @@ export const useStore = create<StoreState>((set) => ({
     entries: state.entries.filter(e => e.id !== id)
   })),
   
-  setSelectedYear: (selectedYear) => set({ selectedYear })
+  setSelectedYear: (selectedYear) => set({ selectedYear }),
+  
+  toggleSidebar: () => set((state) => ({ isSidebarOpen: !state.isSidebarOpen })),
+  
+  setActiveSidebarPanel: (panel) => set({ activeSidebarPanel: panel })
 }))

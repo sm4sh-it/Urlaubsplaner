@@ -1,10 +1,15 @@
 "use client"
 
+import { useState } from "react"
 import { useStore } from "@/store/useStore"
 import { SHORT_MONTHS } from "@/lib/dateUtils"
 import { getProfileStatsForYear } from "@/lib/profileUtils"
+import { ChevronUp, ChevronDown } from "lucide-react"
 
 export default function Statistics() {
+  const activeSidebarPanel = useStore(state => state.activeSidebarPanel)
+  const setActiveSidebarPanel = useStore(state => state.setActiveSidebarPanel)
+  const isOpen = activeSidebarPanel === 'statistics'
   const activeProfileIds = useStore(state => state.activeProfileIds)
   const profiles = useStore(state => state.profiles)
   const entries = useStore(state => state.entries)
@@ -13,7 +18,7 @@ export default function Statistics() {
 
   if (activeProfileIds.length === 0) {
     return (
-      <div className="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 p-4 flex flex-col min-h-0 shrink-0">
+      <div className="bg-white dark:bg-gray-950 rounded-xl shadow-sm border border-slate-200 dark:border-gray-800 p-4 flex flex-col min-h-0 shrink-0">
         <h2 className="font-semibold text-lg mb-4 text-slate-800 dark:text-slate-200">Statistik</h2>
         <div className="text-sm text-slate-500">Bitte wähle ein Profil aus.</div>
       </div>
@@ -28,7 +33,7 @@ export default function Statistics() {
   
   if (!stats) {
     return (
-      <div className="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 p-4 flex flex-col min-h-0 shrink-0">
+      <div className="bg-white dark:bg-gray-950 rounded-xl shadow-sm border border-slate-200 dark:border-gray-800 p-4 flex flex-col min-h-0 shrink-0">
         <h2 className="font-semibold text-lg mb-4 text-slate-800 dark:text-slate-200">Statistik ({activeProfile.name})</h2>
         <div className="text-sm text-slate-500">
           Profil ist für das Jahr {selectedYear} nicht aktiv (Startjahr: {activeProfile.startYear}).
@@ -44,24 +49,31 @@ export default function Statistics() {
 
   let totalUrlaub = 0
   let totalKrank = 0
-  const monthlyStats = Array(12).fill(0).map(() => ({ urlaub: 0, krank: 0 }))
+  let totalMobile = 0
+  const monthlyStats = Array(12).fill(0).map(() => ({ urlaub: 0, krank: 0, mobile: 0 }))
 
   yearEntries.forEach(entry => {
     const month = parseInt(entry.date.split('-')[1]) - 1 // 0-11
     
     let urlaubVal = 0
     let krankVal = 0
+    let mobileVal = 0
 
     if (entry.type === 'U') urlaubVal = 1
     if (entry.type === '2') urlaubVal = 0.5
     if (entry.type === 'K') krankVal = 1
     if (entry.type === '3') krankVal = 0.5
+    if (entry.type === 'M') mobileVal = 1
+    if (entry.type === '5') mobileVal = 0.5
 
     totalUrlaub += urlaubVal
     totalKrank += krankVal
+    totalMobile += mobileVal
+    
     if (month >= 0 && month < 12) {
       monthlyStats[month].urlaub += urlaubVal
       monthlyStats[month].krank += krankVal
+      monthlyStats[month].mobile += mobileVal
     }
   })
 
@@ -82,12 +94,22 @@ export default function Statistics() {
   const ungenutzterResturlaub = Math.max(0, stats.remainingLeave - urlaubVorVerfall)
 
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 p-4 flex flex-col min-h-0">
-      <h2 className="font-semibold text-lg mb-4 text-slate-800 dark:text-slate-200">
-        Statistik ({activeProfile.name})
-      </h2>
+    <div className="bg-white dark:bg-[var(--surface)] rounded-xl shadow-sm border border-slate-200 dark:border-[var(--border-subtle)] p-4 flex flex-col min-h-0">
+      <div 
+        className="flex items-center justify-between cursor-pointer group mb-4"
+        onClick={() => setActiveSidebarPanel(isOpen ? 'legend' : 'statistics')}
+      >
+        <h2 className="font-semibold text-lg text-slate-800 dark:text-slate-200">
+          Statistik ({activeProfile.name})
+        </h2>
+        <button className="p-1 group-hover:bg-slate-100 dark:group-hover:bg-slate-800 rounded-md transition-colors shrink-0">
+          {isOpen ? <ChevronUp className="w-5 h-5 text-slate-500" /> : <ChevronDown className="w-5 h-5 text-slate-500" />}
+        </button>
+      </div>
 
-      {activeProfile.remainingLeave > 0 && (
+      {isOpen && (
+        <>
+          {activeProfile.remainingLeave > 0 && (
         <div className={`mb-4 text-xs p-2 rounded border ${
           ungenutzterResturlaub > 0 
             ? "bg-amber-50 dark:bg-amber-900/20 text-amber-800 dark:text-amber-400 border-amber-200 dark:border-amber-800/50" 
@@ -104,18 +126,21 @@ export default function Statistics() {
       <div className="space-y-4 mb-6 shrink-0">
         <div className="grid grid-cols-2 gap-2 text-sm">
           <div className="text-slate-500 dark:text-slate-400">Anspruch:</div>
-          <div className="font-medium text-right">{verfuegbar} Tage</div>
+          <div className="font-medium text-right dark:text-slate-200">{verfuegbar} Tage</div>
           
           <div className="text-slate-500 dark:text-slate-400">Genommen:</div>
-          <div className="font-medium text-right text-emerald-600 dark:text-emerald-500">{totalUrlaub} Tage</div>
+          <div className="font-medium text-right text-emerald-600 dark:text-[#1b8a5a]">{totalUrlaub} Tage</div>
           
-          <div className="text-slate-500 dark:text-slate-400 font-semibold border-t border-slate-100 dark:border-slate-800 pt-2 mt-1">Rest:</div>
-          <div className="font-bold text-right border-t border-slate-100 dark:border-slate-800 pt-2 mt-1 text-slate-900 dark:text-slate-100">{restUrlaubAktuell} Tage</div>
+          <div className="text-slate-500 dark:text-slate-400 font-semibold border-t border-slate-100 dark:border-[var(--border-subtle)] pt-2 mt-1">Rest:</div>
+          <div className="font-bold text-right border-t border-slate-100 dark:border-[var(--border-subtle)] pt-2 mt-1 text-slate-900 dark:text-white">{restUrlaubAktuell} Tage</div>
         </div>
 
-        <div className="grid grid-cols-2 gap-2 text-sm pt-2 border-t border-slate-100 dark:border-slate-800">
+        <div className="grid grid-cols-2 gap-2 text-sm pt-2 border-t border-slate-100 dark:border-[var(--border-subtle)]">
           <div className="text-slate-500 dark:text-slate-400">Krankheitstage:</div>
-          <div className="font-medium text-right text-red-600 dark:text-red-500">{totalKrank} Tage</div>
+          <div className="font-medium text-right text-red-600 dark:text-[#b0413e]">{totalKrank} Tage</div>
+          
+          <div className="text-slate-500 dark:text-slate-400">Mobiles Arbeiten:</div>
+          <div className="font-medium text-right text-blue-600 dark:text-[#1a5fb4]">{totalMobile} Tage</div>
         </div>
       </div>
 
@@ -123,19 +148,22 @@ export default function Statistics() {
       <div className="flex-1 overflow-y-auto pr-2 space-y-2 text-xs">
         {SHORT_MONTHS.map((month, i) => {
           const stats = monthlyStats[i]
-          if (stats.urlaub === 0 && stats.krank === 0) return null
+          if (stats.urlaub === 0 && stats.krank === 0 && stats.mobile === 0) return null
           
           return (
-            <div key={month} className="flex justify-between items-center py-1 border-b border-slate-100 dark:border-slate-800/50 last:border-0">
-              <span className="font-medium w-8">{month}</span>
+            <div key={month} className="flex justify-between items-center py-1 border-b border-slate-100 dark:border-[var(--border-subtle)] last:border-0">
+              <span className="font-medium w-8 dark:text-slate-300">{month}</span>
               <div className="flex gap-3">
-                {stats.urlaub > 0 && <span className="text-emerald-600 dark:text-emerald-500">{stats.urlaub} U</span>}
-                {stats.krank > 0 && <span className="text-red-600 dark:text-red-500">{stats.krank} K</span>}
+                {stats.urlaub > 0 && <span className="text-emerald-600 dark:text-[#1b8a5a]">{stats.urlaub} U</span>}
+                {stats.krank > 0 && <span className="text-red-600 dark:text-[#b0413e]">{stats.krank} K</span>}
+                {stats.mobile > 0 && <span className="text-blue-600 dark:text-[#1a5fb4]">{stats.mobile} M</span>}
               </div>
             </div>
           )
         })}
       </div>
+        </>
+      )}
     </div>
   )
 }

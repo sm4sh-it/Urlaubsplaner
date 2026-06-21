@@ -3,30 +3,134 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --color-brand-50: #e5f6ff;
-  --color-brand-100: #ccefff;
-  --color-brand-200: #99deff;
-  --color-brand-300: #66ceff;
-  --color-brand-400: #33beff;
-  --color-brand-500: #0088c2;
-  --color-brand-600: #006b99;
-  --color-brand-700: #004d70;
-  --color-brand-800: #003047;
-  --color-brand-900: #00131f;
+  --color-bg: var(--bg);
+  --color-fg: var(--fg);
+  --color-surface: var(--surface);
+  --color-surface-bright: var(--surface-bright);
+  --color-border-subtle: var(--border-subtle);
+  
+  --color-brand: #0088c2;
+  --color-brand-glow: rgba(0, 136, 194, 0.12);
+  
+  /* Status Colors */
+  --color-feiertag-bg: var(--feiertag-bg);
+  --color-feiertag-border: #ff7b72;
+  --color-vacation: #1b8a5a;
+  --color-sick: #b0413e;
+  --color-overtime: #7d52b3;
+  --color-gleitzeit: #c69214;
+  --color-dienstreise: #148080;
+  --color-special: #d97706;
+  --color-blocked: var(--blocked);
+  --color-mobile: #1a5fb4;
+  --color-ferien: #ff9f43;
 }
 
 @layer base {
   :root {
-    --background: #f8fafc;
-    --foreground: #0f172a;
+    --bg: #f8fafc;
+    --fg: #0f172a;
+    --surface: #ffffff;
+    --surface-bright: #f1f5f9;
+    --border-subtle: #e2e8f0;
+    --feiertag-bg: rgba(255, 123, 114, 0.12);
+    --blocked: #cbd5e1;
   }
   .dark {
-    --background: #18181b; /* zinc-900 */
-    --foreground: #f4f4f5; /* zinc-50 */
+    --bg: #050a0f;
+    --fg: #e6edf3;
+    --surface: rgba(30, 45, 60, 0.8);
+    --surface-bright: rgba(50, 70, 92, 0.95);
+    --border-subtle: rgba(255, 255, 255, 0.12);
+    --feiertag-bg: rgba(255, 123, 114, 0.12);
+    --blocked: #374151;
   }
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background-color: var(--bg);
+  color: var(--fg);
+}
+
+.dark body {
+  background-image: 
+    radial-gradient(circle at 15% 15%, rgba(0, 136, 194, 0.05) 0%, transparent 35%),
+    radial-gradient(circle at 85% 75%, rgba(0, 136, 194, 0.03) 0%, transparent 35%);
+  background-attachment: fixed;
+}
+
+/* Premium Styles for Cells & Legend */
+.cell-weekend {
+  background-image: repeating-linear-gradient(
+    45deg,
+    #f1f5f9,
+    #f1f5f9 4px,
+    transparent 4px,
+    transparent 8px
+  ) !important;
+  background-color: rgba(0, 0, 0, 0.05) !important;
+}
+
+.dark .cell-weekend {
+  background-image: repeating-linear-gradient(
+    45deg,
+    var(--surface),
+    var(--surface) 4px,
+    transparent 4px,
+    transparent 8px
+  ) !important;
+  background-color: rgba(0, 0, 0, 0.15) !important;
+}
+
+.cell-feiertag {
+  background-color: var(--feiertag-bg) !important;
+  border-top: 2px solid #ff7b72 !important;
+}
+
+
+
+/* Status Classes */
+.status-u   { background: var(--color-vacation) !important; color: #fff !important; }
+.status-u-2 { background: linear-gradient(135deg, var(--color-vacation) 50%, var(--surface) 50%) !important; color: #fff !important; }
+
+.status-k   { background: var(--color-sick) !important; color: #fff !important; }
+.status-k-2 { background: linear-gradient(135deg, var(--color-sick) 50%, var(--surface) 50%) !important; color: #fff !important; }
+
+.status-ue   { background: var(--color-overtime) !important; color: #fff !important; }
+.status-ue-2 { background: linear-gradient(135deg, var(--color-overtime) 50%, var(--surface) 50%) !important; color: #fff !important; }
+
+.status-g   { background: var(--color-gleitzeit) !important; color: #fff !important; }
+.status-d   { background: var(--color-dienstreise) !important; color: #fff !important; }
+.status-s   { background: var(--color-special) !important; color: #fff !important; }
+.status-m {
+  background-color: #1a5fb4 !important;
+  color: white !important;
+  border: 1px solid rgba(255,255,255,0.1) !important;
+}
+
+.status-m-2 {
+  background: linear-gradient(135deg, #1a5fb4 50%, var(--surface-bright) 50%) !important;
+  color: white !important;
+  border: 1px solid rgba(255,255,255,0.1) !important;
+}
+
+.status-x   { 
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(255,255,255,0.05),
+    rgba(255,255,255,0.05) 5px,
+    var(--blocked) 5px,
+    var(--blocked) 10px
+  ) !important; 
+  color: var(--fg) !important; 
+}
+
+:root .status-x {
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(0,0,0,0.05),
+    rgba(0,0,0,0.05) 5px,
+    var(--blocked) 5px,
+    var(--blocked) 10px
+  ) !important;
 }

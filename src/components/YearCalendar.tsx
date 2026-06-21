@@ -14,27 +14,33 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 const VALID_KEYS: Record<string, EntryType> = {
-  'u': 'U', 'U': 'U',
-  '2': '2',
-  'k': 'K', 'K': 'K',
-  '3': '3',
-  'ü': 'Ü', 'Ü': 'Ü',
+  'u': 'U', 
+  'U': '2', // Shift+u -> halber Tag Urlaub
+  'k': 'K', 
+  'K': '3', // Shift+k -> halber Tag krank
+  'ü': 'Ü', 
+  'Ü': '4', // Shift+ü -> halber Tag Überstunden
   'g': 'G', 'G': 'G',
   'd': 'D', 'D': 'D',
   's': 'S', 'S': 'S',
-  'x': 'X', 'X': 'X'
+  'x': 'X', 'X': 'X',
+  'm': 'M', 
+  'M': '5' // Shift+m -> halber Tag mobiles arbeiten
 }
 
-const ENTRY_COLORS: Record<string, string> = {
-  'U': "bg-emerald-500 text-white",
-  '2': "bg-emerald-300 text-emerald-900",
-  'K': "bg-red-500 text-white",
-  '3': "bg-red-300 text-red-900",
-  'Ü': "bg-teal-500 text-white",
-  'G': "bg-orange-500 text-white",
-  'D': "bg-amber-600 text-white",
-  'S': "bg-green-700 text-white",
-  'X': "bg-neutral-600 text-white dark:bg-neutral-400 dark:text-neutral-900",
+const ENTRY_CLASSES: Record<string, string> = {
+  'U': "status-u",
+  '2': "status-u-2",
+  'K': "status-k",
+  '3': "status-k-2",
+  'Ü': "status-ue",
+  '4': "status-ue-2",
+  'G': "status-g",
+  'D': "status-d",
+  'S': "status-s",
+  'X': "status-x",
+  'M': "status-m",
+  '5': "status-m-2",
 }
 
 export default function YearCalendar() {
@@ -123,11 +129,10 @@ export default function YearCalendar() {
     })
   }
 
-  // Grid layout: 1 col für Monatsname + 31 cols für Tage
   return (
-    <div className="flex-1 flex flex-col bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 p-2 overflow-hidden select-none">
-      <div className="flex items-center justify-between px-4 py-2 border-b border-slate-100 dark:border-slate-800 shrink-0">
-        <h2 className="font-bold text-slate-800 dark:text-slate-200 text-lg">Jahresübersicht {selectedYear}</h2>
+    <div className="flex-1 flex flex-col p-4 md:p-8 overflow-hidden select-none">
+      <div className="flex items-center justify-between pb-6 shrink-0">
+        <h2 className="font-bold text-slate-800 dark:text-slate-200 text-xl tracking-tight">Jahresübersicht {selectedYear}</h2>
         {pressedKey && VALID_KEYS[pressedKey] && (
           <div className="text-xs bg-emerald-100 text-emerald-800 px-2 py-1 rounded font-medium">
             Aktiv: {VALID_KEYS[pressedKey]} (Klicken zum Einfügen)
@@ -135,35 +140,37 @@ export default function YearCalendar() {
         )}
       </div>
       
-      <div className="flex-1 flex flex-col min-h-0 mt-2">
+      <div className="flex-1 flex flex-col min-h-0 overflow-auto pr-2 pb-4">
         {/* Header (Tage 1-31) */}
-        <div className="grid grid-cols-[4rem_repeat(31,minmax(0,1fr))] gap-px bg-slate-200 dark:bg-slate-700 border-b border-slate-200 dark:border-slate-700 shrink-0">
-          <div className="bg-slate-50 dark:bg-slate-900 flex items-center justify-center text-xs font-semibold text-slate-500">
-            Monat
+        <div className="grid grid-cols-[50px_repeat(31,minmax(24px,1fr))] md:grid-cols-[80px_repeat(31,minmax(35px,1fr))] gap-1 md:gap-1.5 mb-2 shrink-0">
+          <div className="bg-transparent flex items-center text-xs font-semibold text-slate-500 pl-2">
+            
           </div>
           {Array.from({ length: 31 }, (_, i) => i + 1).map(day => (
-            <div key={day} className="bg-slate-50 dark:bg-slate-900 flex items-center justify-center text-xs font-semibold text-slate-500 py-1">
+            <div key={day} className="bg-transparent flex items-center justify-center text-xs font-bold text-slate-400">
               {day}
             </div>
           ))}
         </div>
 
         {/* Monate 1-12 */}
-        <div className="flex-1 grid grid-rows-12 bg-slate-200 dark:bg-slate-700 gap-px">
+        <div className="flex flex-col gap-1.5">
           {SHORT_MONTHS.map((monthName, monthIndex) => {
             const days = getMonthDays(selectedYear, monthIndex)
             
             return (
-              <div key={monthIndex} className="grid grid-cols-[4rem_repeat(31,minmax(0,1fr))] gap-px">
+              <div key={monthIndex} className="grid grid-cols-[50px_repeat(31,minmax(24px,1fr))] md:grid-cols-[80px_repeat(31,minmax(35px,1fr))] gap-1 md:gap-1.5">
                 {/* Monatsname */}
-                <div className="bg-white dark:bg-slate-800 flex items-center justify-center text-sm font-medium text-slate-700 dark:text-slate-300">
+                <div className="bg-transparent flex items-center text-sm font-semibold text-slate-700 dark:text-slate-200 pl-2 sticky left-0 z-20">
                   {monthName}
                 </div>
                 
                 {/* Tage */}
                 {days.map((dayObj, i) => {
                   if (!dayObj.isValid) {
-                    return <div key={i} className="bg-slate-100 dark:bg-slate-950/50" />
+                    return (
+                      <div key={i} className="rounded-md pointer-events-none bg-[var(--bg)]" />
+                    )
                   }
 
                   const holidayName = holidays[dayObj.date]
@@ -187,26 +194,28 @@ export default function YearCalendar() {
                           key={dayObj.date} 
                           onClick={() => handleCellClick(dayObj.date)}
                           className={cn(
-                            "bg-white dark:bg-slate-800 flex flex-col relative group hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors cursor-pointer",
-                            dayObj.isWeekend && "bg-slate-100 dark:bg-slate-800/80",
-                            isHoliday && "bg-orange-50/50 dark:bg-orange-900/10"
+                            "flex flex-col relative group cursor-pointer overflow-hidden rounded-md h-[40px]",
+                            "bg-slate-100 dark:bg-[var(--surface)] border border-slate-200 dark:border-white/5",
+                            "hover:bg-slate-200 dark:hover:bg-[var(--surface-bright)] hover:-translate-y-[1px] hover:shadow-md transition-all duration-200",
+                            dayObj.isWeekend && "cell-weekend",
+                            isHoliday && "cell-feiertag"
                           )}
                           title={tooltip}
                         >
                           {/* Schulferien Indikator */}
                           {isVacation && (
-                            <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-sky-400 dark:bg-sky-500 opacity-60 pointer-events-none" />
+                            <div className="absolute bottom-1 left-1.5 right-1.5 h-[2px] bg-[#ff9f43]/70 rounded-full pointer-events-none z-20" />
                           )}
 
                           {/* Feiertags Indikator */}
                           {isHoliday && (
-                            <div className="absolute top-0 right-0 left-0 text-[8px] leading-tight text-center text-orange-600 dark:text-orange-400 font-medium truncate px-0.5 opacity-50 group-hover:opacity-100 pointer-events-none">
+                            <div className="absolute top-0 right-0 left-0 text-[8px] leading-tight text-center text-[#ff7b72] font-medium truncate px-0.5 opacity-0 group-hover:opacity-100 pointer-events-none z-10 transition-opacity">
                               {holidayName.length > 5 ? holidayName.substring(0, 4) + '.' : holidayName}
                             </div>
                           )}
 
                           {/* Zellen-Inhalt für aktive Profile */}
-                          <div className="flex-1 flex flex-col gap-px p-0.5 mt-2">
+                          <div className="flex-1 flex flex-col gap-0.5 p-0.5 z-10 w-full h-full justify-center">
                             {activeProfileIds.map(profileId => {
                               const profile = profiles.find(p => p.id === profileId)
                               if (!profile || selectedYear < profile.startYear) return null
@@ -214,18 +223,18 @@ export default function YearCalendar() {
                               const entry = entries.find(e => e.date === dayObj.date && e.profileId === profileId)
                               if (!entry) return null
                               
-                              const typeColors = ENTRY_COLORS[entry.type] || "bg-slate-200 text-slate-800"
+                              const typeClass = ENTRY_CLASSES[entry.type] || "bg-slate-200 text-slate-800"
                               
                               return (
                                 <div 
                                   key={profileId} 
                                   className={cn(
-                                    "flex-1 flex items-center justify-center text-[10px] font-bold rounded-[2px] border-2 border-solid",
-                                    typeColors
+                                    "flex-1 flex items-center justify-center text-[10px] font-bold rounded-sm border-2 border-solid shadow-sm w-full",
+                                    typeClass
                                   )}
                                   style={{ borderColor: profile.color }}
                                 >
-                                  {entry.type === '2' ? 'u' : entry.type === '3' ? 'k' : entry.type}
+                                  {entry.type === '2' ? 'U/2' : entry.type === '3' ? 'K/2' : entry.type === '4' ? 'Ü/2' : entry.type === '5' ? 'M/2' : entry.type}
                                 </div>
                               )
                             })}

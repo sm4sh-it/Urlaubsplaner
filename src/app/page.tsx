@@ -5,6 +5,8 @@ import Statistics from '@/components/Statistics'
 import StoreHydrator from '@/components/StoreHydrator'
 import { CalendarEntry, EntryType } from '@/types'
 
+import DashboardLayout from '@/components/DashboardLayout'
+
 export const dynamic = 'force-dynamic'
 
 export default async function Home() {
@@ -40,16 +42,15 @@ export default async function Home() {
   return (
     <>
       <StoreHydrator profiles={profilesRaw} entries={entries} overrides={overrides} />
-      <div className="flex flex-1 h-full gap-4">
-        {/* Calendar takes up the main space */}
-        <YearCalendar />
-        
-        {/* Right sidebar for Stats and Legend */}
-        <div className="w-80 flex flex-col gap-4 overflow-y-auto pr-2 pb-2">
-          <Statistics />
-          <Legend />
-        </div>
-      </div>
+      <DashboardLayout 
+        calendar={<YearCalendar />}
+        sidebar={
+          <>
+            <Statistics />
+            <Legend />
+          </>
+        }
+      />
     </>
   )
 }

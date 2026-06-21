@@ -1,0 +1,561 @@
+
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Urlaubsplaner — Premium</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* Brand & Dark Premium Palette */
+      --brand: #0088c2;
+      --brand-glow: rgba(0, 136, 194, 0.12);
+      --bg: #050a0f;
+      
+      /* Erhöhter Kontrast für normale Tage */
+      --surface: rgba(30, 45, 60, 0.8);
+      --surface-bright: rgba(50, 70, 92, 0.95);
+      
+      --fg: #e6edf3;
+      --muted: #8b949e;
+      --border: rgba(255, 255, 255, 0.12);
+      
+      /* New Highlights */
+      --color-ferien: #ff9f43; /* Feine orangefarbene Linie */
+      --color-feiertag-bg: rgba(255, 123, 114, 0.12);
+      --color-feiertag-border: #ff7b72;
+      --color-weekend: rgba(255, 255, 255, 0.03);
+
+      /* Harmonische, gedeckte Statusfarben */
+      --color-vacation: #1b8a5a;    /* Premium Smaragdgrün */
+      --color-sick: #b0413e;        /* Edles Ziegelrot */
+      --color-special: #b8860b;     /* Warmer Bernstein */
+      --color-homeoffice: #1a5fb4;  /* Sattes Ozeanblau */
+
+      --font-main: 'Inter', -apple-system, system-ui, sans-serif;
+      --radius: 8px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--bg);
+      color: var(--fg);
+      font-family: var(--font-main);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      overflow: hidden;
+      
+      /* Subtiler Glow */
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(0, 136, 194, 0.05) 0%, transparent 35%),
+        radial-gradient(circle at 85% 75%, rgba(0, 136, 194, 0.03) 0%, transparent 35%);
+      background-attachment: fixed;
+    }
+
+    /* Header */
+    header {
+      padding: 18px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      background-color: rgba(5, 10, 15, 0.75);
+      backdrop-filter: blur(12px);
+      z-index: 100;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand h1 {
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: -0.03em;
+      background: linear-gradient(to right, var(--fg), var(--brand));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .nav-tabs {
+      display: flex;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.03);
+      padding: 4px;
+      border-radius: 100px;
+      border: 1px solid var(--border);
+    }
+
+    .nav-tab {
+      padding: 6px 16px;
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--muted);
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .nav-tab.active {
+      background: var(--brand);
+      color: white;
+      box-shadow: 0 4px 12px var(--brand-glow);
+    }
+
+    .nav-tab:hover:not(.active) {
+      color: var(--fg);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .user-badge {
+      font-size: 13px;
+      color: var(--muted);
+      background: rgba(30, 45, 60, 0.5);
+      padding: 6px 14px;
+      border-radius: 100px;
+      border: 1px solid var(--border);
+    }
+
+    /* Layout */
+    main {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .calendar-container {
+      flex: 1;
+      overflow: auto;
+      padding: 30px;
+    }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: 110px repeat(31, 45px);
+      gap: 5px;
+    }
+
+    /* Cell Design */
+    .cell {
+      height: 45px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--radius);
+      font-size: 13px;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+    }
+
+    .cell-day {
+      background-color: transparent;
+      color: var(--muted);
+      font-weight: 600;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .cell-month {
+      background-color: transparent;
+      text-align: left;
+      padding-left: 8px;
+      font-weight: 600;
+      color: var(--fg);
+      position: sticky;
+      left: 0;
+      z-index: 10;
+      justify-content: flex-start;
+    }
+
+    .cell-corner { background: transparent; border: none; }
+
+    .cell-data {
+      background-color: var(--surface);
+      border: 1px solid rgba(255, 255, 255, 0.03);
+      cursor: pointer;
+    }
+
+    /* Weekend Highlight */
+    .cell-weekend {
+      background-image: repeating-linear-gradient(
+        45deg,
+        var(--color-weekend),
+        var(--color-weekend) 4px,
+        transparent 4px,
+        transparent 8px
+      );
+      background-color: rgba(18, 28, 38, 0.5);
+      color: var(--muted);
+    }
+
+    /* Public Holiday Highlight */
+    .cell-feiertag {
+      background-color: var(--color-feiertag-bg);
+      border-top: 2px solid var(--color-feiertag-border);
+    }
+
+    /* School Holidays Fine Line */
+    .cell-ferien::after {
+      content: '';
+      position: absolute;
+      bottom: 4px;
+      left: 6px;
+      right: 6px;
+      height: 2px;
+      background-color: var(--color-ferien);
+      border-radius: 10px;
+    }
+
+    /* Non-existent days in specific months */
+    .cell-invalid {
+      opacity: 0.05;
+      pointer-events: none;
+      background-color: transparent;
+    }
+
+    /* Hover & Active States */
+    .cell-data:not(.cell-invalid):hover {
+      background-color: var(--surface-bright);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+      border-color: rgba(0, 136, 194, 0.4);
+    }
+
+    .cell-data.selected {
+      background-color: var(--brand) !important;
+      color: white !important;
+      box-shadow: 0 0 20px rgba(0, 136, 194, 0.5);
+      border-color: var(--brand) !important;
+    }
+
+    /* Statuses applied by user */
+    .status-vacation { background-color: var(--color-vacation) !important; color: #fff !important; font-weight: 600; }
+    .status-sick { background-color: var(--color-sick) !important; color: #fff !important; font-weight: 600; }
+    .status-special { background-color: var(--color-special) !important; color: #fff !important; font-weight: 600; }
+    .status-homeoffice { background-color: var(--color-homeoffice) !important; color: #fff !important; font-weight: 600; }
+
+    /* Sidebar */
+    aside {
+      width: 320px;
+      background-color: rgba(15, 23, 33, 0.5);
+      backdrop-filter: blur(20px);
+      border-left: 1px solid var(--border);
+      padding: 40px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .sidebar-section {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .sidebar-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--brand);
+      font-weight: 700;
+    }
+
+    .legend {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 13px;
+    }
+
+    .legend-indicator {
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .legend-indicator.weekend {
+      background-image: repeating-linear-gradient(
+        45deg,
+        rgba(255,255,255,0.1),
+        rgba(255,255,255,0.1) 2px,
+        transparent 2px,
+        transparent 4px
+      );
+      background-color: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+    }
+
+    .legend-indicator.ferien {
+      border-bottom: 2px solid var(--color-ferien);
+      background: var(--surface);
+    }
+
+    .legend-indicator.feiertag {
+      background-color: var(--color-feiertag-bg);
+      border-top: 2px solid var(--color-feiertag-border);
+    }
+
+    .shortcut-badge {
+      margin-left: auto;
+      font-family: monospace;
+      font-size: 11px;
+      background: rgba(255,255,255,0.05);
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: var(--muted);
+    }
+
+    .help-card {
+      background: rgba(22, 31, 40, 0.4);
+      padding: 20px;
+      border-radius: 12px;
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--muted);
+      border: 1px solid var(--border);
+    }
+
+    /* Tooltip */
+    .tooltip {
+      position: absolute;
+      bottom: 100%;
+      background: #0b0f14;
+      color: #fff;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      white-space: nowrap;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+      z-index: 100;
+      margin-bottom: 5px;
+      border: 1px solid var(--border);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    }
+
+    .cell-data:hover .tooltip {
+      opacity: 1;
+    }
+
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="brand">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="#0088c2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 17L12 22L22 17" stroke="#0088c2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 12L12 17L22 12" stroke="#0088c2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <h1>Urlaubsplaner</h1>
+    </div>
+    
+    <nav class="nav-tabs">
+      <a href="vacation-planner-dashboard.html" class="nav-tab">Home</a>
+      <a href="#" class="nav-tab active">Kalenderansicht</a>
+      <a href="vacation-planner-stats.html" class="nav-tab">Statistiken</a>
+    </nav>
+
+    <div class="user-badge">Wir-Zwei Planer</div>
+  </header>
+
+  <main>
+    <div class="calendar-container">
+      <div class="calendar-grid" id="grid">
+        <!-- Corner -->
+        <div class="cell cell-corner"></div>
+        <!-- Days and Months generated by JS -->
+      </div>
+    </div>
+
+    <aside>
+      <div class="sidebar-section">
+        <div class="sidebar-title">Kalender Highlights</div>
+        <div class="legend">
+          <div class="legend-item">
+            <div class="legend-indicator weekend"></div>
+            <span>Wochenende</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-indicator feiertag"></div>
+            <span>Gesetzl. Feiertag</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-indicator ferien"></div>
+            <span>Schulferien</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-title">Eintragen (Kürzel)</div>
+        <div class="legend">
+          <div class="legend-item">
+            <div class="legend-indicator" style="background: var(--color-vacation);"></div>
+            <span>Urlaub</span>
+            <span class="shortcut-badge">V</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-indicator" style="background: var(--color-sick);"></div>
+            <span>Krank</span>
+            <span class="shortcut-badge">K</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-indicator" style="background: var(--color-special);"></div>
+            <span>Sonderurlaub</span>
+            <span class="shortcut-badge">S</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-indicator" style="background: var(--color-homeoffice);"></div>
+            <span>Home Office</span>
+            <span class="shortcut-badge">H</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="help-card">
+        <strong>Tastatur-Eingabe</strong><br>
+        Tag anklicken & Taste drücken. Drücke <code>Backspace</code> zum Löschen.
+      </div>
+    </aside>
+  </main>
+
+  <script>
+    const grid = document.getElementById('grid');
+    const months = [
+      { name: 'Januar', index: 0, length: 31 },
+      { name: 'Februar', index: 1, length: 28 }, // 2025 ist kein Schaltjahr
+      { name: 'März', index: 2, length: 31 },
+      { name: 'April', index: 3, length: 30 },
+      { name: 'Mai', index: 4, length: 31 },
+      { name: 'Juni', index: 5, length: 30 },
+      { name: 'Juli', index: 6, length: 31 },
+      { name: 'August', index: 7, length: 31 },
+      { name: 'September', index: 8, length: 30 },
+      { name: 'Oktober', index: 9, length: 31 },
+      { name: 'November', index: 10, length: 30 },
+      { name: 'Dezember', index: 11, length: 31 }
+    ];
+
+    // German Public Holidays 2025 (simple dictionary)
+    const publicHolidays2025 = {
+      "0-1": "Neujahr",
+      "3-18": "Karfreitag",
+      "3-21": "Ostermontag",
+      "4-1": "Tag der Arbeit",
+      "4-29": "Christi Himmelfahrt",
+      "5-9": "Pfingstmontag",
+      "9-3": "Tag der Deutschen Einheit",
+      "11-25": "1. Weihnachtsfeiertag",
+      "11-26": "2. Weihnachtsfeiertag"
+    };
+
+    // School Holiday Ranges 2025 (Osterferien + Sommerferien)
+    const schoolHolidays = [
+      { start: new Date('2025-04-14'), end: new Date('2025-04-25') },
+      { start: new Date('2025-07-07'), end: new Date('2025-08-15') }
+    ];
+
+    let selectedCell = null;
+
+    // Helper: Check if date is in holiday range
+    function isSchoolHoliday(date) {
+      return schoolHolidays.some(range => date >= range.start && date <= range.end);
+    }
+
+    // Days Row (1 to 31)
+    for (let i = 1; i <= 31; i++) {
+      const dayCell = document.createElement('div');
+      dayCell.className = 'cell cell-day';
+      dayCell.textContent = i;
+      grid.appendChild(dayCell);
+    }
+
+    // Generate Calendar Content
+    months.forEach(m => {
+      // Month Label Column
+      const monthLabel = document.createElement('div');
+      monthLabel.className = 'cell cell-month';
+      monthLabel.textContent = m.name;
+      grid.appendChild(monthLabel);
+
+      // 31 Days per Month Row
+      for (let day = 1; day <= 31; day++) {
+        const dataCell = document.createElement('div');
+        dataCell.className = 'cell cell-data';
+        
+        // Handle nonexistent days (e.g., Nov 31)
+        if (day > m.length) {
+          dataCell.classList.add('cell-invalid');
+          grid.appendChild(dataCell);
+          continue;
+        }
+
+        const date = new Date(2025, m.index, day);
+        const dayOfWeek = date.getDay(); // 0 = Sunday, 6 = Saturday
+
+        // 1. Check for Weekends
+        if (dayOfWeek === 0 || dayOfWeek === 6) {
+          dataCell.classList.add('cell-weekend');
+        }
+
+        // 2. Check for Public Holidays
+        const holidayKey = `${m.index}-${day}`;
+        if (publicHolidays2025[holidayKey]) {
+          dataCell.classList.add('cell-feiertag');
+          const tooltip = document.createElement('div');
+          tooltip.className = 'tooltip';
+          tooltip.textContent = publicHolidays2025[holidayKey];
+          dataCell.appendChild(tooltip);
+        }
+
+        // 3. Check for School Holidays
+        if (isSchoolHoliday(date)) {
+          dataCell.classList.add('cell-ferien');
+        }
+
+        // Interactive Click Choice
+        dataCell.addEventListener('click', () => {
+          if (selectedCell) selectedCell.classList.remove('selected');
+          selectedCell = dataCell;
+          selectedCell.classList.add('selected');
+        });
+
+        grid.appendChild(dataCell);
+      }
+    });
+
+    // Shortcuts
+    window.addEventListener('keydown', (e) => {
+      if (!selectedCell) return;
+      const key = e.key.toLowerCase();
+      
+      // Reset statuses
+      selectedCell.classList.remove('status-vacation', 'status-sick', 'status-special', 'status-homeoffice');
+
+      if (key === 'v') selectedCell.classList.add('status-vacation');
+      else if (key === 'k') selectedCell.classList.add('status-sick');
+      else if (key === 's') selectedCell.classList.add('status-special');
+      else if (key === 'h') selectedCell.classList.add('status-homeoffice');
+      else if (e.key === 'Backspace' || e.key === 'Delete') {
+          // Cleared state
+      }
+    });
+  </script>
+</body>
+</html>
