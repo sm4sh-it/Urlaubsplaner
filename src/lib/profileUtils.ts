@@ -1,4 +1,5 @@
-import { Profile, ProfileYearOverride, CalendarEntry } from "@/types"
+import { Profile, ProfileYearOverride, CalendarEntry, Trip } from "@/types"
+import { calculateTripVacationCost, isVacationCostingDay } from "@/lib/tripUtils"
 
 export interface YearlyStats {
   annualLeave: number
@@ -11,7 +12,9 @@ export function getProfileStatsForYear(
   profile: Profile,
   year: number,
   overrides: ProfileYearOverride[],
-  entries: CalendarEntry[]
+  entries: CalendarEntry[],
+  trips: Trip[] = [],
+  holidays: Record<string, any> = {}
 ): YearlyStats | null {
   if (year < profile.startYear) return null
 
@@ -29,7 +32,7 @@ export function getProfileStatsForYear(
     remainingLeave = profile.remainingLeave
   } else {
     // Calculate recursively from the previous year
-    const prevStats = getProfileStatsForYear(profile, year - 1, overrides, entries)
+    const prevStats = getProfileStatsForYear(profile, year - 1, overrides, entries, trips, holidays)
     if (prevStats) {
       // Find all used vacation in previous year
       const prevYearStr = (year - 1).toString()
@@ -37,8 +40,16 @@ export function getProfileStatsForYear(
       
       let usedVacation = 0
       prevEntries.forEach(e => {
-        if (e.type === 'U') usedVacation += 1
-        if (e.type === '2') usedVacation += 0.5
+        if (isVacationCostingDay(e.date, profile, holidays)) {
+          if (e.type === 'U') usedVacation += 1
+          if (e.type === '2') usedVacation += 0.5
+        }
+      })
+
+      // Subtract trips in previous year
+      const prevTrips = trips.filter(t => t.profiles.some(p => p.id === profile.id) && t.startDate.startsWith(prevYearStr))
+      prevTrips.forEach(t => {
+        usedVacation += calculateTripVacationCost(t, profile, holidays)
       })
 
       // Carry over is what is left

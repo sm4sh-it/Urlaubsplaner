@@ -27,12 +27,62 @@ export default function AboutPage() {
           </h2>
 
           <div className="space-y-8">
-            {/* V 0.5.0 */}
+            {/* V 0.6.3 */}
             <div className="relative pl-6 border-l-2 border-brand-500">
                <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-white dark:bg-slate-900 border-2 border-brand-500" />
                <div className="flex items-center gap-3 mb-2">
-                 <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 m-0">Version 0.5.0</h3>
+                 <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 m-0">Version 0.6.3</h3>
                  <span className="text-xs px-2 py-1 bg-brand-100 dark:bg-brand-900/30 text-brand-700 dark:text-brand-300 rounded font-medium">Aktuell</span>
+               </div>
+               <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
+                 <li><strong>Rollover-Fix:</strong> Ein Fehler beim Jahreswechsel wurde behoben, bei dem die Urlaubstage von Reisen/Trips im Vorjahr beim Ausrechnen des Resturlaubs ignoriert wurden.</li>
+                 <li><strong>Wochenenden & Feiertage:</strong> Manuell an arbeitsfreien Tagen oder Feiertagen eingetragene Urlaubstage im Kalender ("U") kosten nun keine Tage mehr vom Urlaubsbudget.</li>
+               </ul>
+            </div>
+
+            {/* V 0.6.2 */}
+            <div className="relative pl-6 border-l-2 border-slate-200 dark:border-slate-700">
+               <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-white dark:bg-slate-900 border-2 border-slate-300 dark:border-slate-600" />
+               <div className="flex items-center gap-3 mb-2">
+                 <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 m-0">Version 0.6.2</h3>
+               </div>
+               <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
+                 <li><strong>Startjahr:</strong> In den Profil-Einstellungen kann nun das Startjahr festgelegt werden, ab dem das Urlaubsbudget (inklusive Resturlaub) gezählt wird. Ideal für neue Nutzer, die in späten Jahren dazustoßen.</li>
+                 <li><strong>Trip Status Farben:</strong> Die Farben für "In Planung", "Idee" und "Gebucht" wurden verfeinert. Die Option "Ansparphase" wurde entfernt.</li>
+               </ul>
+            </div>
+
+            {/* V 0.6.1 */}
+            <div className="relative pl-6 border-l-2 border-slate-200 dark:border-slate-700">
+               <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-white dark:bg-slate-900 border-2 border-slate-300 dark:border-slate-600" />
+               <div className="flex items-center gap-3 mb-2">
+                 <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 m-0">Version 0.6.1</h3>
+               </div>
+               <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
+                 <li><strong>Auto-Cleanup:</strong> Manuelle Kalendereinträge, die sich mit Trips überschneiden, werden nun automatisch gelöscht.</li>
+                 <li><strong>Frontend Sync:</strong> Nach dem Hinzufügen, Bearbeiten oder Löschen von Trips wird der Zustand live im Store aktualisiert.</li>
+                 <li><strong>Dashboard Redesign:</strong> Kompaktere Statistiken, Github-Style Jahresübersicht, und aufgeräumte UI Elemente.</li>
+               </ul>
+            </div>
+
+            {/* V 0.6.0 */}
+            <div className="relative pl-6 border-l-2 border-slate-200 dark:border-slate-700">
+               <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-white dark:bg-slate-900 border-2 border-slate-300 dark:border-slate-600" />
+               <div className="flex items-center gap-3 mb-2">
+                 <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 m-0">Version 0.6.0</h3>
+               </div>
+               <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
+                 <li><strong>Trips & Reisen:</strong> Neues Modell für Ausflüge, das automatisch im Kalender blockiert.</li>
+                 <li><strong>Individuelle Arbeitstage:</strong> Arbeitstage pro Profil einstellbar, Feiertage/Wochenenden kosten keinen Urlaub mehr.</li>
+                 <li><strong>Home Dashboard:</strong> Startseite durch ein neues Premium-Dashboard ersetzt.</li>
+               </ul>
+            </div>
+
+            {/* V 0.5.0 */}
+            <div className="relative pl-6 border-l-2 border-slate-200 dark:border-slate-700">
+               <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-white dark:bg-slate-900 border-2 border-slate-300 dark:border-slate-600" />
+               <div className="flex items-center gap-3 mb-2">
+                 <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 m-0">Version 0.5.0</h3>
                </div>
                <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
                  <li><strong>Premium UI:</strong> Neues Kachel-Design mit abgerundeten Ecken, Glassmorphism-Elementen und subtilem Glow im Darkmode für ein hochwertigeres Look & Feel.</li>

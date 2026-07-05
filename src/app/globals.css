@@ -24,6 +24,10 @@
   --color-blocked: var(--blocked);
   --color-mobile: #1a5fb4;
   --color-ferien: #ff9f43;
+
+  --color-status-confirmed: #23d160;
+  --color-status-planning: #ff9f43;
+  --color-status-request: #58a6ff;
 }
 
 @layer base {
@@ -35,13 +39,20 @@
     --border-subtle: #e2e8f0;
     --feiertag-bg: rgba(255, 123, 114, 0.12);
     --blocked: #cbd5e1;
+    --radius: 16px;
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
   .dark {
+    --brand: #0088c2;
+    --brand-glow: rgba(0, 136, 194, 0.15);
     --bg: #050a0f;
-    --fg: #e6edf3;
-    --surface: rgba(30, 45, 60, 0.8);
+    --surface: rgba(22, 31, 40, 0.65);
+    --surface-hover: rgba(30, 42, 54, 0.85);
     --surface-bright: rgba(50, 70, 92, 0.95);
-    --border-subtle: rgba(255, 255, 255, 0.12);
+    --fg: #e6edf3;
+    --muted: #8b949e;
+    --border: rgba(255, 255, 255, 0.08);
+    --border-subtle: rgba(255, 255, 255, 0.08);
     --feiertag-bg: rgba(255, 123, 114, 0.12);
     --blocked: #374151;
   }
@@ -133,4 +144,116 @@ body {
     var(--blocked) 5px,
     var(--blocked) 10px
   ) !important;
+}
+
+/* Trip Status Classes */
+.text-status-confirmed { color: var(--color-status-confirmed); }
+.bg-status-confirmed\/5 { background-color: color-mix(in srgb, var(--color-status-confirmed) 5%, transparent); }
+.border-status-confirmed\/20 { border-color: color-mix(in srgb, var(--color-status-confirmed) 20%, transparent); }
+
+.text-status-planning { color: var(--color-status-planning); }
+.bg-status-planning\/5 { background-color: color-mix(in srgb, var(--color-status-planning) 5%, transparent); }
+.border-status-planning\/20 { border-color: color-mix(in srgb, var(--color-status-planning) 20%, transparent); }
+
+.text-status-request { color: var(--color-status-request); }
+.bg-status-request\/5 { background-color: color-mix(in srgb, var(--color-status-request) 5%, transparent); }
+.border-status-request\/20 { border-color: color-mix(in srgb, var(--color-status-request) 20%, transparent); }
+
+/* Vacation Grid */
+.vacation-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 24px;
+}
+
+/* Vacation Tile / Card */
+.vacation-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px;
+  backdrop-filter: blur(8px);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  position: relative;
+  transition: var(--transition);
+  cursor: pointer;
+}
+
+.vacation-card:hover {
+  background: var(--surface-hover);
+  transform: translateY(-4px);
+  border-color: rgba(0, 136, 194, 0.3);
+  box-shadow: 0 12px 30px var(--brand-glow);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.countdown-badge {
+  background: rgba(0, 136, 194, 0.1);
+  border: 1px solid rgba(0, 136, 194, 0.2);
+  color: var(--brand);
+  padding: 4px 10px;
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.status-badge {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 4px 10px;
+  border-radius: 100px;
+  font-weight: 600;
+  background: rgba(255,255,255,0.04);
+}
+
+.status-badge.confirmed { color: #1b8a5a; border: 1px solid rgba(27, 138, 90, 0.2); background: rgba(27, 138, 90, 0.05); }
+.status-badge.planning { color: #ff9f43; border: 1px solid rgba(255, 159, 67, 0.2); background: rgba(255, 159, 67, 0.05); }
+.status-badge.request { color: #eab308; border: 1px solid rgba(234, 179, 8, 0.2); background: rgba(234, 179, 8, 0.05); }
+
+.card-title-group h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  letter-spacing: -0.01em;
+  color: var(--fg);
+}
+
+.card-title-group .date-range {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.card-meta-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.meta-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.meta-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+}
+
+.meta-value {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--fg);
 }

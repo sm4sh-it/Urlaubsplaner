@@ -1,8 +1,11 @@
 import { prisma } from '@/lib/prisma'
-import DashboardHome from '@/components/Dashboard/DashboardHome'
+import YearCalendar from '@/components/YearCalendar'
+import Legend from '@/components/Legend'
+import Statistics from '@/components/Statistics'
 import StoreHydrator from '@/components/StoreHydrator'
 import { CalendarEntry, EntryType } from '@/types'
 
+import DashboardLayout from '@/components/DashboardLayout'
 
 export const dynamic = 'force-dynamic'
 
@@ -40,9 +43,17 @@ export default async function Home() {
   }))
 
   return (
-    <div className="flex-1 w-full bg-[var(--bg)]">
+    <>
       <StoreHydrator profiles={profilesRaw} entries={entries} overrides={overrides} trips={tripsRaw as any} />
-      <DashboardHome />
-    </div>
+      <DashboardLayout 
+        calendar={<YearCalendar />}
+        sidebar={
+          <>
+            <Statistics />
+            <Legend />
+          </>
+        }
+      />
+    </>
   )
 }

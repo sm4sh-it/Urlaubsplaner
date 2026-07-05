@@ -8,6 +8,8 @@ export const useStore = create<StoreState>((set) => ({
   activeProfileIds: [],
   entries: [],
   overrides: [],
+  trips: [],
+  holidays: {},
   selectedYear: new Date().getFullYear(),
   isSidebarOpen: true,
   activeSidebarPanel: 'statistics',
@@ -43,6 +45,9 @@ export const useStore = create<StoreState>((set) => ({
   removeEntry: (id) => set((state) => ({
     entries: state.entries.filter(e => e.id !== id)
   })),
+  
+  setTrips: (trips) => set({ trips }),
+  setHolidays: (holidays) => set({ holidays }),
   
   setSelectedYear: (selectedYear) => set({ selectedYear }),
   

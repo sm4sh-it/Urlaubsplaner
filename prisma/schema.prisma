@@ -16,12 +16,39 @@ model Profile {
   remainingLeaveExpiryDate String
   stateCode                String
   startYear                Int      @default(2026)
+  workingDays              String   @default("1,2,3,4,5")
   
   entries                  Entry[]
   overrides                ProfileYearOverride[]
+  trips                    Trip[]   @relation("ProfileTrips")
   
   createdAt                DateTime @default(now())
   updatedAt                DateTime @updatedAt
+}
+
+model Trip {
+  id                   String    @id @default(cuid())
+  title                String
+  startDate            String    // YYYY-MM-DD
+  endDate              String    // YYYY-MM-DD
+  duration             Int
+  
+  profiles             Profile[] @relation("ProfileTrips")
+  externalParticipants String?
+  
+  type                 String
+  status               String
+  
+  location             String?
+  travelType           String?
+  transport            String?
+  notes                String?
+  
+  budget               Float?
+  cost                 Float?
+  
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
 }
 
 model ProfileYearOverride {

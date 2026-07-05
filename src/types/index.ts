@@ -1,5 +1,30 @@
 export type EntryType = 'U' | '2' | 'K' | '3' | 'Ü' | '4' | 'G' | 'D' | 'S' | 'X' | 'M' | '5'
 
+export interface Trip {
+  id: string
+  title: string
+  startDate: string
+  endDate: string
+  duration: number
+  
+  profiles: { id: string }[]
+  externalParticipants?: string | null
+  
+  type: string
+  status: string
+  
+  location?: string | null
+  travelType?: string | null
+  transport?: string | null
+  notes?: string | null
+  
+  budget?: number | null
+  cost?: number | null
+  
+  createdAt: string | Date
+  updatedAt: string | Date
+}
+
 export interface Profile {
   id: string
   name: string
@@ -10,6 +35,7 @@ export interface Profile {
   remainingLeaveExpiryDate: string
   stateCode: string
   startYear: number
+  workingDays: string
 }
 
 export interface ProfileYearOverride {
@@ -33,6 +59,8 @@ export interface StoreState {
   activeProfileIds: string[]
   entries: CalendarEntry[]
   overrides: ProfileYearOverride[]
+  trips: Trip[]
+  holidays: Record<string, string>
   selectedYear: number
   isSidebarOpen: boolean
   activeSidebarPanel: 'legend' | 'statistics'
@@ -45,6 +73,8 @@ export interface StoreState {
   setEntries: (entries: CalendarEntry[]) => void
   addOrUpdateEntry: (entry: CalendarEntry) => void
   removeEntry: (id: string) => void
+  setTrips: (trips: Trip[]) => void
+  setHolidays: (holidays: Record<string, string>) => void
   setSelectedYear: (year: number) => void
   toggleSidebar: () => void
   setActiveSidebarPanel: (panel: 'legend' | 'statistics') => void

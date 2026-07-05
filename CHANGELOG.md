@@ -2,6 +2,37 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.6.3] - 2026-07-05
+### Fixed
+- **Jahreswechsel & Resturlaub:** Ein Fehler wurde behoben, durch den bei der Berechnung des Resturlaubs (Rollover) ins Folgejahr die Urlaubstage von angelegten Trips im Vorjahr ignoriert wurden.
+- **Wochenende/Feiertage:** Manuell in den Kalender geklickte Urlaubstage ("U" oder "U/2") verbrauchen nun keine Urlaubstage mehr, wenn sie auf einen im Profil konfigurierten Nicht-Arbeitstag (z.B. Wochenende) oder auf einen gesetzlichen Feiertag fallen.
+
+## [0.6.2] - 2026-07-05
+### Added
+- **Startjahr in den Profil-Einstellungen:** Das im Hintergrund bereits aktive "Startjahr" für Nutzerprofile ist nun in den Profil-Einstellungen frei bearbeitbar. So können neue Nutzer flexibel in späteren Jahren einsteigen, ohne in Vorjahren Fehler bei der Resturlaubsberechnung zu erzeugen.
+
+### Changed
+- **Trip Status Farben:** Die UI-Farben für Ausflüge ("Trips") wurden verfeinert. "Gebucht" entspricht nun exakt dem satten Grün normaler Urlaubstage, "In Planung" erscheint in Orange und "Idee" in Gelb.
+- **Ansparphase entfernt:** Die Option "Ansparphase" wurde für Reisen entfernt.
+
+## [0.6.1] - 2026-06-21
+### Fixed
+- **Auto-Cleanup für Trips und Kalendereinträge:** Manuelle Kalendereinträge (Entries), die sich mit neu erstellten oder aktualisierten Ausflügen (Trips) überschneiden, werden nun automatisch aus der Datenbank gelöscht. Dies verhindert eine doppelte Berechnung von Urlaubstagen.
+- **Frontend Sync Update:** Nach dem Hinzufügen, Bearbeiten oder Löschen von Trips wird der Zustand der Kalendereinträge (`entries`) sofort live im Store optimistisch aktualisiert. Dadurch stimmen Dashboard und Kalender-Statistik ohne Page-Reload perfekt überein.
+
+## [0.6.0] - 2026-06-21
+### Added
+- **Reise- und Ausflugs-Modell (Trips):** Komplette Unterstützung für Ausflüge und Urlaubsreisen. Nutzer können über das neue Dashboard Trips anlegen und Profile zuordnen.
+- **Home Dashboard:** Startseite (`/`) durch ein neues Premium-Dashboard ersetzt. Zeigt anstehende Reisen, Statistiken (Gesamturlaub) und ein Archiv vergangener Trips.
+- **Virtuelle Kalender-Blocker:** Reisen im Status "In Planung", "Gebucht" oder "Abgeschlossen" blockieren den Jahreskalender (`/calendar`) automatisch. Klicks zum manuellen Überschreiben sind auf diesen Tagen gesperrt.
+- **Individuelle Arbeitstage:** Unter Einstellungen lassen sich nun spezifische Arbeitstage (z. B. Mo-Fr) je Profil festlegen. Ausflüge über Wochenenden oder freie Tage kosten keine Urlaubstage mehr.
+- **Automatische Feiertagsberechnung für Trips:** Fällt ein Ausflug auf einen gesetzlichen Feiertag, wird dieser bei den Urlaubskosten ignoriert.
+
+### Changed
+- **Statistik-Optimierung:** Globale Berechnung von Resturlaub, unter Berücksichtigung von manuellen Einträgen und Ausflügen (inkl. Wochenenden/Feiertagen/Arbeitstagen).
+- **Navigation:** Die Navbar enthält jetzt die Tabs "Home" und "Kalenderansicht", da der Kalender eine eigene Route (`/calendar`) erhalten hat.
+- **Holidays im Store:** Gesetzliche Feiertage werden jetzt im Hintergrund global über den `Zustand`-Store geladen, damit auch die Startseite sofort Zugriff auf die genauen Budget-Zahlen hat.
+
 ## [0.5.0] - 2026-06-21
 ### Added
 - **Premium Design Update:** Komplettes Re-Design der UI mit einem modernen "Dashboard"-Look, sanften Kacheln, feinen Transparenzen und einem subtilen Background-Glow im Darkmode.

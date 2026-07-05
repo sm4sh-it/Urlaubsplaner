@@ -19,7 +19,8 @@ export default function SettingsClient({ initialProfiles }: { initialProfiles: P
     additionalLeave: 0,
     remainingLeaveExpiryDate: "03-31",
     stateCode: "NW",
-    startYear: new Date().getFullYear()
+    startYear: new Date().getFullYear(),
+    workingDays: "1,2,3,4,5"
   })
 
   // Spezieller State für die Eingabe im deutschen Format DD.MM
@@ -35,7 +36,8 @@ export default function SettingsClient({ initialProfiles }: { initialProfiles: P
       additionalLeave: profile.additionalLeave,
       remainingLeaveExpiryDate: profile.remainingLeaveExpiryDate,
       stateCode: profile.stateCode,
-      startYear: profile.startYear
+      startYear: profile.startYear,
+      workingDays: profile.workingDays
     })
     setExpiryInput(profile.remainingLeaveExpiryDate.split('-').reverse().join('.'))
   }
@@ -44,7 +46,7 @@ export default function SettingsClient({ initialProfiles }: { initialProfiles: P
     setEditingId(null)
     setFormData({
       name: "", color: "#10b981", annualLeave: 30, remainingLeave: 0,
-      additionalLeave: 0, remainingLeaveExpiryDate: "03-31", stateCode: "NW", startYear: new Date().getFullYear()
+      additionalLeave: 0, remainingLeaveExpiryDate: "03-31", stateCode: "NW", startYear: new Date().getFullYear(), workingDays: "1,2,3,4,5"
     })
     setExpiryInput("31.03")
   }
@@ -107,6 +109,27 @@ export default function SettingsClient({ initialProfiles }: { initialProfiles: P
     } else {
       alert("Fehler bei der Synchronisation!")
     }
+  }
+
+  const daysOfWeek = [
+    { label: 'Mo', value: 1 },
+    { label: 'Di', value: 2 },
+    { label: 'Mi', value: 3 },
+    { label: 'Do', value: 4 },
+    { label: 'Fr', value: 5 },
+    { label: 'Sa', value: 6 },
+    { label: 'So', value: 7 }
+  ]
+
+  const handleWorkingDayChange = (val: number) => {
+    const currentDays = formData.workingDays ? formData.workingDays.split(',').map(Number) : []
+    let newDays = []
+    if (currentDays.includes(val)) {
+      newDays = currentDays.filter(d => d !== val)
+    } else {
+      newDays = [...currentDays, val]
+    }
+    setFormData({ ...formData, workingDays: newDays.sort().join(',') })
   }
 
   return (
@@ -185,7 +208,11 @@ export default function SettingsClient({ initialProfiles }: { initialProfiles: P
             </div>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div>
+              <label className="block text-sm font-medium mb-1">Startjahr</label>
+              <input required type="number" min="2022" max="2100" value={formData.startYear || new Date().getFullYear()} onChange={e => setFormData({...formData, startYear: parseInt(e.target.value) || new Date().getFullYear()})} className="w-full p-2 rounded border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900" />
+            </div>
             <div>
               <label className="block text-sm font-medium mb-1">Jahresurlaub</label>
               <input required type="number" step="0.5" value={formData.annualLeave} onChange={e => setFormData({...formData, annualLeave: parseFloat(e.target.value) || 0})} className="w-full p-2 rounded border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900" />
@@ -203,6 +230,30 @@ export default function SettingsClient({ initialProfiles }: { initialProfiles: P
           <div>
             <label className="block text-sm font-medium mb-1">Verfallsdatum Resturlaub (DD.MM)</label>
             <input required type="text" placeholder="31.03" value={expiryInput} onChange={e => setExpiryInput(e.target.value)} className="w-full p-2 rounded border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900" />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-2">Arbeitstage</label>
+            <div className="flex flex-wrap gap-2">
+              {daysOfWeek.map(day => {
+                const currentDays = formData.workingDays ? formData.workingDays.split(',').map(Number) : []
+                const isSelected = currentDays.includes(day.value)
+                return (
+                  <button
+                    key={day.value}
+                    type="button"
+                    onClick={() => handleWorkingDayChange(day.value)}
+                    className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium transition-colors ${
+                      isSelected 
+                        ? 'bg-brand-500 text-white shadow-sm' 
+                        : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border border-slate-300 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-800'
+                    }`}
+                  >
+                    {day.label}
+                  </button>
+                )
+              })}
+            </div>
           </div>
 
           <div className="flex gap-3 pt-2">

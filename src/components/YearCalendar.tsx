@@ -48,32 +48,54 @@ export default function YearCalendar() {
   const activeProfileIds = useStore(state => state.activeProfileIds)
   const profiles = useStore(state => state.profiles)
   const entries = useStore(state => state.entries)
+  const trips = useStore(state => state.trips)
   const addOrUpdateEntry = useStore(state => state.addOrUpdateEntry)
   const removeEntry = useStore(state => state.removeEntry)
 
-  const [holidays, setHolidays] = React.useState<Record<string, string>>({})
+  const holidays = useStore(state => state.holidays)
   const [vacations, setVacations] = React.useState<{start: string, end: string, name: string}[]>([])
   const [pressedKey, setPressedKey] = React.useState<string | null>(null)
   const [isPending, startTransition] = React.useTransition()
 
-  // Das aktive Profil, welches für die Feiertage/Ferien herangezogen wird
   const primaryProfile = activeProfileIds.length > 0 
     ? profiles.find(p => p.id === activeProfileIds[0])
     : null;
   const stateCode = primaryProfile?.stateCode || "NW"
 
+  // Process trips to virtual entries
+  const validTripStatuses = ["In Planung", "Gebucht", "Abgeschlossen"]
+  const activeTrips = trips.filter(t => validTripStatuses.includes(t.status))
+
+  const getTripForProfileAndDate = (profileId: string, date: string) => {
+    return activeTrips.find(t => 
+      t.profiles.some(p => p.id === profileId) &&
+      date >= t.startDate && date <= t.endDate
+    )
+  }
+
+  const mapTripTypeToEntryType = (type: string): EntryType => {
+    if (type === "Urlaub") return "U"
+    if (type === "Mobiles Arbeiten") return "M"
+    if (type === "Sonderurlaub" || type === "Sabbatical") return "S"
+    if (type === "Überstundenabbau") return "Ü"
+    return "U" // Fallback
+  }
+
   React.useEffect(() => {
     async function loadData() {
       try {
+        const primaryProfile = activeProfileIds.length > 0 
+          ? profiles.find(p => p.id === activeProfileIds[0])
+          : null;
+        const stateCode = primaryProfile?.stateCode || "NW"
         const data = await getCalendarData(selectedYear, stateCode)
-        setHolidays(data.holidays)
         setVacations(data.vacations)
       } catch (e) {
         console.error("Failed to load calendar data from DB")
       }
     }
     loadData()
-  }, [selectedYear, stateCode])
+  }, [selectedYear, activeProfileIds, profiles])
 
   React.useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -105,6 +127,11 @@ export default function YearCalendar() {
       for (const pId of activeProfileIds) {
         const profile = profiles.find(p => p.id === pId)
         if (!profile || selectedYear < profile.startYear) continue
+
+        // Block if covered by a trip
+        if (getTripForProfileAndDate(pId, date)) {
+          continue
+        }
 
         // Optimistic UI update could be added here, but Server Actions are fast enough usually
         // Let's do optimistic:
@@ -192,7 +219,11 @@ export default function YearCalendar() {
                       return (
                         <div 
                           key={dayObj.date} 
-                          onClick={() => handleCellClick(dayObj.date)}
+                          onClick={() => {
+                            // If all active profiles are blocked by a trip, ignore click entirely.
+                            // But handleCellClick already skips individual profiles if blocked.
+                            handleCellClick(dayObj.date)
+                          }}
                           className={cn(
                             "flex flex-col relative group cursor-pointer overflow-hidden rounded-md h-[40px]",
                             "bg-slate-100 dark:bg-[var(--surface)] border border-slate-200 dark:border-white/5",
@@ -220,21 +251,32 @@ export default function YearCalendar() {
                               const profile = profiles.find(p => p.id === profileId)
                               if (!profile || selectedYear < profile.startYear) return null
 
-                              const entry = entries.find(e => e.date === dayObj.date && e.profileId === profileId)
-                              if (!entry) return null
+                              const trip = getTripForProfileAndDate(profileId, dayObj.date)
+                              let entryType: EntryType | null = null
                               
-                              const typeClass = ENTRY_CLASSES[entry.type] || "bg-slate-200 text-slate-800"
+                              if (trip) {
+                                entryType = mapTripTypeToEntryType(trip.type)
+                              } else {
+                                const entry = entries.find(e => e.date === dayObj.date && e.profileId === profileId)
+                                if (entry) entryType = entry.type
+                              }
+                              
+                              if (!entryType) return null
+                              
+                              const typeClass = ENTRY_CLASSES[entryType] || "bg-slate-200 text-slate-800"
                               
                               return (
                                 <div 
                                   key={profileId} 
                                   className={cn(
                                     "flex-1 flex items-center justify-center text-[10px] font-bold rounded-sm border-2 border-solid shadow-sm w-full",
-                                    typeClass
+                                    typeClass,
+                                    trip ? "opacity-90" : ""
                                   )}
                                   style={{ borderColor: profile.color }}
+                                  title={trip ? `Trip: ${trip.title}` : undefined}
                                 >
-                                  {entry.type === '2' ? 'U/2' : entry.type === '3' ? 'K/2' : entry.type === '4' ? 'Ü/2' : entry.type === '5' ? 'M/2' : entry.type}
+                                  {entryType === '2' ? 'U/2' : entryType === '3' ? 'K/2' : entryType === '4' ? 'Ü/2' : entryType === '5' ? 'M/2' : entryType}
                                 </div>
                               )
                             })}
