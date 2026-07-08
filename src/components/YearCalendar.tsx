@@ -42,6 +42,7 @@ const ENTRY_CLASSES: Record<string, string> = {
   'X': "status-x",
   'M': "status-m",
   '5': "status-m-2",
+  'A': "status-a",
 }
 
 export default function YearCalendar() {

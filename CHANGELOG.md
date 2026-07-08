@@ -1,6 +1,10 @@
 # Changelog
 
 All notable changes to this project will be documented in this file.
+## [0.8.2] - 2026-07-08
+### Fixed
+- **Sabbatical Bugfixes:** Behebt einen Absturz bei manueller Eingabe ("a") im Kalender durch fehlende Backend-Validierung (Zod). Die Sabbatical-Tage werden nun wieder korrekt in Himmelblau im Kalender eingefärbt. Zudem tauchen Sabbaticals nun auch korrekt im Jahresübersichts-Graphen ("Urlaubsverteilung über die Jahre") auf der Startseite auf.
+
 ## [0.8.1] - 2026-07-08
 ### Changed
 - **Statistik Diagramme:** Die Darstellung von "Buchungsstatus" und "Art der Reise" nutzt nun wieder das cleane, SVG-basierte Donut-Design inkl. einer übersichtlichen, integrierten Legende (analog zum "Reisetyp"-Diagramm), um einen einheitlichen und aufgeräumteren Look der Widgets zu gewährleisten.

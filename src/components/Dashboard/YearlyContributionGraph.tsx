@@ -64,6 +64,7 @@ export default function YearlyContributionGraph() {
         )
         
         let hasTripDay = false
+        let hasSabbaticalDay = false
         if (blockingTrips.length > 0) {
           for (const trip of blockingTrips) {
             for (const profileId of activeProfileIds) {
@@ -73,6 +74,7 @@ export default function YearlyContributionGraph() {
                   const singleDayTrip = { ...trip, startDate: dateStr, endDate: dateStr }
                   const cost = calculateTripVacationCost(singleDayTrip, p, holidays)
                   if (cost > 0) hasTripDay = true
+                  else if (trip.type === "Sabbatical") hasSabbaticalDay = true
                 }
               }
             }
@@ -81,6 +83,8 @@ export default function YearlyContributionGraph() {
         
         if (hasTripDay) {
           primaryStatus = "u"
+        } else if (hasSabbaticalDay) {
+          primaryStatus = "a"
         } else {
           // 2. Check manual entries
           const manualEntries = entries.filter(e => e.date === dateStr && activeProfileIds.includes(e.profileId))
