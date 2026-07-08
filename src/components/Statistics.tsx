@@ -122,7 +122,7 @@ export default function Statistics() {
   // Logik für Resturlaubs-Warnung
   // Wie viele Urlaubstage wurden VOR dem Verfallsdatum genommen?
   const expiryDateString = `${selectedYear}-${activeProfile.remainingLeaveExpiryDate}`
-  const urlaubVorVerfall = yearEntries.filter(e => {
+  let urlaubVorVerfall = yearEntries.filter(e => {
     if (e.date <= expiryDateString) {
       if (isVacationCostingDay(e.date, activeProfile, holidays)) {
         return e.type === 'U' || e.type === '2'
@@ -130,6 +130,32 @@ export default function Statistics() {
     }
     return false
   }).reduce((sum, e) => sum + (e.type === 'U' ? 1 : 0.5), 0)
+
+  // Berücksichtige auch Urlaubstage, die durch Reisen vor dem Verfallsdatum genommen werden
+  const validTripStatuses = ["In Planung", "Gebucht", "Abgeschlossen"]
+  const validTypes = ["Urlaub"]
+  
+  const profileTrips = trips.filter(t => t.profiles.some(p => p.id === activeProfile.id))
+  
+  profileTrips.forEach(t => {
+    if (validTripStatuses.includes(t.status) && validTypes.includes(t.type)) {
+      const start = new Date(t.startDate)
+      const end = new Date(t.endDate)
+      
+      for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+        const year = d.getFullYear()
+        const month = String(d.getMonth() + 1).padStart(2, '0')
+        const day = String(d.getDate()).padStart(2, '0')
+        const dateStr = `${year}-${month}-${day}`
+        
+        if (dateStr.startsWith(selectedYear.toString()) && dateStr <= expiryDateString) {
+          if (isVacationCostingDay(dateStr, activeProfile, holidays)) {
+            urlaubVorVerfall += 1
+          }
+        }
+      }
+    }
+  })
 
   const verfuegbar = stats.totalAvailable
   const restUrlaubAktuell = verfuegbar - totalUrlaub

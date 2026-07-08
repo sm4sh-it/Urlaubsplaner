@@ -115,7 +115,7 @@ export default function DashboardHome() {
           </h2>
           <button 
             onClick={handleOpenNew}
-            className="flex items-center gap-2 border border-slate-300 dark:border-[var(--border)] text-slate-700 dark:text-slate-300 hover:text-brand-600 dark:hover:text-brand-400 hover:border-brand-500/50 px-4 py-2 rounded-full text-sm font-semibold transition-colors bg-white/50 dark:bg-black/20"
+            className="flex items-center gap-2 border border-slate-300 dark:border-[var(--border)] text-slate-700 dark:text-slate-300 hover:text-brand-600 dark:hover:text-brand-400 hover:border-brand-500/50 hover:bg-slate-100 dark:hover:bg-slate-800/80 px-4 py-2 rounded-full text-sm font-semibold transition-all cursor-pointer bg-white/50 dark:bg-black/20"
           >
             <Plus className="w-4 h-4" /> Neue Reise
           </button>

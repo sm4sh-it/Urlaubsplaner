@@ -25,8 +25,8 @@ export function calculateTripVacationCost(trip: Trip, profile: Profile, holidays
     return 0
   }
 
-  const validTypes = ["Urlaub", "Sonderurlaub", "Sabbatical", "Überstundenabbau"]
-  // "Mobiles Arbeiten" costs 0 vacation days. If we needed to track it separately, we'd return an object.
+  const validTypes = ["Urlaub"]
+  // "Mobiles Arbeiten", "Sonderurlaub", "Sabbatical" and "Überstundenabbau" cost 0 vacation days.
   // For the purpose of deducting vacation budget, we only care about real vacation types.
   if (!validTypes.includes(trip.type)) {
     return 0

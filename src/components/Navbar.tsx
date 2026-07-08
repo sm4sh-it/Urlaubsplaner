@@ -34,18 +34,24 @@ export default function Navbar() {
       </div>
 
       {!isLogin && (
-        <div className="hidden md:flex gap-2 bg-slate-50 dark:bg-slate-800/50 p-1 rounded-full border border-slate-200 dark:border-slate-800">
+        <div className="hidden md:flex gap-1 bg-slate-100 dark:bg-[#1a222c] p-1 rounded-full border border-slate-200/80 dark:border-[#2a3441] shadow-inner">
           <Link 
             href="/" 
-            className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${pathname === '/' ? 'bg-brand-500 text-white shadow-[0_4px_12px_var(--color-brand-glow)]' : 'text-slate-500 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700'}`}
+            className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-300 ${pathname === '/' ? 'bg-white dark:bg-[#2a3644] text-slate-900 dark:text-white shadow-sm' : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-slate-700/50'}`}
           >
             Home
           </Link>
           <Link 
             href="/calendar" 
-            className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${pathname.startsWith('/calendar') ? 'bg-brand-500 text-white shadow-[0_4px_12px_var(--color-brand-glow)]' : 'text-slate-500 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700'}`}
+            className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-300 ${pathname.startsWith('/calendar') ? 'bg-white dark:bg-[#2a3644] text-slate-900 dark:text-white shadow-sm' : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-slate-700/50'}`}
           >
             Kalenderansicht
+          </Link>
+          <Link 
+            href="/statistics" 
+            className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-300 ${pathname.startsWith('/statistics') ? 'bg-white dark:bg-[#2a3644] text-slate-900 dark:text-white shadow-sm' : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-slate-700/50'}`}
+          >
+            Statistiken
           </Link>
         </div>
       )}

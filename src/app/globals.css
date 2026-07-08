@@ -252,6 +252,23 @@ body {
   color: var(--muted);
 }
 
+/* 
+ * Quantile Scales for Historical Statistics
+ * vacation-0 and sick-0 are handled directly as bg-[#2d333b] in JS/JSX 
+ */
+
+/* Vacation (Greens) */
+.vacation-1 { background-color: #0e4429; }
+.vacation-2 { background-color: #006d32; }
+.vacation-3 { background-color: #26a641; }
+.vacation-4 { background-color: #39d353; }
+
+/* Sickness (Reds) */
+.sick-1 { background-color: #4c1110; }
+.sick-2 { background-color: #8c1d18; }
+.sick-3 { background-color: #d12e2a; }
+.sick-4 { background-color: #f85149; }
+
 .meta-value {
   font-size: 14px;
   font-weight: 500;

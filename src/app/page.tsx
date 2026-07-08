@@ -27,8 +27,22 @@ export default async function Home() {
 
   const entriesRaw = await prisma.entry.findMany()
   const overrides = await prisma.profileYearOverride.findMany()
+  
+  // Auto-Archive past trips
+  const todayStr = new Date().toISOString().split('T')[0]
+  await prisma.trip.updateMany({
+    where: {
+      endDate: { lt: todayStr },
+      status: { not: 'Abgeschlossen' }
+    },
+    data: {
+      status: 'Abgeschlossen'
+    }
+  })
+
   const tripsRaw = await prisma.trip.findMany({
-    include: { profiles: true }
+    include: { profiles: true },
+    orderBy: { startDate: 'asc' }
   })
 
   // Ensure entries cast to CalendarEntry to match types

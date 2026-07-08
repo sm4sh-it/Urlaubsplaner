@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.7.0] - 2026-07-08
+### Added
+- **Statistik-Seite:** Eine völlig neue, umfangreiche und responsive Statistikseite wurde hinzugefügt. Enthält diverse Auswertungen zu Urlaubsdauer, Budget, Reisearten und historischen Verteilungen.
+- **Virtueller User 'AlleFerien':** Ein neuer, immer präsenter virtueller User "AlleFerien", der auf Knopfdruck eine gebündelte Schulferienübersicht aller 16 deutschen Bundesländer im Kalender einblendet, ohne die externe API zu überlasten.
+- **Auto-Archivierung von Reisen:** Vergangene Reisen werden beim Öffnen der App nun vollautomatisch in den Status "Abgeschlossen" überführt.
+
+### Changed
+- **Dashboard & Layout:** Diverse Designverbesserungen. Transporte sind nun 2-spaltig (über die volle Breite), aktive Buttons in Modal-Dialogen haben einen klaren blauen Indikator.
+- **Reisekalkulation:** Sabbaticals, Sonderurlaube, Mobiles Arbeiten und Überstundenabbau als Reiseart verbrauchen ab sofort keinen regulären Urlaub mehr.
+
+### Fixed
+- **Resturlaubswarnung:** Die Verfallswarnung für ungenutzten Resturlaub am Stichtag ignoriert keine Trips/Reisen mehr, die vor diesem Stichtag stattfinden.
+
 ## [0.6.3] - 2026-07-05
 ### Fixed
 - **Jahreswechsel & Resturlaub:** Ein Fehler wurde behoben, durch den bei der Berechnung des Resturlaubs (Rollover) ins Folgejahr die Urlaubstage von angelegten Trips im Vorjahr ignoriert wurden.

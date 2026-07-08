@@ -53,7 +53,7 @@ export default function YearCalendar() {
   const removeEntry = useStore(state => state.removeEntry)
 
   const holidays = useStore(state => state.holidays)
-  const [vacations, setVacations] = React.useState<{start: string, end: string, name: string}[]>([])
+  const [vacations, setVacations] = React.useState<{start: string, end: string, name: string, stateCode?: string}[]>([])
   const [pressedKey, setPressedKey] = React.useState<string | null>(null)
   const [isPending, startTransition] = React.useTransition()
 
@@ -204,8 +204,8 @@ export default function YearCalendar() {
                   const isHoliday = !!holidayName
                   
                   // Prüfen ob der Tag in den Schulferien liegt
-                  const activeVacation = vacations.find(v => dayObj.date >= v.start && dayObj.date <= v.end)
-                  const isVacation = !!activeVacation
+                  const activeVacations = vacations.filter(v => dayObj.date >= v.start && dayObj.date <= v.end)
+                  const isVacation = activeVacations.length > 0
 
                       // Tooltip Format: Wochentag, DD.MM.YYYY
                       const dateObj = new Date(dayObj.date)
@@ -213,8 +213,33 @@ export default function YearCalendar() {
                       const formattedDate = dateObj.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' })
                       
                       let tooltip = `${weekday}, ${formattedDate}`
-                      if (holidayName) tooltip += ` - ${holidayName}`
-                      else if (activeVacation) tooltip += ` - ${activeVacation.name}`
+                      if (holidayName) {
+                        tooltip += ` - ${holidayName}`
+                      } else if (activeVacations.length > 0) {
+                        if (stateCode === 'ALL') {
+                          const stateMapper: Record<string, string> = {
+                            BW: "BaWü", BY: "Bayern", BE: "Berlin", BB: "Brandenb.", HB: "Bremen",
+                            HH: "Hamburg", HE: "Hessen", MV: "MeckPom", NI: "Nds", NW: "NRW",
+                            RP: "RLP", SL: "Saarl.", SN: "Sachsen", ST: "Sachs-Anh.", SH: "SH", TH: "Thür."
+                          }
+                          const grouped = activeVacations.reduce((acc, v) => {
+                            // Extract just "Herbst" from "Herbstferien" to keep it short if possible
+                            const shortName = v.name.replace('ferien', '').trim()
+                            if (!acc[shortName]) acc[shortName] = []
+                            // @ts-ignore
+                            if (v.stateCode && !acc[shortName].includes(v.stateCode)) acc[shortName].push(v.stateCode)
+                            return acc
+                          }, {} as Record<string, string[]>)
+                          
+                          const vStrings = Object.entries(grouped).map(([name, codes]) => {
+                            const shortCodes = codes.map(c => stateMapper[c] || c).join(', ')
+                            return `${name} - ${shortCodes}`
+                          })
+                          tooltip += ` - ${vStrings.join(' | ')}`
+                        } else {
+                          tooltip += ` - ${activeVacations[0].name}`
+                        }
+                      }
 
                       return (
                         <div 

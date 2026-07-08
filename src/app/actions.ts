@@ -23,7 +23,7 @@ const profileSchema = z.object({
 })
 
 const yearSchema = z.number().int().min(2022).max(2100)
-const stateCodeSchema = z.string().length(2)
+const stateCodeSchema = z.string().min(2).max(3)
 
 // --- Auth Action ---
 export async function authenticate(password: string) {
@@ -189,6 +189,35 @@ export async function getCalendarData(year: number, stateCode: string) {
   const parsedYear = yearSchema.parse(year)
   const parsedState = stateCodeSchema.parse(stateCode)
 
+  if (parsedState === 'ALL') {
+    const allStates = ["BW", "BY", "BE", "BB", "HB", "HH", "HE", "MV", "NI", "NW", "RP", "SL", "SN", "ST", "SH", "TH"]
+    const allData = await Promise.all(
+      allStates.map(async (s) => {
+        try {
+          return await getCalendarData(year, s)
+        } catch (e) {
+          console.error("Failed fetching for " + s, e)
+          return { holidays: {}, vacations: [] }
+        }
+      })
+    )
+
+    const mergedHolidays: Record<string, string> = {}
+    const mergedVacations: { start: string, end: string, name: string, stateCode: string }[] = []
+
+    for (const data of allData) {
+      for (const [date, name] of Object.entries(data.holidays)) {
+        if (!mergedHolidays[date]) mergedHolidays[date] = name
+      }
+      mergedVacations.push(...data.vacations)
+    }
+
+    return {
+      holidays: mergedHolidays,
+      vacations: mergedVacations
+    }
+  }
+
   // Check if we have data
   const holidayCount = await prisma.holidayCache.count({ where: { year: parsedYear, stateCode: parsedState } })
   
@@ -207,7 +236,8 @@ export async function getCalendarData(year: number, stateCode: string) {
   const vacationList = vacations.map(v => ({
     start: v.startDate,
     end: v.endDate,
-    name: v.name
+    name: v.name,
+    stateCode: v.stateCode
   }))
 
   return {

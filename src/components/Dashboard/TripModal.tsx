@@ -14,7 +14,7 @@ interface TripModalProps {
 
 const TYPE_OPTIONS = ["Urlaub", "Mobiles Arbeiten", "Sonderurlaub", "Sabbatical", "Überstundenabbau"]
 const STATUS_OPTIONS = ["Idee", "In Planung", "Gebucht", "Abgeschlossen"]
-const TRAVEL_TYPE_OPTIONS = ["", "Wanderurlaub", "Städtetrip", "Strandurlaub", "Heimatbesuch", "Rundreise", "Skiurlaub"]
+const TRAVEL_TYPE_OPTIONS = ["", "Wanderurlaub", "Städtetrip", "Strandurlaub", "Heimatbesuch", "Rundreise", "Skiurlaub", "Wellness", "Roadtrip", "Aktivurlaub", "Kombi-Reise"]
 const TRANSPORT_OPTIONS = ["", "Flugzeug", "Mietwagen", "Bahn", "Eigenes Auto", "Schiff", "Fahrrad"]
 
 export default function TripModal({ isOpen, onClose, trip }: TripModalProps) {
@@ -30,7 +30,7 @@ export default function TripModal({ isOpen, onClose, trip }: TripModalProps) {
   const [status, setStatus] = useState(STATUS_OPTIONS[0])
   const [location, setLocation] = useState("")
   const [travelType, setTravelType] = useState("")
-  const [transport, setTransport] = useState("")
+  const [transport, setTransport] = useState<string[]>([])
   const [notes, setNotes] = useState("")
   const [budget, setBudget] = useState<number | "">("")
   const [cost, setCost] = useState<number | "">("")
@@ -49,7 +49,7 @@ export default function TripModal({ isOpen, onClose, trip }: TripModalProps) {
         setStatus(trip.status)
         setLocation(trip.location || "")
         setTravelType(trip.travelType || "")
-        setTransport(trip.transport || "")
+        setTransport(trip.transport ? trip.transport.split(',').map(s => s.trim()).filter(Boolean) : [])
         setNotes(trip.notes || "")
         setBudget(trip.budget || "")
         setCost(trip.cost || "")
@@ -65,7 +65,7 @@ export default function TripModal({ isOpen, onClose, trip }: TripModalProps) {
         setStatus(STATUS_OPTIONS[0])
         setLocation("")
         setTravelType("")
-        setTransport("")
+        setTransport([])
         setNotes("")
         setBudget("")
         setCost("")
@@ -101,7 +101,7 @@ export default function TripModal({ isOpen, onClose, trip }: TripModalProps) {
       status,
       location: location || null,
       travelType: travelType || null,
-      transport: transport || null,
+      transport: transport.length > 0 ? transport.join(', ') : null,
       notes: notes || null,
       budget: budget === "" ? null : Number(budget),
       cost: cost === "" ? null : Number(cost)
@@ -210,7 +210,7 @@ export default function TripModal({ isOpen, onClose, trip }: TripModalProps) {
               <div className="flex flex-col gap-2">
                 <label className="text-sm font-medium text-slate-700 dark:text-slate-300">App-Profile (Für Kalender-Sync) *</label>
                 <div className="flex flex-wrap gap-2">
-                  {profiles.map(p => {
+                  {profiles.filter(p => p.id !== 'ALLE_FERIEN').map(p => {
                     const isSelected = selectedProfileIds.includes(p.id)
                     return (
                       <div 
@@ -258,7 +258,7 @@ export default function TripModal({ isOpen, onClose, trip }: TripModalProps) {
             <section className="flex flex-col gap-4">
               <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-500 border-b border-slate-100 dark:border-slate-800 pb-2">Details (Optional)</h3>
               
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="flex flex-col gap-1">
                   <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Ort / Land</label>
                   <input value={location} onChange={e => setLocation(e.target.value)} type="text" placeholder="z.B. Mallorca" className="px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-brand-500 outline-none" />
@@ -271,11 +271,33 @@ export default function TripModal({ isOpen, onClose, trip }: TripModalProps) {
                   </select>
                 </div>
 
-                <div className="flex flex-col gap-1">
-                  <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Transportmittel</label>
-                  <select value={transport} onChange={e => setTransport(e.target.value)} className="px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-brand-500 outline-none appearance-none">
-                    {TRANSPORT_OPTIONS.map(opt => <option key={opt} value={opt}>{opt || "Bitte wählen..."}</option>)}
-                  </select>
+                <div className="flex flex-col gap-2 md:col-span-2">
+                  <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Transportmittel (Mehrfachauswahl)</label>
+                  <div className="flex flex-wrap gap-2">
+                    {TRANSPORT_OPTIONS.filter(opt => opt !== "").map(opt => {
+                      const isSelected = transport.includes(opt)
+                      return (
+                        <button
+                          key={opt}
+                          type="button"
+                          onClick={() => {
+                            if (isSelected) {
+                              setTransport(prev => prev.filter(t => t !== opt))
+                            } else {
+                              setTransport(prev => [...prev, opt])
+                            }
+                          }}
+                          className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
+                            isSelected 
+                              ? 'bg-[#3b82f6] text-white shadow-sm ring-2 ring-[#3b82f6] ring-offset-2 ring-offset-[#0d1117]' 
+                              : 'bg-slate-100 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
+                          }`}
+                        >
+                          {opt}
+                        </button>
+                      )
+                    })}
+                  </div>
                 </div>
               </div>
 
