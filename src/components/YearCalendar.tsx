@@ -23,6 +23,7 @@ const VALID_KEYS: Record<string, EntryType> = {
   'g': 'G', 'G': 'G',
   'd': 'D', 'D': 'D',
   's': 'S', 'S': 'S',
+  'a': 'A', 'A': 'A', // a -> Auszeit/Sabbatical
   'x': 'X', 'X': 'X',
   'm': 'M', 
   'M': '5' // Shift+m -> halber Tag mobiles arbeiten
@@ -76,7 +77,8 @@ export default function YearCalendar() {
   const mapTripTypeToEntryType = (type: string): EntryType => {
     if (type === "Urlaub") return "U"
     if (type === "Mobiles Arbeiten") return "M"
-    if (type === "Sonderurlaub" || type === "Sabbatical") return "S"
+    if (type === "Sabbatical") return "A"
+    if (type === "Sonderurlaub") return "S"
     if (type === "Überstundenabbau") return "Ü"
     return "U" // Fallback
   }

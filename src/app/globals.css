@@ -24,6 +24,7 @@
   --color-blocked: var(--blocked);
   --color-mobile: #1a5fb4;
   --color-ferien: #ff9f43;
+  --color-auszeit: #0ea5e9;
 
   --color-status-confirmed: #23d160;
   --color-status-planning: #ff9f43;
@@ -113,6 +114,8 @@ body {
 .status-g   { background: var(--color-gleitzeit) !important; color: #fff !important; }
 .status-d   { background: var(--color-dienstreise) !important; color: #fff !important; }
 .status-s   { background: var(--color-special) !important; color: #fff !important; }
+.status-a   { background: var(--color-auszeit) !important; color: #fff !important; }
+.status-a-2 { background: linear-gradient(135deg, var(--color-auszeit) 50%, var(--surface) 50%) !important; color: #fff !important; }
 .status-m {
   background-color: #1a5fb4 !important;
   color: white !important;

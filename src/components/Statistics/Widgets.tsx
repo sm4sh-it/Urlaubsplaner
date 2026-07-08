@@ -22,7 +22,10 @@ export function TripCategoryWidget() {
     return Array.from(counts.entries()).sort((a, b) => b[1] - a[1]).slice(0, 5) // Top 5
   }, [trips, activeProfileIds])
 
-  const maxCount = stats.length > 0 ? stats[0][1] : 1
+  const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#14b8a6', '#f97316']
+
+  const total = stats.reduce((sum, [_, count]) => sum + count, 0)
+  let cumulativePercent = 0
 
   return (
     <div className="bg-[#0d1117] rounded-xl border border-slate-800 p-6 flex flex-col shadow-xl h-full">
@@ -30,13 +33,52 @@ export function TripCategoryWidget() {
       {stats.length === 0 ? (
         <div className="text-slate-500 text-sm my-auto text-center">Keine Daten vorhanden</div>
       ) : (
-        <div className="flex flex-col gap-3">
-          {stats.map(([type, count]) => (
-            <div key={type} className="flex items-center justify-between p-3 rounded-lg bg-[#161b22] border border-slate-800/50">
-              <span className="text-sm font-medium text-slate-300">{type}</span>
-              <span className="font-bold text-brand-500 bg-brand-500/10 px-2.5 py-0.5 rounded-md">{count}x</span>
-            </div>
-          ))}
+        <div className="flex flex-col md:flex-row items-center gap-6 my-auto">
+          <div className="relative w-32 h-32 flex-shrink-0">
+            {/* Base Circle */}
+            <svg viewBox="0 0 100 100" className="absolute top-0 left-0 w-full h-full">
+               <circle cx="50" cy="50" r="40" fill="transparent" stroke="#161b22" strokeWidth="20" />
+            </svg>
+            <svg viewBox="0 0 100 100" className="absolute top-0 left-0 w-full h-full transform -rotate-90">
+              {stats.map(([type, count], idx) => {
+                const percent = (count / total) * 100
+                const strokeDasharray = `${percent} 100`
+                const strokeDashoffset = -cumulativePercent
+                cumulativePercent += percent
+                
+                // Add a small gap by reducing the painted percentage very slightly if there are multiple segments
+                const adjustedPercent = stats.length > 1 ? percent - 1 : percent
+                const adjustedDasharray = `${adjustedPercent > 0 ? adjustedPercent : 0} 100`
+
+                return (
+                  <circle
+                    key={type}
+                    cx="50"
+                    cy="50"
+                    r="40"
+                    fill="transparent"
+                    stroke={COLORS[idx % COLORS.length]}
+                    strokeWidth="20"
+                    strokeDasharray={adjustedDasharray}
+                    strokeDashoffset={strokeDashoffset}
+                    pathLength="100"
+                    strokeLinecap="round"
+                  />
+                )
+              })}
+            </svg>
+          </div>
+          <div className="flex flex-col gap-3 flex-1 w-full justify-center">
+            {stats.map(([type, count], idx) => (
+              <div key={type} className="flex items-center justify-between text-sm">
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 rounded-full" style={{ backgroundColor: COLORS[idx % COLORS.length] }} />
+                  <span className="text-slate-300 truncate max-w-[120px]" title={type}>{type}</span>
+                </div>
+                <span className="font-bold text-slate-100">{Math.round((count / total) * 100)}%</span>
+              </div>
+            ))}
+          </div>
         </div>
       )}
     </div>
@@ -122,25 +164,70 @@ export function StatusWidget() {
     return { counts, total }
   }, [trips, activeProfileIds])
 
+  const STATUS_COLORS: Record<string, string> = {
+    'Idee': '#fde047',
+    'In Planung': '#ff9f43',
+    'Gebucht': '#23d160',
+    'Abgeschlossen': '#64748b'
+  }
+
+  const list = Object.entries(stats.counts).filter(([_, count]) => count > 0)
+  let cumulativePercent = 0
+
   return (
-    <div className="bg-[#0d1117] rounded-xl border border-slate-800 p-6 flex flex-col shadow-xl h-full justify-between">
-      <h3 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-4">Buchungsstatus</h3>
+    <div className="bg-[#0d1117] rounded-xl border border-slate-800 p-6 flex flex-col shadow-xl h-full">
+      <h3 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-6">Buchungsstatus</h3>
       {stats.total === 0 ? (
         <div className="text-slate-500 text-sm my-auto text-center">Keine Daten vorhanden</div>
       ) : (
-        <div className="flex h-16 rounded-lg overflow-hidden">
-          {stats.counts['Idee'] > 0 && <div className="bg-[#fde047] h-full" style={{ width: `${(stats.counts['Idee'] / stats.total) * 100}%` }} title={`Idee: ${stats.counts['Idee']}`} />}
-          {stats.counts['In Planung'] > 0 && <div className="bg-[#ff9f43] h-full" style={{ width: `${(stats.counts['In Planung'] / stats.total) * 100}%` }} title={`In Planung: ${stats.counts['In Planung']}`} />}
-          {stats.counts['Gebucht'] > 0 && <div className="bg-[#23d160] h-full" style={{ width: `${(stats.counts['Gebucht'] / stats.total) * 100}%` }} title={`Gebucht: ${stats.counts['Gebucht']}`} />}
-          {stats.counts['Abgeschlossen'] > 0 && <div className="bg-slate-500 h-full" style={{ width: `${(stats.counts['Abgeschlossen'] / stats.total) * 100}%` }} title={`Abgeschlossen: ${stats.counts['Abgeschlossen']}`} />}
+        <div className="flex flex-col md:flex-row items-center gap-6 my-auto">
+          <div className="relative w-32 h-32 flex-shrink-0">
+            {/* Base Circle */}
+            <svg viewBox="0 0 100 100" className="absolute top-0 left-0 w-full h-full">
+               <circle cx="50" cy="50" r="40" fill="transparent" stroke="#161b22" strokeWidth="20" />
+            </svg>
+            <svg viewBox="0 0 100 100" className="absolute top-0 left-0 w-full h-full transform -rotate-90">
+              {list.map(([type, count]) => {
+                const percent = (count / stats.total) * 100
+                const strokeDasharray = `${percent} 100`
+                const strokeDashoffset = -cumulativePercent
+                cumulativePercent += percent
+                
+                // Add a small gap by reducing the painted percentage very slightly if there are multiple segments
+                const adjustedPercent = list.length > 1 ? percent - 1 : percent
+                const adjustedDasharray = `${adjustedPercent > 0 ? adjustedPercent : 0} 100`
+
+                return (
+                  <circle
+                    key={type}
+                    cx="50"
+                    cy="50"
+                    r="40"
+                    fill="transparent"
+                    stroke={STATUS_COLORS[type] || '#64748b'}
+                    strokeWidth="20"
+                    strokeDasharray={adjustedDasharray}
+                    strokeDashoffset={strokeDashoffset}
+                    pathLength="100"
+                    strokeLinecap="round"
+                  />
+                )
+              })}
+            </svg>
+          </div>
+          <div className="flex flex-col gap-3 flex-1 w-full justify-center">
+            {list.map(([type, count]) => (
+              <div key={type} className="flex items-center justify-between text-sm">
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 rounded-full" style={{ backgroundColor: STATUS_COLORS[type] || '#64748b' }} />
+                  <span className="text-slate-300 truncate max-w-[120px]" title={type}>{type}</span>
+                </div>
+                <span className="font-bold text-slate-100">{Math.round((count / stats.total) * 100)}%</span>
+              </div>
+            ))}
+          </div>
         </div>
       )}
-      <div className="flex flex-wrap gap-x-4 gap-y-2 mt-4 text-xs text-slate-400">
-        <div className="flex items-center gap-1"><div className="w-2 h-2 rounded-full bg-[#fde047]" /> Idee</div>
-        <div className="flex items-center gap-1"><div className="w-2 h-2 rounded-full bg-[#ff9f43]" /> In Planung</div>
-        <div className="flex items-center gap-1"><div className="w-2 h-2 rounded-full bg-[#23d160]" /> Gebucht</div>
-        <div className="flex items-center gap-1"><div className="w-2 h-2 rounded-full bg-slate-500" /> Abgeschlossen</div>
-      </div>
     </div>
   )
 }
@@ -162,7 +249,7 @@ export function AvgDurationWidget() {
   }, [trips, activeProfileIds])
 
   return (
-    <div className="bg-[#0d1117] rounded-xl border border-slate-800 p-6 flex flex-col shadow-xl h-full justify-center">
+    <div className="bg-[#0d1117] rounded-xl border border-slate-800 p-6 flex flex-col shadow-xl h-full">
       <h3 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-2">Ø Urlaubsdauer</h3>
       <div className="flex items-end gap-2">
         <span className="text-4xl font-bold text-slate-100">{avg}</span>
@@ -275,7 +362,6 @@ export function BridgeDaysWidget() {
       <h3 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-2">Genutzte Brückentage</h3>
       <div className="flex items-end gap-2">
         <span className="text-4xl font-bold text-brand-500">{count}</span>
-        <span className="text-lg text-slate-500 mb-1">Tage</span>
       </div>
       <p className="text-xs text-slate-500 mt-2 leading-relaxed">
         Urlaubstage genau zwischen einem Feiertag und einem Wochenende.

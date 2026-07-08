@@ -1,6 +1,23 @@
 # Changelog
 
 All notable changes to this project will be documented in this file.
+## [0.8.1] - 2026-07-08
+### Changed
+- **Statistik Diagramme:** Die Darstellung von "Buchungsstatus" und "Art der Reise" nutzt nun wieder das cleane, SVG-basierte Donut-Design inkl. einer übersichtlichen, integrierten Legende (analog zum "Reisetyp"-Diagramm), um einen einheitlichen und aufgeräumteren Look der Widgets zu gewährleisten.
+
+## [0.8.0] - 2026-07-08
+### Added
+- **Erweiterte Analysen (Recharts):** Einführung einer neuen Jahresauswertung auf der Statistik-Seite. Beinhaltet drei neue, interaktive Diagramme (erstellt mit Recharts):
+  - *Urlaubs-Guthaben Verlauf*: Ein Flächendiagramm (Area Chart), das den Abbau des Resturlaubs über das aktuelle Jahr darstellt.
+  - *Krankheitstage nach Wochentag*: Ein Radar-Diagramm, das zeigt, an welchen Wochentagen Krankheitstage am häufigsten vorkommen.
+  - *Kosten vs. Reisedauer*: Ein interaktives Streudiagramm (Scatter Plot) zur Analyse der Kosteneffizienz einzelner Reisen.
+- **Sabbatical (Auszeit):** Sabbaticals haben nun eine dedizierte eigene Kalender-Kategorie (`A`). Sie werden nicht mehr nur unter "Sonderurlaub" gebündelt und stechen in einer eigenen, himmelblauen Farbe ("Auszeit") im Kalender hervor.
+
+### Changed
+- **Statistik Layout:** Die Statistik-Seite wurde umstrukturiert. Jahresabhängige Statistiken sind nun prominent ganz oben gruppiert.
+- **Statistik Design:** Der "Buchungsstatus" und die "Art der Reise" wurden modernisiert und als animierte Kreis-/Donut-Diagramme neu visualisiert.
+- **Profil-Hydration:** Beim direkten Aufrufen der Statistik-Seite werden die Profildaten nun ebenfalls korrekt aus der Datenbank geladen (Store Hydration), wodurch das Neuladen der Seite fehlerfrei funktioniert.
+
 ## [0.7.1] - 2026-07-08
 ### Changed
 - **UI & Layout Feinschliff:** Dashboard und Statistikseite nutzen nun eine einheitliche, maximale Container-Breite (1600px).
