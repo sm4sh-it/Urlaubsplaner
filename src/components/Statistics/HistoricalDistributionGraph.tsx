@@ -137,8 +137,8 @@ export default function HistoricalDistributionGraph() {
 
   return (
     <div className="bg-[#0d1117] rounded-xl border border-slate-800 p-6 flex flex-col shadow-xl overflow-hidden w-full h-full">
-      <div className="flex flex-col gap-3 mb-6">
-        <div className="flex self-start bg-[#161b22] rounded-full p-1 border border-slate-700/50">
+      <div className="flex flex-col items-center gap-3 mb-6">
+        <div className="flex bg-[#161b22] rounded-full p-1 border border-slate-700/50">
           <button
             onClick={() => setViewMode('Urlaub')}
             className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-semibold transition-all duration-300 ${
@@ -161,7 +161,7 @@ export default function HistoricalDistributionGraph() {
           </button>
         </div>
         
-        <h2 className="text-xl font-bold text-slate-100">
+        <h2 className="text-xl font-bold text-slate-100 text-center min-w-[360px]">
           {viewMode === 'Urlaub' ? 'Urlaubsverteilung über die Jahre' : 'Krankheitsverteilung über die Jahre'}
         </h2>
       </div>

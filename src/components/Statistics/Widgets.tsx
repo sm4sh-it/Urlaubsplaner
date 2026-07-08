@@ -30,19 +30,11 @@ export function TripCategoryWidget() {
       {stats.length === 0 ? (
         <div className="text-slate-500 text-sm my-auto text-center">Keine Daten vorhanden</div>
       ) : (
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-3">
           {stats.map(([type, count]) => (
-            <div key={type} className="flex flex-col gap-1.5">
-              <div className="flex justify-between text-sm text-slate-300">
-                <span>{type}</span>
-                <span className="font-semibold">{count}x</span>
-              </div>
-              <div className="w-full bg-[#161b22] h-2 rounded-full overflow-hidden">
-                <div 
-                  className="bg-brand-500 h-full rounded-full transition-all duration-500" 
-                  style={{ width: `${(count / maxCount) * 100}%` }}
-                />
-              </div>
+            <div key={type} className="flex items-center justify-between p-3 rounded-lg bg-[#161b22] border border-slate-800/50">
+              <span className="text-sm font-medium text-slate-300">{type}</span>
+              <span className="font-bold text-brand-500 bg-brand-500/10 px-2.5 py-0.5 rounded-md">{count}x</span>
             </div>
           ))}
         </div>
@@ -310,7 +302,7 @@ export function TravelTypeWidget() {
     return { list: Array.from(counts.entries()).sort((a, b) => b[1] - a[1]), total }
   }, [trips, activeProfileIds])
 
-  const colors = ['#0ea5e9', '#3b82f6', '#6366f1', '#8b5cf6', '#d946ef', '#f43f5e']
+  const colors = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#f97316']
 
   let cumulativePercent = 0
 

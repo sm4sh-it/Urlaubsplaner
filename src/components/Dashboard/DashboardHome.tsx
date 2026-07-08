@@ -89,7 +89,7 @@ export default function DashboardHome() {
   // const sicknessDays = ...
 
   return (
-    <div className="max-w-6xl w-full mx-auto p-6 md:p-10 flex flex-col gap-10">
+    <div className="max-w-[1600px] w-full mx-auto p-6 md:p-10 flex flex-col gap-10">
       
       {/* Stats Row */}
       <div className="flex flex-wrap items-center gap-3 md:gap-4 text-sm md:text-lg text-slate-600 dark:text-slate-300 border-b border-slate-200 dark:border-[var(--border-subtle)] pb-6 font-medium">

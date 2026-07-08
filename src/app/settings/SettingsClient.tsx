@@ -243,10 +243,10 @@ export default function SettingsClient({ initialProfiles }: { initialProfiles: P
                     key={day.value}
                     type="button"
                     onClick={() => handleWorkingDayChange(day.value)}
-                    className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium transition-colors ${
+                    className={`w-12 h-10 rounded-md flex items-center justify-center text-sm font-medium transition-all duration-200 ${
                       isSelected 
-                        ? 'bg-brand-500 text-white shadow-sm' 
-                        : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border border-slate-300 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-800'
+                        ? 'bg-slate-800 dark:bg-slate-200 text-white dark:text-slate-900 shadow-md ring-1 ring-slate-800 dark:ring-slate-200' 
+                        : 'bg-slate-100 dark:bg-[var(--surface)] text-slate-400 dark:text-slate-500 border border-slate-200 dark:border-white/5 hover:bg-slate-200 dark:hover:bg-[var(--surface-bright)] hover:-translate-y-[1px] hover:shadow-sm'
                     }`}
                   >
                     {day.label}

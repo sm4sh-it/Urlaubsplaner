@@ -1,6 +1,15 @@
 # Changelog
 
 All notable changes to this project will be documented in this file.
+## [0.7.1] - 2026-07-08
+### Changed
+- **UI & Layout Feinschliff:** Dashboard und Statistikseite nutzen nun eine einheitliche, maximale Container-Breite (1600px).
+- **Jahresübersicht:** Der Übersichts-Graph auf dem Dashboard wurde vergrößert und zentriert, um den vorhandenen Platz besser zu nutzen.
+- **Button-Design:** Der "Speichern"-Button in Modalen nutzt nun einen "Ghost-Style", der das Hover-Verhalten des "Abbrechen"-Buttons mit den primären Markenfarben kombiniert.
+- **Statistik-Graphen:** Das Kreisdiagramm der Reisetyps hat neue, deutlich kontrastreichere Farben bekommen. Die "Art der Reise" Kategorie wurde in ein klares, modernes Listen-Design ohne Fortschrittsbalken umgebaut.
+- **Einstellungen:** Die Auswahl der Arbeitstage (Wochentage) entspricht optisch nun exakt den quadratischen und abgerundeten Zellen des Jahreskalenders.
+- **Ausrichtung:** Kasten "Urlaubs- / Krankheitsverteilung" zentriert Toggle-Buttons und Überschrift, wodurch das Layout beim Umschalten stabiler bleibt.
+
 
 ## [0.7.0] - 2026-07-08
 ### Added

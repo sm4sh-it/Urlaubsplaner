@@ -289,7 +289,7 @@ export default function TripModal({ isOpen, onClose, trip }: TripModalProps) {
                           }}
                           className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
                             isSelected 
-                              ? 'bg-[#3b82f6] text-white shadow-sm ring-2 ring-[#3b82f6] ring-offset-2 ring-offset-[#0d1117]' 
+                              ? 'bg-blue-100 dark:bg-blue-900/40 text-blue-800 dark:text-blue-300' 
                               : 'bg-slate-100 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
                           }`}
                         >
@@ -345,7 +345,7 @@ export default function TripModal({ isOpen, onClose, trip }: TripModalProps) {
               type="submit"
               form="trip-form"
               disabled={isSaving || selectedProfileIds.length === 0}
-              className="px-6 py-2 bg-brand-500 hover:bg-brand-600 disabled:opacity-50 text-white rounded-lg font-medium flex items-center gap-2 shadow-sm transition-colors"
+              className="px-6 py-2 text-brand-600 dark:text-brand-500 hover:bg-brand-50 dark:hover:bg-brand-500/10 disabled:opacity-50 rounded-lg font-medium flex items-center gap-2 transition-colors"
             >
               <Save className="w-4 h-4" /> {isSaving ? "Speichert..." : "Speichern"}
             </button>

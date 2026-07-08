@@ -120,32 +120,32 @@ export default function YearlyContributionGraph() {
   }
 
   return (
-    <div className="flex flex-col gap-2 border-b border-slate-200 dark:border-[var(--border-subtle)] pb-6 pt-2">
-      <div className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+    <div className="flex flex-col gap-4 border-b border-slate-200 dark:border-[var(--border-subtle)] pb-8 pt-4 items-center">
+      <div className="text-lg font-bold text-slate-800 dark:text-slate-100 mb-2">
         Jahresübersicht {selectedYear}
       </div>
       
-      <div className="flex">
+      <div className="flex max-w-full justify-center">
         {/* Days of week labels */}
-        <div className="flex flex-col gap-[4px] text-[10px] text-slate-400 mr-3 mt-[24px]">
-          <span className="h-[14px] leading-[14px]">Mo</span>
-          <span className="h-[14px] leading-[14px] invisible">Di</span>
-          <span className="h-[14px] leading-[14px]">Mi</span>
-          <span className="h-[14px] leading-[14px] invisible">Do</span>
-          <span className="h-[14px] leading-[14px]">Fr</span>
-          <span className="h-[14px] leading-[14px] invisible">Sa</span>
-          <span className="h-[14px] leading-[14px]">So</span>
+        <div className="flex flex-col gap-1 text-xs font-medium text-slate-400 mr-4 mt-[30px]">
+          <span className="h-5 leading-5">Mo</span>
+          <span className="h-5 leading-5 invisible">Di</span>
+          <span className="h-5 leading-5">Mi</span>
+          <span className="h-5 leading-5 invisible">Do</span>
+          <span className="h-5 leading-5">Fr</span>
+          <span className="h-5 leading-5 invisible">Sa</span>
+          <span className="h-5 leading-5">So</span>
         </div>
 
-        <div className="flex-1 overflow-x-auto custom-scrollbar pb-2 pl-1">
-          <div className="min-w-max">
+        <div className="overflow-x-auto custom-scrollbar pb-4 pl-1">
+          <div className="min-w-max pr-4">
             {/* Months Row */}
-            <div className="relative h-5 mb-1 flex text-[10px] text-slate-400">
+            <div className="relative h-6 mb-1.5 flex text-xs font-medium text-slate-400">
               {months.map((m, i) => (
                 <div 
                   key={i} 
                   className="absolute"
-                  style={{ left: `${m.colIndex * 18}px` }}
+                  style={{ left: `${m.colIndex * 24}px` }}
                 >
                   {m.label}
                 </div>
@@ -153,18 +153,18 @@ export default function YearlyContributionGraph() {
             </div>
 
             <div 
-              className="grid gap-[4px]"
+              className="grid gap-1"
               style={{
-                gridTemplateRows: 'repeat(7, 14px)',
+                gridTemplateRows: 'repeat(7, 20px)',
                 gridAutoFlow: 'column',
-                gridAutoColumns: '14px'
+                gridAutoColumns: '20px'
               }}
             >
               {days.map((day, i) => (
                 <div
                   key={day.date}
                   title={`${day.date}${day.status ? ` (${day.status.toUpperCase()})` : ''}`}
-                  className={`w-[14px] h-[14px] rounded-sm ${getCssClass(day)} transition-colors hover:ring-2 hover:ring-slate-400`}
+                  className={`w-5 h-5 rounded-sm ${getCssClass(day)} transition-all duration-300 hover:ring-2 hover:ring-brand-500 hover:scale-110 cursor-pointer shadow-sm`}
                 />
               ))}
             </div>
