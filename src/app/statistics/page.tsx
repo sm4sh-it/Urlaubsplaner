@@ -15,27 +15,12 @@ import VacationBurnDownWidget from "@/components/Statistics/VacationBurnDownWidg
 import StoreHydrator from "@/components/StoreHydrator"
 import { prisma } from "@/lib/prisma"
 import { CalendarEntry, EntryType } from "@/types"
+import { ensureDefaultProfile } from "@/lib/ensureDefaultProfile"
 
 export const dynamic = 'force-dynamic'
 
 export default async function StatisticsPage() {
-  let profilesRaw = await prisma.profile.findMany()
-  
-  if (profilesRaw.length === 0) {
-    const defaultProfile = await prisma.profile.create({
-      data: {
-        name: "Max Mustermann",
-        color: "#10b981",
-        annualLeave: 30,
-        remainingLeave: 5,
-        additionalLeave: 0,
-        remainingLeaveExpiryDate: "03-31",
-        stateCode: "NW",
-        startYear: new Date().getFullYear()
-      }
-    })
-    profilesRaw = [defaultProfile]
-  }
+  let profilesRaw = await ensureDefaultProfile()
 
   const entriesRaw = await prisma.entry.findMany()
   const overrides = await prisma.profileYearOverride.findMany()

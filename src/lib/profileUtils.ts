@@ -14,9 +14,13 @@ export function getProfileStatsForYear(
   overrides: ProfileYearOverride[],
   entries: CalendarEntry[],
   trips: Trip[] = [],
-  holidays: Record<string, any> = {}
+  holidays: Record<string, any> = {},
+  cache: Map<string, YearlyStats | null> = new Map()
 ): YearlyStats | null {
   if (year < profile.startYear) return null
+
+  const cacheKey = `${profile.id}_${year}`
+  if (cache.has(cacheKey)) return cache.get(cacheKey) || null
 
   const override = overrides.find(o => o.profileId === profile.id && o.year === year)
   
@@ -32,7 +36,7 @@ export function getProfileStatsForYear(
     remainingLeave = profile.remainingLeave
   } else {
     // Calculate recursively from the previous year
-    const prevStats = getProfileStatsForYear(profile, year - 1, overrides, entries, trips, holidays)
+    const prevStats = getProfileStatsForYear(profile, year - 1, overrides, entries, trips, holidays, cache)
     if (prevStats) {
       // Find all used vacation in previous year
       const prevYearStr = (year - 1).toString()
@@ -58,10 +62,13 @@ export function getProfileStatsForYear(
     }
   }
 
-  return {
+  const result = {
     annualLeave,
     additionalLeave,
     remainingLeave,
     totalAvailable: annualLeave + additionalLeave + remainingLeave
   }
+  
+  cache.set(cacheKey, result)
+  return result
 }

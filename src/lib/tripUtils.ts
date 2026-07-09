@@ -32,8 +32,7 @@ export function calculateTripVacationCost(trip: Trip, profile: Profile, holidays
     return 0
   }
 
-  // Parse working days from string "1,2,3,4,5"
-  const workingDays = profile.workingDays ? profile.workingDays.split(',').map(Number) : [1, 2, 3, 4, 5]
+  // Removed redundant workingDays parsing since isVacationCostingDay already does it
 
   let cost = 0
   
@@ -42,10 +41,7 @@ export function calculateTripVacationCost(trip: Trip, profile: Profile, holidays
   
   // Create a loop from start date to end date
   for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
-    // getDay() returns 0 for Sunday, 1 for Monday...
-    // Let's normalize it to 1-7 where 1=Monday, 7=Sunday
-    let dayOfWeek = d.getDay()
-    if (dayOfWeek === 0) dayOfWeek = 7
+    // (Removed unused dayOfWeek)
 
     const year = d.getFullYear()
     const month = String(d.getMonth() + 1).padStart(2, '0')

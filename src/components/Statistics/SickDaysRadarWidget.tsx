@@ -40,7 +40,7 @@ export default function SickDaysRadarWidget() {
   const maxCount = Math.max(...data.map(d => d.count), 5) // at least 5 for scale
 
   return (
-    <div className="bg-[#0d1117] rounded-xl border border-slate-800 p-6 flex flex-col shadow-xl h-full w-full min-h-[350px]">
+    <div className="bg-white dark:bg-[#0d1117] rounded-xl border border-slate-200 dark:border-slate-800 p-6 flex flex-col shadow-xl h-full w-full min-h-[350px]">
       <h3 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-2">Krankheitstage nach Wochentag</h3>
       <p className="text-xs text-slate-500 mb-2">Gibt es in {selectedYear} einen Wochentag, an dem du öfter krank bist?</p>
       

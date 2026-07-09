@@ -25,18 +25,55 @@ const profileSchema = z.object({
 const yearSchema = z.number().int().min(2022).max(2100)
 const stateCodeSchema = z.string().min(2).max(3)
 
+const feiertageApiResponseSchema = z.record(z.string(), z.object({
+  datum: z.string()
+}).passthrough())
+
+const vacationItemSchema = z.object({
+  startDate: z.string(),
+  endDate: z.string(),
+  name: z.array(z.object({
+    language: z.string(),
+    text: z.string()
+  }).passthrough()).optional()
+}).passthrough()
+
+const openHolidaysApiResponseSchema = z.union([
+  z.array(vacationItemSchema),
+  z.object({ value: z.array(vacationItemSchema) }).passthrough()
+])
+
 // --- Auth Action ---
 export async function authenticate(password: string) {
+  const authEnabled = process.env.AUTH_ENABLED !== 'false'
   const correctPassword = process.env.APP_PASSWORD
-  if (!correctPassword || password === correctPassword) {
+  
+  // Wenn AUTH_ENABLED explizit auf 'false' gesetzt ist, lassen wir jeden rein.
+  if (!authEnabled) {
     (await cookies()).set('sm4sh_auth', 'authenticated', {
       httpOnly: true,
-      secure: false, // Allow HTTP self-hosting
+      secure: process.env.NODE_ENV === 'production',
       maxAge: 60 * 60 * 24 * 30, // 30 days
       path: '/',
     })
     return { success: true }
   }
+
+  // Ab hier ist Authentifizierung Pflicht!
+  if (!correctPassword) {
+    return { success: false, error: "Server-Konfigurationsfehler: Kein Passwort in .env gesetzt." }
+  }
+  
+  if (password === correctPassword) {
+    (await cookies()).set('sm4sh_auth', 'authenticated', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      maxAge: 60 * 60 * 24 * 30, // 30 days
+      path: '/',
+    })
+    return { success: true }
+  }
+  
   return { success: false, error: "Falsches Passwort" }
 }
 
@@ -65,33 +102,19 @@ export async function toggleEntry(date: string, type: EntryType | null, profileI
   }
 
   // Otherwise upsert
-  const existing = await prisma.entry.findUnique({
+  const entry = await prisma.entry.upsert({
     where: {
       date_profileId: {
         date: parsedDate,
         profileId: parsedProfileId
       }
-    }
+    },
+    update: { type: parsedType },
+    create: { date: parsedDate, type: parsedType, profileId: parsedProfileId }
   })
 
-  let action = ''
-  let entry = null
-
-  if (existing) {
-    entry = await prisma.entry.update({
-      where: { id: existing.id },
-      data: { type: parsedType }
-    })
-    action = 'updated'
-  } else {
-    entry = await prisma.entry.create({
-      data: { date: parsedDate, type: parsedType, profileId: parsedProfileId }
-    })
-    action = 'created'
-  }
-
   revalidatePath('/', 'layout')
-  return { success: true, action, entry }
+  return { success: true, action: 'upserted', entry }
 }
 
 export async function createProfile(data: Omit<Profile, 'id'>) {
@@ -143,8 +166,12 @@ export async function syncCalendarData(year: number, stateCode: string) {
       throw new Error("Failed to fetch from external APIs")
     }
 
-    const holidaysData = await holidaysRes.json()
-    const vacationsData = await vacationsRes.json()
+    const rawHolidaysData = await holidaysRes.json()
+    const rawVacationsData = await vacationsRes.json()
+
+    // Validate external responses
+    const holidaysData = feiertageApiResponseSchema.parse(rawHolidaysData)
+    const parsedVacationsData = openHolidaysApiResponseSchema.parse(rawVacationsData)
 
     // 2. Clear old cache for this year and state
     await prisma.holidayCache.deleteMany({
@@ -155,7 +182,7 @@ export async function syncCalendarData(year: number, stateCode: string) {
     })
 
     // 3. Save Holidays
-    const holidayInserts = Object.entries<any>(holidaysData).map(([name, h]) => ({
+    const holidayInserts = Object.entries(holidaysData).map(([name, h]) => ({
       date: h.datum,
       name,
       stateCode: parsedState,
@@ -166,11 +193,11 @@ export async function syncCalendarData(year: number, stateCode: string) {
     }
 
     // 4. Save Vacations
-    const vacationArray = Array.isArray(vacationsData) ? vacationsData : (vacationsData.value || [])
-    const vacationInserts = vacationArray.map((v: any) => ({
+    const vacationArray = Array.isArray(parsedVacationsData) ? parsedVacationsData : parsedVacationsData.value
+    const vacationInserts = vacationArray.map(v => ({
       startDate: v.startDate,
       endDate: v.endDate,
-      name: v.name.find((n: any) => n.language === 'DE')?.text || 'Ferien',
+      name: v.name?.find(n => n.language === 'DE')?.text || 'Ferien',
       stateCode: parsedState,
       year: parsedYear
     }))
@@ -244,6 +271,19 @@ export async function getCalendarData(year: number, stateCode: string) {
     holidays: holidayMap,
     vacations: vacationList
   }
+}
+
+export async function archivePassedTrips() {
+  const todayStr = new Date().toISOString().split('T')[0]
+  await prisma.trip.updateMany({
+    where: {
+      endDate: { lt: todayStr },
+      status: { not: 'Abgeschlossen' }
+    },
+    data: {
+      status: 'Abgeschlossen'
+    }
+  })
 }
 
 

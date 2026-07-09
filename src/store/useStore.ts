@@ -10,6 +10,7 @@ export const useStore = create<StoreState>((set) => ({
   overrides: [],
   trips: [],
   holidays: {},
+  vacations: [],
   selectedYear: new Date().getFullYear(),
   isSidebarOpen: true,
   activeSidebarPanel: 'statistics',
@@ -48,6 +49,7 @@ export const useStore = create<StoreState>((set) => ({
   
   setTrips: (trips) => set({ trips }),
   setHolidays: (holidays) => set({ holidays }),
+  setVacations: (vacations) => set({ vacations }),
   
   setSelectedYear: (selectedYear) => set({ selectedYear }),
   

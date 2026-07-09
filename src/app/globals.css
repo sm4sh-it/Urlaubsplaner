@@ -11,20 +11,30 @@
   
   --color-brand: #0088c2;
   --color-brand-glow: rgba(0, 136, 194, 0.12);
+  --color-brand-50: #f0f9ff;
+  --color-brand-100: #e0f2fe;
+  --color-brand-200: #bae6fd;
+  --color-brand-300: #7dd3fc;
+  --color-brand-400: #38bdf8;
+  --color-brand-500: #0ea5e9;
+  --color-brand-600: #0284c7;
+  --color-brand-700: #0369a1;
+  --color-brand-800: #075985;
+  --color-brand-900: #0c4a6e;
   
   /* Status Colors */
   --color-feiertag-bg: var(--feiertag-bg);
   --color-feiertag-border: #ff7b72;
-  --color-vacation: #1b8a5a;
-  --color-sick: #b0413e;
-  --color-overtime: #7d52b3;
-  --color-gleitzeit: #c69214;
-  --color-dienstreise: #148080;
-  --color-special: #d97706;
+  --color-vacation: var(--c-vacation);
+  --color-sick: var(--c-sick);
+  --color-overtime: var(--c-overtime);
+  --color-gleitzeit: var(--c-gleitzeit);
+  --color-dienstreise: var(--c-dienstreise);
+  --color-special: var(--c-special);
   --color-blocked: var(--blocked);
-  --color-mobile: #1a5fb4;
-  --color-ferien: #ff9f43;
-  --color-auszeit: #0ea5e9;
+  --color-mobile: var(--c-mobile);
+  --color-ferien: var(--c-ferien);
+  --color-auszeit: var(--c-auszeit);
 
   --color-status-confirmed: #23d160;
   --color-status-planning: #ff9f43;
@@ -33,14 +43,31 @@
 
 @layer base {
   :root {
-    --bg: #f8fafc;
-    --fg: #0f172a;
+    --bg: #f5f5f4;               /* stone-100 */
+    --fg: #18181b;               /* zinc-900 */
     --surface: #ffffff;
-    --surface-bright: #f1f5f9;
-    --border-subtle: #e2e8f0;
-    --feiertag-bg: rgba(255, 123, 114, 0.12);
-    --blocked: #cbd5e1;
-    --radius: 16px;
+    --surface-hover: #fafafa;    /* zinc-50 */
+    --surface-bright: #f4f4f5;   /* zinc-100 */
+    
+    --brand: #0077ad;
+    --brand-glow: rgba(0, 119, 173, 0.10);
+    --muted: #71717a;            /* zinc-500 */
+    --border: #d4d4d8;           /* zinc-300 */
+    --border-subtle: #e4e4e7;    /* zinc-200 */
+    --feiertag-bg: rgba(239, 68, 68, 0.08);
+    --blocked: #a1a1aa;          /* zinc-400 */
+    
+    /* Lightmode Status Colors (WCAG compliant) */
+    --c-vacation: #16a34a;
+    --c-sick: #dc2626;
+    --c-overtime: #7c3aed;
+    --c-auszeit: #0284c7;
+    --c-mobile: #1d4ed8;
+    --c-gleitzeit: #c69214;
+    --c-dienstreise: #148080;
+    --c-special: #d97706;
+    --c-ferien: #ff9f43;
+    --radius: 12px;
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
   .dark {
@@ -56,6 +83,17 @@
     --border-subtle: rgba(255, 255, 255, 0.08);
     --feiertag-bg: rgba(255, 123, 114, 0.12);
     --blocked: #374151;
+
+    /* Darkmode Status Colors (Original) */
+    --c-vacation: #1b8a5a;
+    --c-sick: #b0413e;
+    --c-overtime: #7d52b3;
+    --c-auszeit: #0ea5e9;
+    --c-mobile: #1a5fb4;
+    --c-gleitzeit: #c69214;
+    --c-dienstreise: #148080;
+    --c-special: #d97706;
+    --c-ferien: #ff9f43;
   }
 }
 
@@ -64,10 +102,17 @@ body {
   color: var(--fg);
 }
 
+:root body, html:not(.dark) body {
+  background-image:
+    radial-gradient(ellipse at 0% 0%, rgba(0, 136, 194, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 100% 100%, rgba(99, 102, 241, 0.04) 0%, transparent 50%);
+  background-attachment: fixed;
+}
+
 .dark body {
   background-image: 
-    radial-gradient(circle at 15% 15%, rgba(0, 136, 194, 0.05) 0%, transparent 35%),
-    radial-gradient(circle at 85% 75%, rgba(0, 136, 194, 0.03) 0%, transparent 35%);
+    radial-gradient(circle at 15% 15%, rgba(0, 136, 194, 0.12) 0%, transparent 35%),
+    radial-gradient(circle at 85% 75%, rgba(0, 136, 194, 0.08) 0%, transparent 35%);
   background-attachment: fixed;
 }
 
@@ -75,12 +120,12 @@ body {
 .cell-weekend {
   background-image: repeating-linear-gradient(
     45deg,
-    #f1f5f9,
-    #f1f5f9 4px,
+    #e4e4e7,
+    #e4e4e7 4px,
     transparent 4px,
     transparent 8px
   ) !important;
-  background-color: rgba(0, 0, 0, 0.05) !important;
+  background-color: #f4f4f5 !important;
 }
 
 .dark .cell-weekend {
@@ -117,7 +162,7 @@ body {
 .status-a   { background: var(--color-auszeit) !important; color: #fff !important; }
 .status-a-2 { background: linear-gradient(135deg, var(--color-auszeit) 50%, var(--surface) 50%) !important; color: #fff !important; }
 .status-m {
-  background-color: #1a5fb4 !important;
+  background-color: var(--color-mobile) !important;
   color: white !important;
   border: 1px solid rgba(255,255,255,0.1) !important;
 }
@@ -173,6 +218,7 @@ body {
 .vacation-card {
   background: var(--surface);
   border: 1px solid var(--border);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.04);
   border-radius: var(--radius);
   padding: 28px;
   backdrop-filter: blur(8px);
@@ -186,9 +232,9 @@ body {
 
 .vacation-card:hover {
   background: var(--surface-hover);
-  transform: translateY(-4px);
-  border-color: rgba(0, 136, 194, 0.3);
-  box-shadow: 0 12px 30px var(--brand-glow);
+  transform: translateY(-2px);
+  border-color: rgba(0, 119, 173, 0.4);
+  box-shadow: 0 8px 25px var(--brand-glow);
 }
 
 .card-header {

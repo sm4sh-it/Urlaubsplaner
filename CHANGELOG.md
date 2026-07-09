@@ -1,6 +1,27 @@
 # Changelog
 
 All notable changes to this project will be documented in this file.
+## [0.9.0] - 2026-07-09
+### Changed & Fixed
+- **Premium Light-Mode (Phase 4):** Umfassendes Redesign des Light-Modes mit wärmeren `stone-100` Hintergründen, dreidimensionalen Dashboard-Cards (Schatten & Rahmen) und einem subtilen Radial-Gradienten, der dem Design mehr Raumtiefe verleiht.
+- **WCAG-Konformität:** Die Statusfarben (Urlaub, Krank, Mobile etc.) wurden im Light-Mode für bessere Kontraste optimiert (z.B. dunkleres Grün für Urlaub).
+- **Komponenten-Styling:** Navbar mit elegantem `backdrop-blur` Effekt, Statistik-Widgets ohne harten schwarzen Hintergrund und gestreifte Wochenenden im Kalender.
+- **Feinschliff & Bugfixes (Phase 4.1):** Verbessert die Lesbarkeit der Durchschnitts-Urlaubsdauer, entfernt harte Konturen bei den SVG-Donut-Charts, macht Buttons im Hilfe-Popup lesbar und behebt feststeckende Darkmode-Texte im Urlaubsverteilungs-Graphen.
+
+## [0.8.4] - 2026-07-09
+### Performance
+- **Kalender-Render:** Behebt einen Performance-Flaschenhals (O(n²) Lookups) in `YearCalendar`, der bei vielen Einträgen oder Profilen zu Rucklern führen konnte. Einträge und Trips werden nun via `useMemo` in performante Maps vorab umgewandelt.
+- **Berechnung der Statistik:** Implementiert Caching (Memoization) in `getProfileStatsForYear`, um exponentielle Rekursion bei der Berechnung der Resturlaubstage über mehrere Jahre zu verhindern.
+- **Render-Optimierung:** Lagert aufwendige Array-Iterationen in `DashboardHome` und `Statistics` in `useMemo`-Hooks aus.
+- **API-Calls reduziert:** Der redundante Aufruf von `getCalendarData` (Ferien-Daten) in der Kalenderkomponente wurde entfernt. Das Holen und Verwalten der Schulferien passiert nun zentral über den Store/Hydrator.
+
+## [0.8.3] - 2026-07-09
+### Fixed
+- **Sicherheit:** Behebt einen potenziellen Authentifizierungs-Bypass, falls keine Umgebungsvariable für das Passwort gesetzt war. Setzt das `secure`-Flag für Auth-Cookies nun automatisch abhängig von der Umgebung (`production`).
+- **Sicherheit & Stabilität:** Fügt Zod-Validierung für externe API-Responses (Ferien/Feiertage) hinzu, um Abstürze bei Strukturänderungen abzufangen.
+- **Sicherheit:** Stellt sicher, dass in Produktion zwingend eine `DATABASE_URL` konfiguriert sein muss.
+- **Performance/Bugfix:** Behebt einen Render-Bug im Donut-Chart (Mutation von `cumulativePercent`), der unter React Strict Mode zu fehlerhaften Anzeigen führen konnte.
+
 ## [0.8.2] - 2026-07-08
 ### Fixed
 - **Sabbatical Bugfixes:** Behebt einen Absturz bei manueller Eingabe ("a") im Kalender durch fehlende Backend-Validierung (Zod). Die Sabbatical-Tage werden nun wieder korrekt in Himmelblau im Kalender eingefärbt. Zudem tauchen Sabbaticals nun auch korrekt im Jahresübersichts-Graphen ("Urlaubsverteilung über die Jahre") auf der Startseite auf.

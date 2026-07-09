@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { X, Save, Trash2 } from "lucide-react"
 import { useStore } from "@/store/useStore"
-import { Trip } from "@/types"
+import { Trip, TripType, TripStatus } from "@/types"
 import { createTrip, updateTrip, deleteTrip } from "@/app/actions/tripActions"
 
 interface TripModalProps {
@@ -21,55 +21,67 @@ export default function TripModal({ isOpen, onClose, trip }: TripModalProps) {
   const profiles = useStore(state => state.profiles)
   const activeProfileIds = useStore(state => state.activeProfileIds)
   
-  const [title, setTitle] = useState("")
-  const [startDate, setStartDate] = useState("")
-  const [endDate, setEndDate] = useState("")
-  const [selectedProfileIds, setSelectedProfileIds] = useState<string[]>([])
-  const [externalParticipants, setExternalParticipants] = useState("")
-  const [type, setType] = useState(TYPE_OPTIONS[0])
-  const [status, setStatus] = useState(STATUS_OPTIONS[0])
-  const [location, setLocation] = useState("")
-  const [travelType, setTravelType] = useState("")
-  const [transport, setTransport] = useState<string[]>([])
-  const [notes, setNotes] = useState("")
-  const [budget, setBudget] = useState<number | "">("")
-  const [cost, setCost] = useState<number | "">("")
+  const [formData, setFormData] = useState({
+    title: "",
+    startDate: "",
+    endDate: "",
+    selectedProfileIds: [] as string[],
+    externalParticipants: "",
+    type: TYPE_OPTIONS[0] as TripType,
+    status: STATUS_OPTIONS[0] as TripStatus,
+    location: "",
+    travelType: "",
+    transport: [] as string[],
+    notes: "",
+    budget: "" as number | "",
+    cost: "" as number | ""
+  })
+
+  const updateForm = (updates: Partial<typeof formData>) => {
+    setFormData(prev => ({ ...prev, ...updates }))
+  }
+
+  const { title, startDate, endDate, selectedProfileIds, externalParticipants, type, status, location, travelType, transport, notes, budget, cost } = formData
 
   const [isSaving, setIsSaving] = useState(false)
+  const [showConfirmDelete, setShowConfirmDelete] = useState(false)
 
   useEffect(() => {
     if (isOpen) {
       if (trip) {
-        setTitle(trip.title)
-        setStartDate(trip.startDate)
-        setEndDate(trip.endDate)
-        setSelectedProfileIds(trip.profiles.map(p => p.id))
-        setExternalParticipants(trip.externalParticipants || "")
-        setType(trip.type)
-        setStatus(trip.status)
-        setLocation(trip.location || "")
-        setTravelType(trip.travelType || "")
-        setTransport(trip.transport ? trip.transport.split(',').map(s => s.trim()).filter(Boolean) : [])
-        setNotes(trip.notes || "")
-        setBudget(trip.budget || "")
-        setCost(trip.cost || "")
+        setFormData({
+          title: trip.title,
+          startDate: trip.startDate,
+          endDate: trip.endDate,
+          selectedProfileIds: trip.profiles.map(p => p.id),
+          externalParticipants: trip.externalParticipants || "",
+          type: trip.type as TripType,
+          status: trip.status as TripStatus,
+          location: trip.location || "",
+          travelType: trip.travelType || "",
+          transport: trip.transport ? trip.transport.split(',').map(s => s.trim()).filter(Boolean) : [],
+          notes: trip.notes || "",
+          budget: trip.budget || "",
+          cost: trip.cost || ""
+        })
       } else {
-        // Reset for new trip
-        setTitle("")
-        setStartDate("")
-        setEndDate("")
-        // By default, select active profiles
-        setSelectedProfileIds(activeProfileIds)
-        setExternalParticipants("")
-        setType(TYPE_OPTIONS[0])
-        setStatus(STATUS_OPTIONS[0])
-        setLocation("")
-        setTravelType("")
-        setTransport([])
-        setNotes("")
-        setBudget("")
-        setCost("")
+        setFormData({
+          title: "",
+          startDate: "",
+          endDate: "",
+          selectedProfileIds: activeProfileIds,
+          externalParticipants: "",
+          type: TYPE_OPTIONS[0] as TripType,
+          status: STATUS_OPTIONS[0] as TripStatus,
+          location: "",
+          travelType: "",
+          transport: [],
+          notes: "",
+          budget: "",
+          cost: ""
+        })
       }
+      setShowConfirmDelete(false)
     }
   }, [isOpen, trip, activeProfileIds])
 
@@ -141,7 +153,7 @@ export default function TripModal({ isOpen, onClose, trip }: TripModalProps) {
   }
 
   const handleDelete = async () => {
-    if (!trip || !confirm("Möchtest du diese Reise wirklich löschen?")) return
+    if (!trip) return
     setIsSaving(true)
     try {
       await deleteTrip(trip.id)
@@ -156,11 +168,11 @@ export default function TripModal({ isOpen, onClose, trip }: TripModalProps) {
   }
 
   const toggleProfile = (profileId: string) => {
-    setSelectedProfileIds(prev => 
-      prev.includes(profileId) 
-        ? prev.filter(id => id !== profileId)
-        : [...prev, profileId]
-    )
+    updateForm({
+      selectedProfileIds: selectedProfileIds.includes(profileId)
+        ? selectedProfileIds.filter(id => id !== profileId)
+        : [...selectedProfileIds, profileId]
+    })
   }
 
   return (
@@ -188,17 +200,17 @@ export default function TripModal({ isOpen, onClose, trip }: TripModalProps) {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="flex flex-col gap-1 md:col-span-2">
                   <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Titel der Reise *</label>
-                  <input required value={title} onChange={e => setTitle(e.target.value)} type="text" placeholder="z.B. Sommerurlaub Italien" className="px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all" />
+                  <input required value={title} onChange={e => updateForm({ title: e.target.value })} type="text" placeholder="z.B. Sommerurlaub Italien" className="px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all" />
                 </div>
                 
                 <div className="flex flex-col gap-1">
                   <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Startdatum *</label>
-                  <input required value={startDate} onChange={e => setStartDate(e.target.value)} type="date" className="px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-brand-500 outline-none" />
+                  <input required value={startDate} onChange={e => updateForm({ startDate: e.target.value })} type="date" className="px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-brand-500 outline-none" />
                 </div>
                 
                 <div className="flex flex-col gap-1">
                   <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Enddatum *</label>
-                  <input required value={endDate} onChange={e => setEndDate(e.target.value)} type="date" className="px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-brand-500 outline-none" />
+                  <input required value={endDate} onChange={e => updateForm({ endDate: e.target.value })} type="date" className="px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-brand-500 outline-none" />
                 </div>
               </div>
             </section>
@@ -229,7 +241,7 @@ export default function TripModal({ isOpen, onClose, trip }: TripModalProps) {
 
               <div className="flex flex-col gap-1">
                 <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Externe Teilnehmer (Optional)</label>
-                <input value={externalParticipants} onChange={e => setExternalParticipants(e.target.value)} type="text" placeholder="z.B. Oma, Opa, Hund" className="px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-brand-500 outline-none" />
+                <input value={externalParticipants} onChange={e => updateForm({ externalParticipants: e.target.value })} type="text" placeholder="z.B. Oma, Opa, Hund" className="px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-brand-500 outline-none" />
               </div>
             </section>
 
@@ -240,14 +252,14 @@ export default function TripModal({ isOpen, onClose, trip }: TripModalProps) {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="flex flex-col gap-1">
                   <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Art der Reise *</label>
-                  <select required value={type} onChange={e => setType(e.target.value)} className="px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-brand-500 outline-none appearance-none">
+                  <select required value={type} onChange={e => updateForm({ type: e.target.value as TripType })} className="px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-brand-500 outline-none appearance-none">
                     {TYPE_OPTIONS.map(opt => <option key={opt} value={opt}>{opt}</option>)}
                   </select>
                 </div>
 
                 <div className="flex flex-col gap-1">
                   <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Aktueller Status *</label>
-                  <select required value={status} onChange={e => setStatus(e.target.value)} className="px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-brand-500 outline-none appearance-none">
+                  <select required value={status} onChange={e => updateForm({ status: e.target.value as TripStatus })} className="px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-brand-500 outline-none appearance-none">
                     {STATUS_OPTIONS.map(opt => <option key={opt} value={opt}>{opt}</option>)}
                   </select>
                 </div>
@@ -261,12 +273,12 @@ export default function TripModal({ isOpen, onClose, trip }: TripModalProps) {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="flex flex-col gap-1">
                   <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Ort / Land</label>
-                  <input value={location} onChange={e => setLocation(e.target.value)} type="text" placeholder="z.B. Mallorca" className="px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-brand-500 outline-none" />
+                  <input value={location} onChange={e => updateForm({ location: e.target.value })} type="text" placeholder="z.B. Mallorca" className="px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-brand-500 outline-none" />
                 </div>
 
                 <div className="flex flex-col gap-1">
                   <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Reisetyp</label>
-                  <select value={travelType} onChange={e => setTravelType(e.target.value)} className="px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-brand-500 outline-none appearance-none">
+                  <select value={travelType} onChange={e => updateForm({ travelType: e.target.value })} className="px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-brand-500 outline-none appearance-none">
                     {TRAVEL_TYPE_OPTIONS.map(opt => <option key={opt} value={opt}>{opt || "Bitte wählen..."}</option>)}
                   </select>
                 </div>
@@ -281,11 +293,9 @@ export default function TripModal({ isOpen, onClose, trip }: TripModalProps) {
                           key={opt}
                           type="button"
                           onClick={() => {
-                            if (isSelected) {
-                              setTransport(prev => prev.filter(t => t !== opt))
-                            } else {
-                              setTransport(prev => [...prev, opt])
-                            }
+                            updateForm({
+                              transport: isSelected ? transport.filter(t => t !== opt) : [...transport, opt]
+                            })
                           }}
                           className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
                             isSelected 
@@ -304,17 +314,17 @@ export default function TripModal({ isOpen, onClose, trip }: TripModalProps) {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
                 <div className="flex flex-col gap-1">
                   <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Geplantes Budget (€)</label>
-                  <input value={budget} onChange={e => setBudget(e.target.value ? Number(e.target.value) : "")} type="number" min="0" step="0.01" placeholder="0.00" className="px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-brand-500 outline-none" />
+                  <input value={budget} onChange={e => updateForm({ budget: e.target.value ? Number(e.target.value) : "" })} type="number" min="0" step="0.01" placeholder="0.00" className="px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-brand-500 outline-none" />
                 </div>
                 <div className="flex flex-col gap-1">
                   <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Tatsächliche Kosten (€)</label>
-                  <input value={cost} onChange={e => setCost(e.target.value ? Number(e.target.value) : "")} type="number" min="0" step="0.01" placeholder="0.00" className="px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-brand-500 outline-none" />
+                  <input value={cost} onChange={e => updateForm({ cost: e.target.value ? Number(e.target.value) : "" })} type="number" min="0" step="0.01" placeholder="0.00" className="px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-brand-500 outline-none" />
                 </div>
               </div>
 
               <div className="flex flex-col gap-1 mt-2">
                 <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Notizen / Links</label>
-                <textarea value={notes} onChange={e => setNotes(e.target.value)} rows={3} placeholder="Hotel links, Checklisten, etc." className="px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-brand-500 outline-none resize-none"></textarea>
+                <textarea value={notes} onChange={e => updateForm({ notes: e.target.value })} rows={3} placeholder="Hotel links, Checklisten, etc." className="px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-brand-500 outline-none resize-none"></textarea>
               </div>
             </section>
 
@@ -331,7 +341,7 @@ export default function TripModal({ isOpen, onClose, trip }: TripModalProps) {
             >
               <Trash2 className="w-4 h-4" /> Löschen
             </button>
-          ) : <div></div>}
+          ) : null}
           
           <div className="flex gap-3">
             <button 

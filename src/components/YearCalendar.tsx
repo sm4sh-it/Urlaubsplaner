@@ -3,15 +3,12 @@
 import * as React from "react"
 import { useStore } from "@/store/useStore"
 import { SHORT_MONTHS, getMonthDays } from "@/lib/dateUtils"
-import { clsx, type ClassValue } from "clsx"
-import { twMerge } from "tailwind-merge"
+import { cn } from "@/lib/utils"
 import { EntryType } from "@/types"
 
 import { toggleEntry, getCalendarData } from "@/app/actions"
 
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
-}
+
 
 const VALID_KEYS: Record<string, EntryType> = {
   'u': 'U', 
@@ -47,15 +44,15 @@ const ENTRY_CLASSES: Record<string, string> = {
 
 export default function YearCalendar() {
   const selectedYear = useStore(state => state.selectedYear)
-  const activeProfileIds = useStore(state => state.activeProfileIds)
-  const profiles = useStore(state => state.profiles)
-  const entries = useStore(state => state.entries)
-  const trips = useStore(state => state.trips)
+  const activeProfileIds = useStore(state => state.activeProfileIds) || []
+  const profiles = useStore(state => state.profiles) || []
+  const entries = useStore(state => state.entries) || []
+  const trips = useStore(state => state.trips) || []
   const addOrUpdateEntry = useStore(state => state.addOrUpdateEntry)
   const removeEntry = useStore(state => state.removeEntry)
 
-  const holidays = useStore(state => state.holidays)
-  const [vacations, setVacations] = React.useState<{start: string, end: string, name: string, stateCode?: string}[]>([])
+  const holidays = useStore(state => state.holidays) || {}
+  const vacations = useStore(state => state.vacations) || []
   const [pressedKey, setPressedKey] = React.useState<string | null>(null)
   const [isPending, startTransition] = React.useTransition()
 
@@ -68,14 +65,36 @@ export default function YearCalendar() {
   const validTripStatuses = ["In Planung", "Gebucht", "Abgeschlossen"]
   const activeTrips = trips.filter(t => validTripStatuses.includes(t.status))
 
-  const getTripForProfileAndDate = (profileId: string, date: string) => {
-    return activeTrips.find(t => 
-      t.profiles.some(p => p.id === profileId) &&
-      date >= t.startDate && date <= t.endDate
-    )
-  }
+  const tripLookup = React.useMemo(() => {
+    const lookup: Record<string, { type: EntryType, title: string }> = {}
+    for (const t of activeTrips) {
+      const type = mapTripTypeToEntryType(t.type)
+      const start = new Date(t.startDate)
+      const end = new Date(t.endDate)
+      
+      for (const p of t.profiles) {
+        let current = new Date(start)
+        while (current <= end) {
+          const dateStr = current.toISOString().split('T')[0]
+          const key = `${p.id}_${dateStr}`
+          lookup[key] = { type, title: t.title }
+          current.setDate(current.getDate() + 1)
+        }
+      }
+    }
+    return lookup
+  }, [activeTrips])
 
-  const mapTripTypeToEntryType = (type: string): EntryType => {
+  const entryLookup = React.useMemo(() => {
+    const lookup: Record<string, EntryType> = {}
+    for (const e of entries) {
+      const key = `${e.profileId}_${e.date}`
+      lookup[key] = e.type
+    }
+    return lookup
+  }, [entries])
+
+  function mapTripTypeToEntryType(type: string): EntryType {
     if (type === "Urlaub") return "U"
     if (type === "Mobiles Arbeiten") return "M"
     if (type === "Sabbatical") return "A"
@@ -84,21 +103,7 @@ export default function YearCalendar() {
     return "U" // Fallback
   }
 
-  React.useEffect(() => {
-    async function loadData() {
-      try {
-        const primaryProfile = activeProfileIds.length > 0 
-          ? profiles.find(p => p.id === activeProfileIds[0])
-          : null;
-        const stateCode = primaryProfile?.stateCode || "NW"
-        const data = await getCalendarData(selectedYear, stateCode)
-        setVacations(data.vacations)
-      } catch (e) {
-        console.error("Failed to load calendar data from DB")
-      }
-    }
-    loadData()
-  }, [selectedYear, activeProfileIds, profiles])
+
 
   React.useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -132,7 +137,8 @@ export default function YearCalendar() {
         if (!profile || selectedYear < profile.startYear) continue
 
         // Block if covered by a trip
-        if (getTripForProfileAndDate(pId, date)) {
+        const isTripBlock = tripLookup[`${pId}_${date}`]
+        if (isTripBlock) {
           continue
         }
 
@@ -203,11 +209,11 @@ export default function YearCalendar() {
                     )
                   }
 
-                  const holidayName = holidays[dayObj.date]
+                  const holidayName = holidays ? holidays[dayObj.date] : null
                   const isHoliday = !!holidayName
                   
                   // Prüfen ob der Tag in den Schulferien liegt
-                  const activeVacations = vacations.filter(v => dayObj.date >= v.start && dayObj.date <= v.end)
+                  const activeVacations = (vacations || []).filter(v => dayObj.date >= v.start && dayObj.date <= v.end)
                   const isVacation = activeVacations.length > 0
 
                       // Tooltip Format: Wochentag, DD.MM.YYYY
@@ -229,8 +235,8 @@ export default function YearCalendar() {
                             // Extract just "Herbst" from "Herbstferien" to keep it short if possible
                             const shortName = v.name.replace('ferien', '').trim()
                             if (!acc[shortName]) acc[shortName] = []
-                            // @ts-ignore
-                            if (v.stateCode && !acc[shortName].includes(v.stateCode)) acc[shortName].push(v.stateCode)
+                            const stateCode = v.stateCode;
+                            if (stateCode && !acc[shortName].includes(stateCode)) acc[shortName].push(stateCode)
                             return acc
                           }, {} as Record<string, string[]>)
                           
@@ -254,8 +260,8 @@ export default function YearCalendar() {
                           }}
                           className={cn(
                             "flex flex-col relative group cursor-pointer overflow-hidden rounded-md h-[40px]",
-                            "bg-slate-100 dark:bg-[var(--surface)] border border-slate-200 dark:border-white/5",
-                            "hover:bg-slate-200 dark:hover:bg-[var(--surface-bright)] hover:-translate-y-[1px] hover:shadow-md transition-all duration-200",
+                            "bg-stone-100 dark:bg-[var(--surface)] border border-stone-200 dark:border-white/5",
+                            "hover:bg-stone-200 dark:hover:bg-[var(--surface-bright)] hover:-translate-y-[1px] hover:shadow-md transition-all duration-200",
                             dayObj.isWeekend && "cell-weekend",
                             isHoliday && "cell-feiertag"
                           )}
@@ -279,15 +285,9 @@ export default function YearCalendar() {
                               const profile = profiles.find(p => p.id === profileId)
                               if (!profile || selectedYear < profile.startYear) return null
 
-                              const trip = getTripForProfileAndDate(profileId, dayObj.date)
-                              let entryType: EntryType | null = null
-                              
-                              if (trip) {
-                                entryType = mapTripTypeToEntryType(trip.type)
-                              } else {
-                                const entry = entries.find(e => e.date === dayObj.date && e.profileId === profileId)
-                                if (entry) entryType = entry.type
-                              }
+                              const lookupKey = `${profileId}_${dayObj.date}`
+                              const tripEntry = tripLookup[lookupKey]
+                              let entryType: EntryType | null = tripEntry?.type || entryLookup[lookupKey] || null
                               
                               if (!entryType) return null
                               
@@ -299,10 +299,10 @@ export default function YearCalendar() {
                                   className={cn(
                                     "flex-1 flex items-center justify-center text-[10px] font-bold rounded-sm border-2 border-solid shadow-sm w-full",
                                     typeClass,
-                                    trip ? "opacity-90" : ""
+                                    tripEntry ? "opacity-90" : ""
                                   )}
                                   style={{ borderColor: profile.color }}
-                                  title={trip ? `Trip: ${trip.title}` : undefined}
+                                  title={tripEntry ? `Trip: ${tripEntry.title}` : undefined}
                                 >
                                   {entryType === '2' ? 'U/2' : entryType === '3' ? 'K/2' : entryType === '4' ? 'Ü/2' : entryType === '5' ? 'M/2' : entryType}
                                 </div>

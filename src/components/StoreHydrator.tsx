@@ -1,7 +1,4 @@
 "use client"
-
-"use client"
-
 import { useEffect, useRef } from 'react'
 import { useStore } from '@/store/useStore'
 import { StoreState } from '@/types'
@@ -74,6 +71,7 @@ export default function StoreHydrator({
         
         const data = await getCalendarData(selectedYear, stateCode)
         useStore.getState().setHolidays(data.holidays)
+        useStore.getState().setVacations(data.vacations)
       } catch (e) {
         console.error("Failed to load calendar data", e)
       }

@@ -25,7 +25,7 @@ export default function Navbar() {
   }
 
   return (
-    <nav className="h-16 flex items-center justify-between px-6 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 shadow-sm z-50 shrink-0 relative">
+    <nav className="h-16 flex items-center justify-between px-6 bg-white/80 backdrop-blur-md dark:bg-slate-900 border-b border-zinc-200 dark:border-slate-800 shadow-sm z-50 shrink-0 relative">
       <div className="flex items-center gap-2">
         <CalendarDays className="h-6 w-6 text-brand-500" />
         <Link href="/" className="font-bold text-xl tracking-tight text-slate-900 dark:text-slate-50">
@@ -37,19 +37,19 @@ export default function Navbar() {
         <div className="hidden md:flex gap-1 bg-slate-100 dark:bg-[#1a222c] p-1 rounded-full border border-slate-200/80 dark:border-[#2a3441] shadow-inner">
           <Link 
             href="/" 
-            className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-300 ${pathname === '/' ? 'bg-white dark:bg-[#2a3644] text-slate-900 dark:text-white shadow-sm' : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-slate-700/50'}`}
+            className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-300 ${pathname === '/' ? 'bg-white text-brand-600 dark:bg-[#2a3644] dark:text-white shadow-[0_1px_3px_rgba(0,0,0,0.05)]' : 'text-slate-500 dark:text-slate-400 hover:text-brand-600 dark:hover:text-white hover:bg-white/50 dark:hover:bg-slate-700/50'}`}
           >
             Home
           </Link>
           <Link 
             href="/calendar" 
-            className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-300 ${pathname.startsWith('/calendar') ? 'bg-white dark:bg-[#2a3644] text-slate-900 dark:text-white shadow-sm' : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-slate-700/50'}`}
+            className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-300 ${pathname.startsWith('/calendar') ? 'bg-white text-brand-600 dark:bg-[#2a3644] dark:text-white shadow-[0_1px_3px_rgba(0,0,0,0.05)]' : 'text-slate-500 dark:text-slate-400 hover:text-brand-600 dark:hover:text-white hover:bg-white/50 dark:hover:bg-slate-700/50'}`}
           >
             Kalenderansicht
           </Link>
           <Link 
             href="/statistics" 
-            className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-300 ${pathname.startsWith('/statistics') ? 'bg-white dark:bg-[#2a3644] text-slate-900 dark:text-white shadow-sm' : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-slate-700/50'}`}
+            className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-300 ${pathname.startsWith('/statistics') ? 'bg-white text-brand-600 dark:bg-[#2a3644] dark:text-white shadow-[0_1px_3px_rgba(0,0,0,0.05)]' : 'text-slate-500 dark:text-slate-400 hover:text-brand-600 dark:hover:text-white hover:bg-white/50 dark:hover:bg-slate-700/50'}`}
           >
             Statistiken
           </Link>

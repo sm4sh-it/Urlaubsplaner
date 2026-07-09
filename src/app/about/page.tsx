@@ -27,12 +27,52 @@ export default function AboutPage() {
           </h2>
 
           <div className="space-y-8">
-            {/* V 0.8.2 */}
+            {/* V 0.9.0 */}
             <div className="relative pl-6 border-l-2 border-brand-500">
                <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-white dark:bg-slate-900 border-2 border-brand-500" />
                <div className="flex items-center gap-3 mb-2">
-                 <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 m-0">Version 0.8.2</h3>
+                 <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 m-0">Version 0.9.0</h3>
                  <span className="text-xs px-2 py-1 bg-brand-100 dark:bg-brand-900/30 text-brand-700 dark:text-brand-300 rounded font-medium">Aktuell</span>
+               </div>
+               <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
+                 <li><strong>Premium Light-Mode:</strong> Komplettes Re-Design des hellen Modus mit wärmeren Hintergründen, responsiven Radial-Gradienten und dreidimensionalen Cards.</li>
+                 <li><strong>Design-Konformität (WCAG):</strong> Bessere Farbkontraste für Statusfarben, transparente Navigationsleiste mit Blur-Effekt und flexible Anpassung der Statistik-Widgets an das jeweilige Theme.</li>
+                 <li><strong>Polishing:</strong> Unzählige kleine Fehler in Farb- und Kontrastwerten (z.B. bei Durchschnittswerten, Hilfe-Popups und Legenden) wurden behoben, um einen nahtlosen Wechsel zwischen Hell und Dunkel zu garantieren.</li>
+               </ul>
+            </div>
+
+            {/* V 0.8.4 */}
+            <div className="relative pl-6 border-l-2 border-slate-200 dark:border-slate-800">
+               <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-800" />
+               <div className="flex items-center gap-3 mb-2">
+                 <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 m-0">Version 0.8.4</h3>
+               </div>
+               <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
+                 <li><strong>Code Review Phase 2 (Performance):</strong> Behebt O(n²) Lookups im Kalender-Render via <code>useMemo</code>-Maps für spürbar flüssigere Kalenderansicht.</li>
+                 <li><strong>Performance:</strong> Führt Caching in der Statistik-Berechnung ein, um exponentielle Rekursion zu verhindern.</li>
+                 <li><strong>Performance:</strong> Redundante Fetch-Calls für Schulferien zwischen Hydrator und Kalender wurden vereint.</li>
+                 <li><strong>Performance:</strong> Diverse <code>useMemo</code>-Optimierungen in der Dashboard- und Statistikansicht.</li>
+               </ul>
+            </div>
+
+            {/* V 0.8.3 */}
+            <div className="relative pl-6 border-l-2 border-slate-200 dark:border-slate-800">
+               <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-800" />
+               <div className="flex items-center gap-3 mb-2">
+                 <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 m-0">Version 0.8.3</h3>
+               </div>
+               <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
+                 <li><strong>Code Review Phase 1:</strong> Behebt einen potenziellen Auth-Bypass bei fehlender Config und aktiviert sichere Cookies für Produktion.</li>
+                 <li><strong>Stabilität:</strong> Fügt robuste Zod-Validierung für externe Ferien/Feiertags-APIs hinzu, um Abstürze zu vermeiden.</li>
+                 <li><strong>Performance:</strong> Behebt einen Render-Bug im Donut-Chart (React Strict Mode Kompatibilität).</li>
+               </ul>
+            </div>
+
+            {/* V 0.8.2 */}
+            <div className="relative pl-6 border-l-2 border-slate-200 dark:border-slate-700">
+               <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-700" />
+               <div className="flex items-center gap-3 mb-2">
+                 <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 m-0">Version 0.8.2</h3>
                </div>
                <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
                  <li><strong>Sabbatical Bugfixes:</strong> Sabbaticals können nun absturzfrei im Kalender manuell eingetragen werden, erstrahlen dort endlich in ihrem korrekten Himmelblau und werden auch auf dem Dashboard sauber in der "Urlaubsverteilung über die Jahre" angezeigt.</li>

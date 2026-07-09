@@ -127,7 +127,7 @@ export default function HistoricalDistributionGraph() {
   const daysInMonth = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
   
   const getLevelClass = (level: number) => {
-    if (level === 0) return 'bg-[#2d333b]' // Base empty color GitHub dark style
+    if (level === 0) return 'bg-slate-100 dark:bg-[#2d333b]' // Base empty color
     if (viewMode === 'Urlaub') {
       return `vacation-${level}`
     } else {
@@ -136,15 +136,15 @@ export default function HistoricalDistributionGraph() {
   }
 
   return (
-    <div className="bg-[#0d1117] rounded-xl border border-slate-800 p-6 flex flex-col shadow-xl overflow-hidden w-full h-full">
+    <div className="bg-white dark:bg-[#0d1117] rounded-xl border border-slate-200 dark:border-slate-800 p-6 flex flex-col shadow-xl overflow-hidden w-full h-full">
       <div className="flex flex-col items-center gap-3 mb-6">
-        <div className="flex bg-[#161b22] rounded-full p-1 border border-slate-700/50">
+        <div className="flex bg-slate-100 dark:bg-[#161b22] rounded-full p-1 border border-slate-200 dark:border-slate-700/50">
           <button
             onClick={() => setViewMode('Urlaub')}
             className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-semibold transition-all duration-300 ${
               viewMode === 'Urlaub' 
                 ? 'bg-[#238636] text-white shadow-sm' 
-                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800'
+                : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-800'
             }`}
           >
             <CalendarDays className="w-4 h-4" /> Urlaub
@@ -154,14 +154,14 @@ export default function HistoricalDistributionGraph() {
             className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-semibold transition-all duration-300 ${
               viewMode === 'Krankheit' 
                 ? 'bg-[#da3633] text-white shadow-sm' 
-                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800'
+                : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-800'
             }`}
           >
             <Pill className="w-4 h-4" /> Krankheit
           </button>
         </div>
         
-        <h2 className="text-xl font-bold text-slate-100 text-center min-w-[360px]">
+        <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100 text-center min-w-[360px]">
           {viewMode === 'Urlaub' ? 'Urlaubsverteilung über die Jahre' : 'Krankheitsverteilung über die Jahre'}
         </h2>
       </div>
@@ -206,7 +206,7 @@ export default function HistoricalDistributionGraph() {
       <div className="mt-8 flex items-center gap-2 text-xs text-slate-500">
         <span>Selten {viewMode === 'Urlaub' ? 'Urlaub' : 'Krank'}</span>
         <div className="flex gap-1 ml-2 mr-2">
-          <div className="w-4 h-4 rounded-sm bg-[#2d333b]" />
+          <div className="w-4 h-4 rounded-sm bg-slate-100 dark:bg-[#2d333b]" />
           <div className={`w-4 h-4 rounded-sm ${viewMode === 'Urlaub' ? 'vacation-1' : 'sick-1'}`} />
           <div className={`w-4 h-4 rounded-sm ${viewMode === 'Urlaub' ? 'vacation-2' : 'sick-2'}`} />
           <div className={`w-4 h-4 rounded-sm ${viewMode === 'Urlaub' ? 'vacation-3' : 'sick-3'}`} />

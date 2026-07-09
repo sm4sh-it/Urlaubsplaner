@@ -5,7 +5,7 @@ import { useMemo } from "react"
 import { isVacationCostingDay } from "@/lib/tripUtils"
 import { getProfileStatsForYear } from "@/lib/profileUtils"
 import { Plane, Car, Train, Ship, Bike, Info, ArrowUpRight, ArrowDownRight, Wallet, TrendingUp } from "lucide-react"
-
+import { DonutChart } from "@/components/ui/DonutChart"
 export function TripCategoryWidget() {
   const trips = useStore(state => state.trips)
   const activeProfileIds = useStore(state => state.activeProfileIds)
@@ -25,64 +25,19 @@ export function TripCategoryWidget() {
   const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#14b8a6', '#f97316']
 
   const total = stats.reduce((sum, [_, count]) => sum + count, 0)
-  let cumulativePercent = 0
+  
+  const segments = useMemo(() => {
+    let cumulative = 0
+    return stats.map(([type, count], idx) => {
+      const percent = total > 0 ? (count / total) * 100 : 0
+      const offset = cumulative
+      cumulative += percent
+      const color = COLORS[idx % COLORS.length]
+      return { type, count, percent, offset, color }
+    })
+  }, [stats, total])
 
-  return (
-    <div className="bg-[#0d1117] rounded-xl border border-slate-800 p-6 flex flex-col shadow-xl h-full">
-      <h3 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-6">Art der Reise</h3>
-      {stats.length === 0 ? (
-        <div className="text-slate-500 text-sm my-auto text-center">Keine Daten vorhanden</div>
-      ) : (
-        <div className="flex flex-col md:flex-row items-center gap-6 my-auto">
-          <div className="relative w-32 h-32 flex-shrink-0">
-            {/* Base Circle */}
-            <svg viewBox="0 0 100 100" className="absolute top-0 left-0 w-full h-full">
-               <circle cx="50" cy="50" r="40" fill="transparent" stroke="#161b22" strokeWidth="20" />
-            </svg>
-            <svg viewBox="0 0 100 100" className="absolute top-0 left-0 w-full h-full transform -rotate-90">
-              {stats.map(([type, count], idx) => {
-                const percent = (count / total) * 100
-                const strokeDasharray = `${percent} 100`
-                const strokeDashoffset = -cumulativePercent
-                cumulativePercent += percent
-                
-                // Add a small gap by reducing the painted percentage very slightly if there are multiple segments
-                const adjustedPercent = stats.length > 1 ? percent - 1 : percent
-                const adjustedDasharray = `${adjustedPercent > 0 ? adjustedPercent : 0} 100`
-
-                return (
-                  <circle
-                    key={type}
-                    cx="50"
-                    cy="50"
-                    r="40"
-                    fill="transparent"
-                    stroke={COLORS[idx % COLORS.length]}
-                    strokeWidth="20"
-                    strokeDasharray={adjustedDasharray}
-                    strokeDashoffset={strokeDashoffset}
-                    pathLength="100"
-                    strokeLinecap="round"
-                  />
-                )
-              })}
-            </svg>
-          </div>
-          <div className="flex flex-col gap-3 flex-1 w-full justify-center">
-            {stats.map(([type, count], idx) => (
-              <div key={type} className="flex items-center justify-between text-sm">
-                <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded-full" style={{ backgroundColor: COLORS[idx % COLORS.length] }} />
-                  <span className="text-slate-300 truncate max-w-[120px]" title={type}>{type}</span>
-                </div>
-                <span className="font-bold text-slate-100">{Math.round((count / total) * 100)}%</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-    </div>
-  )
+  return <DonutChart title="Art der Reise" segments={segments} />
 }
 
 export function TransportWidget() {
@@ -121,8 +76,8 @@ export function TransportWidget() {
   const colors = ['#39d353', '#26a641', '#006d32', '#0e4429', '#161b22']
 
   return (
-    <div className="bg-[#0d1117] rounded-xl border border-slate-800 p-6 flex flex-col shadow-xl h-full">
-      <h3 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-6">Transportmittel</h3>
+    <div className="bg-white dark:bg-[#0d1117] rounded-xl border border-slate-200 dark:border-slate-800 p-6 flex flex-col shadow-xl h-full">
+      <h3 className="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-6">Transportmittel</h3>
       {stats.list.length === 0 ? (
         <div className="text-slate-500 text-sm my-auto text-center">Keine Daten vorhanden</div>
       ) : (
@@ -132,10 +87,10 @@ export function TransportWidget() {
             const color = colors[idx % colors.length]
             return (
               <div key={type} className="flex items-center gap-3">
-                <div className="flex items-center justify-center w-8 h-8 rounded-full bg-[#161b22] text-slate-300" style={{ color }}>
+                <div className="flex items-center justify-center w-8 h-8 rounded-full bg-slate-100 dark:bg-[#161b22] text-slate-300" style={{ color }}>
                   {getIcon(type)}
                 </div>
-                <div className="flex-1 text-sm text-slate-200">{type}</div>
+                <div className="flex-1 text-sm text-slate-700 dark:text-slate-200">{type}</div>
                 <div className="text-sm font-bold" style={{ color }}>{percentage}%</div>
               </div>
             )
@@ -172,64 +127,19 @@ export function StatusWidget() {
   }
 
   const list = Object.entries(stats.counts).filter(([_, count]) => count > 0)
-  let cumulativePercent = 0
+  
+  const segments = useMemo(() => {
+    let cumulative = 0
+    return list.map(([type, count]) => {
+      const percent = stats.total > 0 ? (count / stats.total) * 100 : 0
+      const offset = cumulative
+      cumulative += percent
+      const color = STATUS_COLORS[type] || '#64748b'
+      return { type, count, percent, offset, color }
+    })
+  }, [list, stats.total])
 
-  return (
-    <div className="bg-[#0d1117] rounded-xl border border-slate-800 p-6 flex flex-col shadow-xl h-full">
-      <h3 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-6">Buchungsstatus</h3>
-      {stats.total === 0 ? (
-        <div className="text-slate-500 text-sm my-auto text-center">Keine Daten vorhanden</div>
-      ) : (
-        <div className="flex flex-col md:flex-row items-center gap-6 my-auto">
-          <div className="relative w-32 h-32 flex-shrink-0">
-            {/* Base Circle */}
-            <svg viewBox="0 0 100 100" className="absolute top-0 left-0 w-full h-full">
-               <circle cx="50" cy="50" r="40" fill="transparent" stroke="#161b22" strokeWidth="20" />
-            </svg>
-            <svg viewBox="0 0 100 100" className="absolute top-0 left-0 w-full h-full transform -rotate-90">
-              {list.map(([type, count]) => {
-                const percent = (count / stats.total) * 100
-                const strokeDasharray = `${percent} 100`
-                const strokeDashoffset = -cumulativePercent
-                cumulativePercent += percent
-                
-                // Add a small gap by reducing the painted percentage very slightly if there are multiple segments
-                const adjustedPercent = list.length > 1 ? percent - 1 : percent
-                const adjustedDasharray = `${adjustedPercent > 0 ? adjustedPercent : 0} 100`
-
-                return (
-                  <circle
-                    key={type}
-                    cx="50"
-                    cy="50"
-                    r="40"
-                    fill="transparent"
-                    stroke={STATUS_COLORS[type] || '#64748b'}
-                    strokeWidth="20"
-                    strokeDasharray={adjustedDasharray}
-                    strokeDashoffset={strokeDashoffset}
-                    pathLength="100"
-                    strokeLinecap="round"
-                  />
-                )
-              })}
-            </svg>
-          </div>
-          <div className="flex flex-col gap-3 flex-1 w-full justify-center">
-            {list.map(([type, count]) => (
-              <div key={type} className="flex items-center justify-between text-sm">
-                <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded-full" style={{ backgroundColor: STATUS_COLORS[type] || '#64748b' }} />
-                  <span className="text-slate-300 truncate max-w-[120px]" title={type}>{type}</span>
-                </div>
-                <span className="font-bold text-slate-100">{Math.round((count / stats.total) * 100)}%</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-    </div>
-  )
+  return <DonutChart title="Buchungsstatus" segments={segments} />
 }
 
 export function AvgDurationWidget() {
@@ -249,10 +159,10 @@ export function AvgDurationWidget() {
   }, [trips, activeProfileIds])
 
   return (
-    <div className="bg-[#0d1117] rounded-xl border border-slate-800 p-6 flex flex-col shadow-xl h-full">
-      <h3 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-2">Ø Urlaubsdauer</h3>
+    <div className="bg-white dark:bg-[#0d1117] rounded-xl border border-slate-200 dark:border-slate-800 p-6 flex flex-col shadow-xl h-full">
+      <h3 className="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Ø Urlaubsdauer</h3>
       <div className="flex items-end gap-2">
-        <span className="text-4xl font-bold text-slate-100">{avg}</span>
+        <span className="text-4xl font-bold text-slate-800 dark:text-slate-100">{avg}</span>
         <span className="text-lg text-slate-500 mb-1">Tage</span>
       </div>
     </div>
@@ -287,8 +197,8 @@ export function BudgetWidget() {
   }
 
   return (
-    <div className="bg-[#0d1117] rounded-xl border border-slate-800 p-6 flex flex-col shadow-xl h-full justify-center">
-      <h3 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-2">
+    <div className="bg-white dark:bg-[#0d1117] rounded-xl border border-slate-200 dark:border-slate-800 p-6 flex flex-col shadow-xl h-full justify-center">
+      <h3 className="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-2">
         <Wallet className="w-4 h-4" /> Budget vs. Realität
       </h3>
       {validTrips === 0 ? (
@@ -303,7 +213,7 @@ export function BudgetWidget() {
               Abweichung <br/>im Schnitt
             </span>
           </div>
-          <p className="text-sm text-slate-400 mt-4 leading-relaxed italic">
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-4 leading-relaxed italic">
             "{getHumorousText(avgDev)}"
           </p>
         </>
@@ -332,7 +242,7 @@ export function BridgeDaysWidget() {
       const d = new Date(e.date)
       
       // Is it a working day?
-      const wDay = d.getDay() // 0 = Sun, 1 = Mon...
+      const wDay = d.getDay() === 0 ? 7 : d.getDay() // 0 = Sun -> 7, 1 = Mon...
       if (!workingDaysArr.includes(wDay)) return // Not a working day anyway
       
       // Check surrounding days
@@ -341,8 +251,11 @@ export function BridgeDaysWidget() {
       const dNext = new Date(d)
       dNext.setDate(d.getDate() + 1)
       
-      const prevIsWeekend = !workingDaysArr.includes(dPrev.getDay())
-      const nextIsWeekend = !workingDaysArr.includes(dNext.getDay())
+      const prevDay = dPrev.getDay() === 0 ? 7 : dPrev.getDay()
+      const nextDay = dNext.getDay() === 0 ? 7 : dNext.getDay()
+
+      const prevIsWeekend = !workingDaysArr.includes(prevDay)
+      const nextIsWeekend = !workingDaysArr.includes(nextDay)
       
       const prevDateStr = `${dPrev.getFullYear()}-${String(dPrev.getMonth()+1).padStart(2,'0')}-${String(dPrev.getDate()).padStart(2,'0')}`
       const nextDateStr = `${dNext.getFullYear()}-${String(dNext.getMonth()+1).padStart(2,'0')}-${String(dNext.getDate()).padStart(2,'0')}`
@@ -358,8 +271,8 @@ export function BridgeDaysWidget() {
   }, [entries, activeProfileIds, profiles, holidays])
 
   return (
-    <div className="bg-[#0d1117] rounded-xl border border-slate-800 p-6 flex flex-col shadow-xl h-full justify-center">
-      <h3 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-2">Genutzte Brückentage</h3>
+    <div className="bg-white dark:bg-[#0d1117] rounded-xl border border-slate-200 dark:border-slate-800 p-6 flex flex-col shadow-xl h-full justify-center">
+      <h3 className="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Genutzte Brückentage</h3>
       <div className="flex items-end gap-2">
         <span className="text-4xl font-bold text-brand-500">{count}</span>
       </div>
@@ -390,62 +303,16 @@ export function TravelTypeWidget() {
 
   const colors = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#f97316']
 
-  let cumulativePercent = 0
+  const segments = useMemo(() => {
+    let cumulative = 0
+    return stats.list.map(([type, count], idx) => {
+      const percent = stats.total > 0 ? (count / stats.total) * 100 : 0
+      const offset = cumulative
+      cumulative += percent
+      const color = colors[idx % colors.length]
+      return { type, count, percent, offset, color }
+    })
+  }, [stats.list, stats.total])
 
-  return (
-    <div className="bg-[#0d1117] rounded-xl border border-slate-800 p-6 flex flex-col shadow-xl h-full">
-      <h3 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-6">Reisetyp</h3>
-      {stats.list.length === 0 ? (
-        <div className="text-slate-500 text-sm my-auto text-center">Keine Daten vorhanden</div>
-      ) : (
-        <div className="flex flex-col md:flex-row items-center gap-6 my-auto">
-          <div className="relative w-32 h-32 flex-shrink-0">
-            {/* Base Circle */}
-            <svg viewBox="0 0 100 100" className="absolute top-0 left-0 w-full h-full">
-               <circle cx="50" cy="50" r="40" fill="transparent" stroke="#161b22" strokeWidth="20" />
-            </svg>
-            <svg viewBox="0 0 100 100" className="absolute top-0 left-0 w-full h-full transform -rotate-90">
-              {stats.list.map(([type, count], idx) => {
-                const percent = (count / stats.total) * 100
-                const strokeDasharray = `${percent} 100`
-                const strokeDashoffset = -cumulativePercent
-                cumulativePercent += percent
-                
-                // Add a small gap by reducing the painted percentage very slightly if there are multiple segments
-                const adjustedPercent = stats.list.length > 1 ? percent - 1 : percent
-                const adjustedDasharray = `${adjustedPercent > 0 ? adjustedPercent : 0} 100`
-
-                return (
-                  <circle
-                    key={type}
-                    cx="50"
-                    cy="50"
-                    r="40"
-                    fill="transparent"
-                    stroke={colors[idx % colors.length]}
-                    strokeWidth="20"
-                    strokeDasharray={adjustedDasharray}
-                    strokeDashoffset={strokeDashoffset}
-                    pathLength="100"
-                    strokeLinecap="round"
-                  />
-                )
-              })}
-            </svg>
-          </div>
-          <div className="flex flex-col gap-3 flex-1 w-full justify-center">
-            {stats.list.map(([type, count], idx) => (
-              <div key={type} className="flex items-center justify-between text-sm">
-                <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded-full" style={{ backgroundColor: colors[idx % colors.length] }} />
-                  <span className="text-slate-300">{type}</span>
-                </div>
-                <span className="font-bold text-slate-100">{Math.round((count / stats.total) * 100)}%</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-    </div>
-  )
+  return <DonutChart title="Reisetyp" segments={segments} />
 }

@@ -4,8 +4,15 @@ import { PrismaLibSql } from '@prisma/adapter-libsql'
 const globalForPrisma = global as unknown as { prisma: PrismaClient }
 
 const getPrisma = () => {
-  const url = process.env.DATABASE_URL || 'file:./dev.db'
-  const adapter = new PrismaLibSql({ url })
+  const isProd = process.env.NODE_ENV === 'production'
+  const url = process.env.DATABASE_URL
+  
+  if (isProd && !url) {
+    throw new Error("DATABASE_URL is not set but required in production")
+  }
+
+  const dbUrl = url || 'file:./dev.db'
+  const adapter = new PrismaLibSql({ url: dbUrl })
   return new PrismaClient({ adapter })
 }
 

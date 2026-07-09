@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useMemo } from "react"
 import { useStore } from "@/store/useStore"
 import { Trip } from "@/types"
 import TripCard from "./TripCard"
@@ -23,25 +23,6 @@ export default function DashboardHome() {
   const [selectedTrip, setSelectedTrip] = useState<Trip | null>(null)
   const [isArchiveOpen, setIsArchiveOpen] = useState(false)
 
-  // Filter trips for the active profiles
-  // A trip is shown if it has AT LEAST ONE profile that is currently active.
-  const activeTrips = trips.filter(trip => 
-    trip.profiles.some(p => activeProfileIds.includes(p.id))
-  )
-
-  const today = new Date()
-  const todayStr = today.toISOString().split('T')[0]
-
-  // Separate into upcoming and archive
-  // Note: we just compare string dates directly since they are YYYY-MM-DD
-  const upcomingTrips = activeTrips.filter(t => t.endDate >= todayStr)
-  const archivedTrips = activeTrips.filter(t => t.endDate < todayStr)
-
-  // Sort upcoming: soonest first
-  upcomingTrips.sort((a, b) => a.startDate.localeCompare(b.startDate))
-  // Sort archived: most recent first
-  archivedTrips.sort((a, b) => b.endDate.localeCompare(a.endDate))
-
   const handleOpenNew = () => {
     setSelectedTrip(null)
     setIsModalOpen(true)
@@ -52,38 +33,50 @@ export default function DashboardHome() {
     setIsModalOpen(true)
   }
 
-  // Calculate precise stats
-  let totalRemainingLeave = 0
-  let totalAnnualLeave = 0
-  
-  activeProfileIds.forEach(id => {
-    const p = profiles.find(p => p.id === id)
-    if (p) {
-      const stats = getProfileStatsForYear(p, selectedYear, overrides, entries, trips, holidays)
-      if (stats) {
-        totalAnnualLeave += stats.totalAvailable
-        
-        // Calculate standard taken leave
-        let standardTaken = 0
-        const yearEntries = entries.filter(e => e.profileId === id && e.date.startsWith(selectedYear.toString()))
-        yearEntries.forEach(e => {
-          if (isVacationCostingDay(e.date, p, holidays)) {
-            if (e.type === 'U') standardTaken += 1
-            if (e.type === '2') standardTaken += 0.5
-          }
-        })
+  const { upcomingTrips, archivedTrips } = useMemo(() => {
+    const active = trips.filter(trip => 
+      trip.profiles.some(p => activeProfileIds.includes(p.id))
+    )
+    const todayStr = new Date().toISOString().split('T')[0]
+    const upcoming = active.filter(t => t.endDate >= todayStr)
+    const archived = active.filter(t => t.endDate < todayStr)
+    upcoming.sort((a, b) => a.startDate.localeCompare(b.startDate))
+    archived.sort((a, b) => b.endDate.localeCompare(a.endDate))
+    return { upcomingTrips: upcoming, archivedTrips: archived }
+  }, [trips, activeProfileIds])
 
-        // Calculate trip taken leave
-        let tripTaken = 0
-        const profileTrips = trips.filter(t => t.profiles.some(pt => pt.id === id) && t.startDate.startsWith(selectedYear.toString()))
-        profileTrips.forEach(t => {
-          tripTaken += calculateTripVacationCost(t, p, holidays)
-        })
+  const { totalRemainingLeave, totalAnnualLeave } = useMemo(() => {
+    let remaining = 0
+    let annual = 0
+    
+    activeProfileIds.forEach(id => {
+      const p = profiles.find(p => p.id === id)
+      if (p) {
+        const stats = getProfileStatsForYear(p, selectedYear, overrides, entries, trips, holidays)
+        if (stats) {
+          annual += stats.totalAvailable
+          
+          let standardTaken = 0
+          const yearEntries = entries.filter(e => e.profileId === id && e.date.startsWith(selectedYear.toString()))
+          yearEntries.forEach(e => {
+            if (isVacationCostingDay(e.date, p, holidays)) {
+              if (e.type === 'U') standardTaken += 1
+              if (e.type === '2') standardTaken += 0.5
+            }
+          })
 
-        totalRemainingLeave += (stats.totalAvailable - standardTaken - tripTaken)
+          let tripTaken = 0
+          const profileTrips = trips.filter(t => t.profiles.some(pt => pt.id === id) && t.startDate.startsWith(selectedYear.toString()))
+          profileTrips.forEach(t => {
+            tripTaken += calculateTripVacationCost(t, p, holidays)
+          })
+
+          remaining += (stats.totalAvailable - standardTaken - tripTaken)
+        }
       }
-    }
-  })
+    })
+    return { totalRemainingLeave: remaining, totalAnnualLeave: annual }
+  }, [activeProfileIds, profiles, selectedYear, overrides, entries, trips, holidays])
 
   // Count sickness days in selected year (removed from display as requested)
   // const sicknessDays = ...

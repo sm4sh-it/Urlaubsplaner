@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useMemo } from "react"
 import { useStore } from "@/store/useStore"
 import { SHORT_MONTHS } from "@/lib/dateUtils"
 import { getProfileStatsForYear } from "@/lib/profileUtils"
@@ -45,123 +45,124 @@ export default function Statistics() {
     )
   }
 
-  // Filtern der Einträge für dieses Jahr und Profil
-  const yearEntries = entries.filter(e => 
-    e.profileId === activeProfile.id && e.date.startsWith(selectedYear.toString())
-  )
+  const { totalUrlaub, totalKrank, totalMobile, monthlyStats, ungenutzterResturlaub } = useMemo(() => {
+    // Filtern der Einträge für dieses Jahr und Profil
+    const yearEntries = entries.filter(e => 
+      e.profileId === activeProfile.id && e.date.startsWith(selectedYear.toString())
+    )
 
-  let totalUrlaub = 0
-  let totalKrank = 0
-  let totalMobile = 0
-  const monthlyStats = Array(12).fill(0).map(() => ({ urlaub: 0, krank: 0, mobile: 0 }))
+    let tUrlaub = 0
+    let tKrank = 0
+    let tMobile = 0
+    const mStats = Array(12).fill(0).map(() => ({ urlaub: 0, krank: 0, mobile: 0 }))
 
-  yearEntries.forEach(entry => {
-    const month = parseInt(entry.date.split('-')[1]) - 1 // 0-11
-    
-    let urlaubVal = 0
-    let krankVal = 0
-    let mobileVal = 0
+    yearEntries.forEach(entry => {
+      const month = parseInt(entry.date.split('-')[1]) - 1 // 0-11
+      
+      let urlaubVal = 0
+      let krankVal = 0
+      let mobileVal = 0
 
-    if (isVacationCostingDay(entry.date, activeProfile, holidays)) {
-      if (entry.type === 'U') urlaubVal = 1
-      if (entry.type === '2') urlaubVal = 0.5
-    }
-    if (entry.type === 'K') krankVal = 1
-    if (entry.type === '3') krankVal = 0.5
-    if (entry.type === 'M') mobileVal = 1
-    if (entry.type === '5') mobileVal = 0.5
-
-    totalUrlaub += urlaubVal
-    totalKrank += krankVal
-    totalMobile += mobileVal
-    
-    if (month >= 0 && month < 12) {
-      monthlyStats[month].urlaub += urlaubVal
-      monthlyStats[month].krank += krankVal
-      monthlyStats[month].mobile += mobileVal
-    }
-  })
-
-  // Trips einberechnen
-  const yearTrips = trips.filter(t => t.profiles.some(p => p.id === activeProfile.id) && t.startDate.startsWith(selectedYear.toString()))
-  
-  yearTrips.forEach(trip => {
-    const cost = calculateTripVacationCost(trip, activeProfile, holidays)
-    totalUrlaub += cost
-
-    // Optionally distribute over months (simplified: attribute to start month)
-    if (cost > 0) {
-      const startMonth = parseInt(trip.startDate.split('-')[1]) - 1
-      if (startMonth >= 0 && startMonth < 12) {
-        monthlyStats[startMonth].urlaub += cost
+      if (isVacationCostingDay(entry.date, activeProfile, holidays)) {
+        if (entry.type === 'U') urlaubVal = 1
+        if (entry.type === '2') urlaubVal = 0.5
       }
-    }
+      if (entry.type === 'K') krankVal = 1
+      if (entry.type === '3') krankVal = 0.5
+      if (entry.type === 'M') mobileVal = 1
+      if (entry.type === '5') mobileVal = 0.5
 
-    if (trip.type === "Mobiles Arbeiten" && ["In Planung", "Gebucht", "Abgeschlossen"].includes(trip.status)) {
-      // Very simple approximation of mobile working days duration
-      // A more complex helper could be written similar to calculateTripVacationCost
-      // but for mobile days. To keep it simple, we use the raw duration or write a quick calc:
-      const start = new Date(trip.startDate)
-      const end = new Date(trip.endDate)
-      let mobileCost = 0
-      const workingDays = activeProfile.workingDays ? activeProfile.workingDays.split(',').map(Number) : [1, 2, 3, 4, 5]
-      for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
-        let dow = d.getDay()
-        if (dow === 0) dow = 7
-        const dateStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
-        if (workingDays.includes(dow) && !holidays[dateStr]) {
-          mobileCost += 1
+      tUrlaub += urlaubVal
+      tKrank += krankVal
+      tMobile += mobileVal
+      
+      if (month >= 0 && month < 12) {
+        mStats[month].urlaub += urlaubVal
+        mStats[month].krank += krankVal
+        mStats[month].mobile += mobileVal
+      }
+    })
+
+    // Trips einberechnen
+    const yearTrips = trips.filter(t => t.profiles.some(p => p.id === activeProfile.id) && t.startDate.startsWith(selectedYear.toString()))
+    
+    yearTrips.forEach(trip => {
+      const cost = calculateTripVacationCost(trip, activeProfile, holidays)
+      tUrlaub += cost
+
+      // Optionally distribute over months (simplified: attribute to start month)
+      if (cost > 0) {
+        const startMonth = parseInt(trip.startDate.split('-')[1]) - 1
+        if (startMonth >= 0 && startMonth < 12) {
+          mStats[startMonth].urlaub += cost
         }
       }
-      totalMobile += mobileCost
-      const sm = parseInt(trip.startDate.split('-')[1]) - 1
-      if (sm >= 0 && sm < 12) monthlyStats[sm].mobile += mobileCost
-    }
-  })
 
-  // Logik für Resturlaubs-Warnung
-  // Wie viele Urlaubstage wurden VOR dem Verfallsdatum genommen?
-  const expiryDateString = `${selectedYear}-${activeProfile.remainingLeaveExpiryDate}`
-  let urlaubVorVerfall = yearEntries.filter(e => {
-    if (e.date <= expiryDateString) {
-      if (isVacationCostingDay(e.date, activeProfile, holidays)) {
-        return e.type === 'U' || e.type === '2'
+      if (trip.type === "Mobiles Arbeiten" && ["In Planung", "Gebucht", "Abgeschlossen"].includes(trip.status)) {
+        // Very simple approximation of mobile working days duration
+        const start = new Date(trip.startDate)
+        const end = new Date(trip.endDate)
+        let mobileCost = 0
+        const workingDays = activeProfile.workingDays ? activeProfile.workingDays.split(',').map(Number) : [1, 2, 3, 4, 5]
+        for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+          let dow = d.getDay()
+          if (dow === 0) dow = 7
+          const dateStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+          if (workingDays.includes(dow) && !holidays[dateStr]) {
+            mobileCost += 1
+          }
+        }
+        tMobile += mobileCost
+        const sm = parseInt(trip.startDate.split('-')[1]) - 1
+        if (sm >= 0 && sm < 12) mStats[sm].mobile += mobileCost
       }
-    }
-    return false
-  }).reduce((sum, e) => sum + (e.type === 'U' ? 1 : 0.5), 0)
+    })
 
-  // Berücksichtige auch Urlaubstage, die durch Reisen vor dem Verfallsdatum genommen werden
-  const validTripStatuses = ["In Planung", "Gebucht", "Abgeschlossen"]
-  const validTypes = ["Urlaub"]
-  
-  const profileTrips = trips.filter(t => t.profiles.some(p => p.id === activeProfile.id))
-  
-  profileTrips.forEach(t => {
-    if (validTripStatuses.includes(t.status) && validTypes.includes(t.type)) {
-      const start = new Date(t.startDate)
-      const end = new Date(t.endDate)
-      
-      for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
-        const year = d.getFullYear()
-        const month = String(d.getMonth() + 1).padStart(2, '0')
-        const day = String(d.getDate()).padStart(2, '0')
-        const dateStr = `${year}-${month}-${day}`
+    // Logik für Resturlaubs-Warnung
+    // Wie viele Urlaubstage wurden VOR dem Verfallsdatum genommen?
+    const expiryDateString = `${selectedYear}-${activeProfile.remainingLeaveExpiryDate}`
+    let urlaubVorVerfall = yearEntries.filter(e => {
+      if (e.date <= expiryDateString) {
+        if (isVacationCostingDay(e.date, activeProfile, holidays)) {
+          return e.type === 'U' || e.type === '2'
+        }
+      }
+      return false
+    }).reduce((sum, e) => sum + (e.type === 'U' ? 1 : 0.5), 0)
+
+    // Berücksichtige auch Urlaubstage, die durch Reisen vor dem Verfallsdatum genommen werden
+    const validTripStatuses = ["In Planung", "Gebucht", "Abgeschlossen"]
+    const validTypes = ["Urlaub"]
+    
+    const profileTrips = trips.filter(t => t.profiles.some(p => p.id === activeProfile.id))
+    
+    profileTrips.forEach(t => {
+      if (validTripStatuses.includes(t.status) && validTypes.includes(t.type)) {
+        const start = new Date(t.startDate)
+        const end = new Date(t.endDate)
         
-        if (dateStr.startsWith(selectedYear.toString()) && dateStr <= expiryDateString) {
-          if (isVacationCostingDay(dateStr, activeProfile, holidays)) {
-            urlaubVorVerfall += 1
+        for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+          const year = d.getFullYear()
+          const month = String(d.getMonth() + 1).padStart(2, '0')
+          const day = String(d.getDate()).padStart(2, '0')
+          const dateStr = `${year}-${month}-${day}`
+          
+          if (dateStr.startsWith(selectedYear.toString()) && dateStr <= expiryDateString) {
+            if (isVacationCostingDay(dateStr, activeProfile, holidays)) {
+              urlaubVorVerfall += 1
+            }
           }
         }
       }
-    }
-  })
+    })
+
+    const ungenutzterResturlaubCalc = Math.max(0, stats.remainingLeave - urlaubVorVerfall)
+
+    return { totalUrlaub: tUrlaub, totalKrank: tKrank, totalMobile: tMobile, monthlyStats: mStats, ungenutzterResturlaub: ungenutzterResturlaubCalc }
+  }, [entries, activeProfile, selectedYear, holidays, trips, stats.remainingLeave])
 
   const verfuegbar = stats.totalAvailable
   const restUrlaubAktuell = verfuegbar - totalUrlaub
-
-  // Wenn man mehr Urlaub nimmt als man Resturlaub hat, ist der Resturlaub quasi verbraucht.
-  const ungenutzterResturlaub = Math.max(0, stats.remainingLeave - urlaubVorVerfall)
 
   return (
     <div className="bg-white dark:bg-[var(--surface)] rounded-xl shadow-sm border border-slate-200 dark:border-[var(--border-subtle)] p-4 flex flex-col min-h-0">
