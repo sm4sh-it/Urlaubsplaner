@@ -32,7 +32,9 @@ services:
       # Mount the database directory so it persists across container restarts and updates
       - urlaubsplaner_data:/app/data
     environment:
-      # Optionales Passwort für globalen Schutz
+      # Aktiviere den Passwortschutz (true) oder deaktiviere ihn komplett (false)
+      - AUTH_ENABLED=true
+      # Das zwingend erforderliche Passwort, wenn AUTH_ENABLED=true ist
       - APP_PASSWORD=DeinSicheresPasswort123
 
 volumes:
@@ -46,8 +48,9 @@ docker compose up -d
 Die App ist nun unter `http://localhost:8666` erreichbar.
 
 ## Absicherung (Globales Passwort)
-Wenn du die App von außen erreichbar machst, solltest du unbedingt die Umgebungsvariable `APP_PASSWORD` in deiner Docker-Umgebung setzen.
-Lässt du sie komplett weg oder leer, ist die App für **jeden** im Netzwerk frei zugänglich.
+Der Urlaubsplaner bringt ein eingebautes, sicheres Authentifizierungssystem mit:
+- **Passwortschutz aktivieren (`AUTH_ENABLED=true`):** Die App ist sicher gesperrt. Du MUSST ein exaktes Passwort im Feld `APP_PASSWORD` hinterlegen. Ist dieses Feld durch einen Konfigurationsfehler leer, sperrt die App sicherheitshalber den gesamten Zugriff ab und zeigt einen Serverfehler.
+- **Passwortschutz deaktivieren (`AUTH_ENABLED=false`):** Die App ist komplett offen für **jeden** im Netzwerk (z.B. hinter einem eigenen Reverse-Proxy/VPN). Man kann sich ohne Passworteingabe einloggen.
 
 ## Entwicklung (Lokal)
 Falls du am Code mitarbeiten möchtest:

@@ -12,7 +12,9 @@ services:
       # Mount the database directory so it persists across container restarts and updates
       - urlaubsplaner_data:/app/data
     environment:
-      # Optionales Passwort für globalen Schutz
+      # Aktiviere den Passwortschutz (true) oder deaktiviere ihn komplett (false)
+      - AUTH_ENABLED=true
+      # Das zwingend erforderliche Passwort, wenn AUTH_ENABLED=true ist
       - APP_PASSWORD=DeinSicheresPasswort123
 
 volumes:

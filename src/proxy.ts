@@ -2,10 +2,10 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
 export function proxy(request: NextRequest) {
-  const password = process.env.APP_PASSWORD
+  const authEnabled = process.env.AUTH_ENABLED !== 'false'
 
-  // If no password is set, the app is completely open
-  if (!password) {
+  // If auth is explicitly disabled, the app is completely open
+  if (!authEnabled) {
     return NextResponse.next()
   }
 
