@@ -17,7 +17,9 @@ export function getProfileStatsForYear(
   holidays: Record<string, any> = {},
   cache: Map<string, YearlyStats | null> = new Map()
 ): YearlyStats | null {
-  if (year < profile.startYear) return null
+  const startYear = profile.startYear ?? 2022
+  // Prevent infinite recursion by enforcing a hard minimum year limit (2020)
+  if (year < startYear || year < 2020) return null
 
   const cacheKey = `${profile.id}_${year}`
   if (cache.has(cacheKey)) return cache.get(cacheKey) || null
@@ -31,7 +33,7 @@ export function getProfileStatsForYear(
   if (override?.remainingLeave != null) {
     // Manually overridden carry-over
     remainingLeave = override.remainingLeave
-  } else if (year === profile.startYear) {
+  } else if (year === startYear) {
     // Base carry-over from profile settings
     remainingLeave = profile.remainingLeave
   } else {

@@ -34,17 +34,8 @@ export default function Statistics() {
 
   const stats = getProfileStatsForYear(activeProfile, selectedYear, overrides, entries, trips, holidays)
   
-  if (!stats) {
-    return (
-      <div className="bg-white dark:bg-gray-950 rounded-xl shadow-sm border border-slate-200 dark:border-gray-800 p-4 flex flex-col min-h-0 shrink-0">
-        <h2 className="font-semibold text-lg mb-4 text-slate-800 dark:text-slate-200">Statistik ({activeProfile.name})</h2>
-        <div className="text-sm text-slate-500">
-          Profil ist für das Jahr {selectedYear} nicht aktiv (Startjahr: {activeProfile.startYear}).
-        </div>
-      </div>
-    )
-  }
-
+  // Wir rendern die Statistik-UI weiter unten nur, wenn stats vorhanden ist.
+  // Das useMemo muss aber VOR dem early return aufgerufen werden, um die Hooks-Reihenfolge einzuhalten.
   const { totalUrlaub, totalKrank, totalMobile, monthlyStats, ungenutzterResturlaub } = useMemo(() => {
     // Filtern der Einträge für dieses Jahr und Profil
     const yearEntries = entries.filter(e => 
@@ -156,10 +147,21 @@ export default function Statistics() {
       }
     })
 
-    const ungenutzterResturlaubCalc = Math.max(0, stats.remainingLeave - urlaubVorVerfall)
+    const ungenutzterResturlaubCalc = Math.max(0, (stats?.remainingLeave || 0) - urlaubVorVerfall)
 
     return { totalUrlaub: tUrlaub, totalKrank: tKrank, totalMobile: tMobile, monthlyStats: mStats, ungenutzterResturlaub: ungenutzterResturlaubCalc }
-  }, [entries, activeProfile, selectedYear, holidays, trips, stats.remainingLeave])
+  }, [entries, activeProfile, selectedYear, holidays, trips, stats?.remainingLeave])
+
+  if (!stats) {
+    return (
+      <div className="bg-white dark:bg-gray-950 rounded-xl shadow-sm border border-slate-200 dark:border-gray-800 p-4 flex flex-col min-h-0 shrink-0">
+        <h2 className="font-semibold text-lg mb-4 text-slate-800 dark:text-slate-200">Statistik ({activeProfile.name})</h2>
+        <div className="text-sm text-slate-500">
+          Profil ist für das Jahr {selectedYear} nicht aktiv (Startjahr: {activeProfile.startYear}).
+        </div>
+      </div>
+    )
+  }
 
   const verfuegbar = stats.totalAvailable
   const restUrlaubAktuell = verfuegbar - totalUrlaub

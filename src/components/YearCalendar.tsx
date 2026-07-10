@@ -61,11 +61,10 @@ export default function YearCalendar() {
     : null;
   const stateCode = primaryProfile?.stateCode || "NW"
 
-  // Process trips to virtual entries
-  const validTripStatuses = ["In Planung", "Gebucht", "Abgeschlossen"]
-  const activeTrips = trips.filter(t => validTripStatuses.includes(t.status))
-
   const tripLookup = React.useMemo(() => {
+    const validTripStatuses = ["In Planung", "Gebucht", "Abgeschlossen"]
+    const activeTrips = trips.filter(t => validTripStatuses.includes(t.status))
+    
     const lookup: Record<string, { type: EntryType, title: string }> = {}
     for (const t of activeTrips) {
       const type = mapTripTypeToEntryType(t.type)
@@ -83,7 +82,7 @@ export default function YearCalendar() {
       }
     }
     return lookup
-  }, [activeTrips])
+  }, [trips])
 
   const entryLookup = React.useMemo(() => {
     const lookup: Record<string, EntryType> = {}
@@ -148,7 +147,8 @@ export default function YearCalendar() {
           const existing = entries.find(e => e.date === date && e.profileId === pId)
           if (existing) removeEntry(existing.id)
         } else {
-          addOrUpdateEntry({ id: crypto.randomUUID(), date, type, profileId: pId })
+          const tempId = (typeof crypto !== 'undefined' && crypto.randomUUID) ? crypto.randomUUID() : 'temp_' + Date.now().toString(36) + Math.random().toString(36).substring(2)
+          addOrUpdateEntry({ id: tempId, date, type, profileId: pId })
         }
 
         // Persist to DB
