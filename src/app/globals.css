@@ -307,16 +307,26 @@ body {
  */
 
 /* Vacation (Greens) */
-.vacation-1 { background-color: #0e4429; }
-.vacation-2 { background-color: #006d32; }
-.vacation-3 { background-color: #26a641; }
-.vacation-4 { background-color: #39d353; }
+.vacation-1 { background-color: #9be9a8; }
+.vacation-2 { background-color: #40c463; }
+.vacation-3 { background-color: #30a14e; }
+.vacation-4 { background-color: #216e39; }
+
+.dark .vacation-1 { background-color: #0e4429; }
+.dark .vacation-2 { background-color: #006d32; }
+.dark .vacation-3 { background-color: #26a641; }
+.dark .vacation-4 { background-color: #39d353; }
 
 /* Sickness (Reds) */
-.sick-1 { background-color: #4c1110; }
-.sick-2 { background-color: #8c1d18; }
-.sick-3 { background-color: #d12e2a; }
-.sick-4 { background-color: #f85149; }
+.sick-1 { background-color: #ffcdd2; }
+.sick-2 { background-color: #ef5350; }
+.sick-3 { background-color: #d32f2f; }
+.sick-4 { background-color: #b71c1c; }
+
+.dark .sick-1 { background-color: #4c1110; }
+.dark .sick-2 { background-color: #8c1d18; }
+.dark .sick-3 { background-color: #d12e2a; }
+.dark .sick-4 { background-color: #f85149; }
 
 .meta-value {
   font-size: 14px;

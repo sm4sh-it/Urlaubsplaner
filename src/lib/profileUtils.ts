@@ -1,5 +1,5 @@
 import { Profile, ProfileYearOverride, CalendarEntry, Trip } from "@/types"
-import { calculateTripVacationCost, isVacationCostingDay } from "@/lib/tripUtils"
+import { calculateTripVacationCost, isVacationCostingDay, tripOverlapsYear } from "@/lib/tripUtils"
 
 export interface YearlyStats {
   annualLeave: number
@@ -53,9 +53,9 @@ export function getProfileStatsForYear(
       })
 
       // Subtract trips in previous year
-      const prevTrips = trips.filter(t => t.profiles.some(p => p.id === profile.id) && t.startDate.startsWith(prevYearStr))
+      const prevTrips = trips.filter(t => t.profiles.some(p => p.id === profile.id) && tripOverlapsYear(t, year - 1))
       prevTrips.forEach(t => {
-        usedVacation += calculateTripVacationCost(t, profile, holidays)
+        usedVacation += calculateTripVacationCost(t, profile, holidays, year - 1)
       })
 
       // Carry over is what is left

@@ -4,7 +4,7 @@ import { useState, useMemo } from "react"
 import { useStore } from "@/store/useStore"
 import { SHORT_MONTHS } from "@/lib/dateUtils"
 import { getProfileStatsForYear } from "@/lib/profileUtils"
-import { calculateTripVacationCost, isVacationCostingDay } from "@/lib/tripUtils"
+import { isVacationCostingDay, calculateTripVacationCost, tripOverlapsYear } from "@/lib/tripUtils"
 import { ChevronUp, ChevronDown } from "lucide-react"
 
 export default function Statistics() {
@@ -75,10 +75,10 @@ export default function Statistics() {
     })
 
     // Trips einberechnen
-    const yearTrips = trips.filter(t => t.profiles.some(p => p.id === activeProfile.id) && t.startDate.startsWith(selectedYear.toString()))
+    const yearTrips = trips.filter(t => t.profiles.some(p => p.id === activeProfile.id) && tripOverlapsYear(t, selectedYear))
     
     yearTrips.forEach(trip => {
-      const cost = calculateTripVacationCost(trip, activeProfile, holidays)
+      const cost = calculateTripVacationCost(trip, activeProfile, holidays, selectedYear)
       tUrlaub += cost
 
       // Optionally distribute over months (simplified: attribute to start month)
@@ -95,10 +95,11 @@ export default function Statistics() {
         const end = new Date(trip.endDate)
         let mobileCost = 0
         const workingDays = activeProfile.workingDays ? activeProfile.workingDays.split(',').map(Number) : [1, 2, 3, 4, 5]
-        for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
-          let dow = d.getDay()
+        for (let d = new Date(start); d <= end; d.setUTCDate(d.getUTCDate() + 1)) {
+          if (d.getUTCFullYear() !== selectedYear) continue;
+          let dow = d.getUTCDay()
           if (dow === 0) dow = 7
-          const dateStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+          const dateStr = `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, '0')}-${String(d.getUTCDate()).padStart(2, '0')}`
           if (workingDays.includes(dow) && !holidays[dateStr]) {
             mobileCost += 1
           }
@@ -132,13 +133,14 @@ export default function Statistics() {
         const start = new Date(t.startDate)
         const end = new Date(t.endDate)
         
-        for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
-          const year = d.getFullYear()
-          const month = String(d.getMonth() + 1).padStart(2, '0')
-          const day = String(d.getDate()).padStart(2, '0')
+        for (let d = new Date(start); d <= end; d.setUTCDate(d.getUTCDate() + 1)) {
+          const year = d.getUTCFullYear()
+          if (year !== selectedYear) continue;
+          const month = String(d.getUTCMonth() + 1).padStart(2, '0')
+          const day = String(d.getUTCDate()).padStart(2, '0')
           const dateStr = `${year}-${month}-${day}`
           
-          if (dateStr.startsWith(selectedYear.toString()) && dateStr <= expiryDateString) {
+          if (dateStr <= expiryDateString) {
             if (isVacationCostingDay(dateStr, activeProfile, holidays)) {
               urlaubVorVerfall += 1
             }

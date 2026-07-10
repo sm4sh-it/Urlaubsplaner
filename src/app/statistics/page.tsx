@@ -41,15 +41,15 @@ export default async function StatisticsPage() {
       <StoreHydrator profiles={profilesRaw} entries={entries} overrides={overrides} trips={tripsRaw as any} />
       
       {/* Jahresabhängige Statistiken */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6 w-full mb-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6 w-full mb-4">
         <VacationBurnDownWidget />
         <SickDaysRadarWidget />
         <ScatterPlotWidget />
       </div>
 
-      <div className="w-full h-px bg-slate-200 dark:bg-white/10 my-4" />
+      <div className="w-full h-px bg-slate-200 dark:bg-white/10 my-2" />
       
-      <div className="flex flex-col xl:flex-row items-start gap-4 md:gap-6 w-full mt-4">
+      <div className="flex flex-col xl:flex-row items-start gap-4 md:gap-6 w-full mt-2">
         {/* Left Column: Stacked Widgets */}
         <div className="flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 w-full">
           <AvgDurationWidget />

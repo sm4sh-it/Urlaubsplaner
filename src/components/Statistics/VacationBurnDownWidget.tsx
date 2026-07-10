@@ -56,9 +56,9 @@ export default function VacationBurnDownWidget() {
         const start = new Date(t.startDate)
         const end = new Date(t.endDate)
         
-        for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
-          if (d.getFullYear() === selectedYear && d.getMonth() === month) {
-            const dateStr = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`
+        for (let d = new Date(start); d <= end; d.setUTCDate(d.getUTCDate() + 1)) {
+          if (d.getUTCFullYear() === selectedYear && d.getUTCMonth() === month) {
+            const dateStr = `${d.getUTCFullYear()}-${String(d.getUTCMonth()+1).padStart(2,'0')}-${String(d.getUTCDate()).padStart(2,'0')}`
             if (isVacationCostingDay(dateStr, activeProfile, holidays)) {
               monthTaken += 1
             }

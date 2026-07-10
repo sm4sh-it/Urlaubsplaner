@@ -1,6 +1,13 @@
 # Changelog
 
 All notable changes to this project will be documented in this file.
+## [0.9.1] - 2026-07-10
+### Fixed
+- **Daten & Zeitzonen-Bug:** Behebt einen gravierenden Fehler bei der Iteration von Reisedaten. Es wurden teilweise falsche Zeitzonen des Browsers (statt UTC) herangezogen, was dazu führen konnte, dass einzelne Tage beim Eintragen in den Kalender übersprungen oder Reisen gänzlich ignoriert wurden.
+- **Jahreswechsel-Bug bei Reisen:** Die Zuordnung von Reise-Tagen wurde grundlegend korrigiert. Eine Reise, die im alten Jahr beginnt und ins neue Jahr reicht, wird nun korrekt und tagesgenau für das jeweilige Jahr in der Urlaubsstatistik abgezogen.
+- **Stiller Absturz beim Speichern (Alle Ferien):** Wenn man im Profil "Alle Ferien" auf "Neue Reise" geklickt hat, hat das System stillschweigend abgebrochen (Record to connect not found), wodurch keine Reise gespeichert wurde. Dies wurde gefixt, es werden nun standardmäßig alle Mitglieder ausgewählt, und im Fehlerfall wird dem Nutzer nun eine sprechende Fehlermeldung (`alert`) angezeigt.
+- **Design & Layout:** Verringert unnötig großen Leerraum zwischen den Kacheln auf der Statistik-Seite.
+
 ## [0.9.0] - 2026-07-09
 ### Changed & Fixed
 - **Premium Light-Mode (Phase 4):** Umfassendes Redesign des Light-Modes mit wärmeren `stone-100` Hintergründen, dreidimensionalen Dashboard-Cards (Schatten & Rahmen) und einem subtilen Radial-Gradienten, der dem Design mehr Raumtiefe verleiht.

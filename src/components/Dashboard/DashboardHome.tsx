@@ -6,7 +6,7 @@ import { Trip } from "@/types"
 import TripCard from "./TripCard"
 import TripModal from "./TripModal"
 import { getProfileStatsForYear } from "@/lib/profileUtils"
-import { calculateTripVacationCost, isVacationCostingDay } from "@/lib/tripUtils"
+import { calculateTripVacationCost, isVacationCostingDay, tripOverlapsYear } from "@/lib/tripUtils"
 import { Plus, ChevronDown, ChevronUp } from "lucide-react"
 import YearlyContributionGraph from "./YearlyContributionGraph"
 
@@ -66,9 +66,9 @@ export default function DashboardHome() {
           })
 
           let tripTaken = 0
-          const profileTrips = trips.filter(t => t.profiles.some(pt => pt.id === id) && t.startDate.startsWith(selectedYear.toString()))
+          const profileTrips = trips.filter(t => t.profiles.some(pt => pt.id === id) && tripOverlapsYear(t, selectedYear))
           profileTrips.forEach(t => {
-            tripTaken += calculateTripVacationCost(t, p, holidays)
+            tripTaken += calculateTripVacationCost(t, p, holidays, selectedYear)
           })
 
           remaining += (stats.totalAvailable - standardTaken - tripTaken)

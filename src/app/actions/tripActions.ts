@@ -4,9 +4,11 @@ import { prisma } from "@/lib/prisma"
 import { revalidatePath } from "next/cache"
 
 export async function createTrip(data: any) {
-  const { profileIds, ...tripData } = data
+  console.log("createTrip called with data:", JSON.stringify(data, null, 2))
+  try {
+    const { profileIds, ...tripData } = data
 
-  const newTrip = await prisma.trip.create({
+    const newTrip = await prisma.trip.create({
     data: {
       ...tripData,
       profiles: {
@@ -32,8 +34,13 @@ export async function createTrip(data: any) {
     })
   }
 
-  revalidatePath("/")
-  return newTrip
+    revalidatePath("/")
+    console.log("createTrip successful:", newTrip.id)
+    return newTrip
+  } catch (error) {
+    console.error("createTrip error:", error)
+    throw error
+  }
 }
 
 export async function updateTrip(id: string, data: any) {

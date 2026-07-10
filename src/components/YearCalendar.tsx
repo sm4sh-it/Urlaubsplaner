@@ -77,7 +77,7 @@ export default function YearCalendar() {
           const dateStr = current.toISOString().split('T')[0]
           const key = `${p.id}_${dateStr}`
           lookup[key] = { type, title: t.title }
-          current.setDate(current.getDate() + 1)
+          current.setUTCDate(current.getUTCDate() + 1)
         }
       }
     }

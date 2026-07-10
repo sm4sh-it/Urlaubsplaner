@@ -13,7 +13,7 @@ export default function HelpModal({ isOpen, onClose }: HelpModalProps) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm transition-opacity">
       <div 
-        className="bg-white dark:bg-[var(--surface)] w-full max-w-2xl max-h-[85vh] rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-slate-200 dark:border-[var(--border-subtle)]"
+        className="bg-white dark:bg-[#0d1117] w-full max-w-2xl max-h-[85vh] rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-slate-200 dark:border-[var(--border-subtle)]"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
@@ -107,7 +107,7 @@ export default function HelpModal({ isOpen, onClose }: HelpModalProps) {
         </div>
         
         {/* Footer */}
-        <div className="p-4 border-t border-slate-100 dark:border-[var(--border-subtle)] bg-slate-50 dark:bg-slate-900/50 text-center shrink-0">
+        <div className="p-4 border-t border-slate-100 dark:border-[var(--border-subtle)] bg-slate-50 dark:bg-slate-900 text-center shrink-0">
           <button 
             onClick={onClose}
             className="px-6 py-2 bg-brand-500 hover:bg-brand-600 text-white font-medium rounded-lg shadow-sm hover:shadow transition-all"

@@ -69,10 +69,12 @@ export default function TripModal({ isOpen, onClose, trip }: TripModalProps) {
           title: "",
           startDate: "",
           endDate: "",
-          selectedProfileIds: activeProfileIds,
+          selectedProfileIds: activeProfileIds.includes('ALLE_FERIEN') 
+            ? profiles.filter(p => p.id !== 'ALLE_FERIEN').map(p => p.id) 
+            : activeProfileIds.filter(id => id !== 'ALLE_FERIEN'),
           externalParticipants: "",
           type: TYPE_OPTIONS[0] as TripType,
-          status: STATUS_OPTIONS[0] as TripStatus,
+          status: STATUS_OPTIONS[1] as TripStatus, // Default to "In Planung" so it shows in the calendar by default
           location: "",
           travelType: "",
           transport: [],
@@ -107,7 +109,7 @@ export default function TripModal({ isOpen, onClose, trip }: TripModalProps) {
       startDate,
       endDate,
       duration,
-      profileIds: selectedProfileIds,
+      profileIds: selectedProfileIds.filter(id => id !== 'ALLE_FERIEN'),
       externalParticipants: externalParticipants || null,
       type,
       status,
@@ -145,8 +147,9 @@ export default function TripModal({ isOpen, onClose, trip }: TripModalProps) {
       }
 
       onClose()
-    } catch (error) {
+    } catch (error: any) {
       console.error("Failed to save trip", error)
+      alert("Fehler beim Speichern der Reise: " + (error.message || "Unbekannter Fehler"))
     } finally {
       setIsSaving(false)
     }

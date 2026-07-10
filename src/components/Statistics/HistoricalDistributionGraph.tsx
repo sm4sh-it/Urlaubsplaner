@@ -49,11 +49,8 @@ export default function HistoricalDistributionGraph() {
         const start = new Date(t.startDate)
         const end = new Date(t.endDate)
         
-        for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
-          const year = d.getFullYear()
-          const month = String(d.getMonth() + 1).padStart(2, '0')
-          const day = String(d.getDate()).padStart(2, '0')
-          const dateStr = `${year}-${month}-${day}`
+        for (let d = new Date(start); d <= end; d.setUTCDate(d.getUTCDate() + 1)) {
+          const dateStr = d.toISOString().split('T')[0]
           
           if (isVacationCostingDay(dateStr, activeProfile, holidays)) {
             uniqueDates.add(dateStr)

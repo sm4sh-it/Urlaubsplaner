@@ -19,7 +19,14 @@ export function isVacationCostingDay(dateStr: string, profile: Profile, holidays
   return true
 }
 
-export function calculateTripVacationCost(trip: Trip, profile: Profile, holidays: Record<string, string>): number {
+export function tripOverlapsYear(trip: Trip, year: number): boolean {
+  if (!trip.startDate || !trip.endDate) return false
+  const startYear = parseInt(trip.startDate.split('-')[0], 10)
+  const endYear = parseInt(trip.endDate.split('-')[0], 10)
+  return year >= startYear && year <= endYear
+}
+
+export function calculateTripVacationCost(trip: Trip, profile: Profile, holidays: Record<string, string>, targetYear?: number): number {
   const validTripStatuses = ["In Planung", "Gebucht", "Abgeschlossen"]
   if (!validTripStatuses.includes(trip.status)) {
     return 0
@@ -32,27 +39,23 @@ export function calculateTripVacationCost(trip: Trip, profile: Profile, holidays
     return 0
   }
 
-  // Removed redundant workingDays parsing since isVacationCostingDay already does it
-
   let cost = 0
-  
   const start = new Date(trip.startDate)
   const end = new Date(trip.endDate)
   
-  // Create a loop from start date to end date
-  for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
-    // (Removed unused dayOfWeek)
+  // Use UTC to avoid daylight saving time skips in different timezones!
+  for (let d = new Date(start); d <= end; d.setUTCDate(d.getUTCDate() + 1)) {
+    const year = d.getUTCFullYear()
+    if (targetYear && year !== targetYear) continue;
 
-    const year = d.getFullYear()
-    const month = String(d.getMonth() + 1).padStart(2, '0')
-    const day = String(d.getDate()).padStart(2, '0')
+    const month = String(d.getUTCMonth() + 1).padStart(2, '0')
+    const day = String(d.getUTCDate()).padStart(2, '0')
     const dateStr = `${year}-${month}-${day}`
 
     if (!isVacationCostingDay(dateStr, profile, holidays)) {
       continue
     }
 
-    // It's a working day and not a holiday, so it costs 1 vacation day
     cost += 1
   }
 
