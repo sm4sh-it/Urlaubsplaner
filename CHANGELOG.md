@@ -1,6 +1,11 @@
 # Changelog
 
 All notable changes to this project will be documented in this file.
+## [0.9.2] - 2026-07-10
+### Changed & Fixed
+- **Dokumentation:** Die `README.md` wurde umfassend überarbeitet, um alle neuen Features (Reisen, interaktive Statistiken, Auto-Sync) widerzuspiegeln. Zusätzlich wurde die Docker-Compose Konfiguration mit der Produktionseinrichtung abgeglichen und eine Danksagung an die verwendeten API-Schnittstellen (`ferien-api.de` & `feiertage-api.de`) hinzugefügt.
+- **UI-Anpassung:** Der vertikale Abstand (Margin) auf der Statistikseite zwischen den großen Jahresgrafiken und den kleineren Widgets wurde verringert, um den Platz auf Desktop-Ansichten besser zu nutzen.
+
 ## [0.9.1] - 2026-07-10
 ### Fixed
 - **Daten & Zeitzonen-Bug:** Behebt einen gravierenden Fehler bei der Iteration von Reisedaten. Es wurden teilweise falsche Zeitzonen des Browsers (statt UTC) herangezogen, was dazu führen konnte, dass einzelne Tage beim Eintragen in den Kalender übersprungen oder Reisen gänzlich ignoriert wurden.
