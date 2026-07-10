@@ -27,6 +27,7 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v2
         with:
+          name: Urlaubsplaner ${{ github.ref_name }} - Major Design & Performance Update
           generate_release_notes: true
 
       - name: Log in to the Container registry
