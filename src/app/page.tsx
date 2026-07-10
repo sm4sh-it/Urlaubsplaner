@@ -31,7 +31,7 @@ export default async function Home() {
   }))
 
   return (
-    <div className="flex-1 w-full bg-transparent">
+    <div className="flex-1 w-full h-full bg-transparent overflow-y-auto overflow-x-hidden custom-scrollbar">
       <StoreHydrator profiles={profilesRaw} entries={entries} overrides={overrides} trips={tripsRaw as any} />
       <DashboardHome />
     </div>

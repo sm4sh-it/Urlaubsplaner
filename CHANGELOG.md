@@ -1,6 +1,10 @@
 # Changelog
 
 All notable changes to this project will be documented in this file.
+## [0.9.4] - 2026-07-10
+### Fixed
+- **UI & Layout (Scrolling):** Behebt ein Problem, bei dem die Dashboard-, Statistik- und Einstellungsseiten nicht mehr gescrollt werden konnten, wenn der Inhalt den Bildschirm überragte. Diese Ansichten haben nun weiche, an das Design angepasste "Custom Scrollbars" (`.custom-scrollbar`).
+
 ## [0.9.3] - 2026-07-10
 ### Fixed
 - **Sicherheit (Passwortschutz):** Ein kritisches Versäumnis wurde behoben, bei dem die Middleware (`proxy.ts`) die Variable `AUTH_ENABLED` ignoriert hat. Zuvor wurde die App bei fehlendem `APP_PASSWORD` für jeden freigegeben, selbst wenn `AUTH_ENABLED` aktiv war. Nun wird der Zugriff wie geplant strikt verweigert und stattdessen ein Konfigurationsfehler ausgegeben.

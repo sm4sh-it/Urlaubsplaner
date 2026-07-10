@@ -37,8 +37,9 @@ export default async function StatisticsPage() {
   }))
 
   return (
-    <div className="flex flex-col p-4 md:p-8 w-full max-w-[1600px] mx-auto overflow-x-hidden">
-      <StoreHydrator profiles={profilesRaw} entries={entries} overrides={overrides} trips={tripsRaw as any} />
+    <div className="flex-1 w-full h-full overflow-y-auto overflow-x-hidden custom-scrollbar">
+      <div className="flex flex-col p-4 md:p-8 w-full max-w-[1600px] mx-auto">
+        <StoreHydrator profiles={profilesRaw} entries={entries} overrides={overrides} trips={tripsRaw as any} />
       
       {/* Jahresabhängige Statistiken */}
       <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6 w-full mb-4">
@@ -65,6 +66,7 @@ export default async function StatisticsPage() {
         <div className="w-full xl:w-fit flex-shrink-0 flex flex-col gap-4 md:gap-6 min-w-0">
           <HistoricalDistributionGraph />
         </div>
+      </div>
       </div>
     </div>
   )
