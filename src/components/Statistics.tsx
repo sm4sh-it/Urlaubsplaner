@@ -69,35 +69,45 @@ export default function Statistics() {
     const yearTrips = trips.filter(t => t.profiles.some(p => p.id === activeProfile.id) && tripOverlapsYear(t, selectedYear))
     
     yearTrips.forEach(trip => {
-      const cost = calculateTripVacationCost(trip, activeProfile, holidays, selectedYear)
-      tUrlaub += cost
+      if (!["In Planung", "Gebucht", "Abgeschlossen"].includes(trip.status)) return
 
-      // Optionally distribute over months (simplified: attribute to start month)
-      if (cost > 0) {
-        const startMonth = parseInt(trip.startDate.split('-')[1]) - 1
-        if (startMonth >= 0 && startMonth < 12) {
-          mStats[startMonth].urlaub += cost
+      if (trip.type === "Urlaub") {
+        const start = new Date(trip.startDate)
+        const end = new Date(trip.endDate)
+        for (let d = new Date(start); d <= end; d.setUTCDate(d.getUTCDate() + 1)) {
+          if (d.getUTCFullYear() !== selectedYear) continue;
+          
+          const monthStr = String(d.getUTCMonth() + 1).padStart(2, '0')
+          const dayStr = String(d.getUTCDate()).padStart(2, '0')
+          const dateStr = `${d.getUTCFullYear()}-${monthStr}-${dayStr}`
+          
+          if (isVacationCostingDay(dateStr, activeProfile, holidays)) {
+            tUrlaub += 1
+            const m = d.getUTCMonth()
+            if (m >= 0 && m < 12) mStats[m].urlaub += 1
+          }
         }
       }
 
-      if (trip.type === "Mobiles Arbeiten" && ["In Planung", "Gebucht", "Abgeschlossen"].includes(trip.status)) {
-        // Very simple approximation of mobile working days duration
+      if (trip.type === "Mobiles Arbeiten") {
         const start = new Date(trip.startDate)
         const end = new Date(trip.endDate)
-        let mobileCost = 0
         const workingDays = activeProfile.workingDays ? activeProfile.workingDays.split(',').map(Number) : [1, 2, 3, 4, 5]
         for (let d = new Date(start); d <= end; d.setUTCDate(d.getUTCDate() + 1)) {
           if (d.getUTCFullYear() !== selectedYear) continue;
+          
           let dow = d.getUTCDay()
           if (dow === 0) dow = 7
-          const dateStr = `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, '0')}-${String(d.getUTCDate()).padStart(2, '0')}`
+          const monthStr = String(d.getUTCMonth() + 1).padStart(2, '0')
+          const dayStr = String(d.getUTCDate()).padStart(2, '0')
+          const dateStr = `${d.getUTCFullYear()}-${monthStr}-${dayStr}`
+          
           if (workingDays.includes(dow) && !holidays[dateStr]) {
-            mobileCost += 1
+            tMobile += 1
+            const m = d.getUTCMonth()
+            if (m >= 0 && m < 12) mStats[m].mobile += 1
           }
         }
-        tMobile += mobileCost
-        const sm = parseInt(trip.startDate.split('-')[1]) - 1
-        if (sm >= 0 && sm < 12) mStats[sm].mobile += mobileCost
       }
     })
 
@@ -211,8 +221,18 @@ export default function Statistics() {
           <div className="text-slate-500 dark:text-slate-400">Genommen:</div>
           <div className="font-medium text-right text-emerald-600 dark:text-[#1b8a5a]">{totalUrlaub} Tage</div>
           
-          <div className="text-slate-500 dark:text-slate-400 font-semibold border-t border-slate-100 dark:border-[var(--border-subtle)] pt-2 mt-1">Rest:</div>
+          <div className="text-slate-500 dark:text-slate-400 font-semibold border-t border-slate-100 dark:border-[var(--border-subtle)] pt-2 mt-1">Rest gesamt:</div>
           <div className="font-bold text-right border-t border-slate-100 dark:border-[var(--border-subtle)] pt-2 mt-1 text-slate-900 dark:text-white">{restUrlaubAktuell} Tage</div>
+          
+          {ungenutzterResturlaub > 0 && (
+            <>
+              <div className="text-amber-600 dark:text-amber-500 text-xs">Davon verfallen am Stichtag:</div>
+              <div className="font-bold text-right text-amber-600 dark:text-amber-500 text-xs">-{ungenutzterResturlaub} Tage</div>
+              
+              <div className="text-slate-500 dark:text-slate-400 font-semibold border-t border-slate-100 dark:border-[var(--border-subtle)] pt-2 mt-1">Übertrag ins nächste Jahr:</div>
+              <div className="font-bold text-right border-t border-slate-100 dark:border-[var(--border-subtle)] pt-2 mt-1 text-emerald-600 dark:text-[#1b8a5a]">{Math.max(0, restUrlaubAktuell - ungenutzterResturlaub)} Tage</div>
+            </>
+          )}
         </div>
 
         <div className="grid grid-cols-2 gap-2 text-sm pt-2 border-t border-slate-100 dark:border-[var(--border-subtle)]">

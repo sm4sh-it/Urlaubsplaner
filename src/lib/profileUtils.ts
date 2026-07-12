@@ -45,23 +45,52 @@ export function getProfileStatsForYear(
       const prevEntries = entries.filter(e => e.profileId === profile.id && e.date.startsWith(prevYearStr))
       
       let usedVacation = 0
+      let usedVacationBeforeExpiry = 0
+      const expiryDateString = `${year - 1}-${profile.remainingLeaveExpiryDate}`
+
       prevEntries.forEach(e => {
         if (isVacationCostingDay(e.date, profile, holidays)) {
+          let dayCost = 0
           e.type.split(',').forEach(part => {
-            if (part === 'U') usedVacation += 1
-            if (part === '2') usedVacation += 0.5
+            if (part === 'U') dayCost += 1
+            if (part === '2') dayCost += 0.5
           })
+          usedVacation += dayCost
+          if (e.date <= expiryDateString) {
+            usedVacationBeforeExpiry += dayCost
+          }
         }
       })
 
       // Subtract trips in previous year
       const prevTrips = trips.filter(t => t.profiles.some(p => p.id === profile.id) && tripOverlapsYear(t, year - 1))
       prevTrips.forEach(t => {
-        usedVacation += calculateTripVacationCost(t, profile, holidays, year - 1)
+        if (["In Planung", "Gebucht", "Abgeschlossen"].includes(t.status) && t.type === "Urlaub") {
+          const start = new Date(t.startDate)
+          const end = new Date(t.endDate)
+          for (let d = new Date(start); d <= end; d.setUTCDate(d.getUTCDate() + 1)) {
+            if (d.getUTCFullYear() !== year - 1) continue;
+            
+            const monthStr = String(d.getUTCMonth() + 1).padStart(2, '0')
+            const dayStr = String(d.getUTCDate()).padStart(2, '0')
+            const dateStr = `${d.getUTCFullYear()}-${monthStr}-${dayStr}`
+            
+            if (isVacationCostingDay(dateStr, profile, holidays)) {
+              usedVacation += 1
+              if (dateStr <= expiryDateString) {
+                usedVacationBeforeExpiry += 1
+              }
+            }
+          }
+        }
       })
 
-      // Carry over is what is left
-      const carryOver = Math.max(0, prevStats.totalAvailable - usedVacation)
+      // Wie viel vom Resturlaub ist verfallen?
+      const expiredLeave = Math.max(0, prevStats.remainingLeave - usedVacationBeforeExpiry)
+
+      // Carry over is what is left from the effectively available days
+      const effectiveAvailable = prevStats.totalAvailable - expiredLeave
+      const carryOver = Math.max(0, effectiveAvailable - usedVacation)
       remainingLeave = carryOver
     }
   }

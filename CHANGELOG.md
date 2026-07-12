@@ -1,6 +1,10 @@
 # Changelog
 
 All notable changes to this project will be documented in this file.
+## [0.9.8] - 2026-07-12
+### Changed & Fixed
+- **Statistiken & Engine:** Behebt einen kritischen Fehler in der Urlaubsübertragsberechnung, bei dem Feiertage im vergangenen Jahr fälschlicherweise als genommener Urlaub abgezogen wurden. Die Feiertage aller aktiven Jahre werden nun initial im Hintergrund geladen.
+
 ## [0.9.7] - 2026-07-12
 ### Changed & Fixed
 - **Kalender:** Die Darstellung im Kalender nutzt ab 3 Einträgen nun ein responsives "Micro-Pills"-Layout (inkl. Grid-Support), um Überlappungen und Overflow zu verhindern.

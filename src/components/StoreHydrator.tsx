@@ -68,10 +68,24 @@ export default function StoreHydrator({
           ? currentProfiles.find(p => p.id === activeProfileIds[0])
           : null;
         const stateCode = primaryProfile?.stateCode || "NW"
+        const startYear = primaryProfile?.startYear || 2022
         
-        const data = await getCalendarData(selectedYear, stateCode)
-        useStore.getState().setHolidays(data.holidays)
-        useStore.getState().setVacations(data.vacations)
+        const yearsToFetch = []
+        for (let y = startYear; y <= selectedYear + 1; y++) {
+          yearsToFetch.push(y)
+        }
+        
+        const allData = await Promise.all(yearsToFetch.map(y => getCalendarData(y, stateCode)))
+        const mergedHolidays: Record<string, string> = {}
+        const mergedVacations: any[] = []
+        
+        allData.forEach(d => {
+          Object.assign(mergedHolidays, d.holidays)
+          mergedVacations.push(...d.vacations)
+        })
+        
+        useStore.getState().setHolidays(mergedHolidays)
+        useStore.getState().setVacations(mergedVacations)
       } catch (e) {
         console.error("Failed to load calendar data", e)
       }
