@@ -27,12 +27,101 @@ export default function AboutPage() {
           </h2>
 
           <div className="space-y-8">
-            {/* V 0.9.0 */}
+            {/* V 0.9.7 */}
             <div className="relative pl-6 border-l-2 border-brand-500">
                <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-white dark:bg-slate-900 border-2 border-brand-500" />
                <div className="flex items-center gap-3 mb-2">
-                 <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 m-0">Version 0.9.0</h3>
+                 <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 m-0">Version 0.9.7</h3>
                  <span className="text-xs px-2 py-1 bg-brand-100 dark:bg-brand-900/30 text-brand-700 dark:text-brand-300 rounded font-medium">Aktuell</span>
+               </div>
+               <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
+                 <li><strong>Kalender:</strong> Die Darstellung im Kalender nutzt ab 3 Einträgen nun ein responsives "Micro-Pills"-Layout (inkl. Grid-Support), um Überlappungen und Overflow zu verhindern.</li>
+                 <li><strong>Legende:</strong> "Überstunden" wurden korrekt nach oben zu "Abwesenheit" verschoben. "Gleitzeit" wurde in "Bildungsurlaub" (Kürzel: B) umbenannt.</li>
+                 <li><strong>Statistiken:</strong> "Ø Urlaubsdauer" zeigt nun den All-Time-Durchschnitt samt Historie der letzten Jahre; neues Widget "Beliebtes Reiseland" hinzugefügt.</li>
+                 <li><strong>Formular (Trips):</strong> Felder "Land" und "Ort" getauscht für eine flüssigere Bedienung.</li>
+                 <li><strong>Docker:</strong> Obsoletes `version` Attribut aus `docker-compose.yml` entfernt.</li>
+               </ul>
+            </div>
+
+            {/* V 0.9.6 */}
+            <div className="relative pl-6 border-l-2 border-slate-200 dark:border-slate-800">
+               <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-800" />
+               <div className="flex items-center gap-3 mb-2">
+                 <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 m-0">Version 0.9.6</h3>
+               </div>
+               <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
+                 <li><strong>UI & Farben:</strong> Globale Farbpalette für Kalendereinträge im Light- und Darkmode komplett überarbeitet, um moderne und konsistente Farbschemata aufzubauen.</li>
+                 <li><strong>Statistik-Dashboard:</strong> Kachel-Design optimiert. Alle Inhalte sind nun obenbündig ausgerichtet. Eine neue Multi-Color-Leiste in "Work - No Work" integriert alle Fehltage farbcodiert direkt in den Fortschrittsbalken.</li>
+               </ul>
+            </div>
+
+            {/* V 0.9.5 */}
+            <div className="relative pl-6 border-l-2 border-slate-200 dark:border-slate-800">
+               <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-800" />
+               <div className="flex items-center gap-3 mb-2">
+                 <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 m-0">Version 0.9.5</h3>
+               </div>
+               <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
+                 <li><strong>Daten & Logik:</strong> Behebt einen Fehler bei gestapelten Kalendereinträgen (z.B. Halber Tag Urlaub + Halber Tag Krank), bei dem sich die Einträge gegenseitig überschrieben haben. Diese werden nun sauber addiert und als gestapelte Strings verarbeitet.</li>
+                 <li><strong>Features:</strong> Unterstützung für halbe Tage (0.5) "Sonderurlaub" hinzugefügt.</li>
+                 <li><strong>Statistiken:</strong> Manuell eingetragene Brückentage werden nun in der Statistik korrekt erfasst und gezählt.</li>
+               </ul>
+            </div>
+
+            {/* V 0.9.4 */}
+            <div className="relative pl-6 border-l-2 border-slate-200 dark:border-slate-800">
+               <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-800" />
+               <div className="flex items-center gap-3 mb-2">
+                 <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 m-0">Version 0.9.4</h3>
+               </div>
+               <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
+                 <li><strong>UI & Layout (Scrolling):</strong> Behebt ein Problem, bei dem die Dashboard-, Statistik- und Einstellungsseiten nicht mehr gescrollt werden konnten, wenn der Inhalt den Bildschirm überragte. Diese Ansichten haben nun weiche, an das Design angepasste "Custom Scrollbars" (<code>.custom-scrollbar</code>).</li>
+               </ul>
+            </div>
+
+            {/* V 0.9.3 */}
+            <div className="relative pl-6 border-l-2 border-slate-200 dark:border-slate-800">
+               <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-800" />
+               <div className="flex items-center gap-3 mb-2">
+                 <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 m-0">Version 0.9.3</h3>
+               </div>
+               <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
+                 <li><strong>Sicherheit (Passwortschutz):</strong> Ein kritisches Versäumnis wurde behoben, bei dem die Middleware (<code>proxy.ts</code>) die Variable <code>AUTH_ENABLED</code> ignoriert hat. Zuvor wurde die App bei fehlendem <code>APP_PASSWORD</code> für jeden freigegeben, selbst wenn <code>AUTH_ENABLED</code> aktiv war. Nun wird der Zugriff wie geplant strikt verweigert und stattdessen ein Konfigurationsfehler ausgegeben.</li>
+                 <li><strong>Konfiguration:</strong> Eine <code>.env.sample</code> Datei wurde als Vorlage hinzugefügt und die Dokumentation / Docker-Dateien bezüglich <code>AUTH_ENABLED</code> aktualisiert.</li>
+               </ul>
+            </div>
+
+            {/* V 0.9.2 */}
+            <div className="relative pl-6 border-l-2 border-slate-200 dark:border-slate-800">
+               <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-800" />
+               <div className="flex items-center gap-3 mb-2">
+                 <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 m-0">Version 0.9.2</h3>
+               </div>
+               <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
+                 <li><strong>Dokumentation:</strong> Die <code>README.md</code> wurde umfassend überarbeitet, um alle neuen Features (Reisen, interaktive Statistiken, Auto-Sync) widerzuspiegeln. Zusätzlich wurde die Docker-Compose Konfiguration mit der Produktionseinrichtung abgeglichen und eine Danksagung an die verwendeten API-Schnittstellen (<code>ferien-api.de</code> & <code>feiertage-api.de</code>) hinzugefügt.</li>
+                 <li><strong>UI-Anpassung:</strong> Der vertikale Abstand (Margin) auf der Statistikseite zwischen den großen Jahresgrafiken und den kleineren Widgets wurde verringert, um den Platz auf Desktop-Ansichten besser zu nutzen.</li>
+               </ul>
+            </div>
+
+            {/* V 0.9.1 */}
+            <div className="relative pl-6 border-l-2 border-slate-200 dark:border-slate-800">
+               <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-800" />
+               <div className="flex items-center gap-3 mb-2">
+                 <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 m-0">Version 0.9.1</h3>
+               </div>
+               <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
+                 <li><strong>Daten & Zeitzonen-Bug:</strong> Behebt einen gravierenden Fehler bei der Iteration von Reisedaten. Es wurden teilweise falsche Zeitzonen des Browsers (statt UTC) herangezogen, was dazu führen konnte, dass einzelne Tage beim Eintragen in den Kalender übersprungen oder Reisen gänzlich ignoriert wurden.</li>
+                 <li><strong>Jahreswechsel-Bug bei Reisen:</strong> Die Zuordnung von Reise-Tagen wurde grundlegend korrigiert. Eine Reise, die im alten Jahr beginnt und ins neue Jahr reicht, wird nun korrekt und tagesgenau für das jeweilige Jahr in der Urlaubsstatistik abgezogen.</li>
+                 <li><strong>Stiller Absturz beim Speichern (Alle Ferien):</strong> Wenn man im Profil "Alle Ferien" auf "Neue Reise" geklickt hat, hat das System stillschweigend abgebrochen (Record to connect not found), wodurch keine Reise gespeichert wurde. Dies wurde gefixt, es werden nun standardmäßig alle Mitglieder ausgewählt, und im Fehlerfall wird dem Nutzer nun eine sprechende Fehlermeldung (<code>alert</code>) angezeigt.</li>
+                 <li><strong>Design & Layout:</strong> Verringert unnötig großen Leerraum zwischen den Kacheln auf der Statistik-Seite.</li>
+               </ul>
+            </div>
+
+            {/* V 0.9.0 */}
+            <div className="relative pl-6 border-l-2 border-slate-200 dark:border-slate-800">
+               <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-800" />
+               <div className="flex items-center gap-3 mb-2">
+                 <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 m-0">Version 0.9.0</h3>
                </div>
                <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
                  <li><strong>Premium Light-Mode:</strong> Komplettes Re-Design des hellen Modus mit wärmeren Hintergründen, responsiven Radial-Gradienten und dreidimensionalen Cards.</li>

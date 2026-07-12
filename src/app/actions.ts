@@ -8,7 +8,7 @@ import { cookies } from 'next/headers'
 
 // --- Validation Schemas ---
 const dateSchema = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Invalid date format")
-const typeSchema = z.enum(['U', '2', 'K', '3', 'Ü', '4', 'G', 'D', 'S', 'X', 'M', '5', 'A']).nullable()
+const typeSchema = z.string().nullable()
 const idSchema = z.string().uuid("Invalid ID format")
 
 const profileSchema = z.object({

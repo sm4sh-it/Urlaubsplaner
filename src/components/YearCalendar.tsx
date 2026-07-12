@@ -17,13 +17,14 @@ const VALID_KEYS: Record<string, EntryType> = {
   'K': '3', // Shift+k -> halber Tag krank
   'ü': 'Ü', 
   'Ü': '4', // Shift+ü -> halber Tag Überstunden
-  'g': 'G', 'G': 'G',
+  'b': 'B', 'B': 'B',
   'd': 'D', 'D': 'D',
-  's': 'S', 'S': 'S',
   'a': 'A', 'A': 'A', // a -> Auszeit/Sabbatical
   'x': 'X', 'X': 'X',
   'm': 'M', 
-  'M': '5' // Shift+m -> halber Tag mobiles arbeiten
+  'M': '5', // Shift+m -> halber Tag mobiles arbeiten
+  's': 'S', 
+  'S': '6', // Shift+s -> halber Tag Sonderurlaub
 }
 
 const ENTRY_CLASSES: Record<string, string> = {
@@ -33,13 +34,31 @@ const ENTRY_CLASSES: Record<string, string> = {
   '3': "status-k-2",
   'Ü': "status-ue",
   '4': "status-ue-2",
-  'G': "status-g",
+  'B': "status-b",
+  'G': "status-b", // Backwards compat
   'D': "status-d",
   'S': "status-s",
+  '6': "status-s-2",
   'X': "status-x",
   'M': "status-m",
   '5': "status-m-2",
   'A': "status-a",
+}
+
+const HALF_TO_FULL: Record<string, string> = {
+  '2': 'U',
+  '3': 'K',
+  '4': 'Ü',
+  '5': 'M',
+  '6': 'S'
+}
+
+const HALF_TO_LABEL: Record<string, string> = {
+  '2': 'U/2',
+  '3': 'K/2',
+  '4': 'Ü/2',
+  '5': 'M/2',
+  '6': 'S/2'
 }
 
 export default function YearCalendar() {
@@ -143,21 +162,64 @@ export default function YearCalendar() {
 
         // Optimistic UI update could be added here, but Server Actions are fast enough usually
         // Let's do optimistic:
+        const existing = entries.find(e => e.date === date && e.profileId === pId)
+
+        let newType: string | null = null
+
         if (!type) {
-          const existing = entries.find(e => e.date === date && e.profileId === pId)
+          // Deleting (LIFO)
+          if (existing) {
+             const parts = existing.type.split(',')
+             if (parts.length > 1) {
+               parts.pop() // remove the last one added
+               newType = parts.join(',')
+             } else {
+               newType = null // fully delete
+             }
+          }
+        } else {
+          // Adding (LIFO stack)
+          if (existing) {
+            const isHalfDay = ['2','3','4','5','6'].includes(type)
+            if (!isHalfDay) {
+              newType = type // Full day overwrites everything
+            } else {
+              const parts = existing.type.split(',')
+              const allHalfDays = parts.every(p => ['2','3','4','5','6'].includes(p))
+              if (!allHalfDays) {
+                 newType = type // Full day was there, overwrite with half day
+              } else {
+                 parts.push(type)
+                 if (parts.length > 2) {
+                   parts.shift() // Remove the oldest one
+                 }
+                 newType = parts.join(',')
+              }
+            }
+          } else {
+            newType = type
+          }
+        }
+
+        // Optimistic UI
+        if (!newType) {
           if (existing) removeEntry(existing.id)
         } else {
-          const tempId = (typeof crypto !== 'undefined' && crypto.randomUUID) ? crypto.randomUUID() : 'temp_' + Date.now().toString(36) + Math.random().toString(36).substring(2)
-          addOrUpdateEntry({ id: tempId, date, type, profileId: pId })
+          if (existing) {
+            addOrUpdateEntry({ ...existing, type: newType })
+          } else {
+            const tempId = (typeof crypto !== 'undefined' && crypto.randomUUID) ? crypto.randomUUID() : 'temp_' + Date.now().toString(36) + Math.random().toString(36).substring(2)
+            addOrUpdateEntry({ id: tempId, date, type: newType, profileId: pId })
+          }
         }
 
         // Persist to DB
-        const result = await toggleEntry(date, type, pId)
+        const result = await toggleEntry(date, newType, pId)
         if (result.success && result.entry) {
           addOrUpdateEntry({
             id: result.entry.id,
             date: result.entry.date,
-            type: result.entry.type as EntryType,
+            type: result.entry.type,
             profileId: result.entry.profileId
           })
         }
@@ -280,34 +342,82 @@ export default function YearCalendar() {
                           )}
 
                           {/* Zellen-Inhalt für aktive Profile */}
-                          <div className="flex-1 flex flex-col gap-0.5 p-0.5 z-10 w-full h-full justify-center">
-                            {activeProfileIds.map(profileId => {
-                              const profile = profiles.find(p => p.id === profileId)
-                              if (!profile || selectedYear < profile.startYear) return null
+                          <div className={cn("z-10 w-full h-full justify-center overflow-hidden", 
+                            (() => {
+                              const dayEntriesCount = activeProfileIds.filter(pId => {
+                                const p = profiles.find(pr => pr.id === pId)
+                                if (!p || selectedYear < p.startYear) return false
+                                const lKey = `${pId}_${dayObj.date}`
+                                return tripLookup[lKey] || entryLookup[lKey]
+                              }).length
 
-                              const lookupKey = `${profileId}_${dayObj.date}`
-                              const tripEntry = tripLookup[lookupKey]
-                              let entryType: EntryType | null = tripEntry?.type || entryLookup[lookupKey] || null
-                              
-                              if (!entryType) return null
-                              
-                              const typeClass = ENTRY_CLASSES[entryType] || "bg-slate-200 text-slate-800"
-                              
-                              return (
-                                <div 
-                                  key={profileId} 
-                                  className={cn(
-                                    "flex-1 flex items-center justify-center text-[10px] font-bold rounded-sm border-2 border-solid shadow-sm w-full",
-                                    typeClass,
-                                    tripEntry ? "opacity-90" : ""
-                                  )}
-                                  style={{ borderColor: profile.color }}
-                                  title={tripEntry ? `Trip: ${tripEntry.title}` : undefined}
-                                >
-                                  {entryType === '2' ? 'U/2' : entryType === '3' ? 'K/2' : entryType === '4' ? 'Ü/2' : entryType === '5' ? 'M/2' : entryType}
-                                </div>
-                              )
-                            })}
+                              if (dayEntriesCount <= 2) return "flex flex-col gap-0.5 p-0.5"
+                              if (dayEntriesCount === 3) return "flex flex-col gap-px p-0"
+                              if (dayEntriesCount === 4) return "grid grid-cols-2 grid-rows-2 gap-px p-0"
+                              if (dayEntriesCount === 5) return "flex flex-col gap-px p-0"
+                              if (dayEntriesCount >= 6) return "grid grid-cols-3 grid-rows-2 gap-px p-0"
+                              return "flex flex-col gap-px p-0"
+                            })()
+                          )}>
+                            {(() => {
+                              const dayEntriesCount = activeProfileIds.filter(pId => {
+                                const p = profiles.find(pr => pr.id === pId)
+                                if (!p || selectedYear < p.startYear) return false
+                                const lKey = `${pId}_${dayObj.date}`
+                                return tripLookup[lKey] || entryLookup[lKey]
+                              }).length
+                              const isCompact = dayEntriesCount > 2
+
+                              return activeProfileIds.map(profileId => {
+                                const profile = profiles.find(p => p.id === profileId)
+                                if (!profile || selectedYear < profile.startYear) return null
+
+                                const lookupKey = `${profileId}_${dayObj.date}`
+                                const tripEntry = tripLookup[lookupKey]
+                                let entryType: string | null = tripEntry?.type || entryLookup[lookupKey] || null
+                                
+                                if (!entryType) return null
+                                
+                                const parts = entryType.split(',')
+
+                                // Render stacked half-days
+                                if (parts.length === 2 && !tripEntry) {
+                                  const typeClass1 = ENTRY_CLASSES[HALF_TO_FULL[parts[0]] || parts[0]] || "bg-slate-200 text-slate-800"
+                                  const typeClass2 = ENTRY_CLASSES[HALF_TO_FULL[parts[1]] || parts[1]] || "bg-slate-200 text-slate-800"
+                                  return (
+                                    <div key={profileId} className={cn("flex flex-col rounded-sm overflow-hidden border-solid shadow-sm w-full h-full", 
+                                      isCompact ? "border-[1px] flex-1" : "border-2 shrink-0 flex-1"
+                                    )} style={{ borderColor: profile.color }}>
+                                      <div className={cn("flex-1 flex items-center justify-center font-bold w-full leading-none", typeClass1, isCompact ? "text-[0px]" : "text-[8px]")}>
+                                        {!isCompact && (HALF_TO_LABEL[parts[0]] || parts[0])}
+                                      </div>
+                                      <div className={cn("flex-1 flex items-center justify-center font-bold w-full leading-none", typeClass2, isCompact ? "text-[0px]" : "text-[8px]")}>
+                                        {!isCompact && (HALF_TO_LABEL[parts[1]] || parts[1])}
+                                      </div>
+                                    </div>
+                                  )
+                                }
+                                
+                                const typeClass = ENTRY_CLASSES[entryType] || "bg-slate-200 text-slate-800"
+                                const label = HALF_TO_LABEL[entryType] || entryType
+                                
+                                return (
+                                  <div 
+                                    key={profileId} 
+                                    className={cn(
+                                      "flex items-center justify-center font-bold rounded-sm border-solid shadow-sm w-full h-full",
+                                      isCompact ? "border-[1px] text-[0px] flex-1" : "border-2 shrink-0 flex-1 text-[10px]",
+                                      typeClass,
+                                      tripEntry ? "opacity-90" : ""
+                                    )}
+                                    style={{ borderColor: profile.color }}
+                                    title={tripEntry ? `Trip: ${tripEntry.title}` : undefined}
+                                  >
+                                    {!isCompact && label}
+                                  </div>
+                                )
+                              })
+                            })()}
                           </div>
                         </div>
                       )

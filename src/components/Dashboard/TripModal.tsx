@@ -5,6 +5,7 @@ import { X, Save, Trash2 } from "lucide-react"
 import { useStore } from "@/store/useStore"
 import { Trip, TripType, TripStatus } from "@/types"
 import { createTrip, updateTrip, deleteTrip } from "@/app/actions/tripActions"
+import { COUNTRIES } from "@/lib/countries"
 
 interface TripModalProps {
   isOpen: boolean
@@ -30,6 +31,7 @@ export default function TripModal({ isOpen, onClose, trip }: TripModalProps) {
     type: TYPE_OPTIONS[0] as TripType,
     status: STATUS_OPTIONS[0] as TripStatus,
     location: "",
+    country: "",
     travelType: "",
     transport: [] as string[],
     notes: "",
@@ -41,7 +43,7 @@ export default function TripModal({ isOpen, onClose, trip }: TripModalProps) {
     setFormData(prev => ({ ...prev, ...updates }))
   }
 
-  const { title, startDate, endDate, selectedProfileIds, externalParticipants, type, status, location, travelType, transport, notes, budget, cost } = formData
+  const { title, startDate, endDate, selectedProfileIds, externalParticipants, type, status, location, country, travelType, transport, notes, budget, cost } = formData
 
   const [isSaving, setIsSaving] = useState(false)
   const [showConfirmDelete, setShowConfirmDelete] = useState(false)
@@ -58,6 +60,7 @@ export default function TripModal({ isOpen, onClose, trip }: TripModalProps) {
           type: trip.type as TripType,
           status: trip.status as TripStatus,
           location: trip.location || "",
+          country: trip.country || "",
           travelType: trip.travelType || "",
           transport: trip.transport ? trip.transport.split(',').map(s => s.trim()).filter(Boolean) : [],
           notes: trip.notes || "",
@@ -76,6 +79,7 @@ export default function TripModal({ isOpen, onClose, trip }: TripModalProps) {
           type: TYPE_OPTIONS[0] as TripType,
           status: STATUS_OPTIONS[1] as TripStatus, // Default to "In Planung" so it shows in the calendar by default
           location: "",
+          country: "",
           travelType: "",
           transport: [],
           notes: "",
@@ -114,6 +118,7 @@ export default function TripModal({ isOpen, onClose, trip }: TripModalProps) {
       type,
       status,
       location: location || null,
+      country: country || null,
       travelType: travelType || null,
       transport: transport.length > 0 ? transport.join(', ') : null,
       notes: notes || null,
@@ -275,8 +280,16 @@ export default function TripModal({ isOpen, onClose, trip }: TripModalProps) {
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="flex flex-col gap-1">
-                  <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Ort / Land</label>
-                  <input value={location} onChange={e => updateForm({ location: e.target.value })} type="text" placeholder="z.B. Mallorca" className="px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-brand-500 outline-none" />
+                  <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Land</label>
+                  <input list="countries" value={country} onChange={e => updateForm({ country: e.target.value })} type="text" placeholder="Land auswählen oder tippen..." className="px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-brand-500 outline-none" />
+                  <datalist id="countries">
+                    {COUNTRIES.map(c => <option key={c} value={c} />)}
+                  </datalist>
+                </div>
+
+                <div className="flex flex-col gap-1">
+                  <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Ort</label>
+                  <input value={location} onChange={e => updateForm({ location: e.target.value })} type="text" placeholder="z.B. Banyalbufar" className="px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-brand-500 outline-none" />
                 </div>
 
                 <div className="flex flex-col gap-1">

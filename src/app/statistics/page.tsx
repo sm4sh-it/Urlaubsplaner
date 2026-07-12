@@ -6,7 +6,10 @@ import {
   StatusWidget, 
   AvgDurationWidget, 
   BudgetWidget, 
-  BridgeDaysWidget 
+  BridgeDaysWidget,
+  WorkRatioWidget,
+  VacationHabitsWidget,
+  CountryWidget
 } from "@/components/Statistics/Widgets"
 
 import ScatterPlotWidget from "@/components/Statistics/ScatterPlotWidget"
@@ -55,11 +58,14 @@ export default async function StatisticsPage() {
         <div className="flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 w-full">
           <AvgDurationWidget />
           <BridgeDaysWidget />
-          <BudgetWidget />
+          <VacationHabitsWidget />
           <StatusWidget />
           <TripCategoryWidget />
           <TravelTypeWidget />
           <TransportWidget />
+          <CountryWidget />
+          <WorkRatioWidget />
+          <BudgetWidget />
         </div>
 
         {/* Right Column: Main Graph */}

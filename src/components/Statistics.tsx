@@ -19,24 +19,13 @@ export default function Statistics() {
   const holidays = useStore(state => state.holidays)
   const selectedYear = useStore(state => state.selectedYear)
 
-  if (activeProfileIds.length === 0) {
-    return (
-      <div className="bg-white dark:bg-gray-950 rounded-xl shadow-sm border border-slate-200 dark:border-gray-800 p-4 flex flex-col min-h-0 shrink-0">
-        <h2 className="font-semibold text-lg mb-4 text-slate-800 dark:text-slate-200">Statistik</h2>
-        <div className="text-sm text-slate-500">Bitte wähle ein Profil aus.</div>
-      </div>
-    )
-  }
+  const activeProfile = activeProfileIds.length > 0 ? profiles.find(p => p.id === activeProfileIds[0]) : undefined
 
-  // Für Einfachheit nehmen wir das erste aktive Profil für die Detailansicht
-  const activeProfile = profiles.find(p => p.id === activeProfileIds[0])
-  if (!activeProfile) return null
-
-  const stats = getProfileStatsForYear(activeProfile, selectedYear, overrides, entries, trips, holidays)
+  const stats = activeProfile ? getProfileStatsForYear(activeProfile, selectedYear, overrides, entries, trips, holidays) : null
   
-  // Wir rendern die Statistik-UI weiter unten nur, wenn stats vorhanden ist.
-  // Das useMemo muss aber VOR dem early return aufgerufen werden, um die Hooks-Reihenfolge einzuhalten.
   const { totalUrlaub, totalKrank, totalMobile, monthlyStats, ungenutzterResturlaub } = useMemo(() => {
+    if (!activeProfile) return { totalUrlaub: 0, totalKrank: 0, totalMobile: 0, monthlyStats: [], ungenutzterResturlaub: 0 }
+
     // Filtern der Einträge für dieses Jahr und Profil
     const yearEntries = entries.filter(e => 
       e.profileId === activeProfile.id && e.date.startsWith(selectedYear.toString())
@@ -54,14 +43,16 @@ export default function Statistics() {
       let krankVal = 0
       let mobileVal = 0
 
-      if (isVacationCostingDay(entry.date, activeProfile, holidays)) {
-        if (entry.type === 'U') urlaubVal = 1
-        if (entry.type === '2') urlaubVal = 0.5
-      }
-      if (entry.type === 'K') krankVal = 1
-      if (entry.type === '3') krankVal = 0.5
-      if (entry.type === 'M') mobileVal = 1
-      if (entry.type === '5') mobileVal = 0.5
+      entry.type.split(',').forEach(part => {
+        if (isVacationCostingDay(entry.date, activeProfile, holidays)) {
+          if (part === 'U') urlaubVal += 1
+          if (part === '2') urlaubVal += 0.5
+        }
+        if (part === 'K') krankVal += 1
+        if (part === '3') krankVal += 0.5
+        if (part === 'M') mobileVal += 1
+        if (part === '5') mobileVal += 0.5
+      })
 
       tUrlaub += urlaubVal
       tKrank += krankVal
@@ -113,14 +104,17 @@ export default function Statistics() {
     // Logik für Resturlaubs-Warnung
     // Wie viele Urlaubstage wurden VOR dem Verfallsdatum genommen?
     const expiryDateString = `${selectedYear}-${activeProfile.remainingLeaveExpiryDate}`
-    let urlaubVorVerfall = yearEntries.filter(e => {
+    let urlaubVorVerfall = 0
+    yearEntries.forEach(e => {
       if (e.date <= expiryDateString) {
         if (isVacationCostingDay(e.date, activeProfile, holidays)) {
-          return e.type === 'U' || e.type === '2'
+          e.type.split(',').forEach(part => {
+            if (part === 'U') urlaubVorVerfall += 1
+            if (part === '2') urlaubVorVerfall += 0.5
+          })
         }
       }
-      return false
-    }).reduce((sum, e) => sum + (e.type === 'U' ? 1 : 0.5), 0)
+    })
 
     // Berücksichtige auch Urlaubstage, die durch Reisen vor dem Verfallsdatum genommen werden
     const validTripStatuses = ["In Planung", "Gebucht", "Abgeschlossen"]
@@ -154,9 +148,20 @@ export default function Statistics() {
     return { totalUrlaub: tUrlaub, totalKrank: tKrank, totalMobile: tMobile, monthlyStats: mStats, ungenutzterResturlaub: ungenutzterResturlaubCalc }
   }, [entries, activeProfile, selectedYear, holidays, trips, stats?.remainingLeave])
 
+  if (activeProfileIds.length === 0) {
+    return (
+      <div className="bg-white dark:bg-[var(--surface)] rounded-xl shadow-sm border border-slate-200 dark:border-[var(--border-subtle)] p-4 flex flex-col min-h-0 shrink-0">
+        <h2 className="font-semibold text-lg mb-4 text-slate-800 dark:text-slate-200">Statistik</h2>
+        <div className="text-sm text-slate-500">Bitte wähle ein Profil aus.</div>
+      </div>
+    )
+  }
+
+  if (!activeProfile) return null
+
   if (!stats) {
     return (
-      <div className="bg-white dark:bg-gray-950 rounded-xl shadow-sm border border-slate-200 dark:border-gray-800 p-4 flex flex-col min-h-0 shrink-0">
+      <div className="bg-white dark:bg-[var(--surface)] rounded-xl shadow-sm border border-slate-200 dark:border-[var(--border-subtle)] p-4 flex flex-col min-h-0 shrink-0">
         <h2 className="font-semibold text-lg mb-4 text-slate-800 dark:text-slate-200">Statistik ({activeProfile.name})</h2>
         <div className="text-sm text-slate-500">
           Profil ist für das Jahr {selectedYear} nicht aktiv (Startjahr: {activeProfile.startYear}).

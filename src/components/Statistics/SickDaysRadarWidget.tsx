@@ -16,12 +16,13 @@ export default function SickDaysRadarWidget() {
 
     entries.forEach(e => {
       if (!activeProfileIds.includes(e.profileId)) return
-      if (e.type === 'K' || e.type === '3') {
-        const d = new Date(e.date)
-        if (d.getFullYear() === selectedYear) {
-          const day = d.getDay()
-          counts[day] += (e.type === '3' ? 0.5 : 1)
-        }
+      const d = new Date(e.date)
+      if (d.getFullYear() === selectedYear) {
+        const day = d.getDay()
+        e.type.split(',').forEach(part => {
+          if (part === 'K') counts[day] += 1
+          if (part === '3') counts[day] += 0.5
+        })
       }
     })
 
@@ -41,7 +42,7 @@ export default function SickDaysRadarWidget() {
 
   return (
     <div className="bg-white dark:bg-[#0d1117] rounded-xl border border-slate-200 dark:border-slate-800 p-6 flex flex-col shadow-xl h-full w-full min-h-[350px]">
-      <h3 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-2">Krankheitstage nach Wochentag</h3>
+      <h3 className="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Krankheitstage nach Wochentag</h3>
       <p className="text-xs text-slate-500 mb-2">Gibt es in {selectedYear} einen Wochentag, an dem du öfter krank bist?</p>
       
       <div className="flex-1 w-full min-h-[250px]">

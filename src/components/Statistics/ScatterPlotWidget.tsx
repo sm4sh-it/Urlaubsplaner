@@ -24,7 +24,7 @@ export default function ScatterPlotWidget() {
 
   return (
     <div className="bg-white dark:bg-[#0d1117] rounded-xl border border-slate-200 dark:border-slate-800 p-6 flex flex-col shadow-xl h-full w-full min-h-[350px]">
-      <h3 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-2">Kosten vs. Reisedauer</h3>
+      <h3 className="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Kosten vs. Reisedauer</h3>
       <p className="text-xs text-slate-500 mb-6">Wie effizient waren deine Reisen im Jahr {selectedYear}?</p>
       
       {data.length === 0 ? (

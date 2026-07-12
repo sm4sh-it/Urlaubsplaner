@@ -47,8 +47,8 @@ export default function HelpModal({ isOpen, onClose }: HelpModalProps) {
               </p>
               <ul className="list-disc list-inside text-sm text-slate-600 dark:text-slate-300 space-y-2">
                 <li><strong>Ganzer Tag:</strong> Halte die jeweilige Taste (z. B. <kbd className="px-2 py-0.5 bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded text-xs font-mono">U</kbd> für Urlaub) gedrückt und klicke auf das gewünschte Datum.</li>
-                <li><strong>Halber Tag:</strong> Halte zusätzlich die <kbd className="px-2 py-0.5 bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded text-xs font-mono">Shift</kbd> Taste gedrückt (z. B. <kbd className="px-2 py-0.5 bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded text-xs font-mono">Shift + U</kbd>). Halbe Tage werden in helleren Farben dargestellt.</li>
-                <li><strong>Eintrag löschen:</strong> Klicke einfach auf einen bereits markierten Tag, <em>ohne</em> eine Taste gedrückt zu halten.</li>
+                <li><strong>Halber Tag:</strong> Halte zusätzlich die <kbd className="px-2 py-0.5 bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded text-xs font-mono">Shift</kbd> Taste gedrückt (z. B. <kbd className="px-2 py-0.5 bg-white dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded text-xs font-mono">Shift + U</kbd>). Du kannst auch zwei verschiedene halbe Tage kombinieren! Sie werden dann zusammen angezeigt. Ein dritter halber Tag überschreibt den jeweils ältesten.</li>
+                <li><strong>Eintrag löschen:</strong> Klicke einfach auf einen bereits markierten Tag, <em>ohne</em> eine Taste gedrückt zu halten. Bei kombinierten Tagen wird immer der zuletzt hinzugefügte zuerst gelöscht.</li>
               </ul>
               <div className="pt-2 text-xs text-slate-500 dark:text-slate-400">
                 Tipp: Die Tastenbelegung für jeden Typen (z. B. <strong>M</strong> für Mobiles Arbeiten) findest du jederzeit in der Legende links!

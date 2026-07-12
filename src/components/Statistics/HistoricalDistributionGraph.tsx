@@ -26,11 +26,20 @@ export default function HistoricalDistributionGraph() {
     // 1. Process Manual Entries
     entries.forEach(e => {
       if (e.profileId !== activeProfile.id) return
-      if (viewMode === 'Urlaub' && (e.type === 'U' || e.type === '2')) {
+      
+      let hasVacation = false
+      let hasSickness = false
+
+      e.type.split(',').forEach(part => {
+        if (part === 'U' || part === '2') hasVacation = true
+        if (part === 'K' || part === '3') hasSickness = true
+      })
+
+      if (viewMode === 'Urlaub' && hasVacation) {
         if (isVacationCostingDay(e.date, activeProfile, holidays)) {
           uniqueDates.add(e.date)
         }
-      } else if (viewMode === 'Krankheit' && (e.type === 'K' || e.type === '3')) {
+      } else if (viewMode === 'Krankheit' && hasSickness) {
         // Sickness counts on any day it is entered
         uniqueDates.add(e.date)
       }
@@ -133,7 +142,7 @@ export default function HistoricalDistributionGraph() {
   }
 
   return (
-    <div className="bg-white dark:bg-[#0d1117] rounded-xl border border-slate-200 dark:border-slate-800 p-6 flex flex-col shadow-xl overflow-hidden w-full h-full">
+    <div className="bg-white dark:bg-[#0d1117] rounded-xl border border-slate-200 dark:border-slate-800 p-6 flex flex-col shadow-xl justify-start w-full h-full">
       <div className="flex flex-col items-center gap-3 mb-6">
         <div className="flex bg-slate-100 dark:bg-[#161b22] rounded-full p-1 border border-slate-200 dark:border-slate-700/50">
           <button
@@ -158,9 +167,9 @@ export default function HistoricalDistributionGraph() {
           </button>
         </div>
         
-        <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100 text-center min-w-[360px]">
+        <h3 className="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-center min-w-[360px]">
           {viewMode === 'Urlaub' ? 'Urlaubsverteilung über die Jahre' : 'Krankheitsverteilung über die Jahre'}
-        </h2>
+        </h3>
       </div>
 
       <div className="overflow-x-auto pb-4">

@@ -88,13 +88,15 @@ export default function YearlyContributionGraph() {
         } else {
           // 2. Check manual entries
           const manualEntries = entries.filter(e => e.date === dateStr && activeProfileIds.includes(e.profileId))
-          // For simplicity, just pick the first entry type or combine if there's a half day
+          // Pick the first type part for the graph color
           if (manualEntries.length > 0) {
-            const e = manualEntries[0]
-            if (e.type === '2') primaryStatus = "u-2"
-            else if (e.type === '3') primaryStatus = "k-2"
-            else if (e.type === '4') primaryStatus = "ue-2"
-            else primaryStatus = e.type.toLowerCase()
+            const type = manualEntries[0].type.split(',')[0]
+            if (type === '2') primaryStatus = "u-2"
+            else if (type === '3') primaryStatus = "k-2"
+            else if (type === '4') primaryStatus = "ue-2"
+            else if (type === '5') primaryStatus = "m-2"
+            else if (type === '6') primaryStatus = "s-2"
+            else primaryStatus = type.toLowerCase()
           }
         }
       }

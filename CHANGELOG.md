@@ -1,6 +1,25 @@
 # Changelog
 
 All notable changes to this project will be documented in this file.
+## [0.9.7] - 2026-07-12
+### Changed & Fixed
+- **Kalender:** Die Darstellung im Kalender nutzt ab 3 Einträgen nun ein responsives "Micro-Pills"-Layout (inkl. Grid-Support), um Überlappungen und Overflow zu verhindern.
+- **Legende:** "Überstunden" wurden korrekt nach oben zu "Abwesenheit" verschoben. "Gleitzeit" wurde in "Bildungsurlaub" (Kürzel: B) umbenannt.
+- **Statistiken:** "Ø Urlaubsdauer" zeigt nun den All-Time-Durchschnitt samt Historie der letzten Jahre; neues Widget "Beliebtes Reiseland" hinzugefügt.
+- **Formular (Trips):** Felder "Land" und "Ort" getauscht für eine flüssigere Bedienung.
+- **Docker:** Obsoletes `version` Attribut aus `docker-compose.yml` entfernt.
+
+## [0.9.6] - 2026-07-12
+### Changed & Fixed
+- **UI & Farben:** Globale Farbpalette für Kalendereinträge im Light- und Darkmode komplett überarbeitet, um moderne und konsistente Farbschemata aufzubauen.
+- **Statistik-Dashboard:** Kachel-Design optimiert. Alle Inhalte sind nun obenbündig ausgerichtet. Eine neue Multi-Color-Leiste in "Work - No Work" integriert alle Fehltage farbcodiert direkt in den Fortschrittsbalken.
+
+## [0.9.5] - 2026-07-11
+### Changed & Fixed
+- **Daten & Logik:** Behebt einen Fehler bei gestapelten Kalendereinträgen (z.B. Halber Tag Urlaub + Halber Tag Krank), bei dem sich die Einträge gegenseitig überschrieben haben. Diese werden nun sauber addiert und als gestapelte Strings verarbeitet.
+- **Features:** Unterstützung für halbe Tage (0.5) "Sonderurlaub" hinzugefügt.
+- **Statistiken:** Manuell eingetragene Brückentage werden nun in der Statistik korrekt erfasst und gezählt.
+
 ## [0.9.4] - 2026-07-10
 ### Fixed
 - **UI & Layout (Scrolling):** Behebt ein Problem, bei dem die Dashboard-, Statistik- und Einstellungsseiten nicht mehr gescrollt werden konnten, wenn der Inhalt den Bildschirm überragte. Diese Ansichten haben nun weiche, an das Design angepasste "Custom Scrollbars" (`.custom-scrollbar`).

@@ -47,8 +47,10 @@ export function getProfileStatsForYear(
       let usedVacation = 0
       prevEntries.forEach(e => {
         if (isVacationCostingDay(e.date, profile, holidays)) {
-          if (e.type === 'U') usedVacation += 1
-          if (e.type === '2') usedVacation += 0.5
+          e.type.split(',').forEach(part => {
+            if (part === 'U') usedVacation += 1
+            if (part === '2') usedVacation += 0.5
+          })
         }
       })
 

@@ -1,4 +1,5 @@
-export type EntryType = 'U' | '2' | 'K' | '3' | 'Ü' | '4' | 'G' | 'D' | 'S' | 'X' | 'M' | '5' | 'A'
+// EntryType is a string that can contain comma-separated values like '2,5' for stacked half-days
+export type EntryType = string // Was: 'U' | '2' | 'K' | '3' | 'Ü' | '4' | 'G' | 'D' | 'S' | 'X' | 'M' | '5' | 'A' | '6'
 
 export type TripType = "Urlaub" | "Mobiles Arbeiten" | "Sabbatical" | "Sonderurlaub" | "Überstundenabbau"
 export type TripStatus = "Idee" | "In Planung" | "Gebucht" | "Abgeschlossen"
@@ -17,6 +18,7 @@ export interface Trip {
   status: TripStatus
   
   location?: string | null
+  country?: string | null
   travelType?: string | null
   transport?: string | null
   notes?: string | null

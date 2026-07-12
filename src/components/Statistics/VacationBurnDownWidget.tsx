@@ -37,8 +37,10 @@ export default function VacationBurnDownWidget() {
         const d = new Date(e.date)
         if (d.getFullYear() === selectedYear && d.getMonth() === month) {
           if (isVacationCostingDay(e.date, activeProfile, holidays)) {
-            if (e.type === 'U') monthTaken += 1
-            if (e.type === '2') monthTaken += 0.5
+            e.type.split(',').forEach(part => {
+              if (part === 'U') monthTaken += 1
+              if (part === '2') monthTaken += 0.5
+            })
           }
         }
       })
@@ -82,7 +84,7 @@ export default function VacationBurnDownWidget() {
 
   return (
     <div className="bg-white dark:bg-[#0d1117] rounded-xl border border-slate-200 dark:border-slate-800 p-6 flex flex-col shadow-xl h-full w-full min-h-[350px]">
-      <h3 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-2">Urlaubs-Guthaben Verlauf</h3>
+      <h3 className="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Urlaubs-Guthaben Verlauf</h3>
       <p className="text-xs text-slate-500 mb-6">Wie schnell verbrauchst du deinen Urlaub im Jahr {selectedYear}?</p>
       
       {data.length === 0 ? (

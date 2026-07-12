@@ -28,7 +28,7 @@
   --color-vacation: var(--c-vacation);
   --color-sick: var(--c-sick);
   --color-overtime: var(--c-overtime);
-  --color-gleitzeit: var(--c-gleitzeit);
+  --color-bildungsurlaub: var(--c-bildungsurlaub);
   --color-dienstreise: var(--c-dienstreise);
   --color-special: var(--c-special);
   --color-blocked: var(--blocked);
@@ -58,14 +58,14 @@
     --blocked: #a1a1aa;          /* zinc-400 */
     
     /* Lightmode Status Colors (WCAG compliant) */
-    --c-vacation: #16a34a;
+    --c-vacation: #10b981;
     --c-sick: #dc2626;
-    --c-overtime: #7c3aed;
-    --c-auszeit: #0284c7;
-    --c-mobile: #1d4ed8;
-    --c-gleitzeit: #c69214;
-    --c-dienstreise: #148080;
-    --c-special: #d97706;
+    --c-overtime: #8b5cf6;
+    --c-auszeit: #0d9488;
+    --c-mobile: #3b82f6;
+    --c-bildungsurlaub: #0284c7;
+    --c-dienstreise: #64748b;
+    --c-special: #ea580c;
     --c-ferien: #ff9f43;
     --radius: 12px;
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -85,14 +85,14 @@
     --blocked: #374151;
 
     /* Darkmode Status Colors (Original) */
-    --c-vacation: #1b8a5a;
+    --c-vacation: #059669;
     --c-sick: #b0413e;
-    --c-overtime: #7d52b3;
-    --c-auszeit: #0ea5e9;
-    --c-mobile: #1a5fb4;
-    --c-gleitzeit: #c69214;
-    --c-dienstreise: #148080;
-    --c-special: #d97706;
+    --c-overtime: #7c3aed;
+    --c-auszeit: #0f766e;
+    --c-mobile: #2563eb;
+    --c-bildungsurlaub: #0369a1;
+    --c-dienstreise: #475569;
+    --c-special: #c2410c;
     --c-ferien: #ff9f43;
   }
 }
@@ -175,9 +175,10 @@ body {
 .status-ue   { background: var(--color-overtime) !important; color: #fff !important; }
 .status-ue-2 { background: linear-gradient(135deg, var(--color-overtime) 50%, var(--surface) 50%) !important; color: #fff !important; }
 
-.status-g   { background: var(--color-gleitzeit) !important; color: #fff !important; }
+.status-b   { background: var(--color-bildungsurlaub) !important; color: #fff !important; }
 .status-d   { background: var(--color-dienstreise) !important; color: #fff !important; }
 .status-s   { background: var(--color-special) !important; color: #fff !important; }
+.status-s-2 { background: linear-gradient(135deg, var(--color-special) 50%, var(--surface) 50%) !important; color: #fff !important; }
 .status-a   { background: var(--color-auszeit) !important; color: #fff !important; }
 .status-a-2 { background: linear-gradient(135deg, var(--color-auszeit) 50%, var(--surface) 50%) !important; color: #fff !important; }
 .status-m {
@@ -187,7 +188,7 @@ body {
 }
 
 .status-m-2 {
-  background: linear-gradient(135deg, #1a5fb4 50%, var(--surface-bright) 50%) !important;
+  background: linear-gradient(135deg, var(--color-mobile) 50%, var(--surface-bright) 50%) !important;
   color: white !important;
   border: 1px solid rgba(255,255,255,0.1) !important;
 }
@@ -326,10 +327,10 @@ body {
  */
 
 /* Vacation (Greens) */
-.vacation-1 { background-color: #9be9a8; }
-.vacation-2 { background-color: #40c463; }
-.vacation-3 { background-color: #30a14e; }
-.vacation-4 { background-color: #216e39; }
+.vacation-1 { background-color: #bbf7d0; }
+.vacation-2 { background-color: #86efac; }
+.vacation-3 { background-color: #4ade80; }
+.vacation-4 { background-color: #39d353; }
 
 .dark .vacation-1 { background-color: #0e4429; }
 .dark .vacation-2 { background-color: #006d32; }

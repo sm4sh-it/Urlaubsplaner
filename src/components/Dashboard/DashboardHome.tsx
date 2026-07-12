@@ -60,8 +60,10 @@ export default function DashboardHome() {
           const yearEntries = entries.filter(e => e.profileId === id && e.date.startsWith(selectedYear.toString()))
           yearEntries.forEach(e => {
             if (isVacationCostingDay(e.date, p, holidays)) {
-              if (e.type === 'U') standardTaken += 1
-              if (e.type === '2') standardTaken += 0.5
+              e.type.split(',').forEach(part => {
+                if (part === 'U') standardTaken += 1
+                if (part === '2') standardTaken += 0.5
+              })
             }
           })
 

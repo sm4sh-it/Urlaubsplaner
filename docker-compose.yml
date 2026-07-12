@@ -1,4 +1,3 @@
-version: '3.8'
 
 services:
   urlaubsplaner:
@@ -16,7 +15,7 @@ services:
       # Aktiviere den Passwortschutz (true) oder deaktiviere ihn komplett (false)
       - AUTH_ENABLED=true
       # Das zwingend erforderliche Passwort, wenn AUTH_ENABLED=true ist
-      - APP_PASSWORD=DeinSicheresPasswort123
+      - APP_PASSWORD=sm4sh
 
 volumes:
   urlaubsplaner_data:

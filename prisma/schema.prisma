@@ -40,6 +40,7 @@ model Trip {
   status               String
   
   location             String?
+  country              String?
   travelType           String?
   transport            String?
   notes                String?

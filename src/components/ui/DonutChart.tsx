@@ -64,9 +64,9 @@ export function DonutChart({ title, segments, emptyText = "Keine Daten vorhanden
                 <div key={seg.type} className="flex items-center justify-between text-sm">
                   <div className="flex items-center gap-2">
                     <div className="w-3 h-3 rounded-full" style={{ backgroundColor: seg.color }} />
-                    <span className="text-slate-300 truncate max-w-[120px]" title={seg.type}>{seg.type}</span>
+                    <span className="text-slate-700 dark:text-slate-300 truncate max-w-[120px]" title={seg.type}>{seg.type}</span>
                   </div>
-                  <span className="font-bold text-slate-100">{Math.round(seg.percent)}%</span>
+                  <span className="font-bold text-slate-700 dark:text-slate-100">{Math.round(seg.percent)}%</span>
                 </div>
               )
             ))}

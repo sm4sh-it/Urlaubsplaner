@@ -48,13 +48,28 @@ export default function Legend() {
           </div>
           <div className="flex items-center gap-3 text-[13px] text-slate-700 dark:text-slate-200">
             <div className="w-7 h-6 rounded flex items-center justify-center text-[10px] font-bold status-s shrink-0">S</div>
-            <span>Sonderurlaub</span>
+            <span>Sonderurlaub (Voll)</span>
             <span className="ml-auto font-mono text-[11px] bg-slate-100 dark:bg-white/5 px-1.5 py-0.5 rounded text-slate-500 dark:text-[var(--fg)] shrink-0">S</span>
+          </div>
+          <div className="flex items-center gap-3 text-[13px] text-slate-700 dark:text-slate-200">
+            <div className="w-7 h-6 rounded flex items-center justify-center text-[10px] font-bold status-s-2 shrink-0">S/2</div>
+            <span>Sonderurlaub (Halb)</span>
+            <span className="ml-auto font-mono text-[11px] bg-slate-100 dark:bg-white/5 px-1.5 py-0.5 rounded text-slate-500 dark:text-[var(--fg)] shrink-0">⇧ S</span>
           </div>
           <div className="flex items-center gap-3 text-[13px] text-slate-700 dark:text-slate-200">
             <div className="w-7 h-6 rounded flex items-center justify-center text-[10px] font-bold status-a shrink-0">A</div>
             <span>Auszeit/Sabbatical</span>
             <span className="ml-auto font-mono text-[11px] bg-slate-100 dark:bg-white/5 px-1.5 py-0.5 rounded text-slate-500 dark:text-[var(--fg)] shrink-0">A</span>
+          </div>
+          <div className="flex items-center gap-3 text-[13px] text-slate-700 dark:text-slate-200">
+            <div className="w-7 h-6 rounded flex items-center justify-center text-[10px] font-bold status-ue shrink-0">Ü</div>
+            <span>Überstunden (Voll)</span>
+            <span className="ml-auto font-mono text-[11px] bg-slate-100 dark:bg-white/5 px-1.5 py-0.5 rounded text-slate-500 dark:text-[var(--fg)] shrink-0">Ü</span>
+          </div>
+          <div className="flex items-center gap-3 text-[13px] text-slate-700 dark:text-slate-200">
+            <div className="w-7 h-6 rounded flex items-center justify-center text-[10px] font-bold status-ue-2 shrink-0">Ü/2</div>
+            <span>Überstunden (Halb)</span>
+            <span className="ml-auto font-mono text-[11px] bg-slate-100 dark:bg-white/5 px-1.5 py-0.5 rounded text-slate-500 dark:text-[var(--fg)] shrink-0">⇧ Ü</span>
           </div>
         </div>
       </div>
@@ -74,19 +89,9 @@ export default function Legend() {
             <span className="ml-auto font-mono text-[11px] bg-slate-100 dark:bg-white/5 px-1.5 py-0.5 rounded text-slate-500 dark:text-[var(--fg)] shrink-0">⇧ M</span>
           </div>
           <div className="flex items-center gap-3 text-[13px] text-slate-700 dark:text-slate-200">
-            <div className="w-7 h-6 rounded flex items-center justify-center text-[10px] font-bold status-ue shrink-0">Ü</div>
-            <span>Überstunden (Voll)</span>
-            <span className="ml-auto font-mono text-[11px] bg-slate-100 dark:bg-white/5 px-1.5 py-0.5 rounded text-slate-500 dark:text-[var(--fg)] shrink-0">Ü</span>
-          </div>
-          <div className="flex items-center gap-3 text-[13px] text-slate-700 dark:text-slate-200">
-            <div className="w-7 h-6 rounded flex items-center justify-center text-[10px] font-bold status-ue-2 shrink-0">Ü/2</div>
-            <span>Überstunden (Halb)</span>
-            <span className="ml-auto font-mono text-[11px] bg-slate-100 dark:bg-white/5 px-1.5 py-0.5 rounded text-slate-500 dark:text-[var(--fg)] shrink-0">⇧ Ü</span>
-          </div>
-          <div className="flex items-center gap-3 text-[13px] text-slate-700 dark:text-slate-200">
-            <div className="w-7 h-6 rounded flex items-center justify-center text-[10px] font-bold status-g shrink-0">G</div>
-            <span>Gleitzeit</span>
-            <span className="ml-auto font-mono text-[11px] bg-slate-100 dark:bg-white/5 px-1.5 py-0.5 rounded text-slate-500 dark:text-[var(--fg)] shrink-0">G</span>
+            <div className="w-7 h-6 rounded flex items-center justify-center text-[10px] font-bold status-b shrink-0">B</div>
+            <span>Bildungsurlaub</span>
+            <span className="ml-auto font-mono text-[11px] bg-slate-100 dark:bg-white/5 px-1.5 py-0.5 rounded text-slate-500 dark:text-[var(--fg)] shrink-0">B</span>
           </div>
           <div className="flex items-center gap-3 text-[13px] text-slate-700 dark:text-slate-200">
             <div className="w-7 h-6 rounded flex items-center justify-center text-[10px] font-bold status-d shrink-0">D</div>
