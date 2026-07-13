@@ -134,10 +134,10 @@ export function StatusWidget() {
   }, [trips, activeProfileIds])
 
   const STATUS_COLORS: Record<string, string> = {
-    'Idee': '#fde047',
-    'In Planung': '#ff9f43',
-    'Gebucht': '#23d160',
-    'Abgeschlossen': '#64748b'
+    'Idee': '#eab308', // Yellow (status-badge request)
+    'In Planung': '#ff9f43', // Orange (status-badge planning)
+    'Gebucht': '#1b8a5a', // Green (status-badge confirmed)
+    'Abgeschlossen': '#64748b' // Slate
   }
 
   const list = Object.entries(stats.counts).filter(([_, count]) => count > 0)

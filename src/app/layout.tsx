@@ -8,7 +8,7 @@ import { ThemeProvider } from "@/components/ThemeProvider"
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" })
 
 export const metadata: Metadata = {
-  title: "sm4shReisen - Urlaubsplaner",
+  title: "sm4sh's Urlaubsplaner",
   description: "Jahresübersicht und Urlaubsplanung für die ganze Familie",
 }
 

@@ -81,10 +81,10 @@ export default function YearCalendar() {
   const stateCode = primaryProfile?.stateCode || "NW"
 
   const tripLookup = React.useMemo(() => {
-    const validTripStatuses = ["In Planung", "Gebucht", "Abgeschlossen"]
+    const validTripStatuses = ["In Planung", "Gebucht", "Abgeschlossen", "Idee"]
     const activeTrips = trips.filter(t => validTripStatuses.includes(t.status))
     
-    const lookup: Record<string, { type: EntryType, title: string }> = {}
+    const lookup: Record<string, { type: EntryType, title: string, isIdea: boolean }> = {}
     for (const t of activeTrips) {
       const type = mapTripTypeToEntryType(t.type)
       const start = new Date(t.startDate)
@@ -95,7 +95,7 @@ export default function YearCalendar() {
         while (current <= end) {
           const dateStr = current.toISOString().split('T')[0]
           const key = `${p.id}_${dateStr}`
-          lookup[key] = { type, title: t.title }
+          lookup[key] = { type, title: t.title, isIdea: t.status === "Idee" }
           current.setUTCDate(current.getUTCDate() + 1)
         }
       }
@@ -408,7 +408,7 @@ export default function YearCalendar() {
                                       "flex items-center justify-center font-bold rounded-sm border-solid shadow-sm w-full h-full",
                                       isCompact ? "border-[1px] text-[0px] flex-1" : "border-2 shrink-0 flex-1 text-[10px]",
                                       typeClass,
-                                      tripEntry ? "opacity-90" : ""
+                                      tripEntry ? (tripEntry.isIdea ? "opacity-50 border-dashed" : "opacity-90") : ""
                                     )}
                                     style={{ borderColor: profile.color }}
                                     title={tripEntry ? `Trip: ${tripEntry.title}` : undefined}

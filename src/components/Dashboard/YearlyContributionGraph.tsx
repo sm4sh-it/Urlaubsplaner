@@ -52,10 +52,11 @@ export default function YearlyContributionGraph() {
       // Calculate if day has vacation
       let primaryStatus = ""
       let secondaryStatus = ""
+      let isIdea = false
       
       if (isCurrentYear && activeProfileIds.length > 0) {
         // 1. Check trips first (typically full days, 'U')
-        const blockingStatuses = ["In Planung", "Gebucht", "Abgeschlossen"]
+        const blockingStatuses = ["In Planung", "Gebucht", "Abgeschlossen", "Idee"]
         const blockingTrips = trips.filter(t => 
           blockingStatuses.includes(t.status) &&
           t.startDate <= dateStr && 
@@ -63,28 +64,25 @@ export default function YearlyContributionGraph() {
           t.profiles.some(p => activeProfileIds.includes(p.id))
         )
         
-        let hasTripDay = false
-        let hasSabbaticalDay = false
+        let primaryTripType: string | null = null
         if (blockingTrips.length > 0) {
           for (const trip of blockingTrips) {
             for (const profileId of activeProfileIds) {
               if (trip.profiles.some(p => p.id === profileId)) {
-                const p = profiles.find(pr => pr.id === profileId)
-                if (p) {
-                  const singleDayTrip = { ...trip, startDate: dateStr, endDate: dateStr }
-                  const cost = calculateTripVacationCost(singleDayTrip, p, holidays)
-                  if (cost > 0) hasTripDay = true
-                  else if (trip.type === "Sabbatical") hasSabbaticalDay = true
-                }
+                primaryTripType = trip.type
+                if (trip.status === "Idee") isIdea = true
               }
             }
           }
         }
         
-        if (hasTripDay) {
-          primaryStatus = "u"
-        } else if (hasSabbaticalDay) {
-          primaryStatus = "a"
+        if (primaryTripType) {
+          if (primaryTripType === "Sabbatical") primaryStatus = "a"
+          else if (primaryTripType === "Sonderurlaub") primaryStatus = "s"
+          else if (primaryTripType === "Krank") primaryStatus = "k"
+          else if (primaryTripType === "Überstundenabbau") primaryStatus = "ue"
+          else if (primaryTripType === "Mobiles Arbeiten") primaryStatus = "m"
+          else primaryStatus = "u"
         } else {
           // 2. Check manual entries
           const manualEntries = entries.filter(e => e.date === dateStr && activeProfileIds.includes(e.profileId))
@@ -105,7 +103,8 @@ export default function YearlyContributionGraph() {
         date: dateStr,
         isCurrentYear,
         monthIndex: currentDate.getMonth(),
-        status: primaryStatus
+        status: primaryStatus,
+        isIdea
       })
 
       currentDate.setDate(currentDate.getDate() + 1)
@@ -114,7 +113,7 @@ export default function YearlyContributionGraph() {
     return { days: daysArray, months: monthsArray }
   }, [selectedYear, entries, trips, activeProfileIds, profiles, holidays])
 
-  const getCssClass = (day: { date: string, isCurrentYear: boolean, monthIndex: number, status: string }) => {
+  const getCssClass = (day: { date: string, isCurrentYear: boolean, monthIndex: number, status: string, isIdea?: boolean }) => {
     if (!day.isCurrentYear) return 'bg-transparent'
     if (!day.status) {
       // empty day with month alternating banding
@@ -122,7 +121,9 @@ export default function YearlyContributionGraph() {
         ? 'bg-slate-100 dark:bg-[var(--border)]' 
         : 'bg-slate-200 dark:bg-white/10'
     }
-    return `status-${day.status}`
+    let baseClass = `status-${day.status}`
+    if (day.isIdea) baseClass += ' opacity-50'
+    return baseClass
   }
 
   return (

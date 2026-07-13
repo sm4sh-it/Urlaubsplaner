@@ -32,11 +32,11 @@ export default function TripCard({ trip, onClick }: TripCardProps) {
   const isConfirmed = trip.status === "Gebucht" || trip.status === "Abgeschlossen"
   const isIdea = trip.status === "Idee"
   
-  let statusClass = "status-badge request"
+  let statusClass = "status-badge planning" // default to In Planung (Orange)
   if (isConfirmed) {
-    statusClass = "status-badge confirmed"
+    statusClass = "status-badge confirmed" // Green
   } else if (isIdea) {
-    statusClass = "status-badge planning"
+    statusClass = "status-badge request" // Yellow
   }
 
   return (

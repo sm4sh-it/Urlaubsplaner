@@ -1,6 +1,15 @@
 # Changelog
 
 All notable changes to this project will be documented in this file.
+## [0.9.9] - 2026-07-13
+### Added & Changed
+- **Mobile Optimierung:** Das Layout wurde nach "Mobile-First" Prinzipien für kleine Bildschirme (Handys) optimiert.
+- **Navigation:** Einführung eines kompakten Hamburger-Menüs auf mobilen Endgeräten.
+- **UI & Layout:** Der Seitenleisten-Button in der Kalenderansicht wurde zu einem "Griff" (ohne Kontur) umgestaltet. "Idee"-Urlaube werden auf der Home-Seite wieder ohne Deckkraft-Reduzierung (wie reguläre Reisen) angezeigt. Statusfarben vereinheitlicht (Idee = Gelb, In Planung = Orange).
+- **Branding:** Globale Umbenennung des Projekts in "sm4sh's Urlaubsplaner".
+### Fixed
+- **Engine:** Behebt einen Scope-Bug (`isIdea` nicht deklariert) im YearlyContributionGraph, der den Production-Build verhinderte.
+
 ## [0.9.8] - 2026-07-12
 ### Changed & Fixed
 - **Statistiken & Engine:** Behebt einen kritischen Fehler in der Urlaubsübertragsberechnung, bei dem Feiertage im vergangenen Jahr fälschlicherweise als genommener Urlaub abgezogen wurden. Die Feiertage aller aktiven Jahre werden nun initial im Hintergrund geladen.

@@ -45,12 +45,12 @@ export default function DashboardLayout({
       <button
         onClick={toggleSidebar}
         className={cn(
-          "absolute top-4 z-10 p-2 rounded-l-lg bg-brand-500 text-white hover:bg-brand-600 shadow-md hover:shadow-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900",
-          isSidebarOpen ? "right-80 mr-4" : "right-0"
+          "absolute top-4 z-10 flex items-center justify-center w-8 h-12 bg-slate-200/50 hover:bg-slate-300/80 dark:bg-slate-800/50 dark:hover:bg-slate-700/80 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 transition-all duration-300 rounded-l-xl backdrop-blur-sm",
+          isSidebarOpen ? "right-80" : "right-0"
         )}
         title={isSidebarOpen ? "Seitenleiste ausblenden" : "Seitenleiste einblenden"}
       >
-        {isSidebarOpen ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
+        {isSidebarOpen ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
       </button>
     </div>
   )

@@ -39,8 +39,8 @@ export default function LoginPage() {
           <div className="p-3 bg-brand-100 dark:bg-brand-900/30 text-brand-600 dark:text-brand-500 rounded-full mb-4">
             <Lock className="w-8 h-8" />
           </div>
-          <h1 className="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
-            <CalendarDays className="text-brand-500 w-6 h-6" /> sm4shReisen
+          <h1 className="text-2xl font-bold text-slate-800 dark:text-slate-100 flex items-center justify-center gap-2 mb-6">
+            <CalendarDays className="text-brand-500 w-6 h-6" /> sm4sh's Urlaubsplaner
           </h1>
           <p className="text-slate-500 dark:text-slate-400 mt-2 text-center">
             Bitte gib das Familien-Passwort ein, um den Urlaubsplaner zu öffnen.

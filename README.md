@@ -1,4 +1,4 @@
-# sm4shReisen - Urlaubsplaner
+# sm4sh's Urlaubsplaner
 
 Ein moderner, interaktiver Single-Page Urlaubsplaner für Familien und kleine Teams mit einem Fokus auf herausragendem Design und erstklassiger Usability.
 
