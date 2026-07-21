@@ -11,7 +11,6 @@ Ein moderner, interaktiver Single-Page Urlaubsplaner für Familien und kleine Te
 - **Auto-Sync:** Feiertage und Schulferien werden automatisch basierend auf dem gewählten deutschen Bundesland geladen.
 - **Resturlaub:** Komplexe Übertragung von Resturlaub ins Folgejahr inkl. Verfallsdatum-Warnung.
 - **Sicher:** Optionaler globaler Passwortschutz für Self-Hosting.
-- **Premium Design:** Hochmodernes UI mit Dark/Light-Mode, Glassmorphism-Effekten, flüssigen Mikro-Animationen und Responsive Design, das auf Desktop, Tablet und Smartphone perfekt funktioniert.
 
 ## Installation via Docker Compose (Empfohlen)
 
