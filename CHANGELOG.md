@@ -1,6 +1,15 @@
 # Changelog
 
 All notable changes to this project will be documented in this file.
+## [1.0.0] - 2026-07-21
+### Added & Changed
+- **Sicherheits-Härtung:** Umstellung auf kryptografisch sichere Verifizierung für das Authentifizierungs-Cookie zur Vermeidung von Bypass-Angriffen.
+- **Sicherheits-Header:** Ergänzung robuster HTTP-Sicherheits-Header in der Web-Konfiguration (`X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`).
+- **Paket-Updates:** Aktualisierung kritischer System-Abhängigkeiten (darunter Next.js, React und Prisma) zur Behebung bekannter externer Schwachstellen.
+- **System-Upgrade:** Erfolgreiches Upgrade der Entwicklungsumgebung auf TypeScript 6.0.3 zur Härtung von Typdefinitionen und Nutzung neuer Compiler-Vorteile.
+- **Daten-Architektur:** Einführung von automatischem Snapshotting für historische Resturlaubstage mit smarter Cache-Invalidierung bei nachträglichen Vergangenheits-Edits.
+- **Repository-Cleanup:** Überarbeitung der `.gitignore`-Regeln und Entfernen temporärer Skripte.
+
 ## [0.9.9] - 2026-07-13
 ### Added & Changed
 - **Mobile Optimierung:** Das Layout wurde nach "Mobile-First" Prinzipien für kleine Bildschirme (Handys) optimiert.

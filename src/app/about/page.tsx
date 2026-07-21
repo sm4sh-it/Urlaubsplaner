@@ -14,12 +14,31 @@ export default function AboutPage() {
           </div>
         </div>
 
-        <div className="max-w-none">
+        <div className="max-w-none space-y-6">
           <p className="text-lg leading-relaxed text-slate-700 dark:text-slate-300">
-            <strong>sm4sh's Urlaubsplaner</strong> wurde entwickelt, um die Urlaubsplanung für Teams oder die ganze Familie 
-            schnell, übersichtlich und einfach zu machen. Er kombiniert automatische Feiertags- und Ferienberechnungen 
-            mit einem intuitiven, tastaturgesteuerten Interface.
+            <strong>sm4sh's Urlaubsplaner</strong> wurde entwickelt, damit du deine freie Zeit optimal planen und dein Urlaubsbudget immer perfekt im Blick behalten kannst – ganz für dich allein oder gemeinsam mit deinen Liebsten.
           </p>
+          <p className="text-lg leading-relaxed text-slate-700 dark:text-slate-300">
+            Statt manuellem Rechnen bietet dir die App eine klare Jahresübersicht inklusive smarter Automatisierung bei der Verwaltung deiner Urlaubstage. Damit du das Maximum aus deinen freien Tagen herausholen kannst, hast du Schulferien und gesetzliche Feiertage immer direkt auf dem Schirm. Kombiniert mit dem intuitiven, tastaturgesteuerten Interface wird die Urlaubsplanung so schnell, übersichtlich und völlig stressfrei.
+          </p>
+
+          <div className="mt-10 pt-8 border-t border-slate-100 dark:border-slate-800">
+            <h2 className="text-xl font-bold text-slate-900 dark:text-slate-50 mb-4">Danksagung &amp; Credits</h2>
+            <p className="text-slate-600 dark:text-slate-400 mb-6 leading-relaxed">
+              Ein Projekt wie dieses baut auf großartigen Ideen und offenen Datenquellen auf. Ein besonderer Dank geht daher an:
+            </p>
+            <ul className="space-y-3 text-slate-700 dark:text-slate-300 ml-4 list-disc">
+              <li className="leading-relaxed">
+                <strong className="text-slate-900 dark:text-slate-100">Inspiration: SL Urlaubsplaner</strong> – Ein großes Dankeschön für die Inspiration zu diesem Projekt.
+              </li>
+              <li className="leading-relaxed">
+                <strong className="text-slate-900 dark:text-slate-100">ferien-api.de:</strong> Für die zuverlässigen und aktuellen Daten zu den Schulferien in Deutschland.
+              </li>
+              <li className="leading-relaxed">
+                <strong className="text-slate-900 dark:text-slate-100">feiertage-api.de:</strong> Für die Bereitstellung der gesetzlichen Feiertage der deutschen Bundesländer.
+              </li>
+            </ul>
+          </div>
 
           <h2 className="flex items-center gap-2 mt-12 mb-6 text-xl font-bold border-b border-slate-100 dark:border-slate-800 pb-2">
             <History className="h-5 w-5 text-brand-500" />
@@ -27,12 +46,27 @@ export default function AboutPage() {
           </h2>
 
           <div className="space-y-8">
-            {/* V 0.9.9 */}
+            {/* V 1.0.0 */}
             <div className="relative pl-6 border-l-2 border-brand-500">
                <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-white dark:bg-slate-900 border-2 border-brand-500" />
                <div className="flex items-center gap-3 mb-2">
-                 <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 m-0">Version 0.9.9</h3>
+                 <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 m-0">Version 1.0.0</h3>
                  <span className="text-xs px-2 py-1 bg-brand-100 dark:bg-brand-900/30 text-brand-700 dark:text-brand-300 rounded font-medium">Aktuell</span>
+               </div>
+                <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
+                  <li><strong>Sicherheits-Härtung:</strong> Sichere kryptografische Authentifizierung für die Session-Verifizierung implementiert und HTTP-Sicherheitsheader hinzugefügt.</li>
+                  <li><strong>Abhängigkeiten:</strong> Aktualisierung kritischer Pakete zur Minimierung bekannter Sicherheitsrisiken in Drittanbieter-Bibliotheken.</li>
+                  <li><strong>System:</strong> Upgrade der TypeScript-Entwicklungsumgebung auf Version 6.0 für verbesserte Stabilität und modernisierte Compiler-Prüfungen.</li>
+                  <li><strong>Daten-Architektur:</strong> Snapshotting-Verfahren für historische Resturlaubstage zur Performancesteigerung bei gleichzeitig smarter, automatischer Cache-Invalidierung bei Vergangenheits-Edits.</li>
+                  <li><strong>Bereinigung:</strong> Optimierung der Dateiausschlüsse im Quellcode-Repository.</li>
+                </ul>
+            </div>
+
+            {/* V 0.9.9 */}
+            <div className="relative pl-6 border-l-2 border-slate-200 dark:border-slate-800">
+               <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-800" />
+               <div className="flex items-center gap-3 mb-2">
+                 <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 m-0">Version 0.9.9</h3>
                </div>
                <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
                  <li><strong>Mobile Optimierung:</strong> Responsives Design und Hamburger-Menü für Smartphones eingeführt.</li>

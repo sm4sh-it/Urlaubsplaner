@@ -1,7 +1,14 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
-export function middleware(request: NextRequest) {
+async function sha256(message: string): Promise<string> {
+  const msgBuffer = new TextEncoder().encode(message)
+  const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer)
+  const hashArray = Array.from(new Uint8Array(hashBuffer))
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('')
+}
+
+export async function proxy(request: NextRequest) {
   const authEnabled = process.env.AUTH_ENABLED !== 'false'
 
   // If auth is explicitly disabled, the app is completely open
@@ -21,8 +28,11 @@ export function middleware(request: NextRequest) {
 
   // Check for the auth cookie
   const authCookie = request.cookies.get('sm4sh_auth')
+  const correctPassword = process.env.APP_PASSWORD || ""
   
-  if (authCookie?.value !== 'authenticated') {
+  const expectedHash = await sha256(correctPassword + '_sm4sh_salt')
+  
+  if (authCookie?.value !== expectedHash) {
     // Redirect to login if not authenticated
     const loginUrl = new URL('/login', request.url)
     return NextResponse.redirect(loginUrl)

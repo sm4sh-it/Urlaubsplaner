@@ -3,6 +3,7 @@ import { useEffect, useRef } from 'react'
 import { useStore } from '@/store/useStore'
 import { StoreState } from '@/types'
 import { getCalendarData } from '@/app/actions'
+import { getProfileStatsForYear } from '@/lib/profileUtils'
 
 export default function StoreHydrator({ 
   profiles, 
@@ -60,6 +61,10 @@ export default function StoreHydrator({
   const selectedYear = useStore(state => state.selectedYear)
   const activeProfileIds = useStore(state => state.activeProfileIds)
   const currentProfiles = useStore(state => state.profiles)
+  const currentOverrides = useStore(state => state.overrides)
+  const currentEntries = useStore(state => state.entries)
+  const currentTrips = useStore(state => state.trips)
+  const holidays = useStore(state => state.holidays)
   
   useEffect(() => {
     async function loadData() {
@@ -96,6 +101,65 @@ export default function StoreHydrator({
       loadData()
     }
   }, [selectedYear, activeProfileIds, currentProfiles])
+
+  // Client-Side Lazy Snapshotting for past years
+  const isSaving = useRef<Record<string, boolean>>({})
+
+  useEffect(() => {
+    if (!isHydrated.current || Object.keys(holidays).length === 0) return
+
+    const currentYear = new Date().getFullYear()
+
+    async function checkAndSaveSnapshots() {
+      for (const profile of currentProfiles) {
+        if (profile.id === 'ALLE_FERIEN') continue
+
+        const startYear = profile.startYear || 2022
+        // We look for missing snapshots in all fully passed years
+        for (let y = startYear; y < currentYear; y++) {
+          const targetYear = y + 1
+          const cacheKey = `${profile.id}_${targetYear}`
+
+          // A snapshot is defined as an override with remainingLeave set, but annualLeave/additionalLeave null
+          const hasSnapshot = currentOverrides.some(o => 
+            o.profileId === profile.id && 
+            o.year === targetYear && 
+            o.remainingLeave !== null && 
+            o.annualLeave === null && 
+            o.additionalLeave === null
+          )
+
+          if (!hasSnapshot && !isSaving.current[cacheKey]) {
+            isSaving.current[cacheKey] = true
+            
+            // Calculate stats dynamically for targetYear
+            const stats = getProfileStatsForYear(profile, targetYear, currentOverrides, currentEntries, currentTrips, holidays)
+            
+            if (stats) {
+              try {
+                const { saveYearlySnapshot } = await import('@/app/actions')
+                const res = await saveYearlySnapshot(profile.id, targetYear, stats.remainingLeave)
+                
+                if (res.success && res.snapshot) {
+                  // Add the new snapshot to the local store overrides dynamically to trigger re-evaluation
+                  const updatedOverrides = [...currentOverrides, res.snapshot]
+                  useStore.getState().setOverrides(updatedOverrides)
+                }
+              } catch (err) {
+                console.error(`Failed to save snapshot for ${profile.name} in ${targetYear}:`, err)
+              } finally {
+                delete isSaving.current[cacheKey]
+              }
+            }
+            // Process only one snapshot per effect run to prevent concurrency issues and multiple renders
+            return
+          }
+        }
+      }
+    }
+
+    checkAndSaveSnapshots()
+  }, [currentProfiles, currentEntries, currentOverrides, currentTrips, holidays])
 
   return null
 }

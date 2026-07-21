@@ -43,6 +43,13 @@ const openHolidaysApiResponseSchema = z.union([
   z.object({ value: z.array(vacationItemSchema) }).passthrough()
 ])
 
+async function sha256(message: string): Promise<string> {
+  const msgBuffer = new TextEncoder().encode(message)
+  const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer)
+  const hashArray = Array.from(new Uint8Array(hashBuffer))
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('')
+}
+
 // --- Auth Action ---
 export async function authenticate(password: string) {
   const authEnabled = process.env.AUTH_ENABLED !== 'false'
@@ -50,28 +57,33 @@ export async function authenticate(password: string) {
   
   // Wenn AUTH_ENABLED explizit auf 'false' gesetzt ist, lassen wir jeden rein.
   if (!authEnabled) {
-    (await cookies()).set('sm4sh_auth', 'authenticated', {
+    const cookieStore = await cookies();
+    cookieStore.set('sm4sh_auth', 'disabled', {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
       maxAge: 60 * 60 * 24 * 30, // 30 days
       path: '/',
-    })
-    return { success: true }
+    });
+    return { success: true };
   }
 
   // Ab hier ist Authentifizierung Pflicht!
   if (!correctPassword) {
-    return { success: false, error: "Server-Konfigurationsfehler: Kein Passwort in .env gesetzt." }
+    return { success: false, error: "Server-Konfigurationsfehler: Kein Passwort in .env gesetzt." };
   }
   
   if (password === correctPassword) {
-    (await cookies()).set('sm4sh_auth', 'authenticated', {
+    const hash = await sha256(correctPassword + '_sm4sh_salt');
+    const cookieStore = await cookies();
+    cookieStore.set('sm4sh_auth', hash, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
       maxAge: 60 * 60 * 24 * 30, // 30 days
       path: '/',
-    })
-    return { success: true }
+    });
+    return { success: true };
   }
   
   return { success: false, error: "Falsches Passwort" }
@@ -82,12 +94,51 @@ export async function logout() {
   return { success: true }
 }
 
+// --- Invalidation & Snapshot Actions ---
+export async function invalidateSnapshots(profileId: string, fromYear: number) {
+  await prisma.profileYearOverride.deleteMany({
+    where: {
+      profileId,
+      year: { gt: fromYear },
+      annualLeave: null,
+      additionalLeave: null
+    }
+  })
+}
+
+export async function saveYearlySnapshot(profileId: string, year: number, remainingLeave: number) {
+  const parsedProfileId = idSchema.parse(profileId)
+  const parsedYear = yearSchema.parse(year)
+  
+  const snapshot = await prisma.profileYearOverride.upsert({
+    where: {
+      profileId_year: {
+        profileId: parsedProfileId,
+        year: parsedYear
+      }
+    },
+    update: {
+      remainingLeave
+    },
+    create: {
+      profileId: parsedProfileId,
+      year: parsedYear,
+      remainingLeave
+    }
+  })
+  
+  revalidatePath('/', 'layout')
+  return { success: true, snapshot }
+}
+
 // --- App Actions ---
 export async function toggleEntry(date: string, type: EntryType | null, profileId: string) {
   // Validate
   const parsedDate = dateSchema.parse(date)
   const parsedType = typeSchema.parse(type) as EntryType | null
   const parsedProfileId = idSchema.parse(profileId)
+
+  const entryYear = parseInt(parsedDate.split('-')[0], 10)
 
   // If type is null, we delete the entry
   if (!parsedType) {
@@ -97,6 +148,7 @@ export async function toggleEntry(date: string, type: EntryType | null, profileI
         profileId: parsedProfileId
       }
     })
+    await invalidateSnapshots(parsedProfileId, entryYear)
     revalidatePath('/', 'layout')
     return { success: true, action: 'deleted' }
   }
@@ -113,6 +165,7 @@ export async function toggleEntry(date: string, type: EntryType | null, profileI
     create: { date: parsedDate, type: parsedType, profileId: parsedProfileId }
   })
 
+  await invalidateSnapshots(parsedProfileId, entryYear)
   revalidatePath('/', 'layout')
   return { success: true, action: 'upserted', entry }
 }
@@ -133,6 +186,7 @@ export async function updateProfile(id: string, data: Omit<Profile, 'id'>) {
     where: { id: parsedId },
     data: parsedData
   })
+  await invalidateSnapshots(parsedId, parsedData.startYear - 1)
   revalidatePath('/', 'layout')
   return { success: true, profile }
 }
