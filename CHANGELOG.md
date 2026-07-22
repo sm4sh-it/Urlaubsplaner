@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.1.1] - 2026-07-22
+### Fixed & Improved
+- **Anmeldeseite & Icons:** Korrektur der Logo-SVG-Einbindung (`/favicon.svg`), Integration des Schloss-Icons im Passwortfeld und Anpassung an das dunkle Kartendesign.
+- **GitHub Actions:** Ergänzung von `run-name` für saubere Release-Titel in der GitHub Actions Übersicht.
+
 ## [1.1.0] - 2026-07-22
 ### Added & Changed
 - **UI & Glassmorphism Redesign:** Edles Dark-Glassmorphic Design für Header & Footer (`backdrop-blur`), Redesign von Hauptmenü, Jahresauswahl, Profilauswahl, Einstellungs- und About-Seite. Behebung des Sticky-Header Spaltfehlers.

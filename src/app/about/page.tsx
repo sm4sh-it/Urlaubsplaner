@@ -69,12 +69,24 @@ export default function AboutPage() {
             </h2>
 
             <div className="space-y-8">
-              {/* V 1.1.0 */}
+              {/* V 1.1.1 */}
               <div className="relative pl-7 border-l-2 border-brand-500">
                 <div className="absolute -left-[9px] top-1.5 h-4 w-4 rounded-full bg-brand-500 ring-4 ring-white dark:ring-[#0d1117]" />
                 <div className="flex items-center gap-3 mb-3">
-                  <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100 m-0">Version 1.1.0</h3>
+                  <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100 m-0">Version 1.1.1</h3>
                   <span className="text-xs px-3 py-1 bg-brand-100 dark:bg-brand-500/20 text-brand-700 dark:text-brand-300 rounded-full font-bold">Aktuell</span>
+                </div>
+                <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
+                  <li><strong>Anmeldeseite &amp; Icons:</strong> Korrektur der Logo-SVG-Einbindung (`/favicon.svg`), Schloss-Icon im Passwortfeld und optische Anpassung.</li>
+                  <li><strong>GitHub Actions:</strong> Einführung von `run-name` für übersichtliche Release-Titel in der Workflow-Übersicht.</li>
+                </ul>
+              </div>
+
+              {/* V 1.1.0 */}
+              <div className="relative pl-6 border-l-2 border-slate-200 dark:border-slate-800">
+                <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-800" />
+                <div className="flex items-center gap-3 mb-3">
+                  <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 m-0">Version 1.1.0</h3>
                 </div>
                 <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
                   <li><strong>UI &amp; Glassmorphism Redesign:</strong> Edles Dark-Glassmorphic Design für Header/Footer, Redesign der Navigations-Pills, Jahresauswahl, Profilauswahl, Einstellungs- und About-Seite. Behebung des Sticky-Header Spaltfehlers.</li>
