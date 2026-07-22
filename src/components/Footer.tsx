@@ -3,7 +3,7 @@ import packageJson from "../../package.json"
 
 export default function Footer() {
   return (
-    <footer className="h-12 flex items-center justify-between px-6 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 text-sm text-slate-500 dark:text-slate-400 shrink-0 z-10">
+    <footer className="w-full h-12 flex items-center justify-between px-4 md:px-6 border-t border-slate-200/80 dark:border-white/5 bg-white/60 dark:bg-[#050a0f]/40 backdrop-blur-sm text-sm text-slate-500 dark:text-slate-400 shrink-0 z-10">
       <div>
         Urlaubsplaner by <a href="https://sm4sh.it" target="_blank" rel="noopener noreferrer" className="font-medium text-brand-600 dark:text-brand-500 hover:underline">sm4sh.it</a>
       </div>

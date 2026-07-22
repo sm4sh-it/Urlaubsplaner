@@ -48,7 +48,7 @@ export default function Navbar() {
   }, [isMobileMenuOpen])
 
   return (
-    <nav className="h-16 flex items-center justify-between px-4 md:px-6 bg-white/80 backdrop-blur-md dark:bg-slate-900 border-b border-zinc-200 dark:border-slate-800 shadow-sm z-50 shrink-0 relative">
+    <header className="sticky top-0 z-50 w-full h-16 flex items-center justify-between px-4 md:px-6 border-b border-slate-200/80 dark:border-white/10 bg-white/80 dark:bg-[#050a0f]/60 backdrop-blur-md shadow-sm shrink-0">
       <div className="flex items-center gap-2">
         {!isLogin && (
           <button 
@@ -58,49 +58,63 @@ export default function Navbar() {
             {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         )}
-        <CalendarDays className="h-6 w-6 text-brand-500 hidden sm:block" />
-        <Link href="/" className="font-bold text-lg md:text-xl tracking-tight text-slate-900 dark:text-slate-50">
-          sm4sh's Urlaubsplaner
+        <Link href="/" className="flex items-center gap-2.5 font-bold text-lg md:text-xl tracking-tight text-slate-900 dark:text-slate-50">
+          <img src="/favicon.svg" alt="Logo" className="h-8.5 w-8.5 md:h-9 md:w-9 object-contain" />
+          <span className="hidden min-[380px]:inline-block">sm4sh's Urlaubsplaner</span>
         </Link>
       </div>
 
+
       {!isLogin && (
-        <div className="hidden md:flex gap-1 bg-slate-100 dark:bg-[#1a222c] p-1 rounded-full border border-slate-200/80 dark:border-[#2a3441] shadow-inner">
+        <div className="hidden md:flex gap-1 bg-slate-100/90 dark:bg-slate-900/90 p-1 rounded-full border border-slate-200 dark:border-white/10 shadow-inner backdrop-blur-md">
           <Link 
             href="/" 
-            className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-300 ${pathname === '/' ? 'bg-white text-brand-600 dark:bg-[#2a3644] dark:text-white shadow-[0_1px_3px_rgba(0,0,0,0.05)]' : 'text-slate-500 dark:text-slate-400 hover:text-brand-600 dark:hover:text-white hover:bg-white/50 dark:hover:bg-slate-700/50'}`}
+            className={`px-4 py-1.5 rounded-full text-sm font-bold transition-all duration-200 ${
+              pathname === '/' 
+                ? 'bg-brand-600 text-white shadow-md shadow-brand-500/20' 
+                : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-white/60 dark:hover:bg-white/10'
+            }`}
           >
             Home
           </Link>
           <Link 
             href="/calendar" 
-            className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-300 ${pathname.startsWith('/calendar') ? 'bg-white text-brand-600 dark:bg-[#2a3644] dark:text-white shadow-[0_1px_3px_rgba(0,0,0,0.05)]' : 'text-slate-500 dark:text-slate-400 hover:text-brand-600 dark:hover:text-white hover:bg-white/50 dark:hover:bg-slate-700/50'}`}
+            className={`px-4 py-1.5 rounded-full text-sm font-bold transition-all duration-200 ${
+              pathname.startsWith('/calendar') 
+                ? 'bg-brand-600 text-white shadow-md shadow-brand-500/20' 
+                : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-white/60 dark:hover:bg-white/10'
+            }`}
           >
             Kalenderansicht
           </Link>
           <Link 
             href="/statistics" 
-            className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-300 ${pathname.startsWith('/statistics') ? 'bg-white text-brand-600 dark:bg-[#2a3644] dark:text-white shadow-[0_1px_3px_rgba(0,0,0,0.05)]' : 'text-slate-500 dark:text-slate-400 hover:text-brand-600 dark:hover:text-white hover:bg-white/50 dark:hover:bg-slate-700/50'}`}
+            className={`px-4 py-1.5 rounded-full text-sm font-bold transition-all duration-200 ${
+              pathname.startsWith('/statistics') 
+                ? 'bg-brand-600 text-white shadow-md shadow-brand-500/20' 
+                : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-white/60 dark:hover:bg-white/10'
+            }`}
           >
             Statistiken
           </Link>
         </div>
       )}
 
-      <div className="flex items-center gap-2 md:gap-4">
+      <div className="flex items-center gap-2 md:gap-3">
         {!isLogin && (
           <>
-            <div className="flex items-center gap-1 md:gap-2 bg-slate-100 dark:bg-slate-800 rounded-full px-1 md:px-2 py-1">
+            <div className="flex items-center gap-1 bg-slate-100/90 dark:bg-slate-900/90 rounded-full p-1 border border-slate-200 dark:border-white/10 shadow-sm backdrop-blur-md">
               <button 
                 onClick={() => {
                   if (selectedYear > 2022) setSelectedYear(selectedYear - 1)
                 }}
                 disabled={selectedYear <= 2022}
-                className="p-1 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-full transition-colors text-slate-600 dark:text-slate-300 disabled:opacity-30 disabled:cursor-not-allowed"
+                className="p-1.5 hover:bg-white dark:hover:bg-slate-800 rounded-full transition-all text-slate-600 dark:text-slate-300 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+                title="Vorheriges Jahr"
               >
                 <ChevronLeft size={16} />
               </button>
-              <span className="font-bold text-xs md:text-sm w-10 md:w-12 text-center text-slate-700 dark:text-slate-200">
+              <span className="font-bold text-xs md:text-sm px-2 text-center text-slate-900 dark:text-slate-100 font-mono tracking-tight">
                 {selectedYear}
               </span>
               <button 
@@ -109,7 +123,8 @@ export default function Navbar() {
                   if (selectedYear < currentYear + 4) setSelectedYear(selectedYear + 1)
                 }}
                 disabled={selectedYear >= new Date().getFullYear() + 4}
-                className="p-1 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-full transition-colors text-slate-600 dark:text-slate-300 disabled:opacity-30 disabled:cursor-not-allowed"
+                className="p-1.5 hover:bg-white dark:hover:bg-slate-800 rounded-full transition-all text-slate-600 dark:text-slate-300 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+                title="Nächstes Jahr"
               >
                 <ChevronRight size={16} />
               </button>
@@ -120,14 +135,26 @@ export default function Navbar() {
         <ThemeToggle />
         {!isLogin && (
           <>
-            <button onClick={() => setIsHelpOpen(true)} className="hidden md:block p-2 rounded-md hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors text-slate-600 dark:text-slate-300" title="Hilfe">
-              <HelpCircle className="h-5 w-5" />
+            <button 
+              onClick={() => setIsHelpOpen(true)} 
+              className="hidden md:flex p-2.5 rounded-full bg-slate-100/90 dark:bg-slate-900/90 border border-slate-200 dark:border-white/10 hover:bg-white dark:hover:bg-slate-800 transition-all text-slate-600 dark:text-slate-300 cursor-pointer shadow-xs" 
+              title="Hilfe"
+            >
+              <HelpCircle className="h-4 w-4" />
             </button>
-            <Link href="/settings" className="hidden md:block p-2 rounded-md hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors text-slate-600 dark:text-slate-300" title="Einstellungen">
-              <Settings className="h-5 w-5" />
+            <Link 
+              href="/settings" 
+              className="hidden md:flex p-2.5 rounded-full bg-slate-100/90 dark:bg-slate-900/90 border border-slate-200 dark:border-white/10 hover:bg-white dark:hover:bg-slate-800 transition-all text-slate-600 dark:text-slate-300 cursor-pointer shadow-xs" 
+              title="Einstellungen"
+            >
+              <Settings className="h-4 w-4" />
             </Link>
-            <button onClick={handleLogout} className="hidden md:block p-2 rounded-md hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors text-slate-600 dark:text-slate-300" title="Abmelden">
-              <LogOut className="h-5 w-5" />
+            <button 
+              onClick={handleLogout} 
+              className="hidden md:flex p-2.5 rounded-full bg-slate-100/90 dark:bg-slate-900/90 border border-slate-200 dark:border-white/10 hover:bg-white dark:hover:bg-slate-800 transition-all text-red-600 dark:text-red-400 cursor-pointer shadow-xs" 
+              title="Abmelden"
+            >
+              <LogOut className="h-4 w-4" />
             </button>
           </>
         )}
@@ -137,23 +164,23 @@ export default function Navbar() {
       {!isLogin && isMobileMenuOpen && (
         <div 
           ref={mobileMenuRef}
-          className="absolute top-16 left-0 right-0 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 shadow-lg md:hidden flex flex-col p-4 gap-2 z-50 animate-in slide-in-from-top-2"
+          className="absolute top-16 left-0 right-0 bg-white/95 dark:bg-[#0d1117]/95 backdrop-blur-xl border-b border-slate-200 dark:border-slate-800 shadow-2xl md:hidden flex flex-col p-4 gap-2 z-50 animate-in slide-in-from-top-2"
         >
           <Link 
             href="/" 
-            className={`px-4 py-3 rounded-lg text-sm font-medium ${pathname === '/' ? 'bg-brand-50 text-brand-600 dark:bg-brand-500/10 dark:text-brand-400' : 'text-slate-700 dark:text-slate-300'}`}
+            className={`px-4 py-3 rounded-xl text-sm font-bold transition-colors ${pathname === '/' ? 'bg-brand-600 text-white shadow-md' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
           >
             Home
           </Link>
           <Link 
             href="/calendar" 
-            className={`px-4 py-3 rounded-lg text-sm font-medium ${pathname.startsWith('/calendar') ? 'bg-brand-50 text-brand-600 dark:bg-brand-500/10 dark:text-brand-400' : 'text-slate-700 dark:text-slate-300'}`}
+            className={`px-4 py-3 rounded-xl text-sm font-bold transition-colors ${pathname.startsWith('/calendar') ? 'bg-brand-600 text-white shadow-md' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
           >
             Kalenderansicht
           </Link>
           <Link 
             href="/statistics" 
-            className={`px-4 py-3 rounded-lg text-sm font-medium ${pathname.startsWith('/statistics') ? 'bg-brand-50 text-brand-600 dark:bg-brand-500/10 dark:text-brand-400' : 'text-slate-700 dark:text-slate-300'}`}
+            className={`px-4 py-3 rounded-xl text-sm font-bold transition-colors ${pathname.startsWith('/statistics') ? 'bg-brand-600 text-white shadow-md' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
           >
             Statistiken
           </Link>
@@ -162,19 +189,19 @@ export default function Navbar() {
           
           <Link 
             href="/settings" 
-            className="px-4 py-3 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-300 flex items-center gap-3"
+            className="px-4 py-3 rounded-xl text-sm font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-3 hover:bg-slate-100 dark:hover:bg-slate-800"
           >
-            <Settings className="h-5 w-5" /> Einstellungen
+            <Settings className="h-5 w-5 text-brand-500" /> Einstellungen
           </Link>
           <button 
             onClick={() => { setIsHelpOpen(true); setIsMobileMenuOpen(false); }}
-            className="px-4 py-3 rounded-lg text-sm font-medium text-slate-700 dark:text-slate-300 flex items-center gap-3 text-left w-full"
+            className="px-4 py-3 rounded-xl text-sm font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-3 text-left w-full hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer"
           >
-            <HelpCircle className="h-5 w-5" /> Hilfe
+            <HelpCircle className="h-5 w-5 text-brand-500" /> Hilfe
           </button>
           <button 
             onClick={handleLogout}
-            className="px-4 py-3 rounded-lg text-sm font-medium text-red-600 dark:text-red-400 flex items-center gap-3 text-left w-full"
+            className="px-4 py-3 rounded-xl text-sm font-semibold text-red-600 dark:text-red-400 flex items-center gap-3 text-left w-full hover:bg-red-50 dark:hover:bg-red-950/40 cursor-pointer"
           >
             <LogOut className="h-5 w-5" /> Abmelden
           </button>
@@ -182,6 +209,6 @@ export default function Navbar() {
       )}
 
       <HelpModal isOpen={isHelpOpen} onClose={() => setIsHelpOpen(false)} />
-    </nav>
+    </header>
   )
 }

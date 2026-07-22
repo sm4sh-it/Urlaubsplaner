@@ -14,10 +14,10 @@ export default function ProfileSelector() {
     <div className="relative">
       <button 
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 bg-slate-100 dark:bg-slate-800 px-3 py-1.5 rounded-md border border-slate-200 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
+        className="flex items-center gap-2 bg-slate-100/90 dark:bg-slate-900/90 px-3.5 py-1.5 rounded-full border border-slate-200 dark:border-white/10 hover:bg-white dark:hover:bg-slate-800 transition-all text-slate-800 dark:text-slate-200 font-semibold text-xs md:text-sm shadow-sm cursor-pointer backdrop-blur-md"
       >
-        <Users className="h-4 w-4 text-slate-500" />
-        <span className="text-sm font-medium">
+        <Users className="h-4 w-4 text-brand-500" />
+        <span>
           {activeProfileIds.length === 0 
             ? "Kein Profil aktiv" 
             : activeProfileIds.length === profiles.length 
@@ -29,9 +29,12 @@ export default function ProfileSelector() {
       {isOpen && (
         <>
           <div className="fixed inset-0 z-40" onClick={() => setIsOpen(false)} />
-          <div className="absolute left-0 mt-2 w-56 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-md shadow-lg z-50 py-1">
+          <div className="absolute right-0 mt-2 w-64 bg-white dark:bg-[#0d1117] border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl z-50 py-2 overflow-hidden backdrop-blur-xl animate-in fade-in-50 zoom-in-95">
+            <div className="px-4 py-2 border-b border-slate-100 dark:border-slate-800 text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
+              Profile auswählen
+            </div>
             {profiles.length === 0 ? (
-              <div className="px-4 py-2 text-sm text-slate-500">Keine Profile angelegt</div>
+              <div className="px-4 py-3 text-sm text-slate-500">Keine Profile angelegt</div>
             ) : (
               profiles.map(profile => {
                 const isActive = activeProfileIds.includes(profile.id)
@@ -39,13 +42,13 @@ export default function ProfileSelector() {
                   <button
                     key={profile.id}
                     onClick={() => toggleActiveProfile(profile.id)}
-                    className="w-full flex items-center justify-between px-4 py-2 text-sm hover:bg-slate-100 dark:hover:bg-slate-700"
+                    className="w-full flex items-center justify-between px-4 py-2.5 text-sm hover:bg-slate-50 dark:hover:bg-slate-800/80 transition-colors cursor-pointer"
                   >
-                    <div className="flex items-center gap-2">
-                      <div className="w-3 h-3 rounded-full" style={{ backgroundColor: profile.color }} />
-                      <span>{profile.name}</span>
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-3.5 h-3.5 rounded-full ring-2 ring-white dark:ring-slate-900 shadow-xs shrink-0" style={{ backgroundColor: profile.color }} />
+                      <span className="font-medium text-slate-800 dark:text-slate-200">{profile.name}</span>
                     </div>
-                    {isActive && <Check className="h-4 w-4 text-emerald-600" />}
+                    {isActive && <Check className="h-4 w-4 text-brand-500 font-bold" />}
                   </button>
                 )
               })
