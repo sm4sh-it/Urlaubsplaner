@@ -37,7 +37,7 @@ export default function LoginPage() {
         
         <div className="flex flex-col items-center mb-8">
           <div className="mb-4">
-            <img src="/favicon.svg" alt="sm4sh's Urlaubsplaner Logo" className="w-16 h-16 object-contain" />
+            <img src="/logo.svg" alt="sm4sh's Urlaubsplaner Logo" className="w-16 h-16 object-contain" />
           </div>
           <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-50 flex items-center justify-center gap-2 mb-1">
             sm4sh's Urlaubsplaner

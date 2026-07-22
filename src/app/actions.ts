@@ -60,7 +60,7 @@ export async function authenticate(password: string) {
     const cookieStore = await cookies();
     cookieStore.set('sm4sh_auth', 'disabled', {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      secure: false,
       sameSite: 'lax',
       maxAge: 60 * 60 * 24 * 30, // 30 days
       path: '/',
@@ -78,7 +78,7 @@ export async function authenticate(password: string) {
     const cookieStore = await cookies();
     cookieStore.set('sm4sh_auth', hash, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
+      secure: false,
       sameSite: 'lax',
       maxAge: 60 * 60 * 24 * 30, // 30 days
       path: '/',
