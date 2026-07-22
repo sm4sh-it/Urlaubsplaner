@@ -33,36 +33,41 @@ export default function LoginPage() {
 
   return (
     <div className="flex-1 flex flex-col items-center justify-center min-h-[calc(100vh-8rem)] p-4">
-      <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-800 p-8 w-full max-w-md">
+      <div className="bg-white dark:bg-[#0d1117] rounded-2xl shadow-xl border border-slate-200 dark:border-slate-800 p-8 w-full max-w-md">
         
         <div className="flex flex-col items-center mb-8">
           <div className="mb-4">
-            <img src="/logo.svg" alt="Logo" className="w-16 h-16 object-contain" />
+            <img src="/favicon.svg" alt="sm4sh's Urlaubsplaner Logo" className="w-16 h-16 object-contain" />
           </div>
-          <h1 className="text-2xl font-bold text-slate-800 dark:text-slate-100 flex items-center justify-center gap-2 mb-2">
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-50 flex items-center justify-center gap-2 mb-1">
             sm4sh's Urlaubsplaner
           </h1>
-          <p className="text-slate-500 dark:text-slate-400 mt-2 text-center">
-            Bitte gib das Familien-Passwort ein, um den Urlaubsplaner zu öffnen.
+          <p className="text-slate-500 dark:text-slate-400 mt-1 text-center text-sm">
+            Bitte gib das Passwort ein, um den Urlaubsplaner zu öffnen.
           </p>
         </div>
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+            <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
               Passwort
             </label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500"
-              placeholder="••••••••"
-              required
-            />
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                <Lock className="h-5 w-5" />
+              </div>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full pl-11 pr-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500 font-medium"
+                placeholder="••••••••"
+                required
+              />
+            </div>
           </div>
 
           {error && (
-            <div className="p-3 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 text-sm rounded-lg border border-red-200 dark:border-red-900/50">
+            <div className="p-3 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 text-sm rounded-xl border border-red-200 dark:border-red-900/50">
               {error}
             </div>
           )}
@@ -70,7 +75,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 bg-brand-500 hover:bg-brand-600 text-white font-semibold rounded-xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full py-3 bg-brand-600 hover:bg-brand-500 text-white font-bold rounded-xl transition-all shadow-md disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
           >
             {loading ? "Wird geprüft..." : "Entsperren"}
           </button>
