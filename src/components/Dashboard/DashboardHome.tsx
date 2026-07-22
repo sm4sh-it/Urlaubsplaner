@@ -104,8 +104,7 @@ export default function DashboardHome() {
       {/* Active Trips */}
       <div className="flex flex-col gap-6">
         <div className="flex justify-between items-center border-b border-slate-200 dark:border-white/10 pb-4">
-          <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100 flex items-center gap-3">
-            <span className="w-1.5 h-6 bg-brand-500 rounded-full inline-block"></span>
+          <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">
             Anstehende Reisen & Urlaube
           </h2>
           <button 

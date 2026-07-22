@@ -1,6 +1,11 @@
 # Changelog
 
-All notable changes to this project will be documented in this file.
+## [1.1.0] - 2026-07-22
+### Added & Changed
+- **UI & Glassmorphism Redesign:** Edles Dark-Glassmorphic Design für Header & Footer (`backdrop-blur`), Redesign von Hauptmenü, Jahresauswahl, Profilauswahl, Einstellungs- und About-Seite. Behebung des Sticky-Header Spaltfehlers.
+- **Hilfe-Popup (`HelpModal`):** Umstellung auf Portal-Rendering (`createPortal`) zur Behebung von Z-Index/Blur-Überlappungen mit Ganzseiten-Blur und Hinweisen zu Urlaubsideen.
+- **Branding & Assets:** Integration des neuen Vektor-Logos (`sm4shUrlaubsplanerLogo.svg`) sowie automatischer Einbindung aller optimierten Favicon-Dateien (`.ico`, `.svg`, `.png`).
+
 ## [1.0.0] - 2026-07-21
 ### Added & Changed
 - **Sicherheits-Härtung:** Umstellung auf kryptografisch sichere Verifizierung für das Authentifizierungs-Cookie zur Vermeidung von Bypass-Angriffen.

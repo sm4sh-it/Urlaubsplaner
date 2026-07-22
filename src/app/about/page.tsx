@@ -1,58 +1,94 @@
-import { CalendarDays, Info, History } from "lucide-react"
+import { Info, History, Heart, ExternalLink } from "lucide-react"
 
 export default function AboutPage() {
   return (
-    <div className="flex-1 overflow-y-auto w-full max-w-4xl mx-auto pb-12">
-      <div className="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 p-8 mt-4">
-        <div className="flex items-center gap-4 border-b border-slate-200 dark:border-slate-800 pb-6 mb-8">
-          <div className="p-3 bg-brand-100 dark:bg-brand-900/30 rounded-lg text-brand-600 dark:text-brand-400">
-            <Info className="h-8 w-8" />
-          </div>
-          <div>
-            <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-50">Über das Projekt</h1>
-            <p className="text-slate-500 dark:text-slate-400">sm4sh's Urlaubsplaner</p>
-          </div>
-        </div>
-
-        <div className="max-w-none space-y-6">
-          <p className="text-lg leading-relaxed text-slate-700 dark:text-slate-300">
-            <strong>sm4sh's Urlaubsplaner</strong> wurde entwickelt, damit du deine freie Zeit optimal planen und dein Urlaubsbudget immer perfekt im Blick behalten kannst – ganz für dich allein oder gemeinsam mit deinen Liebsten.
-          </p>
-          <p className="text-lg leading-relaxed text-slate-700 dark:text-slate-300">
-            Statt manuellem Rechnen bietet dir die App eine klare Jahresübersicht inklusive smarter Automatisierung bei der Verwaltung deiner Urlaubstage. Damit du das Maximum aus deinen freien Tagen herausholen kannst, hast du Schulferien und gesetzliche Feiertage immer direkt auf dem Schirm. Kombiniert mit dem intuitiven, tastaturgesteuerten Interface wird die Urlaubsplanung so schnell, übersichtlich und völlig stressfrei.
-          </p>
-
-          <div className="mt-10 pt-8 border-t border-slate-100 dark:border-slate-800">
-            <h2 className="text-xl font-bold text-slate-900 dark:text-slate-50 mb-4">Danksagung &amp; Credits</h2>
-            <p className="text-slate-600 dark:text-slate-400 mb-6 leading-relaxed">
-              Ein Projekt wie dieses baut auf großartigen Ideen und offenen Datenquellen auf. Ein besonderer Dank geht daher an:
-            </p>
-            <ul className="space-y-3 text-slate-700 dark:text-slate-300 ml-4 list-disc">
-              <li className="leading-relaxed">
-                <strong className="text-slate-900 dark:text-slate-100">Inspiration: SL Urlaubsplaner</strong> – Ein großes Dankeschön für die Inspiration zu diesem Projekt.
-              </li>
-              <li className="leading-relaxed">
-                <strong className="text-slate-900 dark:text-slate-100">ferien-api.de:</strong> Für die zuverlässigen und aktuellen Daten zu den Schulferien in Deutschland.
-              </li>
-              <li className="leading-relaxed">
-                <strong className="text-slate-900 dark:text-slate-100">feiertage-api.de:</strong> Für die Bereitstellung der gesetzlichen Feiertage der deutschen Bundesländer.
-              </li>
-            </ul>
+    <div className="flex-1 w-full h-full overflow-y-auto custom-scrollbar p-4 md:p-8">
+      <div className="max-w-[1200px] mx-auto w-full">
+        <div className="bg-white dark:bg-[#0d1117] rounded-2xl shadow-xl border border-slate-200 dark:border-slate-800 p-6 md:p-10 space-y-8">
+          
+          {/* Header */}
+          <div className="flex items-center gap-4 border-b border-slate-100 dark:border-slate-800 pb-6">
+            <div className="p-3.5 bg-brand-100 dark:bg-brand-500/20 rounded-2xl text-brand-600 dark:text-brand-400 shrink-0">
+              <Info className="h-8 w-8" />
+            </div>
+            <div>
+              <h1 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-slate-50">Über das Projekt</h1>
+              <p className="text-sm font-medium text-slate-500 dark:text-slate-400">sm4sh's Urlaubsplaner</p>
+            </div>
           </div>
 
-          <h2 className="flex items-center gap-2 mt-12 mb-6 text-xl font-bold border-b border-slate-100 dark:border-slate-800 pb-2">
-            <History className="h-5 w-5 text-brand-500" />
-            Changelog
-          </h2>
+          <div className="max-w-none space-y-6">
+            {/* Intro */}
+            <div className="bg-slate-50 dark:bg-slate-900/60 rounded-2xl p-6 border border-slate-100 dark:border-slate-800 space-y-4">
+              <p className="text-base md:text-lg leading-relaxed text-slate-700 dark:text-slate-200 font-medium">
+                <strong className="text-brand-600 dark:text-brand-400">sm4sh's Urlaubsplaner</strong> wurde entwickelt, damit du deine freie Zeit optimal planen und dein Urlaubsbudget immer perfekt im Blick behalten kannst – ganz für dich allein oder gemeinsam mit deinen Liebsten.
+              </p>
+              <p className="text-sm md:text-base leading-relaxed text-slate-600 dark:text-slate-300">
+                Statt manuellem Rechnen bietet dir die App eine klare Jahresübersicht inklusive smarter Automatisierung bei der Verwaltung deiner Urlaubstage. Damit du das Maximum aus deinen freien Tagen herausholen kannst, hast du Schulferien und gesetzliche Feiertage immer direkt auf dem Schirm. Kombiniert mit dem intuitiven, tastaturgesteuerten Interface wird die Urlaubsplanung so schnell, übersichtlich und völlig stressfrei.
+              </p>
+            </div>
 
-          <div className="space-y-8">
-            {/* V 1.0.0 */}
-            <div className="relative pl-6 border-l-2 border-brand-500">
-               <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-white dark:bg-slate-900 border-2 border-brand-500" />
-               <div className="flex items-center gap-3 mb-2">
-                 <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 m-0">Version 1.0.0</h3>
-                 <span className="text-xs px-2 py-1 bg-brand-100 dark:bg-brand-900/30 text-brand-700 dark:text-brand-300 rounded font-medium">Aktuell</span>
-               </div>
+            {/* Credits Grid */}
+            <div className="mt-8 pt-6 border-t border-slate-100 dark:border-slate-800">
+              <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-2">
+                <Heart className="w-5 h-5 text-red-500" /> Danksagung &amp; Credits
+              </h2>
+              <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">
+                Ein Projekt wie dieses baut auf großartigen Ideen und offenen Datenquellen auf.
+              </p>
+              <div className="grid sm:grid-cols-3 gap-4">
+                <div className="bg-slate-50 dark:bg-slate-900/60 p-4 rounded-xl border border-slate-100 dark:border-slate-800">
+                  <div className="font-bold text-slate-900 dark:text-slate-100 text-sm mb-1">SL Urlaubsplaner</div>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                    Ein großes Dankeschön für die ursprüngliche Inspiration zu diesem Projekt.
+                  </p>
+                </div>
+                <div className="bg-slate-50 dark:bg-slate-900/60 p-4 rounded-xl border border-slate-100 dark:border-slate-800">
+                  <div className="font-bold text-slate-900 dark:text-slate-100 text-sm mb-1 flex items-center gap-1">
+                    ferien-api.de <ExternalLink className="w-3 h-3 text-slate-400" />
+                  </div>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                    Für die zuverlässigen Daten zu Schulferien in ganz Deutschland.
+                  </p>
+                </div>
+                <div className="bg-slate-50 dark:bg-slate-900/60 p-4 rounded-xl border border-slate-100 dark:border-slate-800">
+                  <div className="font-bold text-slate-900 dark:text-slate-100 text-sm mb-1 flex items-center gap-1">
+                    feiertage-api.de <ExternalLink className="w-3 h-3 text-slate-400" />
+                  </div>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                    Für die gesetzlichen Feiertage aller deutschen Bundesländer.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Changelog Header */}
+            <h2 className="flex items-center gap-2 mt-10 mb-6 text-xl font-bold border-b border-slate-100 dark:border-slate-800 pb-3 text-slate-900 dark:text-slate-100">
+              <History className="h-6 w-6 text-brand-500" />
+              Changelog
+            </h2>
+
+            <div className="space-y-8">
+              {/* V 1.1.0 */}
+              <div className="relative pl-7 border-l-2 border-brand-500">
+                <div className="absolute -left-[9px] top-1.5 h-4 w-4 rounded-full bg-brand-500 ring-4 ring-white dark:ring-[#0d1117]" />
+                <div className="flex items-center gap-3 mb-3">
+                  <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100 m-0">Version 1.1.0</h3>
+                  <span className="text-xs px-3 py-1 bg-brand-100 dark:bg-brand-500/20 text-brand-700 dark:text-brand-300 rounded-full font-bold">Aktuell</span>
+                </div>
+                <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
+                  <li><strong>UI &amp; Glassmorphism Redesign:</strong> Edles Dark-Glassmorphic Design für Header/Footer, Redesign der Navigations-Pills, Jahresauswahl, Profilauswahl, Einstellungs- und About-Seite. Behebung des Sticky-Header Spaltfehlers.</li>
+                  <li><strong>Hilfe-Popup:</strong> Reaktives Modal via Portal-Rendering (`createPortal`) mit Ganzseiten-Blur und Hinweisen zu Urlaubsideen.</li>
+                  <li><strong>Branding &amp; Assets:</strong> Einbindung des Vektor-Logos und aller optimierten Favicon-Größen.</li>
+                </ul>
+              </div>
+
+              {/* V 1.0.0 */}
+              <div className="relative pl-6 border-l-2 border-slate-200 dark:border-slate-800">
+                <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-800" />
+                <div className="flex items-center gap-3 mb-3">
+                  <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 m-0">Version 1.0.0</h3>
+                </div>
                 <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
                   <li><strong>Sicherheits-Härtung:</strong> Sichere kryptografische Authentifizierung für die Session-Verifizierung implementiert und HTTP-Sicherheitsheader hinzugefügt.</li>
                   <li><strong>Abhängigkeiten:</strong> Aktualisierung kritischer Pakete zur Minimierung bekannter Sicherheitsrisiken in Drittanbieter-Bibliotheken.</li>
@@ -60,7 +96,7 @@ export default function AboutPage() {
                   <li><strong>Daten-Architektur:</strong> Snapshotting-Verfahren für historische Resturlaubstage zur Performancesteigerung bei gleichzeitig smarter, automatischer Cache-Invalidierung bei Vergangenheits-Edits.</li>
                   <li><strong>Bereinigung:</strong> Optimierung der Dateiausschlüsse im Quellcode-Repository.</li>
                 </ul>
-            </div>
+              </div>
 
             {/* V 0.9.9 */}
             <div className="relative pl-6 border-l-2 border-slate-200 dark:border-slate-800">
@@ -526,5 +562,6 @@ export default function AboutPage() {
         </div>
       </div>
     </div>
-  )
+  </div>
+)
 }

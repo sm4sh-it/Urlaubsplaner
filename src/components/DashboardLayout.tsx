@@ -21,7 +21,7 @@ export default function DashboardLayout({
   const toggleSidebar = useStore(state => state.toggleSidebar)
 
   return (
-    <div className="flex flex-1 h-full relative overflow-hidden">
+    <div className="flex flex-1 h-full relative overflow-hidden p-4">
       <div className={cn(
         "flex-1 flex min-w-0 transition-all duration-300 ease-in-out",
         isSidebarOpen ? "mr-4" : "mr-0"
@@ -45,8 +45,8 @@ export default function DashboardLayout({
       <button
         onClick={toggleSidebar}
         className={cn(
-          "absolute top-4 z-10 flex items-center justify-center w-8 h-12 bg-slate-200/50 hover:bg-slate-300/80 dark:bg-slate-800/50 dark:hover:bg-slate-700/80 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 transition-all duration-300 rounded-l-xl backdrop-blur-sm",
-          isSidebarOpen ? "right-80" : "right-0"
+          "absolute top-8 z-10 flex items-center justify-center w-8 h-12 bg-slate-200/50 hover:bg-slate-300/80 dark:bg-slate-800/50 dark:hover:bg-slate-700/80 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 transition-all duration-300 rounded-l-xl backdrop-blur-sm",
+          isSidebarOpen ? "right-84" : "right-4"
         )}
         title={isSidebarOpen ? "Seitenleiste ausblenden" : "Seitenleiste einblenden"}
       >

@@ -36,17 +36,16 @@ export default function LoginPage() {
       <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-800 p-8 w-full max-w-md">
         
         <div className="flex flex-col items-center mb-8">
-          <div className="p-3 bg-brand-100 dark:bg-brand-900/30 text-brand-600 dark:text-brand-500 rounded-full mb-4">
-            <Lock className="w-8 h-8" />
+          <div className="mb-4">
+            <img src="/logo.svg" alt="Logo" className="w-16 h-16 object-contain" />
           </div>
-          <h1 className="text-2xl font-bold text-slate-800 dark:text-slate-100 flex items-center justify-center gap-2 mb-6">
-            <CalendarDays className="text-brand-500 w-6 h-6" /> sm4sh's Urlaubsplaner
+          <h1 className="text-2xl font-bold text-slate-800 dark:text-slate-100 flex items-center justify-center gap-2 mb-2">
+            sm4sh's Urlaubsplaner
           </h1>
           <p className="text-slate-500 dark:text-slate-400 mt-2 text-center">
             Bitte gib das Familien-Passwort ein, um den Urlaubsplaner zu öffnen.
           </p>
         </div>
-
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
