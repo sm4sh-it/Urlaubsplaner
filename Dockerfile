@@ -22,7 +22,7 @@ RUN npx prisma generate
 RUN npx prisma db push --accept-data-loss
 
 # Next.js telemetry is disabled
-ENV NEXT_TELEMETRY_DISABLED 1
+ENV NEXT_TELEMETRY_DISABLED=1
 
 RUN npm run build
 
@@ -30,8 +30,8 @@ RUN npm run build
 FROM base AS runner
 WORKDIR /app
 
-ENV NODE_ENV production
-ENV NEXT_TELEMETRY_DISABLED 1
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
 ENV DATABASE_URL="file:/app/data/dev.db"
 
 RUN addgroup --system --gid 1001 nodejs
@@ -63,8 +63,8 @@ USER nextjs
 
 EXPOSE 8666
 
-ENV PORT 8666
-ENV HOSTNAME "0.0.0.0"
+ENV PORT=8666
+ENV HOSTNAME="0.0.0.0"
 
 ENTRYPOINT ["./docker-entrypoint.sh"]
 CMD ["node", "server.js"]
