@@ -287,17 +287,27 @@ body {
 .status-badge.planning { color: #ff9f43; border: 1px solid rgba(255, 159, 67, 0.2); background: rgba(255, 159, 67, 0.05); }
 .status-badge.request { color: #eab308; border: 1px solid rgba(234, 179, 8, 0.2); background: rgba(234, 179, 8, 0.05); }
 
+.card-title-group {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
 .card-title-group h3 {
   font-size: 18px;
   font-weight: 600;
   margin-bottom: 4px;
   letter-spacing: -0.01em;
   color: var(--fg);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .card-title-group .date-range {
   font-size: 13px;
   color: var(--muted);
+  display: block;
 }
 
 .card-meta-grid {
@@ -352,4 +362,8 @@ body {
   font-size: 14px;
   font-weight: 500;
   color: var(--fg);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
 }

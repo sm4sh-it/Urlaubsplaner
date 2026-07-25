@@ -38,23 +38,40 @@ export default function AboutPage() {
               </p>
               <div className="grid sm:grid-cols-3 gap-4">
                 <div className="bg-slate-50 dark:bg-slate-900/60 p-4 rounded-xl border border-slate-100 dark:border-slate-800">
-                  <div className="font-bold text-slate-900 dark:text-slate-100 text-sm mb-1">SL Urlaubsplaner</div>
+                  <a 
+                    href="https://www.sl-urlaubsplaner.de/" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="font-bold text-slate-900 dark:text-slate-100 text-sm mb-1 inline-flex items-center gap-1.5 hover:text-brand-600 dark:hover:text-brand-400 transition-colors"
+                  >
+                    SL Urlaubsplaner <ExternalLink className="w-3.5 h-3.5 text-slate-400" />
+                  </a>
                   <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
                     Ein großes Dankeschön für die ursprüngliche Inspiration zu diesem Projekt.
                   </p>
                 </div>
                 <div className="bg-slate-50 dark:bg-slate-900/60 p-4 rounded-xl border border-slate-100 dark:border-slate-800">
-                  <div className="font-bold text-slate-900 dark:text-slate-100 text-sm mb-1 flex items-center gap-1">
-                    ferien-api.de <ExternalLink className="w-3 h-3 text-slate-400" />
-                  </div>
+                  <a 
+                    href="https://ferien-api.de/" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="font-bold text-slate-900 dark:text-slate-100 text-sm mb-1 inline-flex items-center gap-1.5 hover:text-brand-600 dark:hover:text-brand-400 transition-colors"
+                  >
+                    ferien-api.de <ExternalLink className="w-3.5 h-3.5 text-slate-400" />
+                  </a>
                   <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
                     Für die zuverlässigen Daten zu Schulferien in ganz Deutschland.
                   </p>
                 </div>
                 <div className="bg-slate-50 dark:bg-slate-900/60 p-4 rounded-xl border border-slate-100 dark:border-slate-800">
-                  <div className="font-bold text-slate-900 dark:text-slate-100 text-sm mb-1 flex items-center gap-1">
-                    feiertage-api.de <ExternalLink className="w-3 h-3 text-slate-400" />
-                  </div>
+                  <a 
+                    href="https://feiertage-api.de/" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="font-bold text-slate-900 dark:text-slate-100 text-sm mb-1 inline-flex items-center gap-1.5 hover:text-brand-600 dark:hover:text-brand-400 transition-colors"
+                  >
+                    feiertage-api.de <ExternalLink className="w-3.5 h-3.5 text-slate-400" />
+                  </a>
                   <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
                     Für die gesetzlichen Feiertage aller deutschen Bundesländer.
                   </p>
@@ -69,12 +86,25 @@ export default function AboutPage() {
             </h2>
 
             <div className="space-y-8">
-              {/* V 1.3.0 */}
+              {/* V 1.4.0 */}
               <div className="relative pl-7 border-l-2 border-brand-500">
                 <div className="absolute -left-[9px] top-1.5 h-4 w-4 rounded-full bg-brand-500 ring-4 ring-white dark:ring-[#0d1117]" />
                 <div className="flex items-center gap-3 mb-3">
-                  <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100 m-0">Version 1.3.0</h3>
+                  <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100 m-0">Version 1.4.0</h3>
                   <span className="text-xs px-3 py-1 bg-brand-100 dark:bg-brand-500/20 text-brand-700 dark:text-brand-300 rounded-full font-bold">Aktuell</span>
+                </div>
+                <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
+                  <li><strong>"Halber Tag" Reiseoption:</strong> Einführung der Checkbox "Halber Tag" inklusive Umschalter für "Vormittag (AM)" und "Nachmittag (PM)" beim Erstellen und Bearbeiten von Reisen.</li>
+                  <li><strong>Berechnung &amp; Überschneidungslogik:</strong> Exakte Anrechnung von 0,5 Urlaubstagen bei halben Urlaubsreisen im Urlaubskonto und Resturlaubs-Übertrag. Erlaubt zwei halbe Reisen am selben Datum mit zweigeteilter Kalenderanzeige.</li>
+                  <li><strong>Transportmittel &amp; Dynamischer Transparenz-Verlauf:</strong> Ergänzung des 7. Transportmittels "Bus" und Einführung eines dynamischen Transparenz-Verlaufs in Markenfarbe (100 % bis 35 % Deckkraft in 10 % Schritten) für Zeilen, Icons und Prozentwerte.</li>
+                </ul>
+              </div>
+
+              {/* V 1.3.0 */}
+              <div className="relative pl-7 border-l-2 border-slate-200 dark:border-slate-800">
+                <div className="absolute -left-[9px] top-1.5 h-4 w-4 rounded-full bg-slate-300 dark:bg-slate-700 ring-4 ring-white dark:ring-[#0d1117]" />
+                <div className="flex items-center gap-3 mb-3">
+                  <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100 m-0">Version 1.3.0</h3>
                 </div>
                 <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
                   <li><strong>Minimalist Header Redesign:</strong> Cleane Tabs ohne Pillen-Behälter, Brand-Unterstrich für die aktive Seite, reine Icon-Buttons mit Brand-Hover und dezenten vertikalen Trennern.</li>

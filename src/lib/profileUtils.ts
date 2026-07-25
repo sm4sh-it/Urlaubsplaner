@@ -76,9 +76,10 @@ export function getProfileStatsForYear(
             const dateStr = `${d.getUTCFullYear()}-${monthStr}-${dayStr}`
             
             if (isVacationCostingDay(dateStr, profile, holidays)) {
-              usedVacation += 1
+              const dayCost = t.isHalfDay ? 0.5 : 1
+              usedVacation += dayCost
               if (dateStr <= expiryDateString) {
-                usedVacationBeforeExpiry += 1
+                usedVacationBeforeExpiry += dayCost
               }
             }
           }

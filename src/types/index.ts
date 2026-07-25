@@ -26,6 +26,9 @@ export interface Trip {
   budget?: number | null
   cost?: number | null
   
+  isHalfDay?: boolean
+  halfDayType?: string | null
+  
   createdAt: string | Date
   updatedAt: string | Date
 }

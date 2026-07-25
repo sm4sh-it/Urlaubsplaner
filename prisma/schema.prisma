@@ -48,6 +48,9 @@ model Trip {
   budget               Float?
   cost                 Float?
   
+  isHalfDay            Boolean   @default(false)
+  halfDayType          String?   // "VORMITTAG" | "NACHMITTAG"
+  
   createdAt            DateTime  @default(now())
   updatedAt            DateTime  @updatedAt
 }

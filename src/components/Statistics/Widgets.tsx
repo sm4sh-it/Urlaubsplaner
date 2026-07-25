@@ -4,7 +4,7 @@ import { useStore } from "@/store/useStore"
 import { useMemo } from "react"
 import { isVacationCostingDay } from "@/lib/tripUtils"
 import { getProfileStatsForYear } from "@/lib/profileUtils"
-import { Plane, Car, Train, Ship, Bike, Info, ArrowUpRight, ArrowDownRight, Wallet, TrendingUp } from "lucide-react"
+import { Plane, Car, Train, Ship, Bike, Bus, Info, ArrowUpRight, ArrowDownRight, Wallet, TrendingUp } from "lucide-react"
 import { DonutChart } from "@/components/ui/DonutChart"
 import { cn } from "@/lib/utils"
 
@@ -83,11 +83,13 @@ export function TransportWidget() {
       case 'bahn': return <Train className="w-4 h-4" />
       case 'schiff': return <Ship className="w-4 h-4" />
       case 'fahrrad': return <Bike className="w-4 h-4" />
-      default: return <div className="w-4 h-4 rounded-full bg-slate-700" />
+      case 'bus': return <Bus className="w-4 h-4" />
+      default: return <div className="w-4 h-4 rounded-full bg-slate-400" />
     }
   }
 
-  const colors = ['#39d353', '#26a641', '#006d32', '#0e4429', '#161b22']
+  // Graduated Cyan-Green frequency scale (Rank 1 = Most used -> Rank 7+ = Least used)
+  const rankColors = ['#10b981', '#14b8a6', '#06b6d4', '#0284c7', '#38bdf8', '#818cf8', '#84cc16']
 
   return (
     <div className="bg-white dark:bg-[#0d1117] rounded-xl border border-slate-200 dark:border-slate-800 p-6 flex flex-col shadow-xl h-full">
@@ -98,13 +100,14 @@ export function TransportWidget() {
         <div className="flex flex-col gap-3">
           {stats.list.map(([type, count], idx) => {
             const percentage = Math.round((count / stats.total) * 100)
-            const color = colors[idx % colors.length]
+            const opacity = Math.max(35, 100 - idx * 10)
+            const color = `color-mix(in srgb, var(--brand) ${opacity}%, transparent)`
             return (
               <div key={type} className="flex items-center gap-3">
-                <div className="flex items-center justify-center w-8 h-8 rounded-full bg-slate-100 dark:bg-[#161b22] text-slate-300" style={{ color }}>
+                <div className="flex items-center justify-center w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800/80 text-slate-300" style={{ color }}>
                   {getIcon(type)}
                 </div>
-                <div className="flex-1 text-sm text-slate-700 dark:text-slate-200">{type}</div>
+                <div className="flex-1 text-sm font-medium" style={{ color }}>{type}</div>
                 <div className="text-sm font-bold" style={{ color }}>{percentage}%</div>
               </div>
             )
@@ -167,7 +170,7 @@ export function AvgDurationWidget() {
       trips.forEach(trip => {
         if (trip.profiles.some(p => activeProfileIds.includes(p.id)) && trip.duration > 0) {
           if (yr === undefined || trip.startDate.startsWith(yr.toString())) {
-            t += trip.duration
+            t += trip.isHalfDay ? 0.5 : trip.duration
             c++
           }
         }

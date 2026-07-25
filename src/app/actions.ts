@@ -312,9 +312,9 @@ export async function getCalendarData(year: number, stateCode: string) {
 
   // Transform to Frontend format
   const holidayMap: Record<string, string> = {}
-  holidays.forEach(h => { holidayMap[h.date] = h.name })
+  holidays.forEach((h: any) => { holidayMap[h.date] = h.name })
 
-  const vacationList = vacations.map(v => ({
+  const vacationList = vacations.map((v: any) => ({
     start: v.startDate,
     end: v.endDate,
     name: v.name,

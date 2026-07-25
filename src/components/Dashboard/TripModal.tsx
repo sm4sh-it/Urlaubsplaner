@@ -16,7 +16,7 @@ interface TripModalProps {
 const TYPE_OPTIONS = ["Urlaub", "Mobiles Arbeiten", "Sonderurlaub", "Sabbatical", "Überstundenabbau"]
 const STATUS_OPTIONS = ["Idee", "In Planung", "Gebucht", "Abgeschlossen"]
 const TRAVEL_TYPE_OPTIONS = ["", "Wanderurlaub", "Städtetrip", "Strandurlaub", "Heimatbesuch", "Rundreise", "Skiurlaub", "Wellness", "Roadtrip", "Aktivurlaub", "Kombi-Reise"]
-const TRANSPORT_OPTIONS = ["", "Flugzeug", "Mietwagen", "Bahn", "Eigenes Auto", "Schiff", "Fahrrad"]
+const TRANSPORT_OPTIONS = ["", "Flugzeug", "Mietwagen", "Bahn", "Eigenes Auto", "Schiff", "Fahrrad", "Bus"]
 
 export default function TripModal({ isOpen, onClose, trip }: TripModalProps) {
   const profiles = useStore(state => state.profiles)
@@ -36,14 +36,16 @@ export default function TripModal({ isOpen, onClose, trip }: TripModalProps) {
     transport: [] as string[],
     notes: "",
     budget: "" as number | "",
-    cost: "" as number | ""
+    cost: "" as number | "",
+    isHalfDay: false,
+    halfDayType: "VORMITTAG"
   })
 
   const updateForm = (updates: Partial<typeof formData>) => {
     setFormData(prev => ({ ...prev, ...updates }))
   }
 
-  const { title, startDate, endDate, selectedProfileIds, externalParticipants, type, status, location, country, travelType, transport, notes, budget, cost } = formData
+  const { title, startDate, endDate, selectedProfileIds, externalParticipants, type, status, location, country, travelType, transport, notes, budget, cost, isHalfDay, halfDayType } = formData
 
   const [isSaving, setIsSaving] = useState(false)
   const [showConfirmDelete, setShowConfirmDelete] = useState(false)
@@ -65,7 +67,9 @@ export default function TripModal({ isOpen, onClose, trip }: TripModalProps) {
           transport: trip.transport ? trip.transport.split(',').map(s => s.trim()).filter(Boolean) : [],
           notes: trip.notes || "",
           budget: trip.budget || "",
-          cost: trip.cost || ""
+          cost: trip.cost || "",
+          isHalfDay: trip.isHalfDay || false,
+          halfDayType: trip.halfDayType || "VORMITTAG"
         })
       } else {
         setFormData({
@@ -84,7 +88,9 @@ export default function TripModal({ isOpen, onClose, trip }: TripModalProps) {
           transport: [],
           notes: "",
           budget: "",
-          cost: ""
+          cost: "",
+          isHalfDay: false,
+          halfDayType: "VORMITTAG"
         })
       }
       setShowConfirmDelete(false)
@@ -123,7 +129,9 @@ export default function TripModal({ isOpen, onClose, trip }: TripModalProps) {
       transport: transport.length > 0 ? transport.join(', ') : null,
       notes: notes || null,
       budget: budget === "" ? null : Number(budget),
-      cost: cost === "" ? null : Number(cost)
+      cost: cost === "" ? null : Number(cost),
+      isHalfDay,
+      halfDayType: isHalfDay ? halfDayType : null
     }
 
     try {
@@ -219,6 +227,47 @@ export default function TripModal({ isOpen, onClose, trip }: TripModalProps) {
                 <div className="flex flex-col gap-1">
                   <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Enddatum *</label>
                   <input required value={endDate} onChange={e => updateForm({ endDate: e.target.value })} type="date" className="px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-brand-500 outline-none" />
+                </div>
+
+                <div className="flex flex-col gap-1 md:col-span-2 mt-1">
+                  <div className="flex flex-wrap items-center justify-between gap-3 p-3 bg-slate-50 dark:bg-slate-800/40 rounded-xl border border-slate-200/80 dark:border-slate-700/60">
+                    <label className="flex items-center gap-2.5 cursor-pointer font-semibold text-sm text-slate-800 dark:text-slate-200 select-none">
+                      <input 
+                        type="checkbox"
+                        checked={isHalfDay}
+                        onChange={e => updateForm({ isHalfDay: e.target.checked })}
+                        className="w-4 h-4 rounded text-brand-600 focus:ring-brand-500 cursor-pointer"
+                      />
+                      <span>Halber Tag</span>
+                    </label>
+
+                    {isHalfDay && (
+                      <div className="flex items-center gap-1.5">
+                        <button
+                          type="button"
+                          onClick={() => updateForm({ halfDayType: "VORMITTAG" })}
+                          className={`px-3 py-1 text-xs font-bold rounded-lg transition-all cursor-pointer ${
+                            halfDayType === "VORMITTAG" || !halfDayType
+                              ? 'bg-brand-600 text-white shadow-xs'
+                              : 'bg-slate-200/80 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-600'
+                          }`}
+                        >
+                          Vormittag (AM)
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => updateForm({ halfDayType: "NACHMITTAG" })}
+                          className={`px-3 py-1 text-xs font-bold rounded-lg transition-all cursor-pointer ${
+                            halfDayType === "NACHMITTAG"
+                              ? 'bg-brand-600 text-white shadow-xs'
+                              : 'bg-slate-200/80 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-600'
+                          }`}
+                        >
+                          Nachmittag (PM)
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             </section>

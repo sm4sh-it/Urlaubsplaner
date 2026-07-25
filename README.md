@@ -1,24 +1,23 @@
 # sm4sh's Urlaubsplaner
 
-Ein moderner, interaktiver Single-Page Urlaubsplaner für Familien und kleine Teams mit einem Fokus auf herausragendem Design und erstklassiger Usability.
+**sm4sh's Urlaubsplaner** wurde entwickelt, damit du deine freie Zeit optimal planen und dein Urlaubsbudget immer perfekt im Blick behalten kannst – ganz für dich allein oder gemeinsam mit deinen Liebsten.
+
+Statt manuellem Rechnen bietet dir die App eine klare Jahresübersicht inklusive automatischer Verwaltung deiner Urlaubstage, Schulferien und gesetzlicher Feiertage. Kombiniert mit dem intuitiven, tastaturgesteuerten Interface wird die Urlaubsplanung so schnell, übersichtlich und völlig stressfrei.
 
 ## Features
-- **Alles auf einen Blick:** Jahresübersicht, die ohne Scrollen komplett auf einen Desktop-Monitor passt.
-- **Tastaturgesteuert:** Superschnelle Eingabe von Urlauben durch einen Klick auf den Kalendertag in Kombination mit einem Tastendruck (z.B. `U` für Urlaub, `K` für Krank, `M` für Mobiles Arbeiten).
-- **Multi-User fähig:** Profile für verschiedene Personen mit eigenen Farben anlegen und gleichzeitig im Kalender anzeigen.
-- **Reise-Management:** Plane gemeinsame Reisen (wie Sommerurlaube) für mehrere Familienmitglieder gleichzeitig. Das System kümmert sich automatisch um die Abzüge von Urlaubstagen, auch wenn Reisen über den Jahreswechsel hinausgehen.
-- **Tiefgreifende Statistiken:** Umfangreiches Statistik-Dashboard mit Jahresvergleichen, Burn-Down-Charts für Resturlaub, Heatmaps für Urlaubs- und Krankheitsverteilungen, Scatter-Plots zur Reisedauer und viem mehr.
-- **Auto-Sync:** Feiertage und Schulferien werden automatisch basierend auf dem gewählten deutschen Bundesland geladen.
-- **Resturlaub:** Komplexe Übertragung von Resturlaub ins Folgejahr inkl. Verfallsdatum-Warnung.
-- **Sicher:** Optionaler globaler Passwortschutz für Self-Hosting.
+- **Alles auf einen Blick:** Übersichtliche Jahresdarstellung für Desktop-Monitore.
+- **Tastaturgesteuert:** Blitzschnelle Eingabe per Tastendruck (`U` für Urlaub, `K` für Krank, `M` für Mobiles Arbeiten, `Shift+U` / `Shift+M` für halbe Tage).
+- **Multi-User fähig:** Profile für verschiedene Personen mit eigenen Farben anlegen und gleichzeitig im Kalender vergleichen.
+- **Reisen & Halbtage:** Ganztägige und halbe Reisen (Vormittag/Nachmittag) planen inkl. automatischer Urlaubs-Abzüge und Transportmittel-Erfassung (z.B. Bus, Flugzeug, Auto).
+- **Auto-Sync:** Feiertage und Schulferien aller deutschen Bundesländer werden automatisch geladen.
+- **Statistiken & Resturlaub:** Detailliertes Dashboard mit Burn-Down-Charts, Verfallsdatum-Warnung und Transportmittel-Auswertungen.
+- **Sicher & Self-Hosted:** Optionaler Passwortschutz (`AUTH_ENABLED`) und einfaches Hosting via Docker.
 
 ## Installation via Docker Compose (Empfohlen)
 
-Die einfachste Möglichkeit, den Urlaubsplaner zu betreiben, ist über Docker. Kopiere die Datei `docker-compose.prod.yml` aus diesem Repository (und benenne sie ggf. in `docker-compose.yml` um) oder nutze diesen Schnipsel:
+Die einfachste Möglichkeit, den Urlaubsplaner zu betreiben, ist über Docker Compose:
 
 ```yaml
-version: '3.8'
-
 services:
   urlaubsplaner:
     # Dieses Image wird von der GitHub Action automatisch gebaut
@@ -28,12 +27,12 @@ services:
     ports:
       - "8666:8666"
     volumes:
-      # Mount the database directory so it persists across container restarts and updates
+      # Datenbank-Verzeichnis persistent speichern
       - urlaubsplaner_data:/app/data
     environment:
-      # Aktiviere den Passwortschutz (true) oder deaktiviere ihn komplett (false)
+      # Passwortschutz aktivieren (true) oder deaktivieren (false)
       - AUTH_ENABLED=true
-      # Das zwingend erforderliche Passwort, wenn AUTH_ENABLED=true ist
+      # Das gewünschte Passwort
       - APP_PASSWORD=sm4sh
 
 volumes:
@@ -47,22 +46,14 @@ docker compose up -d
 Die App ist nun unter `http://localhost:8666` erreichbar.
 
 ## Absicherung (Globales Passwort)
-Der Urlaubsplaner bringt ein eingebautes, sicheres Authentifizierungssystem mit:
-- **Passwortschutz aktivieren (`AUTH_ENABLED=true`):** Die App ist sicher gesperrt. Du MUSST ein exaktes Passwort im Feld `APP_PASSWORD` hinterlegen. Ist dieses Feld durch einen Konfigurationsfehler leer, sperrt die App sicherheitshalber den gesamten Zugriff ab und zeigt einen Serverfehler.
-- **Passwortschutz deaktivieren (`AUTH_ENABLED=false`):** Die App ist komplett offen für **jeden** im Netzwerk (z.B. hinter einem eigenen Reverse-Proxy/VPN). Man kann sich ohne Passworteingabe einloggen.
-
-## Entwicklung (Lokal)
-Falls du am Code mitarbeiten möchtest:
-
-1. Repository klonen: `git clone https://github.com/sm4sh-it/Urlaubsplaner.git`
-2. Abhängigkeiten installieren: `npm install`
-3. Datenbank initialisieren: `npx prisma db push`
-4. Server starten: `npm run dev`
+Der Urlaubsplaner bringt ein eingebautes Authentifizierungssystem mit:
+- **Passwortschutz aktivieren (`AUTH_ENABLED=true`):** Die App ist gesperrt. Es MUSS ein Passwort im Feld `APP_PASSWORD` hinterlegt werden.
+- **Passwortschutz deaktivieren (`AUTH_ENABLED=false`):** Die App ist direkt ohne Passworteingabe zugänglich (z.B. für die Nutzung im heimischen LAN/VPN oder hinter einem eigenen Reverse-Proxy).
 
 ## Danksagung
-Ein großes Dankeschön geht an die Bereitsteller der öffentlichen und kostenfreien APIs, die diese App nutzen darf, um die automatische Synchronisation von Feiertagen und Ferien zu ermöglichen:
-- **[ferien-api.de](https://ferien-api.de/)** – Für die zuverlässigen und aktuellen Daten zu den Schulferien in Deutschland.
-- **[feiertage-api.de](https://feiertage-api.de/)** – Für die Bereitstellung der gesetzlichen Feiertage der deutschen Bundesländer.
+Ein großes Dankeschön geht an die Bereitsteller der kostenfreien APIs für Feiertage und Schulferien:
+- **[ferien-api.de](https://ferien-api.de/)** – Schulferien in Deutschland
+- **[feiertage-api.de](https://feiertage-api.de/)** – Gesetzliche Feiertage der Bundesländer
 
 ## Lizenz
-Dieses Projekt steht unter der [MIT Lizenz](LICENSE). Du darfst es frei verwenden und anpassen.
+Dieses Projekt steht unter der [MIT Lizenz](LICENSE).

@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.4.0] - 2026-07-26
+### Added & Improved
+- **"Halber Tag" Reiseoption:** Einführung einer Checkbox "Halber Tag" inklusive Umschalter für "Vormittag (AM)" und "Nachmittag (PM)" beim Erstellen und Bearbeiten von Reisen.
+- **Berechnung & Überschneidungslogik:** Exakte Anrechnung von 0,5 Urlaubstagen bei halben Urlaubsreisen im Urlaubskonto und Resturlaubs-Übertrag. Erlaubt zwei halbe Reisen am selben Datum (z. B. 0,5 Mobiles Arbeiten + 0,5 Urlaub) mit zweigeteilter Kalenderdarstellung.
+- **Transportmittel & Dynamischer Transparenz-Verlauf:** Ergänzung des 7. Transportmittels "Bus" und Einführung eines dynamischen, häufigkeitsbasierten Transparenz-Verlaufs in Markenfarbe (100 % bis 35 % Deckkraft in 10 % Schritten) für Zeilen, Icons und Prozentwerte im Light- und Darkmode.
+
 ## [1.3.0] - 2026-07-25
 ### Added & Redesigned
 - **Minimalist Header Redesign:** Umstellung der Navigation von Pillen-Containern auf cleane Tabs mit dezentem Brand-Unterstrich für die aktive Seite. Reine Icon-Buttons mit Brand-Hover-Effekt und feinen vertikalen Trennlinien (`|`).

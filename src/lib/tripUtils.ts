@@ -4,8 +4,14 @@ export function isVacationCostingDay(dateStr: string, profile: Profile, holidays
   // Parse working days from string "1,2,3,4,5"
   const workingDays = profile.workingDays ? profile.workingDays.split(',').map(Number) : [1, 2, 3, 4, 5]
   
-  const d = new Date(dateStr)
-  let dayOfWeek = d.getDay()
+  const parts = dateStr.split('-')
+  if (parts.length !== 3) return false
+  const year = parseInt(parts[0], 10)
+  const month = parseInt(parts[1], 10) - 1
+  const day = parseInt(parts[2], 10)
+
+  const d = new Date(Date.UTC(year, month, day))
+  let dayOfWeek = d.getUTCDay()
   if (dayOfWeek === 0) dayOfWeek = 7
 
   if (!workingDays.includes(dayOfWeek)) {
@@ -56,7 +62,7 @@ export function calculateTripVacationCost(trip: Trip, profile: Profile, holidays
       continue
     }
 
-    cost += 1
+    cost += trip.isHalfDay ? 0.5 : 1
   }
 
   return cost

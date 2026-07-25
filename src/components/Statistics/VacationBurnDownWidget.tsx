@@ -62,7 +62,7 @@ export default function VacationBurnDownWidget() {
           if (d.getUTCFullYear() === selectedYear && d.getUTCMonth() === month) {
             const dateStr = `${d.getUTCFullYear()}-${String(d.getUTCMonth()+1).padStart(2,'0')}-${String(d.getUTCDate()).padStart(2,'0')}`
             if (isVacationCostingDay(dateStr, activeProfile, holidays)) {
-              monthTaken += 1
+              monthTaken += t.isHalfDay ? 0.5 : 1
             }
           }
         }

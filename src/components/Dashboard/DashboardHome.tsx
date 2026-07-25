@@ -163,7 +163,7 @@ export default function DashboardHome() {
                       >
                         <td className="py-4 px-4 font-medium text-slate-800 dark:text-slate-200">{trip.title}</td>
                         <td className="py-4 px-4">{start} - {end}</td>
-                        <td className="py-4 px-4">{trip.duration} Tage</td>
+                        <td className="py-4 px-4">{trip.isHalfDay ? (trip.duration === 1 ? "0.5 Tag" : `${trip.duration * 0.5} Tage`) : `${trip.duration} Tage`}</td>
                         <td className="py-4 px-4">{trip.type}</td>
                         <td className="py-4 px-4">{trip.cost ? `€${trip.cost.toFixed(2)}` : '-'}</td>
                       </tr>

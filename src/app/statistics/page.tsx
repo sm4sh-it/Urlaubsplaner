@@ -32,7 +32,7 @@ export default async function StatisticsPage() {
   })
 
   // Ensure entries cast to CalendarEntry to match types
-  const entries: CalendarEntry[] = entriesRaw.map(e => ({
+  const entries: CalendarEntry[] = entriesRaw.map((e: any) => ({
     id: e.id,
     date: e.date,
     type: e.type as EntryType,

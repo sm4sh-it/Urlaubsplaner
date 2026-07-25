@@ -74,6 +74,7 @@ export default function Statistics() {
       if (trip.type === "Urlaub") {
         const start = new Date(trip.startDate)
         const end = new Date(trip.endDate)
+        const dayCost = trip.isHalfDay ? 0.5 : 1
         for (let d = new Date(start); d <= end; d.setUTCDate(d.getUTCDate() + 1)) {
           if (d.getUTCFullYear() !== selectedYear) continue;
           
@@ -82,9 +83,9 @@ export default function Statistics() {
           const dateStr = `${d.getUTCFullYear()}-${monthStr}-${dayStr}`
           
           if (isVacationCostingDay(dateStr, activeProfile, holidays)) {
-            tUrlaub += 1
+            tUrlaub += dayCost
             const m = d.getUTCMonth()
-            if (m >= 0 && m < 12) mStats[m].urlaub += 1
+            if (m >= 0 && m < 12) mStats[m].urlaub += dayCost
           }
         }
       }
@@ -92,6 +93,7 @@ export default function Statistics() {
       if (trip.type === "Mobiles Arbeiten") {
         const start = new Date(trip.startDate)
         const end = new Date(trip.endDate)
+        const dayCost = trip.isHalfDay ? 0.5 : 1
         const workingDays = activeProfile.workingDays ? activeProfile.workingDays.split(',').map(Number) : [1, 2, 3, 4, 5]
         for (let d = new Date(start); d <= end; d.setUTCDate(d.getUTCDate() + 1)) {
           if (d.getUTCFullYear() !== selectedYear) continue;
@@ -103,9 +105,9 @@ export default function Statistics() {
           const dateStr = `${d.getUTCFullYear()}-${monthStr}-${dayStr}`
           
           if (workingDays.includes(dow) && !holidays[dateStr]) {
-            tMobile += 1
+            tMobile += dayCost
             const m = d.getUTCMonth()
-            if (m >= 0 && m < 12) mStats[m].mobile += 1
+            if (m >= 0 && m < 12) mStats[m].mobile += dayCost
           }
         }
       }

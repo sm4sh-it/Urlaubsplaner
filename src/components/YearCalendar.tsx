@@ -61,6 +61,23 @@ const HALF_TO_LABEL: Record<string, string> = {
   '6': 'S/2'
 }
 
+const TYPE_DESCRIPTIONS: Record<string, string> = {
+  'U': 'Urlaub',
+  '2': 'Urlaub (Halber Tag - U/2)',
+  'K': 'Krankheit',
+  '3': 'Krankheit (Halber Tag - K/2)',
+  'Ü': 'Überstundenabbau',
+  '4': 'Überstundenabbau (Halber Tag - Ü/2)',
+  'M': 'Mobiles Arbeiten',
+  '5': 'Mobiles Arbeiten (Halber Tag - M/2)',
+  'S': 'Sonderurlaub',
+  '6': 'Sonderurlaub (Halber Tag - S/2)',
+  'B': 'Berufsschule',
+  'D': 'Dienstreise',
+  'A': 'Auszeit / Sabbatical',
+  'X': 'Feiertag / Frei',
+}
+
 export default function YearCalendar() {
   const selectedYear = useStore(state => state.selectedYear)
   const activeProfileIds = useStore(state => state.activeProfileIds) || []
@@ -86,7 +103,7 @@ export default function YearCalendar() {
     
     const lookup: Record<string, { type: EntryType, title: string, isIdea: boolean }> = {}
     for (const t of activeTrips) {
-      const type = mapTripTypeToEntryType(t.type)
+      const type = mapTripTypeToEntryType(t.type, t.isHalfDay)
       const start = new Date(t.startDate)
       const end = new Date(t.endDate)
       
@@ -95,7 +112,22 @@ export default function YearCalendar() {
         while (current <= end) {
           const dateStr = current.toISOString().split('T')[0]
           const key = `${p.id}_${dateStr}`
-          lookup[key] = { type, title: t.title, isIdea: t.status === "Idee" }
+          const existing = lookup[key]
+          if (existing && t.isHalfDay && existing.type.length < 5) {
+            let combinedType: string
+            if (t.halfDayType === "NACHMITTAG") {
+              combinedType = `${existing.type},${type}`
+            } else {
+              combinedType = `${type},${existing.type}`
+            }
+            lookup[key] = {
+              type: combinedType as EntryType,
+              title: `${existing.title} / ${t.title}`,
+              isIdea: existing.isIdea && (t.status === "Idee")
+            }
+          } else {
+            lookup[key] = { type, title: t.title, isIdea: t.status === "Idee" }
+          }
           current.setUTCDate(current.getUTCDate() + 1)
         }
       }
@@ -112,13 +144,17 @@ export default function YearCalendar() {
     return lookup
   }, [entries])
 
-  function mapTripTypeToEntryType(type: string): EntryType {
-    if (type === "Urlaub") return "U"
-    if (type === "Mobiles Arbeiten") return "M"
-    if (type === "Sabbatical") return "A"
-    if (type === "Sonderurlaub") return "S"
-    if (type === "Überstundenabbau") return "Ü"
-    return "U" // Fallback
+  function mapTripTypeToEntryType(type: string, isHalfDay?: boolean): EntryType {
+    switch (type) {
+      case "Urlaub": return isHalfDay ? "2" : "U"
+      case "Mobiles Arbeiten": return isHalfDay ? "5" : "M"
+      case "Sonderurlaub": return isHalfDay ? "6" : "S"
+      case "Überstundenabbau": return isHalfDay ? "4" : "Ü"
+      case "Sabbatical": return isHalfDay ? "5" : "A"
+      case "Krankheit":
+      case "Krank": return isHalfDay ? "3" : "K"
+      default: return isHalfDay ? "2" : "U"
+    }
   }
 
 
@@ -232,8 +268,8 @@ export default function YearCalendar() {
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 pb-4 sm:pb-6 shrink-0">
         <h2 className="font-bold text-slate-800 dark:text-slate-200 text-lg sm:text-xl tracking-tight">Jahresübersicht {selectedYear}</h2>
         {pressedKey && VALID_KEYS[pressedKey] && (
-          <div className="text-xs bg-emerald-100 text-emerald-800 px-2 py-1 rounded font-medium">
-            Aktiv: {VALID_KEYS[pressedKey]} (Klicken zum Einfügen)
+          <div className="text-xs bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800 px-3 py-1 rounded-lg font-medium shadow-xs animate-in fade-in">
+            Aktiv: <strong className="font-bold">{TYPE_DESCRIPTIONS[VALID_KEYS[pressedKey]] || VALID_KEYS[pressedKey]}</strong> (Klicken zum Einfügen)
           </div>
         )}
       </div>
@@ -385,13 +421,14 @@ export default function YearCalendar() {
                                 
                                 const parts = entryType.split(',')
 
-                                // Render stacked half-days
-                                if (parts.length === 2 && !tripEntry) {
+                                // Render stacked half-days (from manual entries or merged half-day trips)
+                                if (parts.length === 2) {
                                   const typeClass1 = ENTRY_CLASSES[HALF_TO_FULL[parts[0]] || parts[0]] || "bg-slate-200 text-slate-800"
                                   const typeClass2 = ENTRY_CLASSES[HALF_TO_FULL[parts[1]] || parts[1]] || "bg-slate-200 text-slate-800"
                                   return (
                                     <div key={profileId} className={cn("flex flex-col rounded-sm overflow-hidden border-solid shadow-sm w-full h-full", 
-                                      isCompact ? "border-[1px] flex-1" : "border-2 shrink-0 flex-1"
+                                      isCompact ? "border-[1px] flex-1" : "border-2 shrink-0 flex-1",
+                                      tripEntry ? (tripEntry.isIdea ? "opacity-50 border-dashed" : "opacity-90") : ""
                                     )} style={{ borderColor: profile.color }}>
                                       <div className={cn("flex-1 flex items-center justify-center font-bold w-full leading-none", typeClass1, isCompact ? "text-[0px]" : "text-[8px]")}>
                                         {!isCompact && (HALF_TO_LABEL[parts[0]] || parts[0])}

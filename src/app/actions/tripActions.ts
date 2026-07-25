@@ -98,7 +98,7 @@ export async function deleteTrip(id: string) {
   
   if (trip) {
     const tripStartYear = parseInt(trip.startDate.split('-')[0], 10)
-    const profileIds = trip.profiles.map(p => p.id)
+    const profileIds = trip.profiles.map((p: any) => p.id)
     
     await prisma.trip.delete({
       where: { id }

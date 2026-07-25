@@ -35,7 +35,7 @@ export default async function Home() {
   })
 
   // Ensure entries cast to CalendarEntry to match types
-  const entries: CalendarEntry[] = entriesRaw.map(e => ({
+  const entries: CalendarEntry[] = entriesRaw.map((e: any) => ({
     id: e.id,
     date: e.date,
     type: e.type as EntryType,

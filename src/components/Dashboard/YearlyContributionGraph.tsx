@@ -2,7 +2,6 @@
 
 import { useStore } from "@/store/useStore"
 import { useMemo } from "react"
-import { calculateTripVacationCost } from "@/lib/tripUtils"
 
 export default function YearlyContributionGraph() {
   const selectedYear = useStore(state => state.selectedYear)
@@ -11,6 +10,37 @@ export default function YearlyContributionGraph() {
   const activeProfileIds = useStore(state => state.activeProfileIds)
   const profiles = useStore(state => state.profiles)
   const holidays = useStore(state => state.holidays)
+
+  const getStatusColor = (type: string): string => {
+    const t = type.toLowerCase().trim()
+    switch (t) {
+      case 'u':
+      case 'urlaub': return 'var(--color-vacation)'
+      case 'm':
+      case 'mobiles arbeiten': return 'var(--color-mobile)'
+      case 'a':
+      case 'sabbatical':
+      case 'auszeit': return 'var(--color-auszeit)'
+      case 's':
+      case 'sonderurlaub': return 'var(--color-special)'
+      case 'ü':
+      case 'ue':
+      case 'überstundenabbau': return 'var(--color-overtime)'
+      case 'k':
+      case 'krank':
+      case 'krankheit': return 'var(--color-sick)'
+      case 'b':
+      case 'g':
+      case 'bildungsurlaub':
+      case 'blockiert': return 'var(--color-bildungsurlaub)'
+      case 'd':
+      case 'dienstreise': return 'var(--color-dienstreise)'
+      case 'x':
+      case 'urlaubsblocker':
+      case 'blockiert_tag': return 'repeating-linear-gradient(45deg, rgba(255,255,255,0.18) 0px, rgba(255,255,255,0.18) 3px, var(--color-blocked) 3px, var(--color-blocked) 6px)'
+      default: return 'var(--color-vacation)'
+    }
+  }
 
   const { days, months } = useMemo(() => {
     const yearStart = new Date(selectedYear, 0, 1)
@@ -26,10 +56,7 @@ export default function YearlyContributionGraph() {
     const monthsArray: { label: string; colIndex: number }[] = []
     
     let currentDate = new Date(startDate)
-    let colIndex = 0
 
-    // We build the array column by column, 7 days at a time
-    // Stop when we pass yearEnd AND finish the current week (Sunday)
     while (currentDate <= yearEnd || currentDate.getDay() !== 1) {
       if (currentDate.getDay() === 1 && currentDate > yearEnd) {
         break; // we reached Monday of the week after year end
@@ -49,13 +76,13 @@ export default function YearlyContributionGraph() {
         })
       }
 
-      // Calculate if day has vacation
-      let primaryStatus = ""
-      let secondaryStatus = ""
+      let fullColor: string | null = null
+      let amColor: string | null = null
+      let pmColor: string | null = null
       let isIdea = false
-      
+      let labelText = ""
+
       if (isCurrentYear && activeProfileIds.length > 0) {
-        // 1. Check trips first (typically full days, 'U')
         const blockingStatuses = ["In Planung", "Gebucht", "Abgeschlossen", "Idee"]
         const blockingTrips = trips.filter(t => 
           blockingStatuses.includes(t.status) &&
@@ -64,37 +91,51 @@ export default function YearlyContributionGraph() {
           t.profiles.some(p => activeProfileIds.includes(p.id))
         )
         
-        let primaryTripType: string | null = null
         if (blockingTrips.length > 0) {
           for (const trip of blockingTrips) {
-            for (const profileId of activeProfileIds) {
-              if (trip.profiles.some(p => p.id === profileId)) {
-                primaryTripType = trip.type
-                if (trip.status === "Idee") isIdea = true
+            if (trip.status === "Idee") isIdea = true
+            const color = getStatusColor(trip.type)
+            if (!trip.isHalfDay) {
+              fullColor = color
+              labelText = trip.title || trip.type
+            } else {
+              if (trip.halfDayType === "NACHMITTAG") {
+                pmColor = color
+              } else {
+                amColor = color
               }
+              labelText = labelText ? `${labelText} / ${trip.title || trip.type}` : `${trip.title || trip.type} (Halber Tag)`
             }
           }
-        }
-        
-        if (primaryTripType) {
-          if (primaryTripType === "Sabbatical") primaryStatus = "a"
-          else if (primaryTripType === "Sonderurlaub") primaryStatus = "s"
-          else if (primaryTripType === "Krank") primaryStatus = "k"
-          else if (primaryTripType === "Überstundenabbau") primaryStatus = "ue"
-          else if (primaryTripType === "Mobiles Arbeiten") primaryStatus = "m"
-          else primaryStatus = "u"
         } else {
-          // 2. Check manual entries
+          // Check manual entries
           const manualEntries = entries.filter(e => e.date === dateStr && activeProfileIds.includes(e.profileId))
-          // Pick the first type part for the graph color
           if (manualEntries.length > 0) {
-            const type = manualEntries[0].type.split(',')[0]
-            if (type === '2') primaryStatus = "u-2"
-            else if (type === '3') primaryStatus = "k-2"
-            else if (type === '4') primaryStatus = "ue-2"
-            else if (type === '5') primaryStatus = "m-2"
-            else if (type === '6') primaryStatus = "s-2"
-            else primaryStatus = type.toLowerCase()
+            const parts = manualEntries[0].type.split(',').map(p => p.trim())
+            
+            const mapHalfDayCodeToColor = (code: string): string | null => {
+              switch (code) {
+                case '2': return getStatusColor('u')   // Halber Tag Urlaub (U/2)
+                case '5': return getStatusColor('m')   // Halber Tag Mobiles Arbeiten (M/2)
+                case '6': return getStatusColor('s')   // Halber Tag Sonderurlaub (S/2)
+                case '4': return getStatusColor('ue')  // Halber Tag Überstunden (Ü/2)
+                case '3': return getStatusColor('k')   // Halber Tag Krankheit (K/2)
+                default: return null
+              }
+            }
+
+            if (parts.length === 1) {
+              const code = parts[0]
+              const halfColor = mapHalfDayCodeToColor(code)
+              if (halfColor) {
+                amColor = halfColor
+              } else {
+                fullColor = getStatusColor(code)
+              }
+            } else if (parts.length >= 2) {
+              amColor = mapHalfDayCodeToColor(parts[0]) || getStatusColor(parts[0])
+              pmColor = mapHalfDayCodeToColor(parts[1]) || getStatusColor(parts[1])
+            }
           }
         }
       }
@@ -103,8 +144,11 @@ export default function YearlyContributionGraph() {
         date: dateStr,
         isCurrentYear,
         monthIndex: currentDate.getMonth(),
-        status: primaryStatus,
-        isIdea
+        fullColor,
+        amColor,
+        pmColor,
+        isIdea,
+        labelText
       })
 
       currentDate.setDate(currentDate.getDate() + 1)
@@ -113,17 +157,45 @@ export default function YearlyContributionGraph() {
     return { days: daysArray, months: monthsArray }
   }, [selectedYear, entries, trips, activeProfileIds, profiles, holidays])
 
-  const getCssClass = (day: { date: string, isCurrentYear: boolean, monthIndex: number, status: string, isIdea?: boolean }) => {
+  const getDayStyle = (day: typeof days[0]) => {
+    if (!day.isCurrentYear) return {}
+
+    if (day.fullColor) {
+      return { background: day.fullColor, opacity: day.isIdea ? 0.5 : 1 }
+    }
+
+    if (day.amColor && day.pmColor) {
+      return {
+        background: `linear-gradient(135deg, ${day.amColor} 50%, ${day.pmColor} 50%)`,
+        opacity: day.isIdea ? 0.5 : 1
+      }
+    }
+
+    if (day.amColor) {
+      return {
+        background: `linear-gradient(135deg, ${day.amColor} 50%, var(--surface-bright, rgba(203, 213, 225, 0.3)) 50%)`,
+        opacity: day.isIdea ? 0.5 : 1
+      }
+    }
+
+    if (day.pmColor) {
+      return {
+        background: `linear-gradient(135deg, var(--surface-bright, rgba(203, 213, 225, 0.3)) 50%, ${day.pmColor} 50%)`,
+        opacity: day.isIdea ? 0.5 : 1
+      }
+    }
+
+    return {}
+  }
+
+  const getDayClass = (day: typeof days[0]) => {
     if (!day.isCurrentYear) return 'bg-transparent'
-    if (!day.status) {
-      // empty day with month alternating banding
+    if (!day.fullColor && !day.amColor && !day.pmColor) {
       return day.monthIndex % 2 === 0 
         ? 'bg-slate-100 dark:bg-[var(--border)]' 
         : 'bg-slate-200 dark:bg-white/10'
     }
-    let baseClass = `status-${day.status}`
-    if (day.isIdea) baseClass += ' opacity-50'
-    return baseClass
+    return ''
   }
 
   return (
@@ -167,11 +239,12 @@ export default function YearlyContributionGraph() {
                 gridAutoColumns: '20px'
               }}
             >
-              {days.map((day, i) => (
+              {days.map((day) => (
                 <div
                   key={day.date}
-                  title={`${day.date}${day.status ? ` (${day.status.toUpperCase()})` : ''}`}
-                  className={`w-5 h-5 rounded-sm ${getCssClass(day)} transition-all duration-300 hover:ring-2 hover:ring-brand-500 hover:scale-110 cursor-pointer shadow-sm`}
+                  title={`${day.date}${day.labelText ? ` (${day.labelText})` : ''}`}
+                  className={`w-5 h-5 rounded-sm ${getDayClass(day)} transition-all duration-300 hover:ring-2 hover:ring-brand-500 hover:scale-110 cursor-pointer shadow-sm`}
+                  style={getDayStyle(day)}
                 />
               ))}
             </div>

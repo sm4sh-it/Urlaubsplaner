@@ -19,7 +19,7 @@ COPY . .
 # Initialize Prisma client and create a temporary DB for Next.js build prerendering
 ENV DATABASE_URL="file:./dev.db"
 RUN npx prisma generate
-RUN npx prisma db push --accept-data-loss
+RUN npx prisma db push
 
 # Next.js telemetry is disabled
 ENV NEXT_TELEMETRY_DISABLED=1
