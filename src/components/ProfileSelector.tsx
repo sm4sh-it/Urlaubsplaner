@@ -14,7 +14,7 @@ export default function ProfileSelector() {
     <div className="relative">
       <button 
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 bg-slate-100/90 dark:bg-slate-900/90 px-3.5 py-1.5 rounded-full border border-slate-200 dark:border-white/10 hover:bg-white dark:hover:bg-slate-800 transition-all text-slate-800 dark:text-slate-200 font-semibold text-xs md:text-sm shadow-sm cursor-pointer backdrop-blur-md"
+        className="flex items-center gap-2 px-2 py-1 text-slate-600 dark:text-slate-300 hover:text-brand-600 dark:hover:text-brand-400 font-medium text-xs md:text-sm transition-colors cursor-pointer"
       >
         <Users className="h-4 w-4 text-brand-500" />
         <span>

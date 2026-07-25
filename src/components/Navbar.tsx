@@ -62,41 +62,44 @@ export default function Navbar() {
             {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         )}
-        <Link href="/" className="flex items-center gap-2.5 font-bold text-lg md:text-xl tracking-tight text-slate-900 dark:text-slate-50">
+        <Link href="/" className="flex items-center gap-2.5 font-bold text-lg md:text-xl tracking-tight">
           <img src="/logo.svg" alt="Logo" className="h-8.5 w-8.5 md:h-9 md:w-9 object-contain" />
-          <span className="hidden sm:inline-block">sm4sh's Urlaubsplaner</span>
+          <span className="hidden sm:inline-block font-bold">
+            <span className="text-brand-600 dark:text-brand-500">sm4sh's</span>{" "}
+            <span className="text-slate-700 dark:text-slate-200">Urlaubsplaner</span>
+          </span>
         </Link>
       </div>
 
 
       {!isLogin && (
-        <div className="hidden md:flex gap-1 bg-slate-100/90 dark:bg-slate-900/90 p-1 rounded-full border border-slate-200 dark:border-white/10 shadow-inner backdrop-blur-md">
+        <div className="hidden md:flex items-center gap-8 h-16">
           <Link 
             href="/" 
-            className={`px-4 py-1.5 rounded-full text-sm font-bold transition-all duration-200 ${
+            className={`relative h-16 flex items-center text-sm font-semibold transition-colors ${
               pathname === '/' 
-                ? 'bg-brand-600 text-white shadow-md shadow-brand-500/20' 
-                : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-white/60 dark:hover:bg-white/10'
+                ? 'text-slate-900 dark:text-white font-bold after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-brand-500 after:rounded-full' 
+                : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
             }`}
           >
             Home
           </Link>
           <Link 
             href="/calendar" 
-            className={`px-4 py-1.5 rounded-full text-sm font-bold transition-all duration-200 ${
+            className={`relative h-16 flex items-center text-sm font-semibold transition-colors ${
               pathname.startsWith('/calendar') 
-                ? 'bg-brand-600 text-white shadow-md shadow-brand-500/20' 
-                : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-white/60 dark:hover:bg-white/10'
+                ? 'text-slate-900 dark:text-white font-bold after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-brand-500 after:rounded-full' 
+                : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
             }`}
           >
             Kalenderansicht
           </Link>
           <Link 
             href="/statistics" 
-            className={`px-4 py-1.5 rounded-full text-sm font-bold transition-all duration-200 ${
+            className={`relative h-16 flex items-center text-sm font-semibold transition-colors ${
               pathname.startsWith('/statistics') 
-                ? 'bg-brand-600 text-white shadow-md shadow-brand-500/20' 
-                : 'text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-white/60 dark:hover:bg-white/10'
+                ? 'text-slate-900 dark:text-white font-bold after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-brand-500 after:rounded-full' 
+                : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
             }`}
           >
             Statistiken
@@ -104,21 +107,21 @@ export default function Navbar() {
         </div>
       )}
 
-      <div className="flex items-center gap-2 md:gap-3">
+      <div className="flex items-center gap-1 md:gap-1.5">
         {!isLogin && (
           <>
-            <div className="flex items-center gap-1 bg-slate-100/90 dark:bg-slate-900/90 rounded-full p-1 border border-slate-200 dark:border-white/10 shadow-sm backdrop-blur-md">
+            <div className="flex items-center gap-1 text-slate-700 dark:text-slate-300 font-mono text-sm">
               <button 
                 onClick={() => {
                   if (selectedYear > 2022) setSelectedYear(selectedYear - 1)
                 }}
                 disabled={selectedYear <= 2022}
-                className="p-1.5 hover:bg-white dark:hover:bg-slate-800 rounded-full transition-all text-slate-600 dark:text-slate-300 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+                className="p-2 md:p-1 hover:text-brand-600 dark:hover:text-brand-400 active:scale-95 hover:scale-110 transition-all disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer flex items-center justify-center"
                 title="Vorheriges Jahr"
               >
-                <ChevronLeft size={16} />
+                <ChevronLeft className="w-5.5 h-5.5 md:w-4.5 md:h-4.5" />
               </button>
-              <span className="font-bold text-xs md:text-sm px-2 text-center text-slate-900 dark:text-slate-100 font-mono tracking-tight">
+              <span className="font-bold px-1.5 md:px-1 tracking-tight text-sm md:text-sm">
                 {selectedYear}
               </span>
               <button 
@@ -127,15 +130,20 @@ export default function Navbar() {
                   if (selectedYear < currentYear + 4) setSelectedYear(selectedYear + 1)
                 }}
                 disabled={selectedYear >= new Date().getFullYear() + 4}
-                className="p-1.5 hover:bg-white dark:hover:bg-slate-800 rounded-full transition-all text-slate-600 dark:text-slate-300 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+                className="p-2 md:p-1 hover:text-brand-600 dark:hover:text-brand-400 active:scale-95 hover:scale-110 transition-all disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer flex items-center justify-center"
                 title="Nächstes Jahr"
               >
-                <ChevronRight size={16} />
+                <ChevronRight className="w-5.5 h-5.5 md:w-4.5 md:h-4.5" />
               </button>
             </div>
+
+            <div className="hidden md:block h-4 w-px bg-slate-200 dark:bg-slate-800/80 mx-1 shrink-0" />
+
             <div className="hidden md:block">
               <ProfileSelector />
             </div>
+
+            <div className="hidden md:block h-4 w-px bg-slate-200 dark:bg-slate-800/80 mx-1 shrink-0" />
           </>
         )}
         <div className="hidden md:block">
@@ -143,26 +151,34 @@ export default function Navbar() {
         </div>
         {!isLogin && (
           <>
+            <div className="hidden md:block h-4 w-px bg-slate-200 dark:bg-slate-800/80 mx-1 shrink-0" />
+
             <button 
               onClick={() => setIsHelpOpen(true)} 
-              className="hidden md:flex p-2.5 rounded-full bg-slate-100/90 dark:bg-slate-900/90 border border-slate-200 dark:border-white/10 hover:bg-white dark:hover:bg-slate-800 transition-all text-slate-600 dark:text-slate-300 cursor-pointer shadow-xs" 
+              className="hidden md:flex p-1.5 text-slate-500 hover:text-brand-600 dark:text-slate-400 dark:hover:text-brand-400 hover:scale-110 transition-all cursor-pointer" 
               title="Hilfe"
             >
-              <HelpCircle className="h-4 w-4" />
+              <HelpCircle className="h-5 w-5" />
             </button>
+
+            <div className="hidden md:block h-4 w-px bg-slate-200 dark:bg-slate-800/80 mx-1 shrink-0" />
+
             <Link 
               href="/settings" 
-              className="hidden md:flex p-2.5 rounded-full bg-slate-100/90 dark:bg-slate-900/90 border border-slate-200 dark:border-white/10 hover:bg-white dark:hover:bg-slate-800 transition-all text-slate-600 dark:text-slate-300 cursor-pointer shadow-xs" 
+              className="hidden md:flex p-1.5 text-slate-500 hover:text-brand-600 dark:text-slate-400 dark:hover:text-brand-400 hover:scale-110 transition-all cursor-pointer" 
               title="Einstellungen"
             >
-              <Settings className="h-4 w-4" />
+              <Settings className="h-5 w-5" />
             </Link>
+
+            <div className="hidden md:block h-4 w-px bg-slate-200 dark:bg-slate-800/80 mx-1 shrink-0" />
+
             <button 
               onClick={handleLogout} 
-              className="hidden md:flex p-2.5 rounded-full bg-slate-100/90 dark:bg-slate-900/90 border border-slate-200 dark:border-white/10 hover:bg-white dark:hover:bg-slate-800 transition-all text-red-600 dark:text-red-400 cursor-pointer shadow-xs" 
+              className="hidden md:flex p-1.5 text-slate-500 hover:text-red-600 dark:text-slate-400 dark:hover:text-red-400 transition-colors cursor-pointer" 
               title="Abmelden"
             >
-              <LogOut className="h-4 w-4" />
+              <LogOut className="h-5 w-5" />
             </button>
           </>
         )}
@@ -172,36 +188,48 @@ export default function Navbar() {
       {!isLogin && isMobileMenuOpen && (
         <div 
           ref={mobileMenuRef}
-          className="absolute top-16 left-0 right-0 bg-white dark:bg-[#0d1117] border-b border-slate-200 dark:border-slate-800 shadow-2xl md:hidden flex flex-col p-4 gap-2.5 z-[100] animate-in slide-in-from-top-2 max-h-[calc(100vh-4rem)] overflow-y-auto"
+          className="absolute top-16 left-0 right-0 bg-white/95 dark:bg-[#0d1117]/95 backdrop-blur-xl border-b border-slate-200 dark:border-slate-800 shadow-2xl md:hidden flex flex-col p-4 gap-2 z-[100] animate-in slide-in-from-top-2 max-h-[calc(100vh-4rem)] overflow-y-auto"
         >
           {/* Hauptnavigation */}
-          <div className="flex flex-col gap-1">
+          <div className="flex flex-col gap-0.5">
             <Link 
               href="/" 
-              className={`px-4 py-3 rounded-xl text-sm font-bold transition-colors ${pathname === '/' ? 'bg-brand-600 text-white shadow-md' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
+              className={`px-3 py-2.5 text-sm transition-all flex items-center justify-between ${
+                pathname === '/' 
+                  ? 'text-brand-600 dark:text-brand-400 font-bold border-l-2 border-brand-500 pl-3' 
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white font-semibold'
+              }`}
             >
               Home
             </Link>
             <Link 
               href="/calendar" 
-              className={`px-4 py-3 rounded-xl text-sm font-bold transition-colors ${pathname.startsWith('/calendar') ? 'bg-brand-600 text-white shadow-md' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
+              className={`px-3 py-2.5 text-sm transition-all flex items-center justify-between ${
+                pathname.startsWith('/calendar') 
+                  ? 'text-brand-600 dark:text-brand-400 font-bold border-l-2 border-brand-500 pl-3' 
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white font-semibold'
+              }`}
             >
               Kalenderansicht
             </Link>
             <Link 
               href="/statistics" 
-              className={`px-4 py-3 rounded-xl text-sm font-bold transition-colors ${pathname.startsWith('/statistics') ? 'bg-brand-600 text-white shadow-md' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
+              className={`px-3 py-2.5 text-sm transition-all flex items-center justify-between ${
+                pathname.startsWith('/statistics') 
+                  ? 'text-brand-600 dark:text-brand-400 font-bold border-l-2 border-brand-500 pl-3' 
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white font-semibold'
+              }`}
             >
               Statistiken
             </Link>
           </div>
           
-          <div className="h-px bg-slate-200 dark:bg-slate-800 my-1" />
+          <div className="h-px bg-slate-200/80 dark:bg-slate-800/80 my-1" />
 
           {/* Profil-Auswahl auf Mobile */}
           {profiles.length > 0 && (
-            <div className="px-3 py-2 bg-slate-50 dark:bg-slate-900/80 rounded-xl border border-slate-200/80 dark:border-slate-800 flex flex-col gap-1">
-              <div className="flex items-center gap-2 text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider px-1 py-1">
+            <div className="flex flex-col gap-1 py-1">
+              <div className="flex items-center gap-2 text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider px-3 py-1">
                 <Users className="h-3.5 w-3.5 text-brand-500" />
                 <span>Profile ({activeProfileIds.length}/{profiles.length} aktiv)</span>
               </div>
@@ -211,14 +239,14 @@ export default function Navbar() {
                   <button
                     key={profile.id}
                     onClick={() => toggleActiveProfile(profile.id)}
-                    className={`flex items-center justify-between px-3 py-2 rounded-lg text-sm transition-all cursor-pointer ${
+                    className={`flex items-center justify-between px-3 py-2 text-sm transition-colors cursor-pointer ${
                       isActive 
-                        ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-bold shadow-xs' 
-                        : 'text-slate-500 dark:text-slate-400 hover:bg-white/50 dark:hover:bg-slate-800/50'
+                        ? 'text-slate-900 dark:text-slate-100 font-bold' 
+                        : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
                     }`}
                   >
                     <div className="flex items-center gap-2.5">
-                      <div className="w-3.5 h-3.5 rounded-full ring-2 ring-white dark:ring-slate-900 shrink-0" style={{ backgroundColor: profile.color }} />
+                      <div className="w-3 h-3 rounded-full shrink-0" style={{ backgroundColor: profile.color }} />
                       <span>{profile.name}</span>
                     </div>
                     {isActive && <Check className="h-4 w-4 text-brand-500 font-bold" />}
@@ -228,30 +256,28 @@ export default function Navbar() {
             </div>
           )}
 
-          <div className="h-px bg-slate-200 dark:bg-slate-800 my-1" />
+          <div className="h-px bg-slate-200/80 dark:bg-slate-800/80 my-1" />
           
           {/* Neben-Aktionen & Theme */}
-          <div className="flex items-center justify-between px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800">
-            <span className="flex items-center gap-3">
-              Design-Modus
-            </span>
+          <div className="flex items-center justify-between px-3 py-2 text-sm font-medium text-slate-600 dark:text-slate-300">
+            <span>Design-Modus</span>
             <ThemeToggle />
           </div>
           <Link 
             href="/settings" 
-            className="px-4 py-3 rounded-xl text-sm font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-3 hover:bg-slate-100 dark:hover:bg-slate-800"
+            className="px-3 py-2.5 text-sm font-medium text-slate-600 dark:text-slate-300 flex items-center gap-3 hover:text-brand-600 dark:hover:text-brand-400 transition-colors"
           >
-            <Settings className="h-5 w-5 text-brand-500" /> Einstellungen
+            <Settings className="h-5 w-5 text-slate-400" /> Einstellungen
           </Link>
           <button 
             onClick={() => { setIsHelpOpen(true); setIsMobileMenuOpen(false); }}
-            className="px-4 py-3 rounded-xl text-sm font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-3 text-left w-full hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer"
+            className="px-3 py-2.5 text-sm font-medium text-slate-600 dark:text-slate-300 flex items-center gap-3 text-left w-full hover:text-brand-600 dark:hover:text-brand-400 transition-colors cursor-pointer"
           >
-            <HelpCircle className="h-5 w-5 text-brand-500" /> Hilfe
+            <HelpCircle className="h-5 w-5 text-slate-400" /> Hilfe
           </button>
           <button 
             onClick={handleLogout}
-            className="px-4 py-3 rounded-xl text-sm font-semibold text-red-600 dark:text-red-400 flex items-center gap-3 text-left w-full hover:bg-red-50 dark:hover:bg-red-950/40 cursor-pointer"
+            className="px-3 py-2.5 text-sm font-medium text-red-600 dark:text-red-400 flex items-center gap-3 text-left w-full hover:text-red-700 dark:hover:text-red-300 transition-colors cursor-pointer"
           >
             <LogOut className="h-5 w-5" /> Abmelden
           </button>

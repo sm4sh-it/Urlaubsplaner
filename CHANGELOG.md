@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0] - 2026-07-25
+### Added & Redesigned
+- **Minimalist Header Redesign:** Umstellung der Navigation von Pillen-Containern auf cleane Tabs mit dezentem Brand-Unterstrich für die aktive Seite. Reine Icon-Buttons mit Brand-Hover-Effekt und feinen vertikalen Trennlinien (`|`).
+- **Minimalistisches Mobile-Menü:** Aufgeräumtes, randloses Listen-Design ohne schwere Farbblöcke mit Akzentleiste für den aktiven Tab und integrierter Profilauswahl.
+- **Header Branding & Jahreswechsler:** "sm4sh's" in Brand-Farbe. Vergrößerte Touch-Trefferflächen (`p-2`, 22px Pfeile) und Brand-Farbe bei Mouseover im Jahreswechsler.
+- **Kalender-Feinabstimmung:** Transparentes Monatsnamen-Design auf Desktop, optimierter Dark-Mode-Kontrast auf Mobile sowie Ausblenden nicht existierender Tage (z. B. 30./31. Feb).
+
 ## [1.2.1] - 2026-07-25
 ### Fixed
 - **Middleware & Statische Assets:** Behebung des Redirect-Fehlers in der Proxy-Middleware für unauthentifizierte Anfragen auf statische Bild- und Icon-Dateien (`/logo.svg`, `/favicon.svg`), sodass das Logo auf der Anmeldeseite auch ohne Cookie zuverlässig angezeigt wird.

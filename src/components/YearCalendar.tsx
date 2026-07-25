@@ -240,8 +240,8 @@ export default function YearCalendar() {
       
       <div className="flex-1 flex flex-col min-h-0 overflow-x-auto overflow-y-auto custom-scrollbar -webkit-overflow-scrolling-touch pr-2 pb-4">
         {/* Header (Tage 1-31) */}
-        <div className="grid grid-cols-[38px_repeat(31,minmax(24px,1fr))] md:grid-cols-[80px_repeat(31,minmax(35px,1fr))] min-w-max gap-1 md:gap-1.5 mb-2 shrink-0">
-          <div className="bg-white dark:bg-[#0d1117] flex items-center text-xs font-semibold text-slate-500 px-1 md:pl-2 sticky left-0 z-20">
+        <div className="grid grid-cols-[38px_repeat(31,minmax(24px,1fr))] md:grid-cols-[48px_repeat(31,minmax(35px,1fr))] min-w-max gap-1 md:gap-1.5 mb-2 shrink-0">
+          <div className="bg-transparent flex items-center sticky left-0 z-20">
             
           </div>
           {Array.from({ length: 31 }, (_, i) => i + 1).map(day => (
@@ -257,9 +257,14 @@ export default function YearCalendar() {
             const days = getMonthDays(selectedYear, monthIndex)
             
             return (
-              <div key={monthIndex} className="grid grid-cols-[38px_repeat(31,minmax(24px,1fr))] md:grid-cols-[80px_repeat(31,minmax(35px,1fr))] min-w-max gap-1 md:gap-1.5">
+              <div key={monthIndex} className="grid grid-cols-[38px_repeat(31,minmax(24px,1fr))] md:grid-cols-[48px_repeat(31,minmax(35px,1fr))] min-w-max gap-1 md:gap-1.5">
                 {/* Monatsname */}
-                <div className="bg-white dark:bg-[#0d1117] flex items-center text-xs md:text-sm font-semibold text-slate-700 dark:text-slate-200 px-1 md:pl-2 sticky left-0 z-20">
+                <div className={cn(
+                  "h-[40px] flex items-center text-xs md:text-sm sticky left-0 z-20 transition-colors",
+                  "rounded-md border border-stone-200/80 bg-stone-100 text-slate-500 font-bold shadow-xs px-1.5",
+                  "dark:bg-[#050a0f] dark:border-slate-800/80 dark:text-slate-300",
+                  "md:rounded-none md:border-0 md:shadow-none md:bg-transparent dark:md:bg-transparent md:text-slate-700 dark:md:text-slate-200 md:font-semibold md:px-1"
+                )}>
                   {monthName}
                 </div>
                 
@@ -267,7 +272,7 @@ export default function YearCalendar() {
                 {days.map((dayObj, i) => {
                   if (!dayObj.isValid) {
                     return (
-                      <div key={i} className="rounded-md pointer-events-none bg-[var(--bg)]" />
+                      <div key={i} className="rounded-md pointer-events-none bg-transparent border-0 shadow-none opacity-0" />
                     )
                   }
 
