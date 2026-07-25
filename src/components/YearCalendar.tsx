@@ -228,9 +228,9 @@ export default function YearCalendar() {
   }
 
   return (
-    <div className="flex-1 flex flex-col p-4 md:p-8 overflow-hidden select-none">
-      <div className="flex items-center justify-between pb-6 shrink-0">
-        <h2 className="font-bold text-slate-800 dark:text-slate-200 text-xl tracking-tight">Jahresübersicht {selectedYear}</h2>
+    <div className="flex-1 flex flex-col p-2 sm:p-4 md:p-8 overflow-hidden select-none">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 pb-4 sm:pb-6 shrink-0">
+        <h2 className="font-bold text-slate-800 dark:text-slate-200 text-lg sm:text-xl tracking-tight">Jahresübersicht {selectedYear}</h2>
         {pressedKey && VALID_KEYS[pressedKey] && (
           <div className="text-xs bg-emerald-100 text-emerald-800 px-2 py-1 rounded font-medium">
             Aktiv: {VALID_KEYS[pressedKey]} (Klicken zum Einfügen)
@@ -238,10 +238,10 @@ export default function YearCalendar() {
         )}
       </div>
       
-      <div className="flex-1 flex flex-col min-h-0 overflow-auto pr-2 pb-4">
+      <div className="flex-1 flex flex-col min-h-0 overflow-x-auto overflow-y-auto custom-scrollbar -webkit-overflow-scrolling-touch pr-2 pb-4">
         {/* Header (Tage 1-31) */}
-        <div className="grid grid-cols-[50px_repeat(31,minmax(24px,1fr))] md:grid-cols-[80px_repeat(31,minmax(35px,1fr))] gap-1 md:gap-1.5 mb-2 shrink-0">
-          <div className="bg-transparent flex items-center text-xs font-semibold text-slate-500 pl-2">
+        <div className="grid grid-cols-[38px_repeat(31,minmax(24px,1fr))] md:grid-cols-[80px_repeat(31,minmax(35px,1fr))] min-w-max gap-1 md:gap-1.5 mb-2 shrink-0">
+          <div className="bg-white dark:bg-[#0d1117] flex items-center text-xs font-semibold text-slate-500 px-1 md:pl-2 sticky left-0 z-20">
             
           </div>
           {Array.from({ length: 31 }, (_, i) => i + 1).map(day => (
@@ -257,9 +257,9 @@ export default function YearCalendar() {
             const days = getMonthDays(selectedYear, monthIndex)
             
             return (
-              <div key={monthIndex} className="grid grid-cols-[50px_repeat(31,minmax(24px,1fr))] md:grid-cols-[80px_repeat(31,minmax(35px,1fr))] gap-1 md:gap-1.5">
+              <div key={monthIndex} className="grid grid-cols-[38px_repeat(31,minmax(24px,1fr))] md:grid-cols-[80px_repeat(31,minmax(35px,1fr))] min-w-max gap-1 md:gap-1.5">
                 {/* Monatsname */}
-                <div className="bg-transparent flex items-center text-sm font-semibold text-slate-700 dark:text-slate-200 pl-2 sticky left-0 z-20">
+                <div className="bg-white dark:bg-[#0d1117] flex items-center text-xs md:text-sm font-semibold text-slate-700 dark:text-slate-200 px-1 md:pl-2 sticky left-0 z-20">
                   {monthName}
                 </div>
                 

@@ -9,13 +9,13 @@ export default function Legend() {
   const isOpen = activeSidebarPanel === 'legend'
 
   return (
-    <div className="bg-white dark:bg-[var(--surface)] rounded-xl shadow-sm border border-slate-200 dark:border-[var(--border-subtle)] p-6 flex flex-col gap-4 shrink-0">
+    <div className="bg-white dark:bg-[var(--surface)] rounded-xl shadow-sm border border-slate-200 dark:border-[var(--border-subtle)] p-4 sm:p-6 flex flex-col gap-4 shrink-0">
       <div 
-        className="flex items-center justify-between cursor-pointer group"
+        className="flex items-center justify-between cursor-pointer group min-h-[44px] sm:min-h-[40px] py-1"
         onClick={() => setActiveSidebarPanel(isOpen ? 'statistics' : 'legend')}
       >
-        <h2 className="font-semibold text-lg text-slate-800 dark:text-slate-200">Legende</h2>
-        <button className="p-1 group-hover:bg-slate-100 dark:group-hover:bg-slate-800 rounded-md transition-colors">
+        <h2 className="font-semibold text-base sm:text-lg text-slate-800 dark:text-slate-200">Legende</h2>
+        <button className="p-2 sm:p-1 group-hover:bg-slate-100 dark:group-hover:bg-slate-800 rounded-md transition-colors shrink-0 cursor-pointer">
           {isOpen ? <ChevronUp className="w-5 h-5 text-slate-500" /> : <ChevronDown className="w-5 h-5 text-slate-500" />}
         </button>
       </div>

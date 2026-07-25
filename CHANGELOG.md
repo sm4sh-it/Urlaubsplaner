@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0] - 2026-07-25
+### Added & Improved
+- **Mobile Responsiveness (< 768px):** Umfassendes Responsive-Redesign für Smartphones und kleine Bildschirme.
+- **Header & Navigation:** Einkürzen des Brandings auf das Logo-Icon auf Mobilgeräten. Auslagerung von Profilauswahl, Hauptnavigation und Neben-Aktionen in ein aufgeräumtes Mobile-Dropdown-Menü mit hohem Z-Index (`z-[100]`).
+- **Kalenderansicht:** Touch-freundliches horizontales Wischen (`overflow-x-auto`, `-webkit-overflow-scrolling: touch`) mit fixer, blickdichter Monatsspalte (`sticky left-0`) ohne Textüberschneidungen.
+- **Anmeldeseite:** Optimierte Formular-Paddings (`p-5 sm:p-8`), 48px Touch-Ziele (`h-12`) und iOS Auto-Zoom Schutz (`text-base`).
+
 ## [1.1.1] - 2026-07-22
 ### Fixed & Improved
 - **Anmeldeseite & Icons:** Korrektur der Logo-SVG-Einbindung (`/favicon.svg`), Integration des Schloss-Icons im Passwortfeld und Anpassung an das dunkle Kartendesign.

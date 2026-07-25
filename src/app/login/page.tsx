@@ -32,21 +32,21 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex-1 flex flex-col items-center justify-center min-h-[calc(100vh-8rem)] p-4">
-      <div className="bg-white dark:bg-[#0d1117] rounded-2xl shadow-xl border border-slate-200 dark:border-slate-800 p-8 w-full max-w-md">
+    <div className="flex-1 flex flex-col items-center justify-center min-h-[calc(100vh-8rem)] p-4 sm:p-6">
+      <div className="bg-white dark:bg-[#0d1117] rounded-2xl shadow-xl border border-slate-200 dark:border-slate-800 p-5 sm:p-8 w-full max-w-md">
         
-        <div className="flex flex-col items-center mb-8">
-          <div className="mb-4">
-            <img src="/logo.svg" alt="sm4sh's Urlaubsplaner Logo" className="w-16 h-16 object-contain" />
+        <div className="flex flex-col items-center mb-6 sm:mb-8">
+          <div className="mb-3 sm:mb-4">
+            <img src="/logo.svg" alt="sm4sh's Urlaubsplaner Logo" className="w-14 h-14 sm:w-16 sm:h-16 object-contain" />
           </div>
-          <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-50 flex items-center justify-center gap-2 mb-1">
+          <h1 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-50 flex items-center justify-center gap-2 mb-1 text-center">
             sm4sh's Urlaubsplaner
           </h1>
-          <p className="text-slate-500 dark:text-slate-400 mt-1 text-center text-sm">
+          <p className="text-slate-500 dark:text-slate-400 mt-1 text-center text-xs sm:text-sm">
             Bitte gib das Passwort ein, um den Urlaubsplaner zu öffnen.
           </p>
         </div>
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6">
           <div>
             <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
               Passwort
@@ -59,7 +59,7 @@ export default function LoginPage() {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full pl-11 pr-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500 font-medium"
+                className="w-full pl-11 pr-4 h-12 rounded-xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500 font-medium text-base"
                 placeholder="••••••••"
                 required
               />
@@ -75,7 +75,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 bg-brand-600 hover:bg-brand-500 text-white font-bold rounded-xl transition-all shadow-md disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+            className="w-full h-12 bg-brand-600 hover:bg-brand-500 text-white font-bold text-base rounded-xl transition-all shadow-md disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer flex items-center justify-center"
           >
             {loading ? "Wird geprüft..." : "Entsperren"}
           </button>

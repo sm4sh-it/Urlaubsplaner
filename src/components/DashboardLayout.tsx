@@ -20,11 +20,17 @@ export default function DashboardLayout({
   const isSidebarOpen = useStore(state => state.isSidebarOpen)
   const toggleSidebar = useStore(state => state.toggleSidebar)
 
+  React.useEffect(() => {
+    if (typeof window !== 'undefined' && window.innerWidth < 768) {
+      useStore.setState({ isSidebarOpen: false })
+    }
+  }, [])
+
   return (
-    <div className="flex flex-1 h-full relative overflow-hidden p-4">
+    <div className="flex flex-1 h-full relative overflow-hidden p-2 sm:p-4">
       <div className={cn(
         "flex-1 flex min-w-0 transition-all duration-300 ease-in-out",
-        isSidebarOpen ? "mr-4" : "mr-0"
+        isSidebarOpen ? "mr-2 md:mr-4" : "mr-0"
       )}>
         {calendar}
       </div>
@@ -32,11 +38,11 @@ export default function DashboardLayout({
       {/* Sidebar Container */}
       <div 
         className={cn(
-          "flex flex-col transition-all duration-300 ease-in-out shrink-0",
-          isSidebarOpen ? "w-80 opacity-100 translate-x-0" : "w-0 opacity-0 translate-x-12 pointer-events-none"
+          "flex flex-col transition-all duration-300 ease-in-out shrink-0 z-30",
+          isSidebarOpen ? "w-72 sm:w-80 opacity-100 translate-x-0" : "w-0 opacity-0 translate-x-12 pointer-events-none"
         )}
       >
-        <div className="w-80 flex flex-col gap-4 overflow-y-auto pr-2 pb-2 h-full">
+        <div className="w-72 sm:w-80 flex flex-col gap-4 overflow-y-auto pr-1 sm:pr-2 pb-2 h-full custom-scrollbar">
           {sidebar}
         </div>
       </div>
@@ -45,8 +51,8 @@ export default function DashboardLayout({
       <button
         onClick={toggleSidebar}
         className={cn(
-          "absolute top-8 z-10 flex items-center justify-center w-8 h-12 bg-slate-200/50 hover:bg-slate-300/80 dark:bg-slate-800/50 dark:hover:bg-slate-700/80 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 transition-all duration-300 rounded-l-xl backdrop-blur-sm",
-          isSidebarOpen ? "right-84" : "right-4"
+          "absolute top-4 sm:top-8 z-40 flex items-center justify-center w-8 h-12 bg-slate-200/80 hover:bg-slate-300 dark:bg-slate-800/80 dark:hover:bg-slate-700 text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-slate-100 transition-all duration-300 rounded-l-xl backdrop-blur-md shadow-md cursor-pointer",
+          isSidebarOpen ? "right-[296px] sm:right-84" : "right-2 sm:right-4"
         )}
         title={isSidebarOpen ? "Seitenleiste ausblenden" : "Seitenleiste einblenden"}
       >

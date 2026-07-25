@@ -184,15 +184,15 @@ export default function Statistics() {
   const restUrlaubAktuell = verfuegbar - totalUrlaub
 
   return (
-    <div className="bg-white dark:bg-[var(--surface)] rounded-xl shadow-sm border border-slate-200 dark:border-[var(--border-subtle)] p-4 flex flex-col min-h-0">
+    <div className="bg-white dark:bg-[var(--surface)] rounded-xl shadow-sm border border-slate-200 dark:border-[var(--border-subtle)] p-3 sm:p-4 flex flex-col min-h-0">
       <div 
-        className="flex items-center justify-between cursor-pointer group mb-4"
+        className="flex items-center justify-between cursor-pointer group mb-2 sm:mb-4 min-h-[44px] sm:min-h-[40px] py-1"
         onClick={() => setActiveSidebarPanel(isOpen ? 'legend' : 'statistics')}
       >
-        <h2 className="font-semibold text-lg text-slate-800 dark:text-slate-200">
+        <h2 className="font-semibold text-base sm:text-lg text-slate-800 dark:text-slate-200">
           Statistik ({activeProfile.name})
         </h2>
-        <button className="p-1 group-hover:bg-slate-100 dark:group-hover:bg-slate-800 rounded-md transition-colors shrink-0">
+        <button className="p-2 sm:p-1 group-hover:bg-slate-100 dark:group-hover:bg-slate-800 rounded-md transition-colors shrink-0 cursor-pointer">
           {isOpen ? <ChevronUp className="w-5 h-5 text-slate-500" /> : <ChevronDown className="w-5 h-5 text-slate-500" />}
         </button>
       </div>

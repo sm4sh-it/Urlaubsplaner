@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react"
 import Link from "next/link"
-import { CalendarDays, Settings, ChevronLeft, ChevronRight, LogOut, HelpCircle, Menu, X } from "lucide-react"
+import { CalendarDays, Settings, ChevronLeft, ChevronRight, LogOut, HelpCircle, Menu, X, Users, Check } from "lucide-react"
 import { ThemeToggle } from "./ThemeToggle"
 import ProfileSelector from "./ProfileSelector"
 import HelpModal from "./HelpModal"
@@ -17,6 +17,9 @@ export default function Navbar() {
   
   const selectedYear = useStore((state) => state.selectedYear)
   const setSelectedYear = useStore((state) => state.setSelectedYear)
+  const profiles = useStore((state) => state.profiles) || []
+  const activeProfileIds = useStore((state) => state.activeProfileIds) || []
+  const toggleActiveProfile = useStore((state) => state.toggleActiveProfile)
   const pathname = usePathname()
   const router = useRouter()
 
@@ -52,15 +55,16 @@ export default function Navbar() {
       <div className="flex items-center gap-2">
         {!isLogin && (
           <button 
-            className="md:hidden p-2 -ml-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-md"
+            className="md:hidden p-2 -ml-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-md transition-colors"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label="Menü öffnen"
           >
             {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         )}
         <Link href="/" className="flex items-center gap-2.5 font-bold text-lg md:text-xl tracking-tight text-slate-900 dark:text-slate-50">
           <img src="/favicon.svg" alt="Logo" className="h-8.5 w-8.5 md:h-9 md:w-9 object-contain" />
-          <span className="hidden min-[380px]:inline-block">sm4sh's Urlaubsplaner</span>
+          <span className="hidden sm:inline-block">sm4sh's Urlaubsplaner</span>
         </Link>
       </div>
 
@@ -129,10 +133,14 @@ export default function Navbar() {
                 <ChevronRight size={16} />
               </button>
             </div>
-            <ProfileSelector />
+            <div className="hidden md:block">
+              <ProfileSelector />
+            </div>
           </>
         )}
-        <ThemeToggle />
+        <div className="hidden md:block">
+          <ThemeToggle />
+        </div>
         {!isLogin && (
           <>
             <button 
@@ -164,29 +172,71 @@ export default function Navbar() {
       {!isLogin && isMobileMenuOpen && (
         <div 
           ref={mobileMenuRef}
-          className="absolute top-16 left-0 right-0 bg-white/95 dark:bg-[#0d1117]/95 backdrop-blur-xl border-b border-slate-200 dark:border-slate-800 shadow-2xl md:hidden flex flex-col p-4 gap-2 z-50 animate-in slide-in-from-top-2"
+          className="absolute top-16 left-0 right-0 bg-white dark:bg-[#0d1117] border-b border-slate-200 dark:border-slate-800 shadow-2xl md:hidden flex flex-col p-4 gap-2.5 z-[100] animate-in slide-in-from-top-2 max-h-[calc(100vh-4rem)] overflow-y-auto"
         >
-          <Link 
-            href="/" 
-            className={`px-4 py-3 rounded-xl text-sm font-bold transition-colors ${pathname === '/' ? 'bg-brand-600 text-white shadow-md' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
-          >
-            Home
-          </Link>
-          <Link 
-            href="/calendar" 
-            className={`px-4 py-3 rounded-xl text-sm font-bold transition-colors ${pathname.startsWith('/calendar') ? 'bg-brand-600 text-white shadow-md' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
-          >
-            Kalenderansicht
-          </Link>
-          <Link 
-            href="/statistics" 
-            className={`px-4 py-3 rounded-xl text-sm font-bold transition-colors ${pathname.startsWith('/statistics') ? 'bg-brand-600 text-white shadow-md' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
-          >
-            Statistiken
-          </Link>
+          {/* Hauptnavigation */}
+          <div className="flex flex-col gap-1">
+            <Link 
+              href="/" 
+              className={`px-4 py-3 rounded-xl text-sm font-bold transition-colors ${pathname === '/' ? 'bg-brand-600 text-white shadow-md' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
+            >
+              Home
+            </Link>
+            <Link 
+              href="/calendar" 
+              className={`px-4 py-3 rounded-xl text-sm font-bold transition-colors ${pathname.startsWith('/calendar') ? 'bg-brand-600 text-white shadow-md' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
+            >
+              Kalenderansicht
+            </Link>
+            <Link 
+              href="/statistics" 
+              className={`px-4 py-3 rounded-xl text-sm font-bold transition-colors ${pathname.startsWith('/statistics') ? 'bg-brand-600 text-white shadow-md' : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'}`}
+            >
+              Statistiken
+            </Link>
+          </div>
           
-          <div className="h-px bg-slate-200 dark:bg-slate-800 my-2" />
+          <div className="h-px bg-slate-200 dark:bg-slate-800 my-1" />
+
+          {/* Profil-Auswahl auf Mobile */}
+          {profiles.length > 0 && (
+            <div className="px-3 py-2 bg-slate-50 dark:bg-slate-900/80 rounded-xl border border-slate-200/80 dark:border-slate-800 flex flex-col gap-1">
+              <div className="flex items-center gap-2 text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider px-1 py-1">
+                <Users className="h-3.5 w-3.5 text-brand-500" />
+                <span>Profile ({activeProfileIds.length}/{profiles.length} aktiv)</span>
+              </div>
+              {profiles.map(profile => {
+                const isActive = activeProfileIds.includes(profile.id)
+                return (
+                  <button
+                    key={profile.id}
+                    onClick={() => toggleActiveProfile(profile.id)}
+                    className={`flex items-center justify-between px-3 py-2 rounded-lg text-sm transition-all cursor-pointer ${
+                      isActive 
+                        ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 font-bold shadow-xs' 
+                        : 'text-slate-500 dark:text-slate-400 hover:bg-white/50 dark:hover:bg-slate-800/50'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-3.5 h-3.5 rounded-full ring-2 ring-white dark:ring-slate-900 shrink-0" style={{ backgroundColor: profile.color }} />
+                      <span>{profile.name}</span>
+                    </div>
+                    {isActive && <Check className="h-4 w-4 text-brand-500 font-bold" />}
+                  </button>
+                )
+              })}
+            </div>
+          )}
+
+          <div className="h-px bg-slate-200 dark:bg-slate-800 my-1" />
           
+          {/* Neben-Aktionen & Theme */}
+          <div className="flex items-center justify-between px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800">
+            <span className="flex items-center gap-3">
+              Design-Modus
+            </span>
+            <ThemeToggle />
+          </div>
           <Link 
             href="/settings" 
             className="px-4 py-3 rounded-xl text-sm font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-3 hover:bg-slate-100 dark:hover:bg-slate-800"
@@ -212,3 +262,4 @@ export default function Navbar() {
     </header>
   )
 }
+
