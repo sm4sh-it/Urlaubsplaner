@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.2.1] - 2026-07-25
+### Fixed
+- **Middleware & Statische Assets:** Behebung des Redirect-Fehlers in der Proxy-Middleware für unauthentifizierte Anfragen auf statische Bild- und Icon-Dateien (`/logo.svg`, `/favicon.svg`), sodass das Logo auf der Anmeldeseite auch ohne Cookie zuverlässig angezeigt wird.
+
 ## [1.2.0] - 2026-07-25
 ### Added & Improved
 - **Mobile Responsiveness (< 768px):** Umfassendes Responsive-Redesign für Smartphones und kleine Bildschirme.

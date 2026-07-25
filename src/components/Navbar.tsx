@@ -63,7 +63,7 @@ export default function Navbar() {
           </button>
         )}
         <Link href="/" className="flex items-center gap-2.5 font-bold text-lg md:text-xl tracking-tight text-slate-900 dark:text-slate-50">
-          <img src="/favicon.svg" alt="Logo" className="h-8.5 w-8.5 md:h-9 md:w-9 object-contain" />
+          <img src="/logo.svg" alt="Logo" className="h-8.5 w-8.5 md:h-9 md:w-9 object-contain" />
           <span className="hidden sm:inline-block">sm4sh's Urlaubsplaner</span>
         </Link>
       </div>

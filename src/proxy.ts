@@ -16,12 +16,12 @@ export async function proxy(request: NextRequest) {
     return NextResponse.next()
   }
 
-  // Allow access to login page and public assets
+  // Allow access to login page, public assets, and static files
   if (
     request.nextUrl.pathname.startsWith('/login') ||
     request.nextUrl.pathname.startsWith('/_next') ||
-    request.nextUrl.pathname.startsWith('/api/') || // We protect APIs separately if needed, or allow them internally
-    request.nextUrl.pathname === '/favicon.ico'
+    request.nextUrl.pathname.startsWith('/api/') ||
+    /\.(svg|png|jpg|jpeg|gif|webp|ico|woff2?)$/i.test(request.nextUrl.pathname)
   ) {
     return NextResponse.next()
   }
@@ -49,8 +49,8 @@ export const config = {
      * - api (API routes)
      * - _next/static (static files)
      * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
+     * - static image/font extensions
      */
-    '/((?!api|_next/static|_next/image|favicon.ico).*)',
+    '/((?!api|_next/static|_next/image|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|woff2?)$).*)',
   ],
 }
