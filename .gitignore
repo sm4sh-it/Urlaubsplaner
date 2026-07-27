@@ -1,4 +1,6 @@
 /Workfiles/
+/workfiles/
+
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
@@ -45,18 +47,22 @@ debug_script.ts
 next-env.d.ts
 
 # Database
-dev.db
-dev.db-journal
-dev.db-shm
-dev.db-wal
-prisma/dev.db
-prisma/dev.db-journal
+*.db
+*.db-journal
+*.db-shm
+*.db-wal
+*.db.test
+prisma/*.db*
 
 # Docker SQLite data folder
 /data
 
-# Mockups / Old Designs
+# Mockups / Old Designs / Plans
 /new Design/
+implementation_plan.md
+*.plan.md
+task.md
+walkthrough.md
 
 # AI Agent Instructions
 AGENTS.md
