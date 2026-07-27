@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.0] - 2026-07-28
+### Added & Improved
+- **Feiertags-Effizienz & Urlaubs-Multiplikator Metrik:** Neue Metrik misst das Verhältnis von Brutto-Freizeit zu Netto-Urlaubstagen bei Feiertags-Blöcken ($F/U$). Exakte Anrechnung von halben Urlaubstagen und Freistellungen (Krankheit, Sabbatical, Sonderurlaub, Überstundenabbau).
+- **Statistik-Dashboard Redesign & Raster-Optimierung:** Perfekt ausgerichtetes 4-Spalten-Raster im Statistik-Bereich. Neues All-Time Widget "Top Reisemonat" zur Auswertung der beliebtesten Reisemonate über alle Jahre.
+- **Dynamische Arbeitstage & Kalender-Tooltips:** Vollständige Persistierung benutzerdefinierter Arbeitstage (`workingDays`) mit dynamischer Wochenend-Hervorhebung im Kalender sowie erweitere Reise-Tooltips mit Wochentag und Datum.
+- **Visual Performance & Scroll-Fixes:** Kompaktes, scrollfreies Heatmap-Diagramm ("Urlaubsverteilung über die Jahre"), optimierte Donut-Chart Abstände und schlanke einzeilige Detaillisten.
+
 ## [1.4.0] - 2026-07-26
 ### Added & Improved
 - **"Halber Tag" Reiseoption:** Einführung einer Checkbox "Halber Tag" inklusive Umschalter für "Vormittag (AM)" und "Nachmittag (PM)" beim Erstellen und Bearbeiten von Reisen.

@@ -19,7 +19,8 @@ const profileSchema = z.object({
   additionalLeave: z.number().min(0),
   remainingLeaveExpiryDate: z.string().regex(/^\d{2}-\d{2}$/, "Invalid MM-DD format"),
   stateCode: z.string().length(2),
-  startYear: z.number().int().min(2022).max(2100)
+  startYear: z.number().int().min(2022).max(2100),
+  workingDays: z.string()
 })
 
 const yearSchema = z.number().int().min(2022).max(2100)

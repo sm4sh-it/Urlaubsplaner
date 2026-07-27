@@ -20,13 +20,13 @@ export function DonutChart({ title, segments, emptyText = "Keine Daten vorhanden
   const isEmpty = segments.length === 0 || totalPercent === 0
 
   return (
-    <div className={cn("bg-white dark:bg-[#0d1117] rounded-xl border border-slate-200 dark:border-slate-800 p-6 flex flex-col shadow-xl h-full", className)}>
-      <h3 className="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-6">{title}</h3>
+    <div className={cn("bg-white dark:bg-[#0d1117] rounded-xl border border-slate-200 dark:border-slate-800 p-5 sm:p-6 flex flex-col shadow-xl h-full justify-between", className)}>
+      <h3 className="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-4">{title}</h3>
       {isEmpty ? (
         <div className="text-slate-500 text-sm my-auto text-center">{emptyText}</div>
       ) : (
-        <div className="flex flex-col md:flex-row items-center gap-6 my-auto">
-          <div className="relative w-32 h-32 flex-shrink-0">
+        <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4 my-auto w-full min-w-0">
+          <div className="relative w-24 h-24 sm:w-28 sm:h-28 flex-shrink-0">
             {/* Base Circle */}
             <svg viewBox="0 0 100 100" className="absolute top-0 left-0 w-full h-full text-slate-100 dark:text-[#161b22]">
                <circle cx="50" cy="50" r="40" fill="transparent" stroke="currentColor" strokeWidth="20" />
@@ -58,15 +58,15 @@ export function DonutChart({ title, segments, emptyText = "Keine Daten vorhanden
               })}
             </svg>
           </div>
-          <div className="flex flex-col gap-3 flex-1 w-full justify-center">
+          <div className="flex flex-col gap-2 flex-1 w-full min-w-0 justify-center">
             {segments.map((seg) => (
               seg.percent > 0 && (
-                <div key={seg.type} className="flex items-center justify-between text-sm">
-                  <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full" style={{ backgroundColor: seg.color }} />
-                    <span className="text-slate-700 dark:text-slate-300 truncate max-w-[120px]" title={seg.type}>{seg.type}</span>
+                <div key={seg.type} className="flex items-center justify-between text-xs sm:text-sm gap-1 min-w-0">
+                  <div className="flex items-center gap-1.5 min-w-0 flex-1">
+                    <div className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: seg.color }} />
+                    <span className="text-slate-700 dark:text-slate-300 truncate" title={seg.type}>{seg.type}</span>
                   </div>
-                  <span className="font-bold text-slate-700 dark:text-slate-100">{Math.round(seg.percent)}%</span>
+                  <span className="font-bold text-slate-700 dark:text-slate-100 shrink-0 ml-1">{Math.round(seg.percent)}%</span>
                 </div>
               )
             ))}

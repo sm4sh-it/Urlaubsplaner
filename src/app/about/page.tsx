@@ -86,12 +86,26 @@ export default function AboutPage() {
             </h2>
 
             <div className="space-y-8">
-              {/* V 1.4.0 */}
+              {/* V 1.5.0 */}
               <div className="relative pl-7 border-l-2 border-brand-500">
                 <div className="absolute -left-[9px] top-1.5 h-4 w-4 rounded-full bg-brand-500 ring-4 ring-white dark:ring-[#0d1117]" />
                 <div className="flex items-center gap-3 mb-3">
-                  <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100 m-0">Version 1.4.0</h3>
+                  <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100 m-0">Version 1.5.0</h3>
                   <span className="text-xs px-3 py-1 bg-brand-100 dark:bg-brand-500/20 text-brand-700 dark:text-brand-300 rounded-full font-bold">Aktuell</span>
+                </div>
+                <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
+                  <li><strong>Feiertags-Effizienz &amp; Urlaubs-Multiplikator:</strong> Neue Metrik berechnet das Verhältnis von Brutto-Freizeit zu Netto-Urlaubstagen bei Feiertags-Blöcken ($F/U$) mit Anrechnung halber Tage und sonstiger Freistellungen.</li>
+                  <li><strong>Statistik-Dashboard Redesign &amp; 4-Spalten-Raster:</strong> Perfekt ausgerichtetes 4-Spalten-Raster (`1/4`, `1/4`, `2/4`), kompakte einzeilige Listenansicht und neues All-Time Widget "Top Reisemonat".</li>
+                  <li><strong>Dynamische Arbeitstage &amp; Kalender-Tooltips:</strong> Vollständige Persistierung benutzerdefinierter Arbeitstage (`workingDays`), dynamische Kalender-Wochenenddarstellung sowie Reise-Tooltips mit Wochentag und Datum.</li>
+                  <li><strong>Visual Performance &amp; Scroll-Fixes:</strong> Kompaktes, scrollfreies Heatmap-Diagramm ("Urlaubsverteilung über die Jahre") und optimiertes Donut-Chart Spacing.</li>
+                </ul>
+              </div>
+
+              {/* V 1.4.0 */}
+              <div className="relative pl-7 border-l-2 border-slate-200 dark:border-slate-800">
+                <div className="absolute -left-[9px] top-1.5 h-4 w-4 rounded-full bg-slate-300 dark:bg-slate-700 ring-4 ring-white dark:ring-[#0d1117]" />
+                <div className="flex items-center gap-3 mb-3">
+                  <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100 m-0">Version 1.4.0</h3>
                 </div>
                 <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
                   <li><strong>"Halber Tag" Reiseoption:</strong> Einführung der Checkbox "Halber Tag" inklusive Umschalter für "Vormittag (AM)" und "Nachmittag (PM)" beim Erstellen und Bearbeiten von Reisen.</li>

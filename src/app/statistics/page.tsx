@@ -9,7 +9,9 @@ import {
   BridgeDaysWidget,
   WorkRatioWidget,
   VacationHabitsWidget,
-  CountryWidget
+  CountryWidget,
+  HolidayEfficiencyWidget,
+  PeakTravelMonthWidget
 } from "@/components/Statistics/Widgets"
 
 import ScatterPlotWidget from "@/components/Statistics/ScatterPlotWidget"
@@ -53,25 +55,34 @@ export default async function StatisticsPage() {
 
       <div className="w-full h-px bg-slate-200 dark:bg-white/10 my-2" />
       
-      <div className="flex flex-col xl:flex-row items-start gap-4 md:gap-6 w-full mt-2">
-        {/* Left Column: Stacked Widgets */}
-        <div className="flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 w-full">
-          <AvgDurationWidget />
-          <BridgeDaysWidget />
-          <VacationHabitsWidget />
-          <StatusWidget />
-          <TripCategoryWidget />
-          <TravelTypeWidget />
-          <TransportWidget />
-          <CountryWidget />
-          <WorkRatioWidget />
-          <BudgetWidget />
+      {/* Unified 4-Column Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 md:gap-6 w-full mt-2">
+        {/* Row 2: 1/4, 1/4, 2/4 */}
+        <VacationHabitsWidget />
+        <WorkRatioWidget />
+        <div className="md:col-span-2 xl:col-span-2">
+          <HolidayEfficiencyWidget />
         </div>
 
-        {/* Right Column: Main Graph */}
-        <div className="w-full xl:w-fit flex-shrink-0 flex flex-col gap-4 md:gap-6 min-w-0">
+        {/* Row 3: 1/4, 1/4, 1/4 + 1/4 (Graph) */}
+        <AvgDurationWidget />
+        <BudgetWidget />
+        <BridgeDaysWidget />
+        
+        {/* Historical Distribution Graph (spans 3 rows in 4th column on xl) */}
+        <div className="xl:col-span-1 xl:row-span-3 w-full flex flex-col min-w-0">
           <HistoricalDistributionGraph />
         </div>
+
+        {/* Row 4: 1/4, 1/4, 1/4 */}
+        <StatusWidget />
+        <TripCategoryWidget />
+        <TravelTypeWidget />
+
+        {/* Row 5: 1/4, 1/4, 1/4 */}
+        <TransportWidget />
+        <CountryWidget />
+        <PeakTravelMonthWidget />
       </div>
       </div>
     </div>

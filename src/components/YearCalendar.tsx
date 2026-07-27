@@ -96,6 +96,7 @@ export default function YearCalendar() {
     ? profiles.find(p => p.id === activeProfileIds[0])
     : null;
   const stateCode = primaryProfile?.stateCode || "NW"
+  const workingDaysArr = primaryProfile?.workingDays ? primaryProfile.workingDays.split(',').map(Number) : undefined
 
   const tripLookup = React.useMemo(() => {
     const validTripStatuses = ["In Planung", "Gebucht", "Abgeschlossen", "Idee"]
@@ -290,7 +291,7 @@ export default function YearCalendar() {
         {/* Monate 1-12 */}
         <div className="flex flex-col gap-1.5">
           {SHORT_MONTHS.map((monthName, monthIndex) => {
-            const days = getMonthDays(selectedYear, monthIndex)
+            const days = getMonthDays(selectedYear, monthIndex, workingDaysArr)
             
             return (
               <div key={monthIndex} className="grid grid-cols-[38px_repeat(31,minmax(24px,1fr))] md:grid-cols-[48px_repeat(31,minmax(35px,1fr))] min-w-max gap-1 md:gap-1.5">
@@ -322,6 +323,7 @@ export default function YearCalendar() {
                       // Tooltip Format: Wochentag, DD.MM.YYYY
                       const dateObj = new Date(dayObj.date)
                       const weekday = dateObj.toLocaleDateString('de-DE', { weekday: 'long' })
+                      const weekdayShort = dateObj.toLocaleDateString('de-DE', { weekday: 'short' })
                       const formattedDate = dateObj.toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' })
                       
                       let tooltip = `${weekday}, ${formattedDate}`
@@ -429,7 +431,9 @@ export default function YearCalendar() {
                                     <div key={profileId} className={cn("flex flex-col rounded-sm overflow-hidden border-solid shadow-sm w-full h-full", 
                                       isCompact ? "border-[1px] flex-1" : "border-2 shrink-0 flex-1",
                                       tripEntry ? (tripEntry.isIdea ? "opacity-50 border-dashed" : "opacity-90") : ""
-                                    )} style={{ borderColor: profile.color }}>
+                                    )} style={{ borderColor: profile.color }}
+                                      title={tripEntry ? `${weekdayShort} ${formattedDate} - ${tripEntry.title}` : undefined}
+                                    >
                                       <div className={cn("flex-1 flex items-center justify-center font-bold w-full leading-none", typeClass1, isCompact ? "text-[0px]" : "text-[8px]")}>
                                         {!isCompact && (HALF_TO_LABEL[parts[0]] || parts[0])}
                                       </div>
@@ -453,7 +457,7 @@ export default function YearCalendar() {
                                       tripEntry ? (tripEntry.isIdea ? "opacity-50 border-dashed" : "opacity-90") : ""
                                     )}
                                     style={{ borderColor: profile.color }}
-                                    title={tripEntry ? `Trip: ${tripEntry.title}` : undefined}
+                                    title={tripEntry ? `${weekdayShort} ${formattedDate} - ${tripEntry.title}` : undefined}
                                   >
                                     {!isCompact && label}
                                   </div>

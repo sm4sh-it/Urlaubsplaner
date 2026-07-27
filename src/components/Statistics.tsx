@@ -5,6 +5,7 @@ import { useStore } from "@/store/useStore"
 import { SHORT_MONTHS } from "@/lib/dateUtils"
 import { getProfileStatsForYear } from "@/lib/profileUtils"
 import { isVacationCostingDay, calculateTripVacationCost, tripOverlapsYear } from "@/lib/tripUtils"
+import { calculateHolidayEfficiency } from "@/lib/statisticsUtils"
 import { ChevronUp, ChevronDown } from "lucide-react"
 
 export default function Statistics() {
@@ -23,8 +24,8 @@ export default function Statistics() {
 
   const stats = activeProfile ? getProfileStatsForYear(activeProfile, selectedYear, overrides, entries, trips, holidays) : null
   
-  const { totalUrlaub, totalKrank, totalMobile, monthlyStats, ungenutzterResturlaub } = useMemo(() => {
-    if (!activeProfile) return { totalUrlaub: 0, totalKrank: 0, totalMobile: 0, monthlyStats: [], ungenutzterResturlaub: 0 }
+  const { totalUrlaub, totalKrank, totalMobile, monthlyStats, ungenutzterResturlaub, efficiencyData } = useMemo(() => {
+    if (!activeProfile) return { totalUrlaub: 0, totalKrank: 0, totalMobile: 0, monthlyStats: [], ungenutzterResturlaub: 0, efficiencyData: null }
 
     // Filtern der Einträge für dieses Jahr und Profil
     const yearEntries = entries.filter(e => 
@@ -157,7 +158,9 @@ export default function Statistics() {
 
     const ungenutzterResturlaubCalc = Math.max(0, (stats?.remainingLeave || 0) - urlaubVorVerfall)
 
-    return { totalUrlaub: tUrlaub, totalKrank: tKrank, totalMobile: tMobile, monthlyStats: mStats, ungenutzterResturlaub: ungenutzterResturlaubCalc }
+    const efficiencyData = calculateHolidayEfficiency(selectedYear, activeProfile, entries, trips, holidays)
+
+    return { totalUrlaub: tUrlaub, totalKrank: tKrank, totalMobile: tMobile, monthlyStats: mStats, ungenutzterResturlaub: ungenutzterResturlaubCalc, efficiencyData }
   }, [entries, activeProfile, selectedYear, holidays, trips, stats?.remainingLeave])
 
   if (activeProfileIds.length === 0) {

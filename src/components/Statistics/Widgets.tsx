@@ -4,7 +4,8 @@ import { useStore } from "@/store/useStore"
 import { useMemo } from "react"
 import { isVacationCostingDay } from "@/lib/tripUtils"
 import { getProfileStatsForYear } from "@/lib/profileUtils"
-import { Plane, Car, Train, Ship, Bike, Bus, Info, ArrowUpRight, ArrowDownRight, Wallet, TrendingUp } from "lucide-react"
+import { calculateHolidayEfficiency } from "@/lib/statisticsUtils"
+import { Plane, Car, Train, Ship, Bike, Bus, Info, ArrowUpRight, ArrowDownRight, Wallet, TrendingUp, CalendarDays } from "lucide-react"
 import { DonutChart } from "@/components/ui/DonutChart"
 import { cn } from "@/lib/utils"
 
@@ -40,6 +41,12 @@ export function TripCategoryWidget() {
 
   const total = stats.reduce((sum, [_, count]) => sum + count, 0)
   
+  const getShortLabel = (type: string) => {
+    if (type === 'Mobiles Arbeiten') return 'Mobil-Arbeit'
+    if (type === 'Überstundenabbau') return 'Überstunden'
+    return type
+  }
+
   const segments = useMemo(() => {
     let cumulative = 0
     return stats.map(([type, count], idx) => {
@@ -47,7 +54,7 @@ export function TripCategoryWidget() {
       const offset = cumulative
       cumulative += percent
       const color = getTypeColor(type, idx)
-      return { type, count, percent, offset, color }
+      return { type: getShortLabel(type), percent, offset, color }
     })
   }, [stats, total])
 
@@ -665,6 +672,161 @@ export function VacationHabitsWidget() {
           </div>
         </div>
       </div>
+    </div>
+  )
+}
+
+export function HolidayEfficiencyWidget() {
+  const activeProfileIds = useStore(state => state.activeProfileIds)
+  const profiles = useStore(state => state.profiles)
+  const entries = useStore(state => state.entries)
+  const trips = useStore(state => state.trips)
+  const holidays = useStore(state => state.holidays)
+  const selectedYear = useStore(state => state.selectedYear)
+
+  const activeProfile = activeProfileIds.length > 0 ? profiles.find(p => p.id === activeProfileIds[0]) : undefined
+
+  const data = useMemo(() => {
+    if (!activeProfile) return null
+    return calculateHolidayEfficiency(selectedYear, activeProfile, entries, trips, holidays)
+  }, [selectedYear, activeProfile, entries, trips, holidays])
+
+  if (!data || data.blocks.length === 0) {
+    return (
+      <div className="bg-white dark:bg-[#0d1117] rounded-xl border border-slate-200 dark:border-slate-800 p-6 flex flex-col shadow-xl h-full justify-between">
+        <h3 className="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Feiertags-Effizienz</h3>
+        <div className="flex flex-col items-center justify-center flex-1 text-slate-400 dark:text-slate-500 my-auto">
+          <span className="text-xs">Keine Feiertags-Blöcke genutzt</span>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="bg-white dark:bg-[#0d1117] rounded-xl border border-slate-200 dark:border-slate-800 p-6 flex flex-col shadow-xl h-full justify-between">
+      <div className="flex items-start justify-between mb-3">
+        <div>
+          <h3 className="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">Feiertags-Effizienz</h3>
+          <div className="flex items-baseline gap-2">
+            <span className="text-3xl font-bold text-slate-800 dark:text-white">
+              +{data.totalExtraDays}
+            </span>
+            <span className="text-sm text-slate-500 dark:text-slate-400 font-medium">Tage extra Freizeit</span>
+          </div>
+          <div className="text-xs text-emerald-600 dark:text-emerald-400 font-bold mt-1">
+            Ø {data.averageMultiplier.toFixed(1)}x Hebelwirkung
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-2 space-y-1.5 flex-1 overflow-y-auto custom-scrollbar pr-1">
+        {data.blocks.map((block, i) => (
+          <div key={i} className="flex items-center justify-between p-2 rounded-lg bg-slate-50 dark:bg-[#161b22] border border-slate-100 dark:border-slate-800 gap-2">
+            <div className="flex items-center gap-2 min-w-0 flex-1">
+              <span className="text-xs font-semibold text-slate-700 dark:text-slate-200 truncate" title={block.holidaysIncluded.join(', ')}>
+                {block.holidaysIncluded.join(', ')}
+              </span>
+              <span className="text-[10px] text-slate-400 dark:text-slate-500 shrink-0">
+                ({new Date(block.startDate).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' })} - {new Date(block.endDate).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' })})
+              </span>
+            </div>
+            <div className="flex items-center gap-2 shrink-0">
+              <span className="text-[10px] font-medium text-slate-500 dark:text-slate-400">
+                {block.usedVacationDays}U / {block.totalFreeDays}F
+              </span>
+              <span className="px-2 py-0.5 rounded bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 text-xs font-bold whitespace-nowrap min-w-[44px] text-center">
+                {block.multiplier.toFixed(1)}x
+              </span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+export function PeakTravelMonthWidget() {
+  const entries = useStore(state => state.entries)
+  const trips = useStore(state => state.trips)
+  const activeProfileIds = useStore(state => state.activeProfileIds)
+
+  const stats = useMemo(() => {
+    const monthCounts = new Array(12).fill(0)
+    let totalDays = 0
+
+    // Manual entries across ALL years
+    entries.forEach(e => {
+      if (activeProfileIds.includes(e.profileId)) {
+        const parts = e.type.split(',')
+        let isVacation = parts.some(p => p === 'U' || p === '2')
+        if (isVacation) {
+          const monthIdx = parseInt(e.date.split('-')[1], 10) - 1
+          if (monthIdx >= 0 && monthIdx < 12) {
+            const cost = parts.includes('U') ? 1 : 0.5
+            monthCounts[monthIdx] += cost
+            totalDays += cost
+          }
+        }
+      }
+    })
+
+    // Trips across ALL years
+    trips.forEach(t => {
+      if (t.profiles.some(p => activeProfileIds.includes(p.id)) && (t.type === 'Urlaub' || t.type === 'Sabbatical')) {
+        const tStart = new Date(t.startDate)
+        const tEnd = new Date(t.endDate)
+        for (let d = new Date(tStart); d <= tEnd; d.setDate(d.getDate() + 1)) {
+          const monthIdx = d.getMonth()
+          if (monthIdx >= 0 && monthIdx < 12) {
+            monthCounts[monthIdx] += 1
+            totalDays += 1
+          }
+        }
+      }
+    })
+
+    const monthNames = [
+      "Januar", "Februar", "März", "April", "Mai", "Juni", 
+      "Juli", "August", "September", "Oktober", "November", "Dezember"
+    ]
+
+    const list = monthCounts
+      .map((count, idx) => ({ month: monthNames[idx], count: Math.round(count) }))
+      .filter(item => item.count > 0)
+      .sort((a, b) => b.count - a.count)
+
+    return { list, totalDays: Math.round(totalDays) }
+  }, [entries, trips, activeProfileIds])
+
+  const colors = ['#f59e0b', '#3b82f6', '#10b981', '#8b5cf6']
+
+  return (
+    <div className="bg-white dark:bg-[#0d1117] rounded-xl border border-slate-200 dark:border-slate-800 p-6 flex flex-col shadow-xl h-full justify-start">
+      <h3 className="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-4">Top Reisemonat</h3>
+      {stats.list.length === 0 ? (
+        <div className="text-slate-500 text-sm my-auto text-center">Keine Urlaubstage eingetragen</div>
+      ) : (
+        <div className="flex flex-col gap-3 mt-1">
+          {stats.list.slice(0, 3).map((item, idx) => {
+            const isTop = idx === 0
+            const color = colors[idx % colors.length]
+            return (
+              <div key={item.month} className={cn("flex items-center gap-3", isTop ? "mb-1" : "")}>
+                <div className={cn("flex items-center justify-center rounded-full text-white shrink-0", isTop ? "w-10 h-10 shadow-md" : "w-8 h-8 opacity-80")} style={{ backgroundColor: color }}>
+                  <CalendarDays className={isTop ? "w-5 h-5" : "w-4 h-4"} />
+                </div>
+                <div className="flex-1 flex flex-col min-w-0">
+                  <div className={cn("text-slate-700 dark:text-slate-200 truncate", isTop ? "font-bold text-base" : "font-medium text-sm")}>{item.month}</div>
+                  {isTop && <div className="text-xs text-amber-500 dark:text-amber-400 font-medium">Beliebtester Monat (Gesamt)</div>}
+                </div>
+                <div className={cn("font-bold shrink-0 ml-1", isTop ? "text-lg" : "text-sm")} style={{ color }}>
+                  {item.count} {item.count === 1 ? 'Tag' : 'Tage'}
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      )}
     </div>
   )
 }

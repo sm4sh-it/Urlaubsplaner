@@ -142,12 +142,12 @@ export default function HistoricalDistributionGraph() {
   }
 
   return (
-    <div className="bg-white dark:bg-[#0d1117] rounded-xl border border-slate-200 dark:border-slate-800 p-6 flex flex-col shadow-xl justify-start w-full h-full">
-      <div className="flex flex-col items-center gap-3 mb-6">
+    <div className="bg-white dark:bg-[#0d1117] rounded-xl border border-slate-200 dark:border-slate-800 p-4 sm:p-5 flex flex-col shadow-xl justify-start w-full h-full">
+      <div className="flex flex-col items-center gap-3 mb-4">
         <div className="flex bg-slate-100 dark:bg-[#161b22] rounded-full p-1 border border-slate-200 dark:border-slate-700/50">
           <button
             onClick={() => setViewMode('Urlaub')}
-            className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-semibold transition-all duration-300 ${
+            className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs sm:text-sm font-semibold transition-all duration-300 ${
               viewMode === 'Urlaub' 
                 ? 'bg-[#238636] text-white shadow-sm' 
                 : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-800'
@@ -157,7 +157,7 @@ export default function HistoricalDistributionGraph() {
           </button>
           <button
             onClick={() => setViewMode('Krankheit')}
-            className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-semibold transition-all duration-300 ${
+            className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs sm:text-sm font-semibold transition-all duration-300 ${
               viewMode === 'Krankheit' 
                 ? 'bg-[#da3633] text-white shadow-sm' 
                 : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-800'
@@ -167,29 +167,29 @@ export default function HistoricalDistributionGraph() {
           </button>
         </div>
         
-        <h3 className="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-center min-w-[360px]">
+        <h3 className="text-xs sm:text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider text-center">
           {viewMode === 'Urlaub' ? 'Urlaubsverteilung über die Jahre' : 'Krankheitsverteilung über die Jahre'}
         </h3>
       </div>
 
-      <div className="overflow-x-auto pb-4">
-        <div className="min-w-max">
-          <div className="flex gap-2 mb-2">
+      <div className="flex flex-col items-center justify-center my-auto w-full overflow-hidden">
+        <div className="w-fit">
+          <div className="flex gap-1.5 mb-1.5 justify-center">
             {SHORT_MONTHS.map((m, i) => (
-              <div key={i} className="text-[10px] text-slate-500 font-medium uppercase text-center w-5">
+              <div key={i} className="text-[10px] text-slate-500 font-medium uppercase text-center w-4 sm:w-4.5">
                 {m}
               </div>
             ))}
           </div>
 
-          <div className="flex gap-2">
+          <div className="flex gap-1.5 justify-center">
             {SHORT_MONTHS.map((_, mIdx) => (
-              <div key={mIdx} className="flex flex-col gap-1 w-5">
+              <div key={mIdx} className="flex flex-col gap-1 w-4 sm:w-4.5">
                 {Array.from({ length: 31 }).map((_, dIdx) => {
                   const day = dIdx + 1
                   const maxDays = daysInMonth[mIdx]
                   if (day > maxDays) {
-                    return <div key={dIdx} className="w-5 h-5 rounded-sm invisible" />
+                    return <div key={dIdx} className="w-4 h-4 sm:w-4.5 sm:h-4.5 rounded-sm invisible" />
                   }
                   
                   const mmdd = `${String(mIdx + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`
@@ -198,7 +198,7 @@ export default function HistoricalDistributionGraph() {
                   return (
                     <div 
                       key={dIdx} 
-                      className={`w-5 h-5 rounded-sm transition-colors duration-300 ${getLevelClass(level)}`} 
+                      className={`w-4 h-4 sm:w-4.5 sm:h-4.5 rounded-sm transition-colors duration-300 ${getLevelClass(level)}`} 
                       title={`${day}. ${SHORT_MONTHS[mIdx]}: ${levels.has(mmdd) ? levels.get(mmdd) : 0} Einträge (Level ${level})`}
                     />
                   )
@@ -209,16 +209,16 @@ export default function HistoricalDistributionGraph() {
         </div>
       </div>
 
-      <div className="mt-8 flex items-center gap-2 text-xs text-slate-500">
-        <span>Selten {viewMode === 'Urlaub' ? 'Urlaub' : 'Krank'}</span>
-        <div className="flex gap-1 ml-2 mr-2">
-          <div className="w-4 h-4 rounded-sm bg-slate-100 dark:bg-[#2d333b]" />
-          <div className={`w-4 h-4 rounded-sm ${viewMode === 'Urlaub' ? 'vacation-1' : 'sick-1'}`} />
-          <div className={`w-4 h-4 rounded-sm ${viewMode === 'Urlaub' ? 'vacation-2' : 'sick-2'}`} />
-          <div className={`w-4 h-4 rounded-sm ${viewMode === 'Urlaub' ? 'vacation-3' : 'sick-3'}`} />
-          <div className={`w-4 h-4 rounded-sm ${viewMode === 'Urlaub' ? 'vacation-4' : 'sick-4'}`} />
+      <div className="mt-4 flex items-center justify-center gap-1.5 text-[11px] text-slate-500">
+        <span>Selten</span>
+        <div className="flex gap-1 mx-1">
+          <div className="w-3.5 h-3.5 rounded-sm bg-slate-100 dark:bg-[#2d333b]" />
+          <div className={`w-3.5 h-3.5 rounded-sm ${viewMode === 'Urlaub' ? 'vacation-1' : 'sick-1'}`} />
+          <div className={`w-3.5 h-3.5 rounded-sm ${viewMode === 'Urlaub' ? 'vacation-2' : 'sick-2'}`} />
+          <div className={`w-3.5 h-3.5 rounded-sm ${viewMode === 'Urlaub' ? 'vacation-3' : 'sick-3'}`} />
+          <div className={`w-3.5 h-3.5 rounded-sm ${viewMode === 'Urlaub' ? 'vacation-4' : 'sick-4'}`} />
         </div>
-        <span>Häufig {viewMode === 'Urlaub' ? 'Urlaub' : 'Krank'}</span>
+        <span>Häufig</span>
       </div>
     </div>
   )

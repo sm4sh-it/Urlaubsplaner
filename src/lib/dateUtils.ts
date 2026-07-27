@@ -1,4 +1,4 @@
-import { getDaysInMonth, isWeekend, format, parseISO } from "date-fns"
+import { getDaysInMonth, isWeekend as isWeekendFns, format, parseISO } from "date-fns"
 
 export const MONTHS = [
   "Januar", "Februar", "März", "April", "Mai", "Juni",
@@ -10,17 +10,27 @@ export const SHORT_MONTHS = [
   "Jul", "Aug", "Sep", "Okt", "Nov", "Dez"
 ]
 
-export function getMonthDays(year: number, monthIndex: number) {
+export function getMonthDays(year: number, monthIndex: number, workingDaysArr?: number[]) {
   const daysInMonth = getDaysInMonth(new Date(year, monthIndex))
   const days = []
   
   for (let d = 1; d <= 31; d++) {
     if (d <= daysInMonth) {
       const date = new Date(year, monthIndex, d)
+      
+      let isWknd = false
+      if (workingDaysArr) {
+        let dow = date.getDay()
+        if (dow === 0) dow = 7
+        isWknd = !workingDaysArr.includes(dow)
+      } else {
+        isWknd = isWeekendFns(date)
+      }
+
       days.push({
         day: d,
         date: format(date, 'yyyy-MM-dd'),
-        isWeekend: isWeekend(date),
+        isWeekend: isWknd,
         isValid: true
       })
     } else {
