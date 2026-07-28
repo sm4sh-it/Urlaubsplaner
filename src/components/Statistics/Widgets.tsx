@@ -6,59 +6,72 @@ import { isVacationCostingDay } from "@/lib/tripUtils"
 import { getProfileStatsForYear } from "@/lib/profileUtils"
 import { calculateHolidayEfficiency } from "@/lib/statisticsUtils"
 import { Plane, Car, Train, Ship, Bike, Bus, Info, ArrowUpRight, ArrowDownRight, Wallet, TrendingUp, CalendarDays } from "lucide-react"
-import { DonutChart } from "@/components/ui/DonutChart"
+import { DonutChart, DualDonutChart } from "@/components/ui/DonutChart"
 import { cn } from "@/lib/utils"
 
 export function TripCategoryWidget() {
   const trips = useStore(state => state.trips)
   const activeProfileIds = useStore(state => state.activeProfileIds)
+  const selectedYear = useStore(state => state.selectedYear)
 
-  const stats = useMemo(() => {
-    const counts = new Map<string, number>()
+  const items = useMemo(() => {
+    const yearCounts = new Map<string, number>()
+    const allTimeCounts = new Map<string, number>()
+    let yearTotal = 0
+    let allTimeTotal = 0
+
     trips.forEach(t => {
-      if (t.profiles.some(p => activeProfileIds.includes(p.id))) {
-        if (t.type && t.type.trim() !== '') {
-          counts.set(t.type, (counts.get(t.type) || 0) + 1)
+      if (t.profiles.some(p => activeProfileIds.includes(p.id)) && t.type && t.type.trim() !== '') {
+        const type = t.type
+        allTimeCounts.set(type, (allTimeCounts.get(type) || 0) + 1)
+        allTimeTotal++
+
+        const sYr = new Date(t.startDate).getFullYear()
+        const eYr = new Date(t.endDate).getFullYear()
+        if (sYr === selectedYear || eYr === selectedYear) {
+          yearCounts.set(type, (yearCounts.get(type) || 0) + 1)
+          yearTotal++
         }
       }
     })
-    return Array.from(counts.entries()).sort((a, b) => b[1] - a[1]).slice(0, 5) // Top 5
-  }, [trips, activeProfileIds])
 
-  const getTypeColor = (type: string, idx: number) => {
-    switch (type) {
-      case 'Urlaub': return 'var(--color-vacation)'
-      case 'Sabbatical': return 'var(--color-auszeit)'
-      case 'Sonderurlaub': return 'var(--color-special)'
-      case 'Mobiles Arbeiten': return 'var(--color-mobile)'
-      case 'Überstundenabbau': return 'var(--color-overtime)'
-      case 'Krankheit': return 'var(--color-sick)'
-      default:
-        const fallbackColors = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#14b8a6', '#f97316']
-        return fallbackColors[idx % fallbackColors.length]
+    const getTypeColor = (type: string, idx: number) => {
+      switch (type) {
+        case 'Urlaub': return 'var(--color-vacation)'
+        case 'Sabbatical': return 'var(--color-auszeit)'
+        case 'Sonderurlaub': return 'var(--color-special)'
+        case 'Mobiles Arbeiten': return 'var(--color-mobile)'
+        case 'Überstundenabbau': return 'var(--color-overtime)'
+        case 'Krankheit': return 'var(--color-sick)'
+        default:
+          const fallbackColors = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#14b8a6', '#f97316']
+          return fallbackColors[idx % fallbackColors.length]
+      }
     }
-  }
 
-  const total = stats.reduce((sum, [_, count]) => sum + count, 0)
-  
-  const getShortLabel = (type: string) => {
-    if (type === 'Mobiles Arbeiten') return 'Mobil-Arbeit'
-    if (type === 'Überstundenabbau') return 'Überstunden'
-    return type
-  }
+    const getShortLabel = (type: string) => {
+      if (type === 'Mobiles Arbeiten') return 'Mobil-Arbeit'
+      if (type === 'Überstundenabbau') return 'Überstunden'
+      return type
+    }
 
-  const segments = useMemo(() => {
-    let cumulative = 0
-    return stats.map(([type, count], idx) => {
-      const percent = total > 0 ? (count / total) * 100 : 0
-      const offset = cumulative
-      cumulative += percent
-      const color = getTypeColor(type, idx)
-      return { type: getShortLabel(type), percent, offset, color }
+    const allTypes = Array.from(new Set([...yearCounts.keys(), ...allTimeCounts.keys()]))
+      .sort((a, b) => (allTimeCounts.get(b) || 0) - (allTimeCounts.get(a) || 0))
+      .slice(0, 5)
+
+    return allTypes.map((type, idx) => {
+      const yCount = yearCounts.get(type) || 0
+      const aCount = allTimeCounts.get(type) || 0
+      return {
+        type: getShortLabel(type),
+        yearPercent: yearTotal > 0 ? (yCount / yearTotal) * 100 : 0,
+        allTimePercent: allTimeTotal > 0 ? (aCount / allTimeTotal) * 100 : 0,
+        color: getTypeColor(type, idx)
+      }
     })
-  }, [stats, total])
+  }, [trips, activeProfileIds, selectedYear])
 
-  return <DonutChart title="Art der Reise" segments={segments} />
+  return <DualDonutChart title="Art der Reise" yearLabel={String(selectedYear)} allTimeLabel="Ø" items={items} />
 }
 
 export function TransportWidget() {
@@ -128,42 +141,52 @@ export function TransportWidget() {
 export function StatusWidget() {
   const trips = useStore(state => state.trips)
   const activeProfileIds = useStore(state => state.activeProfileIds)
+  const selectedYear = useStore(state => state.selectedYear)
 
-  const stats = useMemo(() => {
-    const counts = { 'Idee': 0, 'In Planung': 0, 'Gebucht': 0, 'Abgeschlossen': 0 }
-    let total = 0
+  const items = useMemo(() => {
+    const yearCounts = { 'Idee': 0, 'In Planung': 0, 'Gebucht': 0, 'Abgeschlossen': 0 }
+    const allTimeCounts = { 'Idee': 0, 'In Planung': 0, 'Gebucht': 0, 'Abgeschlossen': 0 }
+    let yearTotal = 0
+    let allTimeTotal = 0
+
     trips.forEach(t => {
-      if (t.profiles.some(p => activeProfileIds.includes(p.id))) {
-        if (t.status in counts) {
-          counts[t.status as keyof typeof counts]++
-          total++
+      if (t.profiles.some(p => activeProfileIds.includes(p.id)) && t.status in allTimeCounts) {
+        const st = t.status as keyof typeof allTimeCounts
+        allTimeCounts[st]++
+        allTimeTotal++
+
+        const sYr = new Date(t.startDate).getFullYear()
+        const eYr = new Date(t.endDate).getFullYear()
+        if (sYr === selectedYear || eYr === selectedYear) {
+          yearCounts[st]++
+          yearTotal++
         }
       }
     })
-    return { counts, total }
-  }, [trips, activeProfileIds])
 
-  const STATUS_COLORS: Record<string, string> = {
-    'Idee': '#eab308', // Yellow (status-badge request)
-    'In Planung': '#ff9f43', // Orange (status-badge planning)
-    'Gebucht': '#1b8a5a', // Green (status-badge confirmed)
-    'Abgeschlossen': '#64748b' // Slate
-  }
+    const STATUS_COLORS: Record<string, string> = {
+      'Idee': '#eab308',
+      'In Planung': '#ff9f43',
+      'Gebucht': '#1b8a5a',
+      'Abgeschlossen': '#64748b'
+    }
 
-  const list = Object.entries(stats.counts).filter(([_, count]) => count > 0)
-  
-  const segments = useMemo(() => {
-    let cumulative = 0
-    return list.map(([type, count]) => {
-      const percent = stats.total > 0 ? (count / stats.total) * 100 : 0
-      const offset = cumulative
-      cumulative += percent
-      const color = STATUS_COLORS[type] || '#64748b'
-      return { type, count, percent, offset, color }
-    })
-  }, [list, stats.total])
+    const statuses = ['Idee', 'In Planung', 'Gebucht', 'Abgeschlossen']
+    return statuses
+      .filter(st => yearCounts[st as keyof typeof yearCounts] > 0 || allTimeCounts[st as keyof typeof allTimeCounts] > 0)
+      .map(st => {
+        const yCount = yearCounts[st as keyof typeof yearCounts]
+        const aCount = allTimeCounts[st as keyof typeof allTimeCounts]
+        return {
+          type: st,
+          yearPercent: yearTotal > 0 ? (yCount / yearTotal) * 100 : 0,
+          allTimePercent: allTimeTotal > 0 ? (aCount / allTimeTotal) * 100 : 0,
+          color: STATUS_COLORS[st] || '#64748b'
+        }
+      })
+  }, [trips, activeProfileIds, selectedYear])
 
-  return <DonutChart title="Buchungsstatus" segments={segments} />
+  return <DualDonutChart title="Buchungsstatus" yearLabel={String(selectedYear)} allTimeLabel="Ø" items={items} />
 }
 
 export function AvgDurationWidget() {
@@ -196,14 +219,14 @@ export function AvgDurationWidget() {
   }, [trips, activeProfileIds, selectedYear])
 
   return (
-    <div className="bg-white dark:bg-[#0d1117] rounded-xl border border-slate-200 dark:border-slate-800 p-6 flex flex-col shadow-xl h-full">
+    <div className="bg-white dark:bg-[#0d1117] rounded-xl border border-slate-200 dark:border-slate-800 p-6 flex flex-col shadow-xl h-full justify-start">
       <h3 className="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Ø Urlaubsdauer</h3>
-      <div className="flex items-end gap-2 mb-4">
+      <div className="flex items-end gap-2 mb-2">
         <span className="text-4xl font-bold text-blue-500 dark:text-blue-400">{avgData.allTime}</span>
-        <span className="text-lg text-slate-500 mb-1">Tage</span>
+        <span className="text-sm text-slate-500 mb-1">Tage (Gesamt)</span>
       </div>
       
-      <div className="mt-auto flex flex-col gap-2 border-t border-slate-100 dark:border-slate-800 pt-4">
+      <div className="mt-3 flex flex-col gap-2 border-t border-slate-100 dark:border-slate-800 pt-4">
         {avgData.history.map(h => (
           <div key={h.year} className="flex items-center justify-between text-sm">
             <span className="text-slate-500 dark:text-slate-400">{h.year}</span>
@@ -270,50 +293,66 @@ export function CountryWidget() {
 export function BudgetWidget() {
   const trips = useStore(state => state.trips)
   const activeProfileIds = useStore(state => state.activeProfileIds)
+  const selectedYear = useStore(state => state.selectedYear)
 
-  const { avgDev, validTrips } = useMemo(() => {
-    let sumDev = 0
-    let valid = 0
-    trips.forEach(t => {
-      if (t.profiles.some(p => activeProfileIds.includes(p.id))) {
-        if (t.budget && t.cost && t.budget > 0) {
-          const dev = ((t.cost - t.budget) / t.budget) * 100
-          sumDev += dev
-          valid++
+  const budgetData = useMemo(() => {
+    const getBudgetStats = (yr?: number) => {
+      let sumDev = 0
+      let valid = 0
+      trips.forEach(t => {
+        if (t.profiles.some(p => activeProfileIds.includes(p.id))) {
+          const sYr = new Date(t.startDate).getFullYear()
+          if ((yr === undefined || sYr === yr) && t.budget && t.cost && t.budget > 0) {
+            const dev = ((t.cost - t.budget) / t.budget) * 100
+            sumDev += dev
+            valid++
+          }
         }
-      }
-    })
-    return { avgDev: valid > 0 ? sumDev / valid : 0, validTrips: valid }
-  }, [trips, activeProfileIds])
+      })
+      return { dev: valid > 0 ? sumDev / valid : 0, valid }
+    }
 
-  const getHumorousText = (dev: number) => {
-    if (dev > 20) return "Oha! Deine Urlaube eskalieren finanziell völlig. 💸"
-    if (dev > 5) return "Immer etwas teurer als gedacht... typisch! 🤷‍♂️"
-    if (dev > -5) return "Wow, Punktlandung! Du planst wie ein Buchhalter. 🤓"
-    if (dev > -20) return "Schnäppchenjäger! Günstiger als geplant. 🤑"
-    return "Hast du den Urlaub im Garten verbracht? Extrem gespart! 🏕️"
-  }
+    const allTimeStats = getBudgetStats()
+
+    return {
+      avgDev: allTimeStats.dev,
+      validTrips: allTimeStats.valid,
+      history: [
+        { year: selectedYear, ...getBudgetStats(selectedYear) },
+        { year: selectedYear - 1, ...getBudgetStats(selectedYear - 1) },
+        { year: selectedYear - 2, ...getBudgetStats(selectedYear - 2) }
+      ]
+    }
+  }, [trips, activeProfileIds, selectedYear])
 
   return (
     <div className="bg-white dark:bg-[#0d1117] rounded-xl border border-slate-200 dark:border-slate-800 p-6 flex flex-col shadow-xl h-full justify-start">
       <h3 className="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">
         Budget vs. Realität
       </h3>
-      {validTrips === 0 ? (
+      {budgetData.validTrips === 0 ? (
          <div className="text-slate-500 text-sm mt-2">Trage bei deinen Reisen geplantes Budget und tatsächliche Kosten ein, um hier dein Finanz-Karma zu sehen.</div>
       ) : (
         <>
-          <div className="flex items-end gap-2 mt-2">
-            <span className={`text-4xl font-bold ${avgDev > 0 ? 'text-[#f85149]' : 'text-[#39d353]'}`}>
-              {avgDev > 0 ? '+' : ''}{avgDev.toFixed(1)}%
+          <div className="flex items-end gap-2 mb-2">
+            <span className={`text-4xl font-bold ${budgetData.avgDev > 0 ? 'text-[#f85149]' : 'text-[#39d353]'}`}>
+              {budgetData.avgDev > 0 ? '+' : ''}{budgetData.avgDev.toFixed(1)}%
             </span>
             <span className="text-sm text-slate-500 mb-1 leading-tight">
               Abweichung <br/>im Schnitt
             </span>
           </div>
-          <p className="text-sm text-slate-500 dark:text-slate-400 mt-4 leading-relaxed italic">
-            "{getHumorousText(avgDev)}"
-          </p>
+
+          <div className="mt-3 flex flex-col gap-2 border-t border-slate-100 dark:border-slate-800 pt-4">
+            {budgetData.history.map(h => (
+              <div key={h.year} className="flex items-center justify-between text-sm">
+                <span className="text-slate-500 dark:text-slate-400">{h.year}</span>
+                <span className={cn("font-medium", h.valid > 0 ? (h.dev > 0 ? 'text-[#f85149]' : 'text-[#39d353]') : 'text-slate-400')}>
+                  {h.valid > 0 ? `${h.dev > 0 ? '+' : ''}${h.dev.toFixed(1)}%` : '-'}
+                </span>
+              </div>
+            ))}
+          </div>
         </>
       )}
     </div>
@@ -325,84 +364,102 @@ export function BridgeDaysWidget() {
   const holidays = useStore(state => state.holidays)
   const activeProfileIds = useStore(state => state.activeProfileIds)
   const profiles = useStore(state => state.profiles)
-
   const trips = useStore(state => state.trips)
+  const selectedYear = useStore(state => state.selectedYear)
 
-  const count = useMemo(() => {
+  const bridgeData = useMemo(() => {
     const activeProfile = profiles.find(p => p.id === activeProfileIds[0])
-    if (!activeProfile) return 0
+    if (!activeProfile) return { allTime: 0, history: [] }
     
-    let bridgeCount = 0
     const workingDaysArr = activeProfile.workingDays.split(',').map(Number)
 
-    const vacationDates = new Set<string>()
+    const getBridgeCountForYear = (yr?: number) => {
+      let bridgeCount = 0
+      const vacationDates = new Set<string>()
 
-    entries.forEach(e => {
-      if (e.profileId !== activeProfile.id) return
-      e.type.split(',').forEach(part => {
-        if (part === 'U' || part === '2') {
-          vacationDates.add(e.date)
+      entries.forEach(e => {
+        if (e.profileId !== activeProfile.id) return
+        if (yr !== undefined && !e.date.startsWith(String(yr))) return
+        e.type.split(',').forEach(part => {
+          if (part === 'U' || part === '2') {
+            vacationDates.add(e.date)
+          }
+        })
+      })
+
+      trips.forEach(t => {
+        if (!t.profiles.some(p => p.id === activeProfile.id)) return
+        const validTripStatuses = ["In Planung", "Gebucht", "Abgeschlossen"]
+        const validTypes = ["Urlaub", "Sabbatical", "Sonderurlaub", "Überstundenabbau", "Wanderurlaub", "Städtetrip", "Strandurlaub", "Heimatbesuch", "Rundreise", "Skiurlaub", "Wellness", "Roadtrip", "Aktivurlaub", "Kombi-Reise"]
+        if (!validTripStatuses.includes(t.status)) return
+        if (!validTypes.includes(t.type)) return
+
+        const start = new Date(t.startDate)
+        const end = new Date(t.endDate)
+        
+        for (let d = new Date(start); d <= end; d.setUTCDate(d.getUTCDate() + 1)) {
+          if (yr === undefined || d.getFullYear() === yr) {
+            const dateStr = d.toISOString().split('T')[0]
+            vacationDates.add(dateStr)
+          }
         }
       })
-    })
 
-    trips.forEach(t => {
-      if (!t.profiles.some(p => p.id === activeProfile.id)) return
-      const validTripStatuses = ["In Planung", "Gebucht", "Abgeschlossen"]
-      const validTypes = ["Urlaub", "Sonderurlaub", "Sabbatical", "Überstundenabbau", "Wanderurlaub", "Städtetrip", "Strandurlaub", "Heimatbesuch", "Rundreise", "Skiurlaub", "Wellness", "Roadtrip", "Aktivurlaub", "Kombi-Reise"]
-      if (!validTripStatuses.includes(t.status)) return
-      if (!validTypes.includes(t.type)) return
+      Array.from(vacationDates).forEach(dateStr => {
+        const d = new Date(dateStr)
+        const wDay = d.getDay() === 0 ? 7 : d.getDay()
+        if (!workingDaysArr.includes(wDay)) return
+        
+        const dPrev = new Date(d)
+        dPrev.setDate(d.getDate() - 1)
+        const dNext = new Date(d)
+        dNext.setDate(d.getDate() + 1)
+        
+        const prevDay = dPrev.getDay() === 0 ? 7 : dPrev.getDay()
+        const nextDay = dNext.getDay() === 0 ? 7 : dNext.getDay()
 
-      const start = new Date(t.startDate)
-      const end = new Date(t.endDate)
-      
-      for (let d = new Date(start); d <= end; d.setUTCDate(d.getUTCDate() + 1)) {
-        const dateStr = d.toISOString().split('T')[0]
-        vacationDates.add(dateStr)
-      }
-    })
+        const prevIsWeekend = !workingDaysArr.includes(prevDay)
+        const nextIsWeekend = !workingDaysArr.includes(nextDay)
+        
+        const prevDateStr = `${dPrev.getFullYear()}-${String(dPrev.getMonth()+1).padStart(2,'0')}-${String(dPrev.getDate()).padStart(2,'0')}`
+        const nextDateStr = `${dNext.getFullYear()}-${String(dNext.getMonth()+1).padStart(2,'0')}-${String(dNext.getDate()).padStart(2,'0')}`
+        
+        const prevIsHoliday = !!holidays[prevDateStr]
+        const nextIsHoliday = !!holidays[nextDateStr]
 
-    Array.from(vacationDates).forEach(dateStr => {
-      const d = new Date(dateStr)
-      
-      // Is it a working day?
-      const wDay = d.getDay() === 0 ? 7 : d.getDay() // 0 = Sun -> 7, 1 = Mon...
-      if (!workingDaysArr.includes(wDay)) return // Not a working day anyway
-      
-      // Check surrounding days
-      const dPrev = new Date(d)
-      dPrev.setDate(d.getDate() - 1)
-      const dNext = new Date(d)
-      dNext.setDate(d.getDate() + 1)
-      
-      const prevDay = dPrev.getDay() === 0 ? 7 : dPrev.getDay()
-      const nextDay = dNext.getDay() === 0 ? 7 : dNext.getDay()
+        if ((prevIsHoliday && nextIsWeekend) || (prevIsWeekend && nextIsHoliday)) {
+          bridgeCount++
+        }
+      })
+      return bridgeCount
+    }
 
-      const prevIsWeekend = !workingDaysArr.includes(prevDay)
-      const nextIsWeekend = !workingDaysArr.includes(nextDay)
-      
-      const prevDateStr = `${dPrev.getFullYear()}-${String(dPrev.getMonth()+1).padStart(2,'0')}-${String(dPrev.getDate()).padStart(2,'0')}`
-      const nextDateStr = `${dNext.getFullYear()}-${String(dNext.getMonth()+1).padStart(2,'0')}-${String(dNext.getDate()).padStart(2,'0')}`
-      
-      const prevIsHoliday = !!holidays[prevDateStr]
-      const nextIsHoliday = !!holidays[nextDateStr]
-
-      if ((prevIsHoliday && nextIsWeekend) || (prevIsWeekend && nextIsHoliday)) {
-        bridgeCount++
-      }
-    })
-    return bridgeCount
-  }, [entries, trips, activeProfileIds, profiles, holidays])
+    return {
+      allTime: getBridgeCountForYear(),
+      history: [
+        { year: selectedYear, count: getBridgeCountForYear(selectedYear) },
+        { year: selectedYear - 1, count: getBridgeCountForYear(selectedYear - 1) },
+        { year: selectedYear - 2, count: getBridgeCountForYear(selectedYear - 2) }
+      ]
+    }
+  }, [entries, trips, activeProfileIds, profiles, holidays, selectedYear])
 
   return (
     <div className="bg-white dark:bg-[#0d1117] rounded-xl border border-slate-200 dark:border-slate-800 p-6 flex flex-col shadow-xl h-full justify-start">
       <h3 className="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Genutzte Brückentage</h3>
-      <div className="flex items-end gap-2">
-        <span className="text-4xl font-bold text-brand-500">{count}</span>
+      <div className="flex items-end gap-2 mb-2">
+        <span className="text-4xl font-bold text-brand-500">{bridgeData.allTime}</span>
+        <span className="text-sm text-slate-500 mb-1">Tage (Gesamt)</span>
       </div>
-      <p className="text-xs text-slate-500 mt-2 leading-relaxed">
-        Urlaubstage genau zwischen einem Feiertag und einem Wochenende. (Zählt für alle Jahre aufsteigend)
-      </p>
+
+      <div className="mt-3 flex flex-col gap-2 border-t border-slate-100 dark:border-slate-800 pt-4">
+        {bridgeData.history.map(h => (
+          <div key={h.year} className="flex items-center justify-between text-sm">
+            <span className="text-slate-500 dark:text-slate-400">{h.year}</span>
+            <span className="font-medium text-slate-700 dark:text-slate-300">{h.count > 0 ? `${h.count} Tage` : '-'}</span>
+          </div>
+        ))}
+      </div>
     </div>
   )
 }
@@ -410,35 +467,48 @@ export function BridgeDaysWidget() {
 export function TravelTypeWidget() {
   const trips = useStore(state => state.trips)
   const activeProfileIds = useStore(state => state.activeProfileIds)
+  const selectedYear = useStore(state => state.selectedYear)
 
-  const stats = useMemo(() => {
-    const counts = new Map<string, number>()
-    let total = 0
+  const items = useMemo(() => {
+    const yearCounts = new Map<string, number>()
+    const allTimeCounts = new Map<string, number>()
+    let yearTotal = 0
+    let allTimeTotal = 0
+
     trips.forEach(t => {
-      if (t.profiles.some(p => activeProfileIds.includes(p.id))) {
-        if (t.travelType && t.travelType.trim() !== '') {
-          counts.set(t.travelType, (counts.get(t.travelType) || 0) + 1)
-          total++
+      if (t.profiles.some(p => activeProfileIds.includes(p.id)) && t.travelType && t.travelType.trim() !== '') {
+        const tt = t.travelType
+        allTimeCounts.set(tt, (allTimeCounts.get(tt) || 0) + 1)
+        allTimeTotal++
+
+        const sYr = new Date(t.startDate).getFullYear()
+        const eYr = new Date(t.endDate).getFullYear()
+        if (sYr === selectedYear || eYr === selectedYear) {
+          yearCounts.set(tt, (yearCounts.get(tt) || 0) + 1)
+          yearTotal++
         }
       }
     })
-    return { list: Array.from(counts.entries()).sort((a, b) => b[1] - a[1]), total }
-  }, [trips, activeProfileIds])
 
-  const colors = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#f97316']
+    const colors = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#f97316']
 
-  const segments = useMemo(() => {
-    let cumulative = 0
-    return stats.list.map(([type, count], idx) => {
-      const percent = stats.total > 0 ? (count / stats.total) * 100 : 0
-      const offset = cumulative
-      cumulative += percent
-      const color = colors[idx % colors.length]
-      return { type, count, percent, offset, color }
+    const allTypes = Array.from(new Set([...yearCounts.keys(), ...allTimeCounts.keys()]))
+      .sort((a, b) => (allTimeCounts.get(b) || 0) - (allTimeCounts.get(a) || 0))
+      .slice(0, 5)
+
+    return allTypes.map((type, idx) => {
+      const yCount = yearCounts.get(type) || 0
+      const aCount = allTimeCounts.get(type) || 0
+      return {
+        type,
+        yearPercent: yearTotal > 0 ? (yCount / yearTotal) * 100 : 0,
+        allTimePercent: allTimeTotal > 0 ? (aCount / allTimeTotal) * 100 : 0,
+        color: colors[idx % colors.length]
+      }
     })
-  }, [stats.list, stats.total])
+  }, [trips, activeProfileIds, selectedYear])
 
-  return <DonutChart title="Reisetyp" segments={segments} />
+  return <DualDonutChart title="Reisetyp" yearLabel={String(selectedYear)} allTimeLabel="Ø" items={items} />
 }
 
 export function WorkRatioWidget() {
@@ -551,13 +621,18 @@ export function WorkRatioWidget() {
         <h3 className="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
           Work - No Work {selectedYear}
         </h3>
-        <p className="text-xs text-brand-500 font-bold mt-1">{stats.ratio.toFixed(1)}% Fehltage</p>
+        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Übersicht der Arbeitstage &amp; Abwesenheiten</p>
       </div>
       
       <div className="flex flex-col gap-3 flex-1">
         <div className="flex justify-between items-center pb-2 border-b border-slate-100 dark:border-slate-800">
           <span className="text-slate-500 dark:text-slate-400 text-sm">Mögliche Arbeitstage</span>
-          <span className="font-bold text-slate-700 dark:text-slate-300">{stats.totalWorkDays}</span>
+          <div className="flex items-center gap-2">
+            <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
+              {stats.ratio.toFixed(1)}% Abwesenheit
+            </span>
+            <span className="font-bold text-slate-700 dark:text-slate-300">{stats.totalWorkDays}</span>
+          </div>
         </div>
         
         <div className="flex justify-between items-center text-sm">
@@ -611,7 +686,8 @@ export function VacationHabitsWidget() {
   const stats = useMemo(() => {
     let short = 0 // 1-3 days
     let medium = 0 // 4-10 days
-    let long = 0 // > 10 days
+    let long = 0 // 11-20 days
+    let extreme = 0 // > 20 days ("Was ist arbeiten?")
     
     trips.forEach(t => {
       if (!t.profiles.some(p => activeProfileIds.includes(p.id))) return
@@ -622,14 +698,15 @@ export function VacationHabitsWidget() {
       
       if (t.type === 'Urlaub' || t.type === 'Sabbatical') {
         const d = t.duration || 1
-        if (d <= 3) short++
-        else if (d <= 10) medium++
-        else long++
+        if (d > 20) extreme++
+        else if (d > 10) long++
+        else if (d >= 4) medium++
+        else short++
       }
     })
     
-    const total = short + medium + long
-    return { short, medium, long, total }
+    const total = short + medium + long + extreme
+    return { short, medium, long, extreme, total }
   }, [trips, activeProfileIds, selectedYear])
 
   return (
@@ -638,7 +715,7 @@ export function VacationHabitsWidget() {
         <h3 className="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
           Urlaubsgewohnheiten
         </h3>
-        <p className="text-xs text-brand-500 font-bold mt-1">Reiselänge in {selectedYear}</p>
+        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Reiselänge in {selectedYear}</p>
       </div>
 
       <div className="flex flex-col gap-4 mt-2">
@@ -664,13 +741,25 @@ export function VacationHabitsWidget() {
 
         <div className="flex flex-col gap-1">
           <div className="flex justify-between text-sm">
-            <span className="text-slate-700 dark:text-slate-300">Langurlaub (&gt;10 Tage)</span>
+            <span className="text-slate-700 dark:text-slate-300">Langurlaub (11-20 Tage)</span>
             <span className="font-semibold text-slate-900 dark:text-white">{stats.long}</span>
           </div>
           <div className="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-2 overflow-hidden">
             <div className="bg-[#8b5cf6] dark:bg-[#7c3aed] h-full rounded-full transition-all duration-500" style={{ width: stats.total ? `${(stats.long / stats.total) * 100}%` : '0%' }}></div>
           </div>
         </div>
+
+        {stats.extreme > 0 && (
+          <div className="flex flex-col gap-1">
+            <div className="flex justify-between text-sm">
+              <span className="text-slate-700 dark:text-slate-300 font-medium">Was ist arbeiten? (&gt;20 Tage)</span>
+              <span className="font-semibold text-amber-500 dark:text-amber-400">{stats.extreme}</span>
+            </div>
+            <div className="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-2 overflow-hidden">
+              <div className="bg-[#f59e0b] dark:bg-[#d97706] h-full rounded-full transition-all duration-500" style={{ width: stats.total ? `${(stats.extreme / stats.total) * 100}%` : '0%' }}></div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )

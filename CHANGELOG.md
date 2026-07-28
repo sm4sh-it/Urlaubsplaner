@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.1] - 2026-07-28
+### Added & Improved
+- **Doppel-Kreisdiagramme (Dual Donut Charts):** Gegenüberstellung von gewähltem Jahr und Gesamt-Durchschnitt ($Ø$) für *Buchungsstatus*, *Art der Reise* und *Reisetyp* mit flüssiger Mount-Ladeanimation und zentrierter Legende.
+- **Statistik-Dashboard Re-Ordering & Raster-Symmetrie:** Neusortiertes 5-Zeilen-Raster ($1/3$ in Reihe 1–3, $1/4$ in Reihe 4–5). Ausrichtung des Jahresverlaufs direkt unter der Hauptzahl bei *Ø Urlaubsdauer* sowie Ergänzung des 3-Jahresverlaufs bei *Budget vs. Realität* und *Genutzte Brückentage*.
+- **Widget Finetunings & Easter Egg:** *Urlaubsgewohnheiten* mit angepasster Typografie und dynamischer Oster-Egg Statistik („Was ist arbeiten?“ bei Reisen >20 Tage); *Work - No Work* mit neutralem Badge *% Abwesenheit*.
+- **Native-Button Styling („+ Neue Reise“):** Exakt an das Kachel-Design und Mouseover-Verhalten der Reise-Kacheln angepasst.
+
 ## [1.5.0] - 2026-07-28
 ### Added & Improved
 - **Feiertags-Effizienz & Urlaubs-Multiplikator Metrik:** Neue Metrik misst das Verhältnis von Brutto-Freizeit zu Netto-Urlaubstagen bei Feiertags-Blöcken ($F/U$). Exakte Anrechnung von halben Urlaubstagen und Freistellungen (Krankheit, Sabbatical, Sonderurlaub, Überstundenabbau).

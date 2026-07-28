@@ -43,47 +43,47 @@ export default async function StatisticsPage() {
 
   return (
     <div className="flex-1 w-full h-full overflow-y-auto overflow-x-hidden custom-scrollbar">
-      <div className="flex flex-col p-4 md:p-8 w-full max-w-[1600px] mx-auto">
+      <div className="flex flex-col p-4 md:p-8 w-full max-w-[1600px] mx-auto gap-4 md:gap-6">
         <StoreHydrator profiles={profilesRaw} entries={entries} overrides={overrides} trips={tripsRaw as any} />
       
-      {/* Jahresabhängige Statistiken */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6 w-full mb-4">
-        <VacationBurnDownWidget />
-        <SickDaysRadarWidget />
-        <ScatterPlotWidget />
-      </div>
-
-      <div className="w-full h-px bg-slate-200 dark:bg-white/10 my-2" />
-      
-      {/* Unified 4-Column Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 md:gap-6 w-full mt-2">
-        {/* Row 2: 1/4, 1/4, 2/4 */}
-        <VacationHabitsWidget />
-        <WorkRatioWidget />
-        <div className="md:col-span-2 xl:col-span-2">
+        {/* Zeile 1: Urlaubs-Guthaben, Kosten vs. Reisedauer, Feiertags-Effizienz */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 w-full">
+          <VacationBurnDownWidget />
+          <ScatterPlotWidget />
           <HolidayEfficiencyWidget />
         </div>
 
-        {/* Row 3: 1/4, 1/4, 1/4 + 1/4 (Graph) */}
-        <AvgDurationWidget />
-        <BudgetWidget />
-        <BridgeDaysWidget />
-        
-        {/* Historical Distribution Graph (spans 3 rows in 4th column on xl) */}
-        <div className="xl:col-span-1 xl:row-span-3 w-full flex flex-col min-w-0">
-          <HistoricalDistributionGraph />
+        {/* Zeile 2: Urlaubsgewohnheiten, Work No Work, Krankheitstage nach Wochentag */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 w-full">
+          <VacationHabitsWidget />
+          <WorkRatioWidget />
+          <SickDaysRadarWidget />
         </div>
 
-        {/* Row 4: 1/4, 1/4, 1/4 */}
-        <StatusWidget />
-        <TripCategoryWidget />
-        <TravelTypeWidget />
+        {/* Zeile 3: Buchungsstatus, Art der Reise, Reisetyp (Dual Donut Charts) */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 w-full">
+          <StatusWidget />
+          <TripCategoryWidget />
+          <TravelTypeWidget />
+        </div>
 
-        {/* Row 5: 1/4, 1/4, 1/4 */}
-        <TransportWidget />
-        <CountryWidget />
-        <PeakTravelMonthWidget />
-      </div>
+        {/* Zeile 4 & 5: 4-Spalten Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 md:gap-6 w-full">
+          {/* Zeile 4 */}
+          <AvgDurationWidget />
+          <BudgetWidget />
+          <BridgeDaysWidget />
+          
+          {/* Urlaubsverteilung über die Jahre (spans 2 rows in column 4) */}
+          <div className="xl:col-span-1 xl:row-span-2 w-full flex flex-col min-w-0">
+            <HistoricalDistributionGraph />
+          </div>
+
+          {/* Zeile 5 */}
+          <TransportWidget />
+          <CountryWidget />
+          <PeakTravelMonthWidget />
+        </div>
       </div>
     </div>
   )
