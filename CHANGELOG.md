@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.5.2] - 2026-08-06
+### Fixed
+- **Kalender Crash bei 'Alle Ferien':** Klicks auf den Kalender bei alleinig oder zusätzlich ausgewähltem virtuellem Profil *Alle Ferien* führten bisher zu einem Datenbank-Absturz. Das virtuelle Profil wird nun für Klick-Aktionen im Kalender korrekt ignoriert, während reguläre Profil-Auswahlen weiterhin normal verarbeitet werden.
+
 ## [1.5.1] - 2026-07-28
 ### Added & Improved
 - **Doppel-Kreisdiagramme (Dual Donut Charts):** Gegenüberstellung von gewähltem Jahr und Gesamt-Durchschnitt ($Ø$) für *Buchungsstatus*, *Art der Reise* und *Reisetyp* mit flüssiger Mount-Ladeanimation und zentrierter Legende.

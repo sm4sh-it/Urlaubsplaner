@@ -188,6 +188,7 @@ export default function YearCalendar() {
       if (pressedKey && !type) return // Invalid key pressed
 
       for (const pId of activeProfileIds) {
+        if (pId === 'ALLE_FERIEN') continue
         const profile = profiles.find(p => p.id === pId)
         if (!profile || selectedYear < profile.startYear) continue
 
