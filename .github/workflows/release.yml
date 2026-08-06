@@ -7,11 +7,11 @@ on:
       - 'v*'
   release:
     types: [published]
-  workflow_dispatch: # Allows manual trigger from Actions tab
+  workflow_dispatch:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
+  IMAGE_NAME: sm4sh-it/urlaubsplaner
 
 jobs:
   build-and-push-image:
@@ -62,7 +62,6 @@ jobs:
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
             type=raw,value=latest,enable={{is_default_branch}}
-            type=ref,event=tag
             type=raw,value=${{ github.ref_name }}
 
       - name: Build and push Docker image
