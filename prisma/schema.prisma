@@ -21,6 +21,7 @@ model Profile {
   entries                  Entry[]
   overrides                ProfileYearOverride[]
   trips                    Trip[]   @relation("ProfileTrips")
+  budgetParticipants       BudgetParticipant[]
   
   createdAt                DateTime @default(now())
   updatedAt                DateTime @updatedAt
@@ -50,6 +51,8 @@ model Trip {
   
   isHalfDay            Boolean   @default(false)
   halfDayType          String?   // "VORMITTAG" | "NACHMITTAG"
+  
+  budgetRel            TripBudget? @relation("TripToBudget")
   
   createdAt            DateTime  @default(now())
   updatedAt            DateTime  @updatedAt
@@ -96,4 +99,79 @@ model VacationCache {
   name      String
   stateCode String
   year      Int
+}
+
+model TripBudget {
+  id           String              @id @default(cuid())
+  name         String
+  currency     String              @default("EUR")
+  totalBudget  Float?              // Geplantes Ausgabenlimit (optional)
+  startDate    String?             // YYYY-MM-DD
+  endDate      String?             // YYYY-MM-DD
+  
+  tripId       String?             @unique
+  trip         Trip?               @relation("TripToBudget", fields: [tripId], references: [id], onDelete: SetNull)
+  
+  participants BudgetParticipant[]
+  expenses     BudgetExpense[]
+  categories   BudgetCategory[]
+  
+  createdAt    DateTime            @default(now())
+  updatedAt    DateTime            @updatedAt
+}
+
+model BudgetParticipant {
+  id           String          @id @default(cuid())
+  budgetId     String
+  budget       TripBudget      @relation(fields: [budgetId], references: [id], onDelete: Cascade)
+  
+  profileId    String?         // null bei externen Gästen
+  profile      Profile?        @relation(fields: [profileId], references: [id], onDelete: SetNull)
+  
+  name         String
+  color        String?
+  
+  splits       ExpenseSplit[]
+  paidExpenses BudgetExpense[]
+}
+
+model BudgetCategory {
+  id        String          @id @default(cuid())
+  budgetId  String?         // null = Standardkategorie, sonst reisespezifisch
+  budget    TripBudget?     @relation(fields: [budgetId], references: [id], onDelete: Cascade)
+  name      String
+  icon      String?         // z. B. 'building', 'plane', 'utensils', 'ticket', 'tag'
+  color     String?         // Hex-Farbcode
+  expenses  BudgetExpense[]
+}
+
+model BudgetExpense {
+  id          String              @id @default(cuid())
+  budgetId    String
+  budget      TripBudget          @relation(fields: [budgetId], references: [id], onDelete: Cascade)
+  
+  title       String
+  amount      Float
+  date        String              // YYYY-MM-DD
+  notes       String?
+  
+  categoryId  String?
+  category    BudgetCategory?     @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  
+  payerId     String
+  payer       BudgetParticipant   @relation(fields: [payerId], references: [id], onDelete: Cascade)
+  
+  splits      ExpenseSplit[]
+  createdAt   DateTime            @default(now())
+}
+
+model ExpenseSplit {
+  id            String            @id @default(cuid())
+  expenseId     String
+  expense       BudgetExpense     @relation(fields: [expenseId], references: [id], onDelete: Cascade)
+  
+  participantId String
+  participant   BudgetParticipant @relation(fields: [participantId], references: [id], onDelete: Cascade)
+  
+  amount        Float             // Exakter Anteil dieser Person
 }

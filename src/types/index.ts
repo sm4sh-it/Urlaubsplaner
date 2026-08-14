@@ -62,6 +62,77 @@ export interface CalendarEntry {
   profileId: string
 }
 
+// --- Budget Module Interfaces ---
+
+export interface BudgetParticipant {
+  id: string
+  budgetId: string
+  profileId?: string | null
+  profile?: Profile | null
+  name: string
+  color?: string | null
+}
+
+export interface BudgetCategory {
+  id: string
+  budgetId?: string | null
+  name: string
+  icon?: string | null
+  color?: string | null
+}
+
+export interface ExpenseSplit {
+  id: string
+  expenseId: string
+  participantId: string
+  participant?: BudgetParticipant
+  amount: number
+}
+
+export interface BudgetExpense {
+  id: string
+  budgetId: string
+  title: string
+  amount: number
+  date: string // YYYY-MM-DD
+  notes?: string | null
+  categoryId?: string | null
+  category?: BudgetCategory | null
+  payerId: string
+  payer: BudgetParticipant
+  splits: ExpenseSplit[]
+  createdAt: string | Date
+}
+
+export interface TripBudget {
+  id: string
+  name: string
+  currency: string
+  totalBudget?: number | null
+  startDate?: string | null
+  endDate?: string | null
+  tripId?: string | null
+  trip?: Trip | null
+  participants: BudgetParticipant[]
+  expenses: BudgetExpense[]
+  categories: BudgetCategory[]
+  createdAt: string | Date
+  updatedAt: string | Date
+}
+
+export interface ParticipantBalance {
+  participant: BudgetParticipant
+  totalPaid: number
+  totalShare: number
+  netBalance: number
+}
+
+export interface DebtSettlement {
+  from: BudgetParticipant
+  to: BudgetParticipant
+  amount: number
+}
+
 export interface StoreState {
   profiles: Profile[]
   activeProfileIds: string[]

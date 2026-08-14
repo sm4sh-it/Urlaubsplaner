@@ -95,6 +95,16 @@ export default function Navbar() {
             Kalenderansicht
           </Link>
           <Link 
+            href="/budget" 
+            className={`relative h-16 flex items-center text-sm font-semibold transition-colors ${
+              pathname.startsWith('/budget') 
+                ? 'text-slate-900 dark:text-white font-bold after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-brand-500 after:rounded-full' 
+                : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
+            }`}
+          >
+            Budget
+          </Link>
+          <Link 
             href="/statistics" 
             className={`relative h-16 flex items-center text-sm font-semibold transition-colors ${
               pathname.startsWith('/statistics') 
@@ -211,6 +221,16 @@ export default function Navbar() {
               }`}
             >
               Kalenderansicht
+            </Link>
+            <Link 
+              href="/budget" 
+              className={`px-3 py-2.5 text-sm transition-all flex items-center justify-between ${
+                pathname.startsWith('/budget') 
+                  ? 'text-brand-600 dark:text-brand-400 font-bold border-l-2 border-brand-500 pl-3' 
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white font-semibold'
+              }`}
+            >
+              Budget
             </Link>
             <Link 
               href="/statistics" 

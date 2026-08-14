@@ -63,6 +63,7 @@ implementation_plan.md
 *.plan.md
 task.md
 walkthrough.md
+scratch/
 
 # AI Agent Instructions
 AGENTS.md

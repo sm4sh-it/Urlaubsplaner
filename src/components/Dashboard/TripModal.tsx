@@ -221,12 +221,32 @@ export default function TripModal({ isOpen, onClose, trip }: TripModalProps) {
                 
                 <div className="flex flex-col gap-1">
                   <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Startdatum *</label>
-                  <input required value={startDate} onChange={e => updateForm({ startDate: e.target.value })} type="date" className="px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-brand-500 outline-none" />
+                  <input 
+                    required 
+                    value={startDate} 
+                    onChange={e => {
+                      const newStart = e.target.value
+                      if (endDate && newStart && endDate < newStart) {
+                        updateForm({ startDate: newStart, endDate: newStart })
+                      } else {
+                        updateForm({ startDate: newStart })
+                      }
+                    }} 
+                    type="date" 
+                    className="px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-brand-500 outline-none" 
+                  />
                 </div>
                 
                 <div className="flex flex-col gap-1">
                   <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Enddatum *</label>
-                  <input required value={endDate} onChange={e => updateForm({ endDate: e.target.value })} type="date" className="px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-brand-500 outline-none" />
+                  <input 
+                    required 
+                    value={endDate} 
+                    min={startDate || undefined}
+                    onChange={e => updateForm({ endDate: e.target.value })} 
+                    type="date" 
+                    className="px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 focus:ring-2 focus:ring-brand-500 outline-none" 
+                  />
                 </div>
 
                 <div className="flex flex-col gap-1 md:col-span-2 mt-1">

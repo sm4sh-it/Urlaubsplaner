@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   urlaubsplaner:
     # Dieses Image wird von der GitHub Action automatisch gebaut

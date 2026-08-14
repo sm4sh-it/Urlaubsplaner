@@ -1,6 +1,18 @@
 # Changelog
 
-## [1.5.2] - 2026-08-06
+## [1.6.0] - 2026-08-14
+### Added & Improved
+- **Vollwertiges Modul "Budget- & Reisekostenverwaltung":**
+  - **Hauptübersicht (`/budget`):** KPI-Dashboard zu Gesamtausgaben, geplantem Budgetlimit, erfassten Belegen und aktiven Budgets. Filterung nach Jahren und Echtzeit-Suche.
+  - **Reisedetailseite (`/budget/[tripBudgetId]`):**
+    - **Header & Schnellübersicht:** Gesamtkosten, Ø Kosten pro Reisetag, Ø Kosten pro Person und Budgetlimit-Fortschrittsbalken.
+    - **Tab "Ausgaben":** Chronologische Belegerfassung mit Kategorie-Icons, Notizen, Zahler-Zuordnung und flexibler Kostenaufteilung (Gleichmäßig auf alle / ausgewählte Teilnehmer oder benutzerdefinierte Einzelbeträge).
+    - **Tab "Kategorien & Analytics":** Auswertung der Ausgaben nach Kategorien mit Multi-Segment-Visualisierung, Tagesschnitt, Highlight der größten Einzelausgabe sowie Erstellung eigener Kategorien.
+    - **Tab "Abrechnung & Salden":** Automatische Saldenberechnung pro Teilnehmer ($\text{Bezahlt} - \text{Eigenanteil}$) und **Smart Debt Settlement** zur Minimierung von Ausgleichszahlungen ("Wer schuldet wem wie viel?") samt Ein-Klick-Export/Kopieren für Messenger.
+    - **Tab "Teilnehmer":** Verwaltung von Mitreisenden aus echten Profilen sowie externen Gästen (mit individuellem Namen & Farbe).
+- **Manuelle Reise-Synchronisation:** Nahtlose Verknüpfung von Budgets mit bestehenden Reisen im Kalender (`Trip`). Über den Button *"Kosten in Reise übernehmen"* können Gesamtausgaben und geplantes Budgetlimit gezielt und ohne Serverlast in die Kalender-/Dashboard-Statistiken übernommen werden.
+- **Smarte Datepicker-Synchronisation:** Beim Auswählen eines Startdatums setzt das Enddatum-Feld automatisch das Startdatum als `min`-Datum, sodass sich der Kalender-Popup des Enddatums direkt im passenden Monat und Jahr öffnet.
+- **Navigation:** Neuer Menüpunkt *"Budget"* nahtlos integriert zwischen *"Kalenderansicht"* und *"Statistiken"* (Desktop & Mobile).
 ### Fixed
 - **Kalender Crash bei 'Alle Ferien':** Klicks auf den Kalender bei alleinig oder zusätzlich ausgewähltem virtuellem Profil *Alle Ferien* führten bisher zu einem Datenbank-Absturz. Das virtuelle Profil wird nun für Klick-Aktionen im Kalender korrekt ignoriert, während reguläre Profil-Auswahlen weiterhin normal verarbeitet werden.
 
