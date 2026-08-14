@@ -61,7 +61,7 @@ export default function ParticipantsTab({
       {/* Header Toolbar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white dark:bg-[#0d1117] border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-xs">
         <div>
-          <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
+          <h2 className="text-lg font-bold text-slate-700 dark:text-slate-200 flex items-center gap-2">
             <Users className="w-5 h-5 text-brand-500" />
             Reiseteilnehmer ({participants.length})
           </h2>
@@ -72,7 +72,7 @@ export default function ParticipantsTab({
 
         <button
           onClick={onOpenAddParticipant}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl font-semibold text-xs sm:text-sm text-slate-800 dark:text-slate-100 bg-white dark:bg-[#161f28]/70 hover:bg-[#fafafa] dark:hover:bg-[#1e2a36]/90 border border-slate-300 dark:border-slate-700/80 hover:border-brand-500/50 dark:hover:border-brand-500/50 hover:-translate-y-0.5 hover:shadow-md hover:shadow-brand-500/10 active:translate-y-0 active:scale-[0.98] transition-all duration-300 backdrop-blur-md cursor-pointer shrink-0"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl font-semibold text-xs sm:text-sm text-slate-700 dark:text-slate-200 bg-white dark:bg-[#161f28]/70 hover:bg-[#fafafa] dark:hover:bg-[#1e2a36]/90 border border-slate-300 dark:border-slate-700/80 hover:border-brand-500/50 dark:hover:border-brand-500/50 hover:-translate-y-0.5 hover:shadow-md hover:shadow-brand-500/10 active:translate-y-0 active:scale-[0.98] transition-all duration-300 backdrop-blur-md cursor-pointer shrink-0"
         >
           <UserPlus className="w-4 h-4 text-brand-500 shrink-0" />
           <span>Teilnehmer hinzufügen</span>
@@ -102,7 +102,7 @@ export default function ParticipantsTab({
 
                   <div className="flex flex-col min-w-0">
                     <div className="flex items-center gap-2">
-                      <span className="font-bold text-base text-slate-800 dark:text-slate-100 truncate">
+                      <span className="font-bold text-base text-slate-700 dark:text-slate-200 truncate">
                         {b.participant.name}
                       </span>
                       {isGuest && (
@@ -111,7 +111,7 @@ export default function ParticipantsTab({
                         </span>
                       )}
                     </div>
-                    <span className="text-xs text-slate-400 font-medium">
+                    <span className="text-xs text-slate-400 dark:text-slate-500 font-medium">
                       {expensesCount} Beleg{expensesCount === 1 ? "" : "e"} bezahlt
                     </span>
                   </div>
@@ -133,14 +133,14 @@ export default function ParticipantsTab({
               {/* Financial Box */}
               <div className="grid grid-cols-2 gap-2 p-3 rounded-xl bg-slate-50/80 dark:bg-slate-900/40 border border-slate-100 dark:border-slate-800/60 text-xs">
                 <div className="flex flex-col">
-                  <span className="text-[10px] uppercase font-semibold text-slate-400">Ausgelegt</span>
-                  <span className="font-extrabold text-slate-800 dark:text-slate-200 text-sm">
+                  <span className="text-[10px] uppercase font-semibold text-slate-400 dark:text-slate-500">Ausgelegt</span>
+                  <span className="font-semibold text-slate-700 dark:text-slate-200 text-sm">
                     {formatCurrency(b.totalPaid, currency)}
                   </span>
                 </div>
                 <div className="flex flex-col text-right">
-                  <span className="text-[10px] uppercase font-semibold text-slate-400">Eigenanteil</span>
-                  <span className="font-extrabold text-slate-800 dark:text-slate-200 text-sm">
+                  <span className="text-[10px] uppercase font-semibold text-slate-400 dark:text-slate-500">Eigenanteil</span>
+                  <span className="font-semibold text-slate-700 dark:text-slate-200 text-sm">
                     {formatCurrency(b.totalShare, currency)}
                   </span>
                 </div>

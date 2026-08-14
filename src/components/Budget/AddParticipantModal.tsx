@@ -122,7 +122,7 @@ export default function AddParticipantModal({
             <div className="p-2 rounded-xl bg-brand-50 dark:bg-brand-500/10 text-brand-500">
               <UserPlus className="w-5 h-5" />
             </div>
-            <h2 className="text-base font-bold text-slate-800 dark:text-slate-100">
+            <h2 className="text-base font-bold text-slate-700 dark:text-slate-200">
               Teilnehmer hinzufügen
             </h2>
           </div>
@@ -149,8 +149,8 @@ export default function AddParticipantModal({
               onClick={() => setMode("profile")}
               className={`py-2 rounded-lg transition-all cursor-pointer ${
                 mode === "profile"
-                  ? "bg-white dark:bg-[#161f28] text-slate-800 dark:text-slate-100 shadow-xs"
-                  : "text-slate-500 hover:text-slate-800 dark:hover:text-slate-200"
+                  ? "bg-white dark:bg-[#161f28] text-slate-700 dark:text-slate-200 shadow-xs"
+                  : "text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"
               }`}
             >
               Aus Profilen wählen
@@ -160,8 +160,8 @@ export default function AddParticipantModal({
               onClick={() => setMode("guest")}
               className={`py-2 rounded-lg transition-all cursor-pointer ${
                 mode === "guest"
-                  ? "bg-white dark:bg-[#161f28] text-slate-800 dark:text-slate-100 shadow-xs"
-                  : "text-slate-500 hover:text-slate-800 dark:hover:text-slate-200"
+                  ? "bg-white dark:bg-[#161f28] text-slate-700 dark:text-slate-200 shadow-xs"
+                  : "text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"
               }`}
             >
               Externer Gast
@@ -170,7 +170,7 @@ export default function AddParticipantModal({
 
           {mode === "profile" ? (
             <div>
-              <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">
+              <label className="block text-xs font-semibold text-slate-600 dark:text-slate-300 uppercase tracking-wider mb-2">
                 Verfügbare Profile
               </label>
               {availableProfiles.length === 0 ? (
@@ -188,7 +188,7 @@ export default function AddParticipantModal({
                         onClick={() => setSelectedProfileId(p.id)}
                         className={`flex items-center justify-between p-3 rounded-xl border text-sm font-medium transition-all cursor-pointer ${
                           isSelected
-                            ? "bg-brand-50 dark:bg-brand-500/15 border-brand-500/50 text-slate-800 dark:text-slate-100 ring-1 ring-brand-500/30"
+                            ? "bg-brand-50 dark:bg-brand-500/15 border-brand-500/50 text-slate-700 dark:text-slate-200 ring-1 ring-brand-500/30"
                             : "bg-white dark:bg-[#161f28] border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:border-slate-300"
                         }`}
                       >
@@ -209,7 +209,7 @@ export default function AddParticipantModal({
           ) : (
             <div className="flex flex-col gap-3">
               <div>
-                <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">
+                <label className="block text-xs font-semibold text-slate-600 dark:text-slate-300 uppercase tracking-wider mb-1.5">
                   Name des Gasts *
                 </label>
                 <input
@@ -218,12 +218,12 @@ export default function AddParticipantModal({
                   value={guestName}
                   onChange={(e) => setGuestName(e.target.value)}
                   placeholder="z. B. Julia, Lukas, Oma..."
-                  className="w-full px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#161f28]/70 text-slate-800 dark:text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500"
+                  className="w-full px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#161f28]/70 text-slate-700 dark:text-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">
+                <label className="block text-xs font-semibold text-slate-600 dark:text-slate-300 uppercase tracking-wider mb-1.5">
                   Farbe
                 </label>
                 <div className="flex flex-wrap gap-2">
@@ -255,7 +255,7 @@ export default function AddParticipantModal({
             <button
               type="submit"
               disabled={isSubmitting || (mode === "profile" && !selectedProfileId)}
-              className="inline-flex items-center gap-2 px-5 py-2 rounded-xl font-semibold text-sm text-slate-800 dark:text-slate-100 bg-white dark:bg-[#161f28]/70 hover:bg-[#fafafa] dark:hover:bg-[#1e2a36]/90 border border-slate-300 dark:border-slate-700/80 hover:border-brand-500/50 dark:hover:border-brand-500/50 hover:-translate-y-0.5 hover:shadow-md hover:shadow-brand-500/10 active:translate-y-0 active:scale-[0.98] transition-all duration-300 backdrop-blur-md cursor-pointer disabled:opacity-50"
+              className="inline-flex items-center gap-2 px-5 py-2 rounded-xl font-semibold text-sm text-slate-700 dark:text-slate-200 bg-white dark:bg-[#161f28]/70 hover:bg-[#fafafa] dark:hover:bg-[#1e2a36]/90 border border-slate-300 dark:border-slate-700/80 hover:border-brand-500/50 dark:hover:border-brand-500/50 hover:-translate-y-0.5 hover:shadow-md hover:shadow-brand-500/10 active:translate-y-0 active:scale-[0.98] transition-all duration-300 backdrop-blur-md cursor-pointer disabled:opacity-50"
             >
               <span>{isSubmitting ? "Wird hinzugefügt..." : "Hinzufügen"}</span>
             </button>

@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.6.2] - 2026-08-14
+### Added & Improved
+- **Lokale Kategorie-Icons & Icon-Auswahl im Budget:**
+  - Standard-Ausgabekategorien (Unterkunft, Transport, Verpflegung, Aktivitäten, Shopping, Sonstiges) verfügen nun automatisch über zugehörige Lucide-Icons (Hotel, Flugzeug, Besteck, Kompass, Einkaufstasche, Beleg).
+  - Neuer interaktiver, MIT-lizenzierter und lokal gehosteter Icon-Picker (`lucide-react`) im Kategorie-Modal zur flexiblen Auswahl individueller Icons beim Anlegen neuer Kategorien.
+  - Nahtlose, dynamische Darstellung der Icons in der Ausgabenliste und im Kategorie-Analytics-Tab.
+- **Harmonisiertes 3-Stufen-Typografie- & Farbsystem (Less is More):**
+  - Vollständige Konsolidierung aller Schriftstärken (Entfernung von `font-extrabold` zugunsten eleganter `font-semibold` und `font-bold` Stile).
+  - Bereinigung aller inkonsistenten Textfarben (wie harte `slate-800` Kontraste im Light Mode und grelles `slate-100` im Dark Mode) im gesamten Projekt (Dashboard, Kalender, Budget, Statistiken, Einstellungen, Hilfe, Modals und Diagramme).
+  - Umfassender Kontrast-Audit nach WCAG 2.1 AA/AAA für alle Text- und Hintergrundkombinationen.
+- **Kalender-Lesbarkeit & halbe Tage im Light-Mode:**
+  - Einführung der dynamischen `--status-text` CSS-Variable (`#0f172a` im Light Mode, `#ffffff` im Dark Mode).
+  - Behebung des Problems unleserlicher Buchstabeneinträge bei halben Tagen (`U/2`, `K/2`, `M/2`, `S/2`, etc.) auf diagonalen Verlaufshintergründen im Light Mode.
+
 ## [1.6.1] - 2026-08-14
 ### Fixed & Improved
 - **Scrollverhalten & Verlaufshintergrund auf allen Budget-Seiten:** Behebung des Scrollfehlers auf der Hauptübersicht (`/budget`) und der Reisedetailseite (`/budget/[tripBudgetId]`). Die Seiten nutzen nun den einheitlichen, flüssigen Scroll-Container und lassen den dynamischen Verlaufshintergrund nahtlos durchscheinen.

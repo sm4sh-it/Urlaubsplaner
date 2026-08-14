@@ -81,7 +81,7 @@ export default function SettlementTab({
             <Scale className="w-6 h-6" />
           </div>
           <div>
-            <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100">
+            <h2 className="text-lg font-bold text-slate-700 dark:text-slate-200">
               Smarter Saldenausgleich
             </h2>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
@@ -93,7 +93,7 @@ export default function SettlementTab({
 
         <button
           onClick={handleCopySummary}
-          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm text-slate-800 dark:text-slate-100 bg-white dark:bg-[#161f28] hover:bg-slate-50 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-xs hover:shadow-md transition-all cursor-pointer shrink-0"
+          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm text-slate-700 dark:text-slate-200 bg-white dark:bg-[#161f28] hover:bg-slate-50 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-xs hover:shadow-md transition-all cursor-pointer shrink-0"
         >
           {copied ? (
             <>
@@ -119,7 +119,7 @@ export default function SettlementTab({
         {settlements.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-10 text-center">
             <CheckCircle2 className="w-10 h-10 text-emerald-500 mb-2" />
-            <span className="font-bold text-sm text-slate-800 dark:text-slate-200">
+            <span className="font-bold text-sm text-slate-700 dark:text-slate-200">
               Perfekt ausgeglichen!
             </span>
             <span className="text-xs text-slate-400 mt-0.5">
@@ -141,14 +141,14 @@ export default function SettlementTab({
                   >
                     {s.from.name.charAt(0).toUpperCase()}
                   </div>
-                  <span className="font-bold text-sm text-slate-800 dark:text-slate-200 truncate">
+                  <span className="font-bold text-sm text-slate-700 dark:text-slate-200 truncate">
                     {s.from.name}
                   </span>
                 </div>
 
                 {/* Amount Arrow */}
                 <div className="flex flex-col items-center px-3 shrink-0">
-                  <span className="text-xs font-black text-slate-800 dark:text-slate-100">
+                  <span className="text-xs font-bold text-slate-700 dark:text-slate-200">
                     {formatCurrency(s.amount, currency)}
                   </span>
                   <div className="flex items-center text-slate-400">
@@ -158,7 +158,7 @@ export default function SettlementTab({
 
                 {/* Creditor (To) */}
                 <div className="flex items-center gap-2.5 min-w-0 justify-end">
-                  <span className="font-bold text-sm text-slate-800 dark:text-slate-200 truncate text-right">
+                  <span className="font-bold text-sm text-slate-700 dark:text-slate-200 truncate text-right">
                     {s.to.name}
                   </span>
                   <div
@@ -199,14 +199,14 @@ export default function SettlementTab({
                     >
                       {b.participant.name.charAt(0).toUpperCase()}
                     </div>
-                    <span className="font-bold text-sm text-slate-800 dark:text-slate-200 truncate">
+                    <span className="font-bold text-sm text-slate-700 dark:text-slate-200 truncate">
                       {b.participant.name}
                     </span>
                   </div>
 
                   {/* Net Balance Badge */}
                   <span
-                    className={`px-2.5 py-1 rounded-full text-xs font-extrabold shrink-0 ${
+                    className={`px-2.5 py-1 rounded-full text-xs font-bold shrink-0 ${
                       isCreditor
                         ? "bg-emerald-100 dark:bg-emerald-500/15 text-emerald-700 dark:text-emerald-300"
                         : isDebtor

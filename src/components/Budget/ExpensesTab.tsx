@@ -17,6 +17,7 @@ import { BudgetCategory, BudgetExpense, BudgetParticipant } from "@/types"
 import { formatCurrency } from "@/lib/budgetUtils"
 import { deleteBudgetExpense } from "@/app/actions/budgetActions"
 import { useRouter } from "next/navigation"
+import CategoryIcon from "./CategoryIcon"
 
 interface ExpensesTabProps {
   budgetId: string
@@ -103,7 +104,7 @@ export default function ExpensesTab({
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Ausgabe oder Notiz suchen..."
-            className="w-full pl-9 pr-4 py-2 rounded-xl text-sm border-none bg-slate-50 dark:bg-slate-900/60 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
+            className="w-full pl-9 pr-4 py-2 rounded-xl text-sm border-none bg-slate-50 dark:bg-slate-900/60 text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
           />
         </div>
 
@@ -140,7 +141,7 @@ export default function ExpensesTab({
           {/* Add Expense Button */}
           <button
             onClick={() => onOpenExpenseModal(null)}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl font-semibold text-xs sm:text-sm text-slate-800 dark:text-slate-100 bg-white dark:bg-[#161f28]/70 hover:bg-[#fafafa] dark:hover:bg-[#1e2a36]/90 border border-slate-300 dark:border-slate-700/80 hover:border-brand-500/50 dark:hover:border-brand-500/50 hover:-translate-y-0.5 hover:shadow-md hover:shadow-brand-500/10 active:translate-y-0 active:scale-[0.98] transition-all duration-300 backdrop-blur-md cursor-pointer shrink-0"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl font-semibold text-xs sm:text-sm text-slate-700 dark:text-slate-200 bg-white dark:bg-[#161f28]/70 hover:bg-[#fafafa] dark:hover:bg-[#1e2a36]/90 border border-slate-300 dark:border-slate-700/80 hover:border-brand-500/50 dark:hover:border-brand-500/50 hover:-translate-y-0.5 hover:shadow-md hover:shadow-brand-500/10 active:translate-y-0 active:scale-[0.98] transition-all duration-300 backdrop-blur-md cursor-pointer shrink-0"
           >
             <Plus className="w-4 h-4 text-brand-500 shrink-0" />
             <span>Ausgabe erfassen</span>
@@ -154,7 +155,7 @@ export default function ExpensesTab({
           <div className="p-4 rounded-full bg-brand-50 dark:bg-brand-500/10 text-brand-500 mb-3">
             <Receipt className="w-7 h-7" />
           </div>
-          <h3 className="text-base font-bold text-slate-800 dark:text-slate-100">
+          <h3 className="text-base font-bold text-slate-700 dark:text-slate-200">
             Keine Ausgaben gefunden
           </h3>
           <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 max-w-sm mt-1 mb-4">
@@ -187,12 +188,12 @@ export default function ExpensesTab({
                     className="w-10 h-10 rounded-xl flex items-center justify-center text-white shrink-0 shadow-xs mt-0.5"
                     style={{ backgroundColor: cat?.color || "#64748b" }}
                   >
-                    <Tag className="w-5 h-5" />
+                    <CategoryIcon name={cat?.icon} className="w-5 h-5" />
                   </div>
 
                   <div className="flex flex-col min-w-0 flex-1">
                     <div className="flex items-center gap-2">
-                      <span className="font-bold text-sm sm:text-base text-slate-800 dark:text-slate-100 truncate">
+                      <span className="font-bold text-sm sm:text-base text-slate-700 dark:text-slate-200 truncate">
                         {exp.title}
                       </span>
                       {cat && (
@@ -217,18 +218,18 @@ export default function ExpensesTab({
 
                       {/* Payer info */}
                       <span className="flex items-center gap-1.5 font-medium">
-                        <span className="text-slate-400">Bezahlt von:</span>
+                        <span className="text-slate-400 dark:text-slate-500">Bezahlt von:</span>
                         <div
                           className="w-2.5 h-2.5 rounded-full shrink-0"
                           style={{ backgroundColor: exp.payer?.color || "#3b82f6" }}
                         />
-                        <strong className="text-slate-700 dark:text-slate-200">
+                        <strong className="text-slate-700 dark:text-slate-300">
                           {exp.payer?.name || "Unbekannt"}
                         </strong>
                       </span>
 
                       {/* Splits preview */}
-                      <span className="flex items-center gap-1 text-slate-400">
+                      <span className="flex items-center gap-1 text-slate-400 dark:text-slate-500">
                         <Users className="w-3 h-3" />
                         {exp.splits?.length || 0} Beteiligte
                       </span>
@@ -246,11 +247,11 @@ export default function ExpensesTab({
                 {/* Right: Amount & Actions */}
                 <div className="flex items-center justify-between sm:justify-end gap-4 shrink-0 border-t sm:border-t-0 pt-2 sm:pt-0 border-slate-100 dark:border-slate-800/80">
                   <div className="flex flex-col items-start sm:items-end">
-                    <span className="text-base sm:text-lg font-black text-slate-800 dark:text-slate-100">
+                    <span className="text-base sm:text-lg font-bold text-slate-700 dark:text-slate-200">
                       {formatCurrency(exp.amount, currency)}
                     </span>
                     {exp.splits && exp.splits.length > 0 && (
-                      <span className="text-[11px] text-slate-400 font-medium">
+                      <span className="text-[11px] text-slate-400 dark:text-slate-500 font-medium">
                         Ø {(exp.amount / exp.splits.length).toFixed(2)} {currency} / P.
                       </span>
                     )}

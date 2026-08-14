@@ -200,7 +200,7 @@ export default function YearlyContributionGraph() {
 
   return (
     <div className="flex flex-col gap-4 border-b border-slate-200 dark:border-[var(--border-subtle)] pb-8 pt-4 items-center">
-      <div className="text-lg font-bold text-slate-800 dark:text-slate-100 mb-2">
+      <div className="text-lg font-bold text-slate-700 dark:text-slate-300 mb-2">
         Jahresübersicht {selectedYear}
       </div>
       

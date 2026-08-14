@@ -73,7 +73,7 @@ export function DonutChart({ title, segments, emptyText = "Keine Daten vorhanden
                     <div className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: seg.color }} />
                     <span className="text-slate-700 dark:text-slate-300 truncate" title={seg.type}>{seg.type}</span>
                   </div>
-                  <span className="font-bold text-slate-700 dark:text-slate-100 shrink-0 ml-1">{Math.round(seg.percent)}%</span>
+                  <span className="font-bold text-slate-700 dark:text-slate-200 shrink-0 ml-1">{Math.round(seg.percent)}%</span>
                 </div>
               )
             ))}
@@ -190,7 +190,7 @@ export function DualDonutChart({
             {items.map((item) => (
               <div key={item.type} className="flex items-center justify-between text-xs sm:text-sm gap-1 min-w-0">
                 {/* Year % (left) */}
-                <span className="font-bold text-slate-800 dark:text-white shrink-0 text-right min-w-[32px]">
+                <span className="font-bold text-slate-700 dark:text-slate-200 shrink-0 text-right min-w-[32px]">
                   {item.yearPercent > 0 ? `${Math.round(item.yearPercent)}%` : '0%'}
                 </span>
 
@@ -201,7 +201,7 @@ export function DualDonutChart({
                 </div>
 
                 {/* All-Time % (right) */}
-                <span className="font-bold text-slate-800 dark:text-white shrink-0 text-left min-w-[32px]">
+                <span className="font-bold text-slate-700 dark:text-slate-200 shrink-0 text-left min-w-[32px]">
                   {item.allTimePercent > 0 ? `${Math.round(item.allTimePercent)}%` : '0%'}
                 </span>
               </div>

@@ -155,9 +155,9 @@ export default function BudgetDetailView({
         {/* Title & Dates */}
         <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2">
           <div>
-            <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-slate-800 dark:text-slate-100 tracking-tight">
+            <h2 className="font-bold text-slate-700 dark:text-slate-300 text-lg sm:text-xl tracking-tight">
               {budget.name}
-            </h1>
+            </h2>
             <div className="flex flex-wrap items-center gap-3 text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
               {budget.startDate && (
                 <span className="flex items-center gap-1 font-mono">
@@ -166,7 +166,7 @@ export default function BudgetDetailView({
                 </span>
               )}
               {budget.trip && (
-                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800/90 text-slate-700 dark:text-slate-300 font-medium">
+                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800/90 text-slate-600 dark:text-slate-300 font-medium">
                   <Plane className="w-3.5 h-3.5 text-brand-500" />
                   Verknüpft: {budget.trip.title}
                 </span>
@@ -184,13 +184,13 @@ export default function BudgetDetailView({
             Gesamtausgaben
           </span>
           <div className="my-2">
-            <span className="text-2xl sm:text-3xl font-black text-slate-800 dark:text-slate-100 tracking-tight">
+            <span className="text-xl sm:text-2xl font-bold text-slate-700 dark:text-slate-300 tracking-tight">
               {formatCurrency(totalSpent, budget.currency)}
             </span>
           </div>
           {hasLimit ? (
             <div className="flex flex-col gap-1">
-              <div className="flex justify-between text-[11px] font-medium text-slate-400">
+              <div className="flex justify-between text-[11px] font-medium text-slate-400 dark:text-slate-500">
                 <span>Limit: {formatCurrency(budget.totalBudget, budget.currency)}</span>
                 <span className={isOverBudget ? "text-rose-500 font-bold" : ""}>
                   {Math.round((totalSpent / budget.totalBudget!) * 100)}%
@@ -210,7 +210,7 @@ export default function BudgetDetailView({
               </div>
             </div>
           ) : (
-            <span className="text-xs text-slate-400">Kein Limit festgelegt</span>
+            <span className="text-xs text-slate-400 dark:text-slate-500">Kein Limit festgelegt</span>
           )}
         </div>
 
@@ -220,11 +220,11 @@ export default function BudgetDetailView({
             Ø Kosten pro Tag
           </span>
           <div className="my-2">
-            <span className="text-2xl sm:text-3xl font-black text-slate-800 dark:text-slate-100 tracking-tight">
+            <span className="text-xl sm:text-2xl font-bold text-slate-700 dark:text-slate-300 tracking-tight">
               {formatCurrency(dailyAvg.avgPerDay, budget.currency)}
             </span>
           </div>
-          <span className="text-xs text-slate-400">
+          <span className="text-xs text-slate-400 dark:text-slate-500">
             Über {dailyAvg.daysCount} Reisetag{dailyAvg.daysCount === 1 ? "" : "e"}
           </span>
         </div>
@@ -235,11 +235,11 @@ export default function BudgetDetailView({
             Ø Kosten pro Person
           </span>
           <div className="my-2">
-            <span className="text-2xl sm:text-3xl font-black text-slate-800 dark:text-slate-100 tracking-tight">
+            <span className="text-xl sm:text-2xl font-bold text-slate-700 dark:text-slate-300 tracking-tight">
               {formatCurrency(perPersonAvg, budget.currency)}
             </span>
           </div>
-          <span className="text-xs text-slate-400">
+          <span className="text-xs text-slate-400 dark:text-slate-500">
             Aufgeteilt auf {budget.participants.length} Teilnehmer
           </span>
         </div>
@@ -255,7 +255,7 @@ export default function BudgetDetailView({
               <button
                 onClick={handleSyncTripCost}
                 disabled={isSyncingTrip}
-                className="inline-flex items-center justify-center gap-2 px-3 py-2 rounded-xl text-xs font-bold text-slate-800 dark:text-slate-100 bg-slate-100 dark:bg-slate-800 hover:bg-brand-50 dark:hover:bg-brand-500/15 hover:text-brand-600 dark:hover:text-brand-400 border border-slate-200 dark:border-slate-700 transition-all cursor-pointer disabled:opacity-50"
+                className="inline-flex items-center justify-center gap-2 px-3 py-2 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-800 hover:bg-brand-50 dark:hover:bg-brand-500/15 hover:text-brand-600 dark:hover:text-brand-400 border border-slate-200 dark:border-slate-700 transition-all cursor-pointer disabled:opacity-50"
                 title="Aktualisiert das Feld 'cost' der verknüpften Reise im Kalender"
               >
                 <RefreshCw className={`w-3.5 h-3.5 text-brand-500 ${isSyncingTrip ? "animate-spin" : ""}`} />
@@ -271,16 +271,16 @@ export default function BudgetDetailView({
             </div>
           ) : (
             <div className="my-2">
-              <span className="text-sm font-bold text-slate-600 dark:text-slate-400">
+              <span className="text-sm font-bold text-slate-600 dark:text-slate-300">
                 Eigenständiges Budget
               </span>
-              <p className="text-[11px] text-slate-400 mt-0.5">
+              <p className="text-[11px] text-slate-400 dark:text-slate-500 mt-0.5">
                 Nicht mit einer Kalender-Reise verknüpft.
               </p>
             </div>
           )}
 
-          <span className="text-[11px] text-slate-400">
+          <span className="text-[11px] text-slate-400 dark:text-slate-500">
             {budget.expenses.length} Ausgaben gebucht
           </span>
         </div>
@@ -293,12 +293,12 @@ export default function BudgetDetailView({
           className={`flex items-center gap-2 py-3 px-3 sm:px-4 text-xs sm:text-sm font-bold border-b-2 transition-all cursor-pointer whitespace-nowrap ${
             activeTab === "expenses"
               ? "border-brand-500 text-brand-600 dark:text-brand-400"
-              : "border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200"
+              : "border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200"
           }`}
         >
           <Receipt className="w-4 h-4" />
           <span>Ausgaben</span>
-          <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
+          <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
             {budget.expenses.length}
           </span>
         </button>
@@ -308,7 +308,7 @@ export default function BudgetDetailView({
           className={`flex items-center gap-2 py-3 px-3 sm:px-4 text-xs sm:text-sm font-bold border-b-2 transition-all cursor-pointer whitespace-nowrap ${
             activeTab === "analytics"
               ? "border-brand-500 text-brand-600 dark:text-brand-400"
-              : "border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200"
+              : "border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200"
           }`}
         >
           <PieChart className="w-4 h-4" />
@@ -320,7 +320,7 @@ export default function BudgetDetailView({
           className={`flex items-center gap-2 py-3 px-3 sm:px-4 text-xs sm:text-sm font-bold border-b-2 transition-all cursor-pointer whitespace-nowrap ${
             activeTab === "settlement"
               ? "border-brand-500 text-brand-600 dark:text-brand-400"
-              : "border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200"
+              : "border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200"
           }`}
         >
           <Scale className="w-4 h-4" />
@@ -332,12 +332,12 @@ export default function BudgetDetailView({
           className={`flex items-center gap-2 py-3 px-3 sm:px-4 text-xs sm:text-sm font-bold border-b-2 transition-all cursor-pointer whitespace-nowrap ${
             activeTab === "participants"
               ? "border-brand-500 text-brand-600 dark:text-brand-400"
-              : "border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200"
+              : "border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200"
           }`}
         >
           <Users className="w-4 h-4" />
           <span>Teilnehmer</span>
-          <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
+          <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
             {budget.participants.length}
           </span>
         </button>

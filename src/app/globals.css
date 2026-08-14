@@ -166,30 +166,43 @@ body {
 
 
 /* Status Classes */
-.status-u   { background: var(--color-vacation) !important; color: #fff !important; }
-.status-u-2 { background: linear-gradient(135deg, var(--color-vacation) 50%, var(--surface) 50%) !important; color: #fff !important; }
+:root {
+  --status-text: #0f172a;
+}
+.dark {
+  --status-text: #ffffff;
+}
 
-.status-k   { background: var(--color-sick) !important; color: #fff !important; }
-.status-k-2 { background: linear-gradient(135deg, var(--color-sick) 50%, var(--surface) 50%) !important; color: #fff !important; }
+.status-u   { background: var(--color-vacation) !important; color: var(--status-text) !important; }
+.status-u-2 { background: linear-gradient(135deg, var(--color-vacation) 50%, var(--surface) 50%) !important; color: var(--status-text) !important; }
 
-.status-ue   { background: var(--color-overtime) !important; color: #fff !important; }
-.status-ue-2 { background: linear-gradient(135deg, var(--color-overtime) 50%, var(--surface) 50%) !important; color: #fff !important; }
+.status-k   { background: var(--color-sick) !important; color: var(--status-text) !important; }
+.status-k-2 { background: linear-gradient(135deg, var(--color-sick) 50%, var(--surface) 50%) !important; color: var(--status-text) !important; }
 
-.status-b   { background: var(--color-bildungsurlaub) !important; color: #fff !important; }
-.status-d   { background: var(--color-dienstreise) !important; color: #fff !important; }
-.status-s   { background: var(--color-special) !important; color: #fff !important; }
-.status-s-2 { background: linear-gradient(135deg, var(--color-special) 50%, var(--surface) 50%) !important; color: #fff !important; }
-.status-a   { background: var(--color-auszeit) !important; color: #fff !important; }
-.status-a-2 { background: linear-gradient(135deg, var(--color-auszeit) 50%, var(--surface) 50%) !important; color: #fff !important; }
+.status-ue   { background: var(--color-overtime) !important; color: var(--status-text) !important; }
+.status-ue-2 { background: linear-gradient(135deg, var(--color-overtime) 50%, var(--surface) 50%) !important; color: var(--status-text) !important; }
+
+.status-b   { background: var(--color-bildungsurlaub) !important; color: var(--status-text) !important; }
+.status-d   { background: var(--color-dienstreise) !important; color: var(--status-text) !important; }
+.status-s   { background: var(--color-special) !important; color: var(--status-text) !important; }
+.status-s-2 { background: linear-gradient(135deg, var(--color-special) 50%, var(--surface) 50%) !important; color: var(--status-text) !important; }
+.status-a   { background: var(--color-auszeit) !important; color: var(--status-text) !important; }
+.status-a-2 { background: linear-gradient(135deg, var(--color-auszeit) 50%, var(--surface) 50%) !important; color: var(--status-text) !important; }
 .status-m {
   background-color: var(--color-mobile) !important;
-  color: white !important;
+  color: var(--status-text) !important;
+  border: 1px solid rgba(0,0,0,0.08) !important;
+}
+.dark .status-m {
   border: 1px solid rgba(255,255,255,0.1) !important;
 }
 
 .status-m-2 {
   background: linear-gradient(135deg, var(--color-mobile) 50%, var(--surface-bright) 50%) !important;
-  color: white !important;
+  color: var(--status-text) !important;
+  border: 1px solid rgba(0,0,0,0.08) !important;
+}
+.dark .status-m-2 {
   border: 1px solid rgba(255,255,255,0.1) !important;
 }
 

@@ -14,7 +14,7 @@ export default function Legend() {
         className="flex items-center justify-between cursor-pointer group min-h-[44px] sm:min-h-[40px] py-1 shrink-0"
         onClick={() => setActiveSidebarPanel(isOpen ? 'statistics' : 'legend')}
       >
-        <h2 className="font-semibold text-base sm:text-lg text-slate-800 dark:text-slate-200">Legende</h2>
+        <h2 className="font-semibold text-base sm:text-lg text-slate-700 dark:text-slate-200">Legende</h2>
         <button className="p-2 sm:p-1 group-hover:bg-slate-100 dark:group-hover:bg-slate-800 rounded-md transition-colors shrink-0 cursor-pointer">
           {isOpen ? <ChevronUp className="w-5 h-5 text-slate-500" /> : <ChevronDown className="w-5 h-5 text-slate-500" />}
         </button>

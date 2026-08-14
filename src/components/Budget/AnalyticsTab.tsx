@@ -21,6 +21,7 @@ import {
 } from "@/lib/budgetUtils"
 import { deleteBudgetCategory } from "@/app/actions/budgetActions"
 import { useRouter } from "next/navigation"
+import CategoryIcon from "./CategoryIcon"
 
 interface AnalyticsTabProps {
   budgetId: string
@@ -90,11 +91,11 @@ export default function AnalyticsTab({
             Ø Kosten pro Reisetag
           </span>
           <div className="my-2">
-            <span className="text-2xl font-extrabold text-slate-800 dark:text-slate-100">
+            <span className="text-2xl font-bold text-slate-700 dark:text-slate-300">
               {formatCurrency(dailyAverage.avgPerDay, currency)}
             </span>
           </div>
-          <span className="text-xs text-slate-400 font-medium">
+          <span className="text-xs text-slate-400 dark:text-slate-500 font-medium">
             Berechnet über {dailyAverage.daysCount} Tag{dailyAverage.daysCount === 1 ? "" : "e"}
           </span>
         </div>
@@ -106,11 +107,11 @@ export default function AnalyticsTab({
             Größte Einzelausgabe
           </span>
           <div className="my-2">
-            <span className="text-2xl font-extrabold text-slate-800 dark:text-slate-100">
+            <span className="text-2xl font-bold text-slate-700 dark:text-slate-300">
               {topExpense ? formatCurrency(topExpense.amount, currency) : "-"}
             </span>
           </div>
-          <span className="text-xs text-slate-400 font-medium truncate">
+          <span className="text-xs text-slate-400 dark:text-slate-500 font-medium truncate">
             {topExpense ? `"${topExpense.title}"` : "Keine Ausgaben vorhanden"}
           </span>
         </div>
@@ -122,12 +123,12 @@ export default function AnalyticsTab({
             Aktive Kategorien
           </span>
           <div className="my-2">
-            <span className="text-2xl font-extrabold text-slate-800 dark:text-slate-100">
+            <span className="text-2xl font-bold text-slate-700 dark:text-slate-300">
               {breakdown.length}
             </span>
-            <span className="text-xs text-slate-400 font-medium ml-1.5">von {categories.length}</span>
+            <span className="text-xs text-slate-400 dark:text-slate-500 font-medium ml-1.5">von {categories.length}</span>
           </div>
-          <span className="text-xs text-slate-400 font-medium">
+          <span className="text-xs text-slate-400 dark:text-slate-500 font-medium">
             mit erfassten Buchungen
           </span>
         </div>
@@ -137,10 +138,10 @@ export default function AnalyticsTab({
       <div className="bg-white dark:bg-[#0d1117] border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm flex flex-col gap-6">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100">
+            <h2 className="text-lg font-bold text-slate-700 dark:text-slate-300">
               Ausgaben nach Kategorie
             </h2>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5">
               Prozentuale Verteilung der Gesamtausgaben ({formatCurrency(totalSpent, currency)})
             </p>
           </div>
@@ -154,7 +155,7 @@ export default function AnalyticsTab({
         </div>
 
         {breakdown.length === 0 ? (
-          <div className="py-12 text-center text-sm text-slate-400">
+          <div className="py-12 text-center text-sm text-slate-400 dark:text-slate-500">
             Noch keine kategorisierten Ausgaben vorhanden.
           </div>
         ) : (
@@ -187,17 +188,17 @@ export default function AnalyticsTab({
                       style={{ backgroundColor: item.color }}
                     />
                     <div className="flex flex-col min-w-0">
-                      <span className="font-bold text-sm text-slate-800 dark:text-slate-200 truncate">
+                      <span className="font-bold text-sm text-slate-700 dark:text-slate-200 truncate">
                         {item.name}
                       </span>
-                      <span className="text-xs text-slate-400 font-medium">
+                      <span className="text-xs text-slate-400 dark:text-slate-500 font-medium">
                         {item.count} Posten ({item.percent.toFixed(1)}%)
                       </span>
                     </div>
                   </div>
 
                   <div className="text-right shrink-0">
-                    <span className="font-black text-sm text-slate-800 dark:text-slate-100">
+                    <span className="font-bold text-sm text-slate-700 dark:text-slate-200">
                       {formatCurrency(item.amount, currency)}
                     </span>
                   </div>
@@ -223,9 +224,11 @@ export default function AnalyticsTab({
               className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-900/40 text-xs font-medium text-slate-700 dark:text-slate-300"
             >
               <div
-                className="w-2.5 h-2.5 rounded-full shrink-0"
+                className="w-5 h-5 rounded-lg flex items-center justify-center text-white shrink-0"
                 style={{ backgroundColor: cat.color || "#3b82f6" }}
-              />
+              >
+                <CategoryIcon name={cat.icon} className="w-3 h-3" />
+              </div>
               <span>{cat.name}</span>
 
               {/* Custom categories can be deleted */}

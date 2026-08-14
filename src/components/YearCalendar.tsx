@@ -268,9 +268,9 @@ export default function YearCalendar() {
   return (
     <div className="flex-1 flex flex-col p-2 sm:p-4 md:p-6 lg:p-8 pt-1 sm:pt-2 md:pt-4 overflow-hidden select-none">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 pb-2 sm:pb-4 shrink-0">
-        <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-slate-800 dark:text-slate-100 tracking-tight">
+        <h2 className="font-bold text-slate-700 dark:text-slate-300 text-lg sm:text-xl tracking-tight">
           Jahresübersicht {selectedYear}
-        </h1>
+        </h2>
         {pressedKey && VALID_KEYS[pressedKey] && (
           <div className="text-xs bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800 px-3 py-1 rounded-lg font-medium shadow-xs animate-in fade-in">
             Aktiv: <strong className="font-bold">{TYPE_DESCRIPTIONS[VALID_KEYS[pressedKey]] || VALID_KEYS[pressedKey]}</strong> (Klicken zum Einfügen)
@@ -279,11 +279,11 @@ export default function YearCalendar() {
       </div>
       
       <div className="flex-1 flex flex-col min-h-0 overflow-x-auto overflow-y-auto custom-scrollbar -webkit-overflow-scrolling-touch pr-2 pb-4">
-        {/* Header (Tage 1-31) - Sticky vertically */}
-        <div className="grid grid-cols-[38px_repeat(31,minmax(24px,1fr))] md:grid-cols-[48px_repeat(31,minmax(35px,1fr))] min-w-max gap-1 md:gap-1.5 mb-2 shrink-0 sticky top-0 z-30 bg-stone-100/95 dark:bg-[#050a0f]/95 backdrop-blur-md py-1">
-          <div className="bg-stone-100 dark:bg-[#050a0f] flex items-center sticky left-0 z-40" />
+        {/* Header (Tage 1-31) */}
+        <div className="grid grid-cols-[38px_repeat(31,minmax(24px,1fr))] md:grid-cols-[48px_repeat(31,minmax(35px,1fr))] min-w-max gap-1 md:gap-1.5 mb-2 shrink-0">
+          <div className="bg-transparent flex items-center sticky left-0 z-20" />
           {Array.from({ length: 31 }, (_, i) => i + 1).map(day => (
-            <div key={day} className="flex items-center justify-center text-xs font-bold text-slate-400">
+            <div key={day} className="bg-transparent flex items-center justify-center text-xs font-medium text-slate-400 dark:text-slate-500">
               {day}
             </div>
           ))}
@@ -301,7 +301,7 @@ export default function YearCalendar() {
                   "h-[40px] flex items-center text-xs md:text-sm sticky left-0 z-20 transition-colors",
                   "rounded-md border border-stone-200/80 bg-stone-100 text-slate-500 font-bold shadow-xs px-1.5",
                   "dark:bg-[#050a0f] dark:border-slate-800/80 dark:text-slate-300",
-                  "md:rounded-none md:border-0 md:shadow-none md:bg-transparent dark:md:bg-transparent md:text-slate-700 dark:md:text-slate-200 md:font-semibold md:px-1"
+                  "md:rounded-none md:border-0 md:shadow-none md:bg-transparent dark:md:bg-transparent md:text-slate-600 dark:md:text-slate-300 md:font-semibold md:px-1"
                 )}>
                   {monthName}
                 </div>
@@ -426,8 +426,8 @@ export default function YearCalendar() {
 
                                 // Render stacked half-days (from manual entries or merged half-day trips)
                                 if (parts.length === 2) {
-                                  const typeClass1 = ENTRY_CLASSES[HALF_TO_FULL[parts[0]] || parts[0]] || "bg-slate-200 text-slate-800"
-                                  const typeClass2 = ENTRY_CLASSES[HALF_TO_FULL[parts[1]] || parts[1]] || "bg-slate-200 text-slate-800"
+                                  const typeClass1 = ENTRY_CLASSES[HALF_TO_FULL[parts[0]] || parts[0]] || "bg-slate-200 text-slate-700 dark:text-slate-200"
+                                  const typeClass2 = ENTRY_CLASSES[HALF_TO_FULL[parts[1]] || parts[1]] || "bg-slate-200 text-slate-700 dark:text-slate-200"
                                   return (
                                     <div key={profileId} className={cn("flex flex-col rounded-sm overflow-hidden border-solid shadow-sm w-full h-full", 
                                       isCompact ? "border-[1px] flex-1" : "border-2 shrink-0 flex-1",
@@ -445,7 +445,7 @@ export default function YearCalendar() {
                                   )
                                 }
                                 
-                                const typeClass = ENTRY_CLASSES[entryType] || "bg-slate-200 text-slate-800"
+                                const typeClass = ENTRY_CLASSES[entryType] || "bg-slate-200 text-slate-700 dark:text-slate-200"
                                 const label = HALF_TO_LABEL[entryType] || entryType
                                 
                                 return (

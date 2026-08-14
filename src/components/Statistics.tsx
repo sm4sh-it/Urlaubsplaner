@@ -166,7 +166,7 @@ export default function Statistics() {
   if (activeProfileIds.length === 0) {
     return (
       <div className="bg-white dark:bg-[var(--surface)] rounded-xl shadow-sm border border-slate-200 dark:border-[var(--border-subtle)] p-4 flex flex-col min-h-0 shrink-0">
-        <h2 className="font-semibold text-lg mb-4 text-slate-800 dark:text-slate-200">Statistik</h2>
+        <h2 className="font-semibold text-lg mb-4 text-slate-700 dark:text-slate-200">Statistik</h2>
         <div className="text-sm text-slate-500">Bitte wähle ein Profil aus.</div>
       </div>
     )
@@ -177,7 +177,7 @@ export default function Statistics() {
   if (!stats) {
     return (
       <div className="bg-white dark:bg-[var(--surface)] rounded-xl shadow-sm border border-slate-200 dark:border-[var(--border-subtle)] p-4 flex flex-col min-h-0 shrink-0">
-        <h2 className="font-semibold text-lg mb-4 text-slate-800 dark:text-slate-200">Statistik ({activeProfile.name})</h2>
+        <h2 className="font-semibold text-lg mb-4 text-slate-700 dark:text-slate-200">Statistik ({activeProfile.name})</h2>
         <div className="text-sm text-slate-500">
           Profil ist für das Jahr {selectedYear} nicht aktiv (Startjahr: {activeProfile.startYear}).
         </div>
@@ -194,7 +194,7 @@ export default function Statistics() {
         className="flex items-center justify-between cursor-pointer group mb-2 sm:mb-4 min-h-[44px] sm:min-h-[40px] py-1 shrink-0"
         onClick={() => setActiveSidebarPanel(isOpen ? 'legend' : 'statistics')}
       >
-        <h2 className="font-semibold text-base sm:text-lg text-slate-800 dark:text-slate-200">
+        <h2 className="font-semibold text-base sm:text-lg text-slate-700 dark:text-slate-200">
           Statistik ({activeProfile.name})
         </h2>
         <button className="p-2 sm:p-1 group-hover:bg-slate-100 dark:group-hover:bg-slate-800 rounded-md transition-colors shrink-0 cursor-pointer">
@@ -227,7 +227,7 @@ export default function Statistics() {
           <div className="font-medium text-right text-emerald-600 dark:text-[#1b8a5a]">{totalUrlaub} Tage</div>
           
           <div className="text-slate-500 dark:text-slate-400 font-semibold border-t border-slate-100 dark:border-[var(--border-subtle)] pt-2 mt-1">Rest gesamt:</div>
-          <div className="font-bold text-right border-t border-slate-100 dark:border-[var(--border-subtle)] pt-2 mt-1 text-slate-900 dark:text-white">{restUrlaubAktuell} Tage</div>
+          <div className="font-bold text-right border-t border-slate-100 dark:border-[var(--border-subtle)] pt-2 mt-1 text-slate-700 dark:text-slate-200">{restUrlaubAktuell} Tage</div>
           
           {ungenutzterResturlaub > 0 && (
             <>

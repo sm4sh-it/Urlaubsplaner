@@ -721,8 +721,8 @@ export function VacationHabitsWidget() {
       <div className="flex flex-col gap-4 mt-2">
         <div className="flex flex-col gap-1">
           <div className="flex justify-between text-sm">
-            <span className="text-slate-700 dark:text-slate-300">Kurztrips (1-3 Tage)</span>
-            <span className="font-semibold text-slate-900 dark:text-white">{stats.short}</span>
+            <span className="text-slate-600 dark:text-slate-300">Kurztrips (1-3 Tage)</span>
+            <span className="font-semibold text-slate-700 dark:text-slate-200">{stats.short}</span>
           </div>
           <div className="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-2 overflow-hidden">
             <div className="bg-[#10b981] dark:bg-[#059669] h-full rounded-full transition-all duration-500" style={{ width: stats.total ? `${(stats.short / stats.total) * 100}%` : '0%' }}></div>
@@ -731,8 +731,8 @@ export function VacationHabitsWidget() {
         
         <div className="flex flex-col gap-1">
           <div className="flex justify-between text-sm">
-            <span className="text-slate-700 dark:text-slate-300">Normal (4-10 Tage)</span>
-            <span className="font-semibold text-slate-900 dark:text-white">{stats.medium}</span>
+            <span className="text-slate-600 dark:text-slate-300">Normal (4-10 Tage)</span>
+            <span className="font-semibold text-slate-700 dark:text-slate-200">{stats.medium}</span>
           </div>
           <div className="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-2 overflow-hidden">
             <div className="bg-[#3b82f6] dark:bg-[#2563eb] h-full rounded-full transition-all duration-500" style={{ width: stats.total ? `${(stats.medium / stats.total) * 100}%` : '0%' }}></div>
@@ -741,8 +741,8 @@ export function VacationHabitsWidget() {
 
         <div className="flex flex-col gap-1">
           <div className="flex justify-between text-sm">
-            <span className="text-slate-700 dark:text-slate-300">Langurlaub (11-20 Tage)</span>
-            <span className="font-semibold text-slate-900 dark:text-white">{stats.long}</span>
+            <span className="text-slate-600 dark:text-slate-300">Langurlaub (11-20 Tage)</span>
+            <span className="font-semibold text-slate-700 dark:text-slate-200">{stats.long}</span>
           </div>
           <div className="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-2 overflow-hidden">
             <div className="bg-[#8b5cf6] dark:bg-[#7c3aed] h-full rounded-full transition-all duration-500" style={{ width: stats.total ? `${(stats.long / stats.total) * 100}%` : '0%' }}></div>
@@ -797,7 +797,7 @@ export function HolidayEfficiencyWidget() {
         <div>
           <h3 className="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">Feiertags-Effizienz</h3>
           <div className="flex items-baseline gap-2">
-            <span className="text-3xl font-bold text-slate-800 dark:text-white">
+            <span className="text-3xl font-bold text-slate-700 dark:text-slate-200">
               +{data.totalExtraDays}
             </span>
             <span className="text-sm text-slate-500 dark:text-slate-400 font-medium">Tage extra Freizeit</span>

@@ -46,7 +46,7 @@ export default function ProfileSelector() {
                   >
                     <div className="flex items-center gap-2.5">
                       <div className="w-3.5 h-3.5 rounded-full ring-2 ring-white dark:ring-slate-900 shadow-xs shrink-0" style={{ backgroundColor: profile.color }} />
-                      <span className="font-medium text-slate-800 dark:text-slate-200">{profile.name}</span>
+                      <span className="font-medium text-slate-700 dark:text-slate-200">{profile.name}</span>
                     </div>
                     {isActive && <Check className="h-4 w-4 text-brand-500 font-bold" />}
                   </button>

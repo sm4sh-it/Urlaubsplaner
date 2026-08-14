@@ -71,15 +71,14 @@ export default function Navbar() {
         </Link>
       </div>
 
-
       {!isLogin && (
         <div className="hidden md:flex items-center gap-8 h-16">
           <Link 
             href="/" 
             className={`relative h-16 flex items-center text-sm font-semibold transition-colors ${
               pathname === '/' 
-                ? 'text-slate-900 dark:text-white font-bold after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-brand-500 after:rounded-full' 
-                : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
+                ? 'text-slate-700 dark:text-slate-200 font-bold after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-brand-500 after:rounded-full' 
+                : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
             }`}
           >
             Home
@@ -88,8 +87,8 @@ export default function Navbar() {
             href="/calendar" 
             className={`relative h-16 flex items-center text-sm font-semibold transition-colors ${
               pathname.startsWith('/calendar') 
-                ? 'text-slate-900 dark:text-white font-bold after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-brand-500 after:rounded-full' 
-                : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
+                ? 'text-slate-700 dark:text-slate-200 font-bold after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-brand-500 after:rounded-full' 
+                : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
             }`}
           >
             Kalenderansicht
@@ -98,8 +97,8 @@ export default function Navbar() {
             href="/budget" 
             className={`relative h-16 flex items-center text-sm font-semibold transition-colors ${
               pathname.startsWith('/budget') 
-                ? 'text-slate-900 dark:text-white font-bold after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-brand-500 after:rounded-full' 
-                : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
+                ? 'text-slate-700 dark:text-slate-200 font-bold after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-brand-500 after:rounded-full' 
+                : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
             }`}
           >
             Budget
@@ -108,8 +107,8 @@ export default function Navbar() {
             href="/statistics" 
             className={`relative h-16 flex items-center text-sm font-semibold transition-colors ${
               pathname.startsWith('/statistics') 
-                ? 'text-slate-900 dark:text-white font-bold after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-brand-500 after:rounded-full' 
-                : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
+                ? 'text-slate-700 dark:text-slate-200 font-bold after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-brand-500 after:rounded-full' 
+                : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
             }`}
           >
             Statistiken
@@ -126,76 +125,89 @@ export default function Navbar() {
                   if (selectedYear > 2022) setSelectedYear(selectedYear - 1)
                 }}
                 disabled={selectedYear <= 2022}
-                className="p-2 md:p-1 hover:text-brand-600 dark:hover:text-brand-400 active:scale-95 hover:scale-110 transition-all disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer flex items-center justify-center"
-                title="Vorheriges Jahr"
+                className="p-2 sm:p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors cursor-pointer min-h-[44px] min-w-[44px] sm:min-h-0 sm:min-w-0 flex items-center justify-center text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 disabled:opacity-30 disabled:cursor-not-allowed"
+                aria-label="Vorheriges Jahr"
               >
-                <ChevronLeft className="w-5.5 h-5.5 md:w-4.5 md:h-4.5" />
+                <ChevronLeft className="h-4 w-4" />
               </button>
-              <span className="font-bold px-1.5 md:px-1 tracking-tight text-sm md:text-sm">
-                {selectedYear}
-              </span>
+              <span className="font-bold px-1.5 py-0.5 text-base">{selectedYear}</span>
               <button 
                 onClick={() => {
                   const currentYear = new Date().getFullYear()
                   if (selectedYear < currentYear + 4) setSelectedYear(selectedYear + 1)
                 }}
                 disabled={selectedYear >= new Date().getFullYear() + 4}
-                className="p-2 md:p-1 hover:text-brand-600 dark:hover:text-brand-400 active:scale-95 hover:scale-110 transition-all disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer flex items-center justify-center"
-                title="Nächstes Jahr"
+                className="p-2 sm:p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors cursor-pointer min-h-[44px] min-w-[44px] sm:min-h-0 sm:min-w-0 flex items-center justify-center text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 disabled:opacity-30 disabled:cursor-not-allowed"
+                aria-label="Nächstes Jahr"
               >
-                <ChevronRight className="w-5.5 h-5.5 md:w-4.5 md:h-4.5" />
+                <ChevronRight className="h-4 w-4" />
               </button>
             </div>
 
-            <div className="hidden md:block h-4 w-px bg-slate-200 dark:bg-slate-800/80 mx-1 shrink-0" />
+            <div className="h-4 w-[1px] bg-slate-200 dark:bg-slate-800 mx-1 hidden sm:block" />
 
-            <div className="hidden md:block">
+            <div className="hidden sm:block">
               <ProfileSelector />
             </div>
 
-            <div className="hidden md:block h-4 w-px bg-slate-200 dark:bg-slate-800/80 mx-1 shrink-0" />
+            <div className="h-4 w-[1px] bg-slate-200 dark:bg-slate-800 mx-1 hidden sm:block" />
           </>
         )}
-        <div className="hidden md:block">
+
+        <div className="hidden sm:block">
           <ThemeToggle />
         </div>
+
         {!isLogin && (
           <>
-            <div className="hidden md:block h-4 w-px bg-slate-200 dark:bg-slate-800/80 mx-1 shrink-0" />
+            <div className="h-4 w-[1px] bg-slate-200 dark:bg-slate-800 mx-1 hidden sm:block" />
 
             <button 
-              onClick={() => setIsHelpOpen(true)} 
-              className="hidden md:flex p-1.5 text-slate-500 hover:text-brand-600 dark:text-slate-400 dark:hover:text-brand-400 hover:scale-110 transition-all cursor-pointer" 
-              title="Hilfe"
+              onClick={() => setIsHelpOpen(true)}
+              className="p-2 sm:p-1.5 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800/80 rounded-xl transition-colors cursor-pointer hidden sm:flex items-center justify-center"
+              aria-label="Hilfe & Tastaturkürzel anzeigen"
             >
-              <HelpCircle className="h-5 w-5" />
+              <HelpCircle className="h-4.5 w-4.5" />
             </button>
 
-            <div className="hidden md:block h-4 w-px bg-slate-200 dark:bg-slate-800/80 mx-1 shrink-0" />
+            <div className="h-4 w-[1px] bg-slate-200 dark:bg-slate-800 mx-1 hidden sm:block" />
 
-            <Link 
-              href="/settings" 
-              className="hidden md:flex p-1.5 text-slate-500 hover:text-brand-600 dark:text-slate-400 dark:hover:text-brand-400 hover:scale-110 transition-all cursor-pointer" 
-              title="Einstellungen"
+            <Link
+              href="/settings"
+              className={`p-2 sm:p-1.5 rounded-xl transition-colors cursor-pointer hidden sm:flex items-center justify-center ${
+                pathname === '/settings'
+                  ? 'text-brand-600 dark:text-brand-400 bg-brand-50 dark:bg-brand-500/10'
+                  : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800/80'
+              }`}
+              aria-label="Einstellungen"
             >
-              <Settings className="h-5 w-5" />
+              <Settings className="h-4.5 w-4.5" />
             </Link>
 
-            <div className="hidden md:block h-4 w-px bg-slate-200 dark:bg-slate-800/80 mx-1 shrink-0" />
+            <div className="h-4 w-[1px] bg-slate-200 dark:bg-slate-800 mx-1 hidden sm:block" />
 
             <button 
               onClick={handleLogout} 
-              className="hidden md:flex p-1.5 text-slate-500 hover:text-red-600 dark:text-slate-400 dark:hover:text-red-400 transition-colors cursor-pointer" 
+              className="p-2 sm:p-1.5 text-slate-500 hover:text-red-600 dark:text-slate-400 dark:hover:text-red-400 hover:bg-slate-100 dark:hover:bg-slate-800/80 rounded-xl transition-colors cursor-pointer hidden sm:flex items-center justify-center" 
               title="Abmelden"
             >
-              <LogOut className="h-5 w-5" />
+              <LogOut className="h-4.5 w-4.5" />
+            </button>
+
+            {/* Mobile Menu Toggle Button */}
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="sm:hidden p-2 text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800/80 rounded-xl transition-colors cursor-pointer min-h-[44px] min-w-[44px] flex items-center justify-center ml-0.5"
+              aria-label="Menü öffnen"
+            >
+              {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </button>
           </>
         )}
       </div>
 
-      {/* Mobile Menu Dropdown */}
-      {!isLogin && isMobileMenuOpen && (
+      {/* Mobile Drawer Navigation Menu */}
+      {isMobileMenuOpen && !isLogin && (
         <div 
           ref={mobileMenuRef}
           className="absolute top-16 left-0 right-0 bg-white/95 dark:bg-[#0d1117]/95 backdrop-blur-xl border-b border-slate-200 dark:border-slate-800 shadow-2xl md:hidden flex flex-col p-4 gap-2 z-[100] animate-in slide-in-from-top-2 max-h-[calc(100vh-4rem)] overflow-y-auto"
@@ -207,7 +219,7 @@ export default function Navbar() {
               className={`px-3 py-2.5 text-sm transition-all flex items-center justify-between ${
                 pathname === '/' 
                   ? 'text-brand-600 dark:text-brand-400 font-bold border-l-2 border-brand-500 pl-3' 
-                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white font-semibold'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 font-semibold'
               }`}
             >
               Home
@@ -217,7 +229,7 @@ export default function Navbar() {
               className={`px-3 py-2.5 text-sm transition-all flex items-center justify-between ${
                 pathname.startsWith('/calendar') 
                   ? 'text-brand-600 dark:text-brand-400 font-bold border-l-2 border-brand-500 pl-3' 
-                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white font-semibold'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 font-semibold'
               }`}
             >
               Kalenderansicht
@@ -227,7 +239,7 @@ export default function Navbar() {
               className={`px-3 py-2.5 text-sm transition-all flex items-center justify-between ${
                 pathname.startsWith('/budget') 
                   ? 'text-brand-600 dark:text-brand-400 font-bold border-l-2 border-brand-500 pl-3' 
-                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white font-semibold'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 font-semibold'
               }`}
             >
               Budget
@@ -237,7 +249,7 @@ export default function Navbar() {
               className={`px-3 py-2.5 text-sm transition-all flex items-center justify-between ${
                 pathname.startsWith('/statistics') 
                   ? 'text-brand-600 dark:text-brand-400 font-bold border-l-2 border-brand-500 pl-3' 
-                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white font-semibold'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 font-semibold'
               }`}
             >
               Statistiken
@@ -261,8 +273,8 @@ export default function Navbar() {
                     onClick={() => toggleActiveProfile(profile.id)}
                     className={`flex items-center justify-between px-3 py-2 text-sm transition-colors cursor-pointer ${
                       isActive 
-                        ? 'text-slate-900 dark:text-slate-100 font-bold' 
-                        : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
+                        ? 'text-slate-700 dark:text-slate-200 font-bold' 
+                        : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
                     }`}
                   >
                     <div className="flex items-center gap-2.5">

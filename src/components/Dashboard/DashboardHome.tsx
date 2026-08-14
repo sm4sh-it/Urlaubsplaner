@@ -88,16 +88,16 @@ export default function DashboardHome() {
       
       {/* Stats Row / Header */}
       <div className="flex flex-wrap items-center gap-3 md:gap-4 text-xs sm:text-sm md:text-base text-slate-600 dark:text-slate-300 border-b border-slate-200 dark:border-[var(--border-subtle)] pb-2 sm:pb-4 font-medium">
-        <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-slate-800 dark:text-slate-100 tracking-tight">
+        <span className="font-bold text-slate-700 dark:text-slate-300 text-lg sm:text-xl tracking-tight">
           {selectedYear}
-        </h1>
-        <span className="w-px h-5 bg-slate-300 dark:bg-slate-700 hidden sm:block" />
-        <span className="flex items-center gap-1.5">
-          Gesamturlaub <strong className="font-bold text-slate-800 dark:text-slate-100">{totalRemainingLeave} / {totalAnnualLeave}</strong>
         </span>
         <span className="w-px h-5 bg-slate-300 dark:bg-slate-700 hidden sm:block" />
         <span className="flex items-center gap-1.5">
-          Geplante Reisen <strong className="font-bold text-slate-800 dark:text-slate-100">{upcomingTrips.length}</strong>
+          Gesamturlaub <strong className="font-bold text-slate-700 dark:text-slate-300">{totalRemainingLeave} / {totalAnnualLeave}</strong>
+        </span>
+        <span className="w-px h-5 bg-slate-300 dark:bg-slate-700 hidden sm:block" />
+        <span className="flex items-center gap-1.5">
+          Geplante Reisen <strong className="font-bold text-slate-700 dark:text-slate-300">{upcomingTrips.length}</strong>
         </span>
       </div>
 
@@ -106,12 +106,12 @@ export default function DashboardHome() {
       {/* Active Trips */}
       <div className="flex flex-col gap-6">
         <div className="flex justify-between items-center border-b border-slate-200 dark:border-white/10 pb-4">
-          <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">
+          <h2 className="text-lg sm:text-xl font-bold text-slate-700 dark:text-slate-300">
             Anstehende Reisen & Urlaube
           </h2>
           <button 
             onClick={handleOpenNew}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl font-semibold text-sm text-slate-800 dark:text-slate-100 bg-white dark:bg-[#161f28]/70 hover:bg-[#fafafa] dark:hover:bg-[#1e2a36]/90 border border-slate-300 dark:border-slate-700/80 hover:border-brand-500/50 dark:hover:border-brand-500/50 hover:-translate-y-0.5 hover:shadow-md hover:shadow-brand-500/10 active:translate-y-0 active:scale-[0.98] transition-all duration-300 backdrop-blur-md cursor-pointer"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl font-semibold text-sm text-slate-700 dark:text-slate-200 bg-white dark:bg-[#161f28]/70 hover:bg-[#fafafa] dark:hover:bg-[#1e2a36]/90 border border-slate-300 dark:border-slate-700/80 hover:border-brand-500/50 dark:hover:border-brand-500/50 hover:-translate-y-0.5 hover:shadow-md hover:shadow-brand-500/10 active:translate-y-0 active:scale-[0.98] transition-all duration-300 backdrop-blur-md cursor-pointer"
           >
             <Plus className="w-4 h-4 text-brand-500 shrink-0" />
             <span>Neue Reise</span>
@@ -119,7 +119,7 @@ export default function DashboardHome() {
         </div>
 
         {upcomingTrips.length === 0 ? (
-          <div className="text-center py-16 bg-white/50 dark:bg-white/5 border border-dashed border-slate-300 dark:border-slate-700 rounded-2xl text-slate-500">
+          <div className="text-center py-16 bg-white/50 dark:bg-white/5 border border-dashed border-slate-300 dark:border-slate-700 rounded-2xl text-slate-400 dark:text-slate-500">
             Aktuell sind keine Reisen geplant.
           </div>
         ) : (
@@ -136,7 +136,7 @@ export default function DashboardHome() {
         <div className="mt-8 border-t border-slate-200 dark:border-white/10 pt-8">
           <button 
             onClick={() => setIsArchiveOpen(!isArchiveOpen)}
-            className="flex justify-between items-center w-full text-left text-xl font-bold text-slate-800 dark:text-slate-100 hover:text-brand-500 transition-colors"
+            className="flex justify-between items-center w-full text-left text-xl font-bold text-slate-700 dark:text-slate-200 hover:text-brand-500 transition-colors"
           >
             Archivierte & Vergangene Urlaube
             {isArchiveOpen ? <ChevronUp className="w-6 h-6 text-slate-400" /> : <ChevronDown className="w-6 h-6 text-slate-400" />}
@@ -164,7 +164,7 @@ export default function DashboardHome() {
                         onClick={() => handleOpenEdit(trip)}
                         className="border-b border-slate-100 dark:border-slate-800/50 hover:bg-slate-50 dark:hover:bg-slate-800/30 cursor-pointer transition-colors"
                       >
-                        <td className="py-4 px-4 font-medium text-slate-800 dark:text-slate-200">{trip.title}</td>
+                        <td className="py-4 px-4 font-medium text-slate-700 dark:text-slate-200">{trip.title}</td>
                         <td className="py-4 px-4">{start} - {end}</td>
                         <td className="py-4 px-4">{trip.isHalfDay ? (trip.duration === 1 ? "0.5 Tag" : `${trip.duration * 0.5} Tage`) : `${trip.duration} Tage`}</td>
                         <td className="py-4 px-4">{trip.type}</td>

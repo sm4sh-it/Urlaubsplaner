@@ -34,7 +34,7 @@ export default function HelpModal({ isOpen, onClose }: HelpModalProps) {
               <CalendarDays className="w-6 h-6" />
             </div>
             <div>
-              <h2 className="text-xl md:text-2xl font-bold text-slate-900 dark:text-slate-100">Hilfe &amp; Funktionen</h2>
+              <h2 className="text-xl md:text-2xl font-bold text-slate-700 dark:text-slate-200">Hilfe &amp; Funktionen</h2>
               <p className="text-xs md:text-sm text-slate-500 dark:text-slate-400">So nutzt du sm4sh's Urlaubsplaner optimal</p>
             </div>
           </div>
@@ -51,19 +51,19 @@ export default function HelpModal({ isOpen, onClose }: HelpModalProps) {
           
           {/* Section 1: Einträge */}
           <section className="bg-slate-50 dark:bg-slate-900/60 rounded-xl p-4 md:p-5 border border-slate-100 dark:border-slate-800">
-            <h3 className="flex items-center gap-2 text-base md:text-lg font-bold text-slate-900 dark:text-slate-100 mb-3">
+            <h3 className="flex items-center gap-2 text-base md:text-lg font-bold text-slate-700 dark:text-slate-200 mb-3">
               <MousePointerClick className="w-5 h-5 text-brand-500" />
               Tage eintragen &amp; löschen
             </h3>
             <ul className="space-y-2.5 text-sm md:text-base leading-relaxed">
               <li>
-                <strong className="text-slate-900 dark:text-slate-100">Ganzer Tag:</strong> Halte die Taste gedrückt (z. B. <kbd className="px-2 py-0.5 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded text-xs font-bold font-mono">U</kbd> für Urlaub) und klicke auf das Datum.
+                <strong className="text-slate-700 dark:text-slate-200">Ganzer Tag:</strong> Halte die Taste gedrückt (z. B. <kbd className="px-2 py-0.5 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded text-xs font-bold font-mono">U</kbd> für Urlaub) und klicke auf das Datum.
               </li>
               <li>
-                <strong className="text-slate-900 dark:text-slate-100">Halber Tag:</strong> Halte zusätzlich <kbd className="px-2 py-0.5 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded text-xs font-bold font-mono">Shift</kbd> gedrückt (z. B. <kbd className="px-2 py-0.5 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded text-xs font-bold font-mono">Shift + U</kbd>). Halbe Tage lassen sich auch kombinieren!
+                <strong className="text-slate-700 dark:text-slate-200">Halber Tag:</strong> Halte zusätzlich <kbd className="px-2 py-0.5 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded text-xs font-bold font-mono">Shift</kbd> gedrückt (z. B. <kbd className="px-2 py-0.5 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded text-xs font-bold font-mono">Shift + U</kbd>). Halbe Tage lassen sich auch kombinieren!
               </li>
               <li>
-                <strong className="text-slate-900 dark:text-slate-100">Löschen:</strong> Klicke ohne gedrückte Taste auf einen markierten Tag.
+                <strong className="text-slate-700 dark:text-slate-200">Löschen:</strong> Klicke ohne gedrückte Taste auf einen markierten Tag.
               </li>
             </ul>
             <div className="mt-3 pt-3 border-t border-slate-200/60 dark:border-slate-800 text-xs md:text-sm text-slate-500 dark:text-slate-400 flex items-center gap-2">
@@ -74,7 +74,7 @@ export default function HelpModal({ isOpen, onClose }: HelpModalProps) {
 
           {/* Section 2: Reisen & Ideen */}
           <section className="bg-slate-50 dark:bg-slate-900/60 rounded-xl p-4 md:p-5 border border-slate-100 dark:border-slate-800">
-            <h3 className="flex items-center gap-2 text-base md:text-lg font-bold text-slate-900 dark:text-slate-100 mb-3">
+            <h3 className="flex items-center gap-2 text-base md:text-lg font-bold text-slate-700 dark:text-slate-200 mb-3">
               <Plane className="w-5 h-5 text-brand-500" />
               Reisen &amp; Urlaubsideen
             </h3>
@@ -86,7 +86,7 @@ export default function HelpModal({ isOpen, onClose }: HelpModalProps) {
                 <strong className="text-amber-500">Idee:</strong> Wird im Kalender vormerkt, zieht aber erst dann Urlaubstage ab, wenn du den Status auf <em>"In Planung"</em> oder <em>"Gebucht"</em> umstellst.
               </li>
               <li>
-                <strong className="text-slate-900 dark:text-slate-100">Finanzen:</strong> Geplantes Budget &amp; tatsächliche Kosten eintragen, um die Ausgaben im Blick zu behalten.
+                <strong className="text-slate-700 dark:text-slate-200">Finanzen:</strong> Geplantes Budget &amp; tatsächliche Kosten eintragen, um die Ausgaben im Blick zu behalten.
               </li>
             </ul>
           </section>
@@ -94,7 +94,7 @@ export default function HelpModal({ isOpen, onClose }: HelpModalProps) {
           {/* Section 3: Feiertage & Ferien */}
           <section className="grid sm:grid-cols-2 gap-4">
             <div className="bg-slate-50 dark:bg-slate-900/60 rounded-xl p-4 border border-slate-100 dark:border-slate-800">
-              <div className="font-bold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-2 text-sm md:text-base">
+              <div className="font-bold text-slate-700 dark:text-slate-200 mb-2 flex items-center gap-2 text-sm md:text-base">
                 <div className="w-4 h-4 rounded-sm bg-orange-400/20 border-t-2 border-[#ff7b72]" />
                 Feiertage
               </div>
@@ -104,7 +104,7 @@ export default function HelpModal({ isOpen, onClose }: HelpModalProps) {
             </div>
             
             <div className="bg-slate-50 dark:bg-slate-900/60 rounded-xl p-4 border border-slate-100 dark:border-slate-800">
-              <div className="font-bold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-2 text-sm md:text-base">
+              <div className="font-bold text-slate-700 dark:text-slate-200 mb-2 flex items-center gap-2 text-sm md:text-base">
                 <div className="w-4 h-0 border-b-2 border-amber-500" />
                 Schulferien
               </div>
@@ -116,7 +116,7 @@ export default function HelpModal({ isOpen, onClose }: HelpModalProps) {
 
           {/* Section 4: Profile & Einstellungen */}
           <section className="bg-slate-50 dark:bg-slate-900/60 rounded-xl p-4 md:p-5 border border-slate-100 dark:border-slate-800">
-            <h3 className="flex items-center gap-2 text-base md:text-lg font-bold text-slate-900 dark:text-slate-100 mb-3">
+            <h3 className="flex items-center gap-2 text-base md:text-lg font-bold text-slate-700 dark:text-slate-200 mb-3">
               <Users className="w-5 h-5 text-brand-500" />
               Profile &amp; Anpassung
             </h3>
@@ -126,7 +126,7 @@ export default function HelpModal({ isOpen, onClose }: HelpModalProps) {
             <div className="flex items-start gap-3 p-3 bg-white dark:bg-[#0d1117] border border-slate-200 dark:border-slate-800 rounded-xl text-xs md:text-sm">
               <Settings className="w-5 h-5 text-brand-500 shrink-0 mt-0.5" />
               <div>
-                <strong className="text-slate-900 dark:text-slate-100">Einstellungen:</strong> Über das Zahnrad-Symbol oben kannst du Jahresanspruch, Übertragsfrist und Bundesland für jedes Profil individuell anpassen.
+                <strong className="text-slate-700 dark:text-slate-200">Einstellungen:</strong> Über das Zahnrad-Symbol oben kannst du Jahresanspruch, Übertragsfrist und Bundesland für jedes Profil individuell anpassen.
               </div>
             </div>
           </section>

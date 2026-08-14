@@ -137,9 +137,9 @@ export default function BudgetList({
       {/* Top Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 dark:border-slate-800 pb-2 sm:pb-4">
         <div>
-          <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-slate-800 dark:text-slate-100 tracking-tight">
+          <h2 className="font-bold text-slate-700 dark:text-slate-300 text-lg sm:text-xl tracking-tight">
             Budget- &amp; Reisekosten
-          </h1>
+          </h2>
           <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5">
             Verwalte Reisebudgets, erfasse gemeinsame Ausgaben und begleiche Salden transparent.
           </p>
@@ -150,7 +150,7 @@ export default function BudgetList({
             setBudgetToEdit(null)
             setIsCreateModalOpen(true)
           }}
-          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold text-sm text-slate-800 dark:text-slate-100 bg-white dark:bg-[#161f28]/70 hover:bg-[#fafafa] dark:hover:bg-[#1e2a36]/90 border border-slate-300 dark:border-slate-700/80 hover:border-brand-500/50 dark:hover:border-brand-500/50 hover:-translate-y-0.5 hover:shadow-md hover:shadow-brand-500/10 active:translate-y-0 active:scale-[0.98] transition-all duration-300 backdrop-blur-md cursor-pointer shrink-0"
+          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold text-sm text-slate-700 dark:text-slate-200 bg-white dark:bg-[#161f28]/70 hover:bg-[#fafafa] dark:hover:bg-[#1e2a36]/90 border border-slate-300 dark:border-slate-700/80 hover:border-brand-500/50 dark:hover:border-brand-500/50 hover:-translate-y-0.5 hover:shadow-md hover:shadow-brand-500/10 active:translate-y-0 active:scale-[0.98] transition-all duration-300 backdrop-blur-md cursor-pointer shrink-0"
         >
           <Plus className="w-4 h-4 text-brand-500 shrink-0" />
           <span>Neues Reise-Budget</span>
@@ -165,7 +165,7 @@ export default function BudgetList({
             Gesamtausgaben
           </span>
           <div className="mt-2 flex items-baseline gap-2">
-            <span className="text-2xl sm:text-3xl font-extrabold text-slate-800 dark:text-slate-100 tracking-tight">
+            <span className="text-xl sm:text-2xl font-bold text-slate-700 dark:text-slate-300 tracking-tight">
               {formatCurrency(overallStats.totalSpent)}
             </span>
           </div>
@@ -180,7 +180,7 @@ export default function BudgetList({
             Geplantes Budgetlimit
           </span>
           <div className="mt-2 flex items-baseline gap-2">
-            <span className="text-2xl sm:text-3xl font-extrabold text-slate-800 dark:text-slate-100 tracking-tight">
+            <span className="text-xl sm:text-2xl font-bold text-slate-700 dark:text-slate-300 tracking-tight">
               {overallStats.totalBudgetLimit > 0
                 ? formatCurrency(overallStats.totalBudgetLimit)
                 : "Kein Limit"}
@@ -199,10 +199,10 @@ export default function BudgetList({
             Erfasste Ausgaben
           </span>
           <div className="mt-2 flex items-baseline gap-2">
-            <span className="text-2xl sm:text-3xl font-extrabold text-slate-800 dark:text-slate-100 tracking-tight">
+            <span className="text-xl sm:text-2xl font-bold text-slate-700 dark:text-slate-300 tracking-tight">
               {overallStats.totalExpensesCount}
             </span>
-            <span className="text-xs font-medium text-slate-400">Belege &amp; Posten</span>
+            <span className="text-xs font-medium text-slate-400 dark:text-slate-500">Belege &amp; Posten</span>
           </div>
           <span className="text-xs text-slate-500 dark:text-slate-400 mt-1">
             Ø {overallStats.budgetCount > 0 ? (overallStats.totalExpensesCount / overallStats.budgetCount).toFixed(1) : 0} pro Reise
@@ -215,10 +215,10 @@ export default function BudgetList({
             Reise-Budgets
           </span>
           <div className="mt-2 flex items-baseline gap-2">
-            <span className="text-2xl sm:text-3xl font-extrabold text-slate-800 dark:text-slate-100 tracking-tight">
+            <span className="text-xl sm:text-2xl font-bold text-slate-700 dark:text-slate-300 tracking-tight">
               {filteredBudgets.length}
             </span>
-            <span className="text-xs font-medium text-slate-400">aktiv</span>
+            <span className="text-xs font-medium text-slate-400 dark:text-slate-500">aktiv</span>
           </div>
           <span className="text-xs text-slate-500 dark:text-slate-400 mt-1">
             {yearFilter === "all" ? "Alle Jahre" : `im Jahr ${yearFilter}`}
@@ -235,7 +235,7 @@ export default function BudgetList({
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Reise oder Teilnehmer suchen..."
-            className="w-full pl-9 pr-4 py-2 rounded-xl text-sm border-none bg-slate-50 dark:bg-slate-900/60 text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
+            className="w-full pl-9 pr-4 py-2 rounded-xl text-sm border-none bg-slate-50 dark:bg-slate-900/60 text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500/20"
           />
         </div>
 
@@ -261,7 +261,7 @@ export default function BudgetList({
           <div className="p-4 rounded-full bg-brand-50 dark:bg-brand-500/10 text-brand-500 mb-4">
             <DollarSign className="w-8 h-8" />
           </div>
-          <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100">
+          <h3 className="text-lg font-bold text-slate-700 dark:text-slate-200">
             Keine Reise-Budgets gefunden
           </h3>
           <p className="text-sm text-slate-500 dark:text-slate-400 max-w-md mt-1 mb-6">
@@ -299,24 +299,22 @@ export default function BudgetList({
                   {/* Card Header */}
                   <div className="flex items-start justify-between gap-3 mb-3">
                     <div className="flex-1 min-w-0">
-                      <Link
-                        href={`/budget/${budget.id}`}
-                        className="text-lg font-bold text-slate-800 dark:text-slate-100 hover:text-brand-500 transition-colors line-clamp-1"
-                      >
-                        {budget.name}
+                      <Link href={`/budget/${budget.id}`}>
+                        <h3 className="font-bold text-base text-slate-700 dark:text-slate-200 group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors truncate">
+                          {budget.name}
+                        </h3>
                       </Link>
 
                       {/* Dates or Linked Trip */}
                       <div className="flex flex-wrap items-center gap-2 text-xs text-slate-500 dark:text-slate-400 mt-1">
                         {budget.startDate && (
-                          <span className="flex items-center gap-1">
+                          <span className="flex items-center gap-1 font-mono">
                             <Calendar className="w-3.5 h-3.5 text-slate-400" />
-                            {budget.startDate}
-                            {budget.endDate ? ` - ${budget.endDate}` : ""}
+                            {budget.startDate} {budget.endDate ? `- ${budget.endDate}` : ""}
                           </span>
                         )}
                         {budget.trip && (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800/90 text-slate-600 dark:text-slate-300 font-medium">
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-medium">
                             <Plane className="w-3 h-3 text-brand-500" />
                             {budget.trip.title}
                           </span>
@@ -350,7 +348,7 @@ export default function BudgetList({
                       <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
                         Gesamtausgaben
                       </span>
-                      <span className="text-xl font-extrabold text-slate-800 dark:text-slate-100">
+                      <span className="text-lg font-bold text-slate-700 dark:text-slate-200">
                         {formatCurrency(totalSpent, budget.currency)}
                       </span>
                     </div>

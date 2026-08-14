@@ -12,7 +12,7 @@ export default function AboutPage() {
               <Info className="h-8 w-8" />
             </div>
             <div>
-              <h1 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-slate-50">Über das Projekt</h1>
+              <h1 className="text-xl sm:text-2xl font-bold text-slate-700 dark:text-slate-300">Über das Projekt</h1>
               <p className="text-sm font-medium text-slate-500 dark:text-slate-400">sm4sh's Urlaubsplaner</p>
             </div>
           </div>
@@ -30,7 +30,7 @@ export default function AboutPage() {
 
             {/* Credits Grid */}
             <div className="mt-8 pt-6 border-t border-slate-100 dark:border-slate-800">
-              <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-2">
+              <h2 className="text-xl font-bold text-slate-700 dark:text-slate-200 mb-2 flex items-center gap-2">
                 <Heart className="w-5 h-5 text-red-500" /> Danksagung &amp; Credits
               </h2>
               <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">
@@ -42,7 +42,7 @@ export default function AboutPage() {
                     href="https://www.sl-urlaubsplaner.de/" 
                     target="_blank" 
                     rel="noopener noreferrer" 
-                    className="font-bold text-slate-900 dark:text-slate-100 text-sm mb-1 inline-flex items-center gap-1.5 hover:text-brand-600 dark:hover:text-brand-400 transition-colors"
+                    className="font-bold text-slate-700 dark:text-slate-200 text-sm mb-1 inline-flex items-center gap-1.5 hover:text-brand-600 dark:hover:text-brand-400 transition-colors"
                   >
                     SL Urlaubsplaner <ExternalLink className="w-3.5 h-3.5 text-slate-400" />
                   </a>
@@ -55,7 +55,7 @@ export default function AboutPage() {
                     href="https://ferien-api.de/" 
                     target="_blank" 
                     rel="noopener noreferrer" 
-                    className="font-bold text-slate-900 dark:text-slate-100 text-sm mb-1 inline-flex items-center gap-1.5 hover:text-brand-600 dark:hover:text-brand-400 transition-colors"
+                    className="font-bold text-slate-700 dark:text-slate-200 text-sm mb-1 inline-flex items-center gap-1.5 hover:text-brand-600 dark:hover:text-brand-400 transition-colors"
                   >
                     ferien-api.de <ExternalLink className="w-3.5 h-3.5 text-slate-400" />
                   </a>
@@ -68,7 +68,7 @@ export default function AboutPage() {
                     href="https://feiertage-api.de/" 
                     target="_blank" 
                     rel="noopener noreferrer" 
-                    className="font-bold text-slate-900 dark:text-slate-100 text-sm mb-1 inline-flex items-center gap-1.5 hover:text-brand-600 dark:hover:text-brand-400 transition-colors"
+                    className="font-bold text-slate-700 dark:text-slate-200 text-sm mb-1 inline-flex items-center gap-1.5 hover:text-brand-600 dark:hover:text-brand-400 transition-colors"
                   >
                     feiertage-api.de <ExternalLink className="w-3.5 h-3.5 text-slate-400" />
                   </a>
@@ -80,18 +80,31 @@ export default function AboutPage() {
             </div>
 
             {/* Changelog Header */}
-            <h2 className="flex items-center gap-2 mt-10 mb-6 text-xl font-bold border-b border-slate-100 dark:border-slate-800 pb-3 text-slate-900 dark:text-slate-100">
+            <h2 className="flex items-center gap-2 mt-10 mb-6 text-xl font-bold border-b border-slate-100 dark:border-slate-800 pb-3 text-slate-700 dark:text-slate-200">
               <History className="h-6 w-6 text-brand-500" />
               Changelog
             </h2>
 
             <div className="space-y-8">
-              {/* V 1.6.1 */}
+              {/* V 1.6.2 */}
               <div className="relative pl-7 border-l-2 border-brand-500">
                 <div className="absolute -left-[9px] top-1.5 h-4 w-4 rounded-full bg-brand-500 ring-4 ring-white dark:ring-[#0d1117]" />
                 <div className="flex items-center gap-3 mb-3">
-                  <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100 m-0">Version 1.6.1</h3>
+                  <h3 className="text-lg font-bold text-slate-700 dark:text-slate-200 m-0">Version 1.6.2</h3>
                   <span className="text-xs px-3 py-1 bg-brand-100 dark:bg-brand-500/20 text-brand-700 dark:text-brand-300 rounded-full font-bold">Aktuell</span>
+                </div>
+                <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
+                  <li><strong>Lokale Kategorie-Icons &amp; Icon-Picker:</strong> Zuweisung moderner Lucide-Icons für alle Standard-Ausgabekategorien sowie interaktiver Icon-Picker im Kategorie-Modal zur individuellen Zuweisung bei Neuanlage.</li>
+                  <li><strong>Harmonisiertes 3-Stufen-Typografie- &amp; Farbsystem:</strong> Bereinigung harter Textfarben und überladener Schriftgewichte (Entfernung von <code>font-extrabold</code>) zugunsten eines harmonischen 3-Ebenen-Systems mit verifizierten WCAG AA/AAA Kontrastwerten.</li>
+                  <li><strong>Kalender-Lesbarkeit im Light-Mode:</strong> Dunkle, kontrastreiche Textfarben für alle Buchstabeneinträge und Behebung von unleserlichen Einträgen bei halben Tagen (<code>U/2</code>, <code>K/2</code>, etc.) auf diagonalen Verlaufshintergründen.</li>
+                </ul>
+              </div>
+
+              {/* V 1.6.1 */}
+              <div className="relative pl-7 border-l-2 border-slate-200 dark:border-slate-800">
+                <div className="absolute -left-[9px] top-1.5 h-4 w-4 rounded-full bg-slate-300 dark:bg-slate-700 ring-4 ring-white dark:ring-[#0d1117]" />
+                <div className="flex items-center gap-3 mb-3">
+                  <h3 className="text-lg font-bold text-slate-700 dark:text-slate-200 m-0">Version 1.6.1</h3>
                 </div>
                 <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
                   <li><strong>Scrollverhalten auf allen Budget-Seiten:</strong> Behebung des Scrollfehlers auf den Budget-Übersichts- und Detailseiten inklusive dynamischem Verlaufshintergrund.</li>
@@ -104,7 +117,7 @@ export default function AboutPage() {
               <div className="relative pl-7 border-l-2 border-slate-200 dark:border-slate-800">
                 <div className="absolute -left-[9px] top-1.5 h-4 w-4 rounded-full bg-slate-300 dark:bg-slate-700 ring-4 ring-white dark:ring-[#0d1117]" />
                 <div className="flex items-center gap-3 mb-3">
-                  <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100 m-0">Version 1.6.0</h3>
+                  <h3 className="text-lg font-bold text-slate-700 dark:text-slate-200 m-0">Version 1.6.0</h3>
                 </div>
                 <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
                   <li><strong>Vollwertiges Modul „Budget- &amp; Reisekostenverwaltung“:</strong> Neue Hauptseite <code>/budget</code> mit KPI-Übersicht, Jahresfiltern und Suchfunktion sowie detaillierte Reise-Budgetansicht <code>/budget/[id]</code> mit vier dedizierten Tabs (Ausgaben, Kategorien &amp; Analytics, Abrechnung &amp; Salden, Teilnehmer).</li>
@@ -119,7 +132,7 @@ export default function AboutPage() {
               <div className="relative pl-7 border-l-2 border-slate-200 dark:border-slate-800">
                 <div className="absolute -left-[9px] top-1.5 h-4 w-4 rounded-full bg-slate-300 dark:bg-slate-700 ring-4 ring-white dark:ring-[#0d1117]" />
                 <div className="flex items-center gap-3 mb-3">
-                  <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100 m-0">Version 1.5.2</h3>
+                  <h3 className="text-lg font-bold text-slate-700 dark:text-slate-200 m-0">Version 1.5.2</h3>
                 </div>
                 <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
                   <li><strong>Bugfix Kalender Crash:</strong> Klicks auf den Kalender bei alleinig oder zusätzlich ausgewähltem virtuellem Profil <em>Alle Ferien</em> führten bisher zu einem Datenbank-Absturz. Das virtuelle Profil wird nun für Klick-Aktionen im Kalender korrekt ignoriert, während reguläre Profil-Auswahlen weiterhin normal verarbeitet werden.</li>
@@ -130,7 +143,7 @@ export default function AboutPage() {
               <div className="relative pl-7 border-l-2 border-slate-200 dark:border-slate-800">
                 <div className="absolute -left-[9px] top-1.5 h-4 w-4 rounded-full bg-slate-300 dark:bg-slate-700 ring-4 ring-white dark:ring-[#0d1117]" />
                 <div className="flex items-center gap-3 mb-3">
-                  <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100 m-0">Version 1.5.1</h3>
+                  <h3 className="text-lg font-bold text-slate-700 dark:text-slate-200 m-0">Version 1.5.1</h3>
                 </div>
                 <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
                   <li><strong>Doppel-Kreisdiagramme (Dual Donut Charts):</strong> Gegenseite Gegenüberstellung des aktuellen Jahres mit dem Gesamtdurchschnitt ($Ø$) für *Buchungsstatus*, *Art der Reise* und *Reisetyp* inklusive flüssiger Mount-Animationsverläufe.</li>
@@ -144,7 +157,7 @@ export default function AboutPage() {
               <div className="relative pl-7 border-l-2 border-slate-200 dark:border-slate-800">
                 <div className="absolute -left-[9px] top-1.5 h-4 w-4 rounded-full bg-slate-300 dark:bg-slate-700 ring-4 ring-white dark:ring-[#0d1117]" />
                 <div className="flex items-center gap-3 mb-3">
-                  <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100 m-0">Version 1.5.0</h3>
+                  <h3 className="text-lg font-bold text-slate-700 dark:text-slate-200 m-0">Version 1.5.0</h3>
                 </div>
                 <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
                   <li><strong>Feiertags-Effizienz &amp; Urlaubs-Multiplikator:</strong> Neue Metrik berechnet das Verhältnis von Brutto-Freizeit zu Netto-Urlaubstagen bei Feiertags-Blöcken ($F/U$) mit Anrechnung halber Tage und sonstiger Freistellungen.</li>
@@ -158,7 +171,7 @@ export default function AboutPage() {
               <div className="relative pl-7 border-l-2 border-slate-200 dark:border-slate-800">
                 <div className="absolute -left-[9px] top-1.5 h-4 w-4 rounded-full bg-slate-300 dark:bg-slate-700 ring-4 ring-white dark:ring-[#0d1117]" />
                 <div className="flex items-center gap-3 mb-3">
-                  <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100 m-0">Version 1.4.0</h3>
+                  <h3 className="text-lg font-bold text-slate-700 dark:text-slate-200 m-0">Version 1.4.0</h3>
                 </div>
                 <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
                   <li><strong>"Halber Tag" Reiseoption:</strong> Einführung der Checkbox "Halber Tag" inklusive Umschalter für "Vormittag (AM)" und "Nachmittag (PM)" beim Erstellen und Bearbeiten von Reisen.</li>
@@ -171,7 +184,7 @@ export default function AboutPage() {
               <div className="relative pl-7 border-l-2 border-slate-200 dark:border-slate-800">
                 <div className="absolute -left-[9px] top-1.5 h-4 w-4 rounded-full bg-slate-300 dark:bg-slate-700 ring-4 ring-white dark:ring-[#0d1117]" />
                 <div className="flex items-center gap-3 mb-3">
-                  <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100 m-0">Version 1.3.0</h3>
+                  <h3 className="text-lg font-bold text-slate-700 dark:text-slate-200 m-0">Version 1.3.0</h3>
                 </div>
                 <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
                   <li><strong>Minimalist Header Redesign:</strong> Cleane Tabs ohne Pillen-Behälter, Brand-Unterstrich für die aktive Seite, reine Icon-Buttons mit Brand-Hover und dezenten vertikalen Trennern.</li>
@@ -185,7 +198,7 @@ export default function AboutPage() {
               <div className="relative pl-6 border-l-2 border-slate-200 dark:border-slate-800">
                 <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-800" />
                 <div className="flex items-center gap-3 mb-3">
-                  <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 m-0">Version 1.2.1</h3>
+                  <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-200 m-0">Version 1.2.1</h3>
                 </div>
                 <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
                   <li><strong>Middleware &amp; Logo-Fix:</strong> Behebung des Redirect-Fehlers in der Proxy-Middleware für statische Bild-Assets (`/logo.svg`), sodass das Logo auf der Anmeldeseite stets korrekt geladen wird.</li>
@@ -196,7 +209,7 @@ export default function AboutPage() {
               <div className="relative pl-6 border-l-2 border-slate-200 dark:border-slate-800">
                 <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-800" />
                 <div className="flex items-center gap-3 mb-3">
-                  <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 m-0">Version 1.2.0</h3>
+                  <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-200 m-0">Version 1.2.0</h3>
                 </div>
                 <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
                   <li><strong>Mobile Responsiveness:</strong> Umfassendes Responsive-Redesign für Smartphones und kleine Bildschirme (`&lt; 768px`).</li>
@@ -210,7 +223,7 @@ export default function AboutPage() {
               <div className="relative pl-6 border-l-2 border-slate-200 dark:border-slate-800">
                 <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-800" />
                 <div className="flex items-center gap-3 mb-3">
-                  <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 m-0">Version 1.1.1</h3>
+                  <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-200 m-0">Version 1.1.1</h3>
                 </div>
                 <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
                   <li><strong>Anmeldeseite &amp; Icons:</strong> Korrektur der Logo-SVG-Einbindung (`/favicon.svg`), Schloss-Icon im Passwortfeld und optische Anpassung.</li>
@@ -222,7 +235,7 @@ export default function AboutPage() {
               <div className="relative pl-6 border-l-2 border-slate-200 dark:border-slate-800">
                 <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-800" />
                 <div className="flex items-center gap-3 mb-3">
-                  <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 m-0">Version 1.1.0</h3>
+                  <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-200 m-0">Version 1.1.0</h3>
                 </div>
                 <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
                   <li><strong>UI &amp; Glassmorphism Redesign:</strong> Edles Dark-Glassmorphic Design für Header/Footer, Redesign der Navigations-Pills, Jahresauswahl, Profilauswahl, Einstellungs- und About-Seite. Behebung des Sticky-Header Spaltfehlers.</li>
@@ -235,7 +248,7 @@ export default function AboutPage() {
               <div className="relative pl-6 border-l-2 border-slate-200 dark:border-slate-800">
                 <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-800" />
                 <div className="flex items-center gap-3 mb-3">
-                  <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 m-0">Version 1.0.0</h3>
+                  <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-200 m-0">Version 1.0.0</h3>
                 </div>
                 <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
                   <li><strong>Sicherheits-Härtung:</strong> Sichere kryptografische Authentifizierung für die Session-Verifizierung implementiert und HTTP-Sicherheitsheader hinzugefügt.</li>
@@ -250,7 +263,7 @@ export default function AboutPage() {
             <div className="relative pl-6 border-l-2 border-slate-200 dark:border-slate-800">
                <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-800" />
                <div className="flex items-center gap-3 mb-2">
-                 <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 m-0">Version 0.9.9</h3>
+                 <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-200 m-0">Version 0.9.9</h3>
                </div>
                <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
                  <li><strong>Mobile Optimierung:</strong> Responsives Design und Hamburger-Menü für Smartphones eingeführt.</li>
@@ -264,7 +277,7 @@ export default function AboutPage() {
             <div className="relative pl-6 border-l-2 border-slate-200 dark:border-slate-800">
                <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-800" />
                <div className="flex items-center gap-3 mb-2">
-                 <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 m-0">Version 0.9.8</h3>
+                 <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-200 m-0">Version 0.9.8</h3>
                </div>
                <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
                  <li><strong>Statistiken & Engine:</strong> Behebt einen kritischen Fehler in der Urlaubsübertragsberechnung, bei dem Feiertage im vergangenen Jahr fälschlicherweise als genommener Urlaub abgezogen wurden. Die Feiertage aller aktiven Jahre werden nun initial im Hintergrund geladen.</li>
@@ -275,7 +288,7 @@ export default function AboutPage() {
             <div className="relative pl-6 border-l-2 border-slate-200 dark:border-slate-800">
                <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-800" />
                <div className="flex items-center gap-3 mb-2">
-                 <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 m-0">Version 0.9.7</h3>
+                 <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-200 m-0">Version 0.9.7</h3>
                </div>
                <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
                  <li><strong>Kalender:</strong> Die Darstellung im Kalender nutzt ab 3 Einträgen nun ein responsives "Micro-Pills"-Layout (inkl. Grid-Support), um Überlappungen und Overflow zu verhindern.</li>
@@ -290,7 +303,7 @@ export default function AboutPage() {
             <div className="relative pl-6 border-l-2 border-slate-200 dark:border-slate-800">
                <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-800" />
                <div className="flex items-center gap-3 mb-2">
-                 <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 m-0">Version 0.9.6</h3>
+                 <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-200 m-0">Version 0.9.6</h3>
                </div>
                <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
                  <li><strong>UI & Farben:</strong> Globale Farbpalette für Kalendereinträge im Light- und Darkmode komplett überarbeitet, um moderne und konsistente Farbschemata aufzubauen.</li>
@@ -302,7 +315,7 @@ export default function AboutPage() {
             <div className="relative pl-6 border-l-2 border-slate-200 dark:border-slate-800">
                <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-800" />
                <div className="flex items-center gap-3 mb-2">
-                 <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 m-0">Version 0.9.5</h3>
+                 <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-200 m-0">Version 0.9.5</h3>
                </div>
                <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
                  <li><strong>Daten & Logik:</strong> Behebt einen Fehler bei gestapelten Kalendereinträgen (z.B. Halber Tag Urlaub + Halber Tag Krank), bei dem sich die Einträge gegenseitig überschrieben haben. Diese werden nun sauber addiert und als gestapelte Strings verarbeitet.</li>
@@ -315,7 +328,7 @@ export default function AboutPage() {
             <div className="relative pl-6 border-l-2 border-slate-200 dark:border-slate-800">
                <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-800" />
                <div className="flex items-center gap-3 mb-2">
-                 <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 m-0">Version 0.9.4</h3>
+                 <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-200 m-0">Version 0.9.4</h3>
                </div>
                <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
                  <li><strong>UI & Layout (Scrolling):</strong> Behebt ein Problem, bei dem die Dashboard-, Statistik- und Einstellungsseiten nicht mehr gescrollt werden konnten, wenn der Inhalt den Bildschirm überragte. Diese Ansichten haben nun weiche, an das Design angepasste "Custom Scrollbars" (<code>.custom-scrollbar</code>).</li>
@@ -326,7 +339,7 @@ export default function AboutPage() {
             <div className="relative pl-6 border-l-2 border-slate-200 dark:border-slate-800">
                <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-800" />
                <div className="flex items-center gap-3 mb-2">
-                 <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 m-0">Version 0.9.3</h3>
+                 <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-200 m-0">Version 0.9.3</h3>
                </div>
                <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
                  <li><strong>Sicherheit (Passwortschutz):</strong> Ein kritisches Versäumnis wurde behoben, bei dem die Middleware (<code>proxy.ts</code>) die Variable <code>AUTH_ENABLED</code> ignoriert hat. Zuvor wurde die App bei fehlendem <code>APP_PASSWORD</code> für jeden freigegeben, selbst wenn <code>AUTH_ENABLED</code> aktiv war. Nun wird der Zugriff wie geplant strikt verweigert und stattdessen ein Konfigurationsfehler ausgegeben.</li>
@@ -338,7 +351,7 @@ export default function AboutPage() {
             <div className="relative pl-6 border-l-2 border-slate-200 dark:border-slate-800">
                <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-800" />
                <div className="flex items-center gap-3 mb-2">
-                 <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 m-0">Version 0.9.2</h3>
+                 <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-200 m-0">Version 0.9.2</h3>
                </div>
                <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
                  <li><strong>Dokumentation:</strong> Die <code>README.md</code> wurde umfassend überarbeitet, um alle neuen Features (Reisen, interaktive Statistiken, Auto-Sync) widerzuspiegeln. Zusätzlich wurde die Docker-Compose Konfiguration mit der Produktionseinrichtung abgeglichen und eine Danksagung an die verwendeten API-Schnittstellen (<code>ferien-api.de</code> & <code>feiertage-api.de</code>) hinzugefügt.</li>
@@ -350,7 +363,7 @@ export default function AboutPage() {
             <div className="relative pl-6 border-l-2 border-slate-200 dark:border-slate-800">
                <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-800" />
                <div className="flex items-center gap-3 mb-2">
-                 <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 m-0">Version 0.9.1</h3>
+                 <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-200 m-0">Version 0.9.1</h3>
                </div>
                <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
                  <li><strong>Daten & Zeitzonen-Bug:</strong> Behebt einen gravierenden Fehler bei der Iteration von Reisedaten. Es wurden teilweise falsche Zeitzonen des Browsers (statt UTC) herangezogen, was dazu führen konnte, dass einzelne Tage beim Eintragen in den Kalender übersprungen oder Reisen gänzlich ignoriert wurden.</li>
@@ -364,7 +377,7 @@ export default function AboutPage() {
             <div className="relative pl-6 border-l-2 border-slate-200 dark:border-slate-800">
                <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-800" />
                <div className="flex items-center gap-3 mb-2">
-                 <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 m-0">Version 0.9.0</h3>
+                 <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-200 m-0">Version 0.9.0</h3>
                </div>
                <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
                  <li><strong>Premium Light-Mode:</strong> Komplettes Re-Design des hellen Modus mit wärmeren Hintergründen, responsiven Radial-Gradienten und dreidimensionalen Cards.</li>
@@ -377,7 +390,7 @@ export default function AboutPage() {
             <div className="relative pl-6 border-l-2 border-slate-200 dark:border-slate-800">
                <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-800" />
                <div className="flex items-center gap-3 mb-2">
-                 <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 m-0">Version 0.8.4</h3>
+                 <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-200 m-0">Version 0.8.4</h3>
                </div>
                <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
                  <li><strong>Code Review Phase 2 (Performance):</strong> Behebt O(n²) Lookups im Kalender-Render via <code>useMemo</code>-Maps für spürbar flüssigere Kalenderansicht.</li>
@@ -391,7 +404,7 @@ export default function AboutPage() {
             <div className="relative pl-6 border-l-2 border-slate-200 dark:border-slate-800">
                <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-800" />
                <div className="flex items-center gap-3 mb-2">
-                 <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 m-0">Version 0.8.3</h3>
+                 <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-200 m-0">Version 0.8.3</h3>
                </div>
                <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
                  <li><strong>Code Review Phase 1:</strong> Behebt einen potenziellen Auth-Bypass bei fehlender Config und aktiviert sichere Cookies für Produktion.</li>
@@ -404,7 +417,7 @@ export default function AboutPage() {
             <div className="relative pl-6 border-l-2 border-slate-200 dark:border-slate-700">
                <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-700" />
                <div className="flex items-center gap-3 mb-2">
-                 <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 m-0">Version 0.8.2</h3>
+                 <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-200 m-0">Version 0.8.2</h3>
                </div>
                <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
                  <li><strong>Sabbatical Bugfixes:</strong> Sabbaticals können nun absturzfrei im Kalender manuell eingetragen werden, erstrahlen dort endlich in ihrem korrekten Himmelblau und werden auch auf dem Dashboard sauber in der "Urlaubsverteilung über die Jahre" angezeigt.</li>
@@ -415,7 +428,7 @@ export default function AboutPage() {
             <div className="relative pl-6 border-l-2 border-slate-200 dark:border-slate-700">
                <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-700" />
                <div className="flex items-center gap-3 mb-2">
-                 <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 m-0">Version 0.8.1</h3>
+                 <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-200 m-0">Version 0.8.1</h3>
                </div>
                <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
                  <li><strong>Statistik Design:</strong> Revert der Recharts-Kreisdiagramme für "Buchungsstatus" und "Art der Reise" zurück auf das cleane, selbsterstellte SVG-Design inkl. platzsparender Legende.</li>
@@ -426,7 +439,7 @@ export default function AboutPage() {
             <div className="relative pl-6 border-l-2 border-slate-200 dark:border-slate-700">
                <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-700" />
                <div className="flex items-center gap-3 mb-2">
-                 <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 m-0">Version 0.8.0</h3>
+                 <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-200 m-0">Version 0.8.0</h3>
                </div>
                <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
                  <li><strong>Erweiterte Statistiken:</strong> Interaktive Recharts-Graphen für den "Urlaubs-Guthaben Verlauf", "Krankheitstage nach Wochentag" und "Kosten vs. Reisedauer" zur Statistikseite hinzugefügt.</li>
@@ -439,7 +452,7 @@ export default function AboutPage() {
             <div className="relative pl-6 border-l-2 border-slate-200 dark:border-slate-700">
                <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-white dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-700" />
                <div className="flex items-center gap-3 mb-2">
-                 <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 m-0">Version 0.7.1</h3>
+                 <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-200 m-0">Version 0.7.1</h3>
                </div>
                <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
                  <li><strong>Design-Feinschliff:</strong> Dashboard und Statistik nutzen nun dieselbe Breite. Die Jahresübersicht ist vergrößert und besser zentriert.</li>
@@ -452,7 +465,7 @@ export default function AboutPage() {
             <div className="relative pl-6 border-l-2 border-slate-200 dark:border-slate-800">
                <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-white dark:bg-slate-900 border-2 border-slate-300 dark:border-slate-700" />
                <div className="flex items-center gap-3 mb-2">
-                 <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 m-0">Version 0.7.0</h3>
+                 <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-200 m-0">Version 0.7.0</h3>
                </div>
                <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
                  <li><strong>Statistik-Seite:</strong> Eine völlig neue, umfangreiche Statistikseite mit Auswertungen zu Urlaubsdauer, Budget und Reisearten.</li>
@@ -466,7 +479,7 @@ export default function AboutPage() {
             <div className="relative pl-6 border-l-2 border-slate-200 dark:border-slate-800">
                <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-white dark:bg-slate-900 border-2 border-slate-300 dark:border-slate-700" />
                <div className="flex items-center gap-3 mb-2">
-                 <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 m-0">Version 0.6.3</h3>
+                 <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-200 m-0">Version 0.6.3</h3>
                </div>
                <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
                  <li><strong>Rollover-Fix:</strong> Ein Fehler beim Jahreswechsel wurde behoben, bei dem die Urlaubstage von Reisen/Trips im Vorjahr beim Ausrechnen des Resturlaubs ignoriert wurden.</li>
@@ -478,7 +491,7 @@ export default function AboutPage() {
             <div className="relative pl-6 border-l-2 border-slate-200 dark:border-slate-700">
                <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-white dark:bg-slate-900 border-2 border-slate-300 dark:border-slate-600" />
                <div className="flex items-center gap-3 mb-2">
-                 <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 m-0">Version 0.6.2</h3>
+                 <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-200 m-0">Version 0.6.2</h3>
                </div>
                <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
                  <li><strong>Startjahr:</strong> In den Profil-Einstellungen kann nun das Startjahr festgelegt werden, ab dem das Urlaubsbudget (inklusive Resturlaub) gezählt wird. Ideal für neue Nutzer, die in späten Jahren dazustoßen.</li>
@@ -490,7 +503,7 @@ export default function AboutPage() {
             <div className="relative pl-6 border-l-2 border-slate-200 dark:border-slate-700">
                <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-white dark:bg-slate-900 border-2 border-slate-300 dark:border-slate-600" />
                <div className="flex items-center gap-3 mb-2">
-                 <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 m-0">Version 0.6.1</h3>
+                 <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-200 m-0">Version 0.6.1</h3>
                </div>
                <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
                  <li><strong>Auto-Cleanup:</strong> Manuelle Kalendereinträge, die sich mit Trips überschneiden, werden nun automatisch gelöscht.</li>
@@ -503,7 +516,7 @@ export default function AboutPage() {
             <div className="relative pl-6 border-l-2 border-slate-200 dark:border-slate-700">
                <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-white dark:bg-slate-900 border-2 border-slate-300 dark:border-slate-600" />
                <div className="flex items-center gap-3 mb-2">
-                 <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 m-0">Version 0.6.0</h3>
+                 <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-200 m-0">Version 0.6.0</h3>
                </div>
                <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
                  <li><strong>Trips & Reisen:</strong> Neues Modell für Ausflüge, das automatisch im Kalender blockiert.</li>
@@ -516,7 +529,7 @@ export default function AboutPage() {
             <div className="relative pl-6 border-l-2 border-slate-200 dark:border-slate-700">
                <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-white dark:bg-slate-900 border-2 border-slate-300 dark:border-slate-600" />
                <div className="flex items-center gap-3 mb-2">
-                 <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 m-0">Version 0.5.0</h3>
+                 <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-200 m-0">Version 0.5.0</h3>
                </div>
                <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
                  <li><strong>Premium UI:</strong> Neues Kachel-Design mit abgerundeten Ecken, Glassmorphism-Elementen und subtilem Glow im Darkmode für ein hochwertigeres Look & Feel.</li>
@@ -529,7 +542,7 @@ export default function AboutPage() {
             <div className="relative pl-6 border-l-2 border-slate-200 dark:border-slate-700">
                <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-white dark:bg-slate-900 border-2 border-slate-300 dark:border-slate-600" />
                <div className="flex items-center gap-3 mb-2">
-                 <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 m-0">Version 0.4.0</h3>
+                 <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-200 m-0">Version 0.4.0</h3>
                </div>
                <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
                  <li><strong>Layout:</strong> Die Seitenleiste (Statistik & Legende) ist nun über einen mittig platzierten, deutlich sichtbaren Pfeil-Button einklappbar, um mehr Platz für den Kalender zu bieten.</li>
@@ -541,7 +554,7 @@ export default function AboutPage() {
             <div className="relative pl-6 border-l-2 border-slate-200 dark:border-slate-700">
                <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-white dark:bg-slate-900 border-2 border-slate-300 dark:border-slate-600" />
                <div className="flex items-center gap-3 mb-2">
-                 <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 m-0">Version 0.3.9</h3>
+                 <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-200 m-0">Version 0.3.9</h3>
                </div>
                <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
                  <li><strong>Docker Build-Cache:</strong> Ein kritischer Fehler wurde behoben, bei dem Next.js während des Docker-Builds Standardprofile generierte und diese fest ins Cache-HTML einbrannte, was nach dem Start zu unsichtbaren Profilen oder "Foreign Key"-Fehlern beim Eintragen von Urlauben führte.</li>
@@ -552,7 +565,7 @@ export default function AboutPage() {
             <div className="relative pl-6 border-l-2 border-slate-200 dark:border-slate-700">
                <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-white dark:bg-slate-900 border-2 border-slate-300 dark:border-slate-600" />
                <div className="flex items-center gap-3 mb-2">
-                 <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 m-0">Version 0.3.8</h3>
+                 <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-200 m-0">Version 0.3.8</h3>
                </div>
                <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
                  <li><strong>Datenbank Fehler:</strong> Ein Fehler beim Hinzufügen von Urlauben nach einem Datenbank-Reset wurde behoben. Der Browser bereinigt nun automatisch alte Profil-IDs, die nicht mehr existieren.</li>
@@ -563,7 +576,7 @@ export default function AboutPage() {
             <div className="relative pl-6 border-l-2 border-slate-200 dark:border-slate-700">
                <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-white dark:bg-slate-900 border-2 border-slate-300 dark:border-slate-600" />
                <div className="flex items-center gap-3 mb-2">
-                 <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 m-0">Version 0.3.7</h3>
+                 <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-200 m-0">Version 0.3.7</h3>
                </div>
                <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
                  <li><strong>Dokumentation:</strong> Das Docker Compose-Beispiel in der README wurde auf benannte Volumes (`urlaubsplaner_data:/app/data`) aktualisiert.</li>
@@ -574,7 +587,7 @@ export default function AboutPage() {
             <div className="relative pl-6 border-l-2 border-slate-200 dark:border-slate-700">
                <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-white dark:bg-slate-900 border-2 border-slate-300 dark:border-slate-600" />
                <div className="flex items-center gap-3 mb-2">
-                 <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 m-0">Version 0.3.6</h3>
+                 <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-200 m-0">Version 0.3.6</h3>
                </div>
                <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
                  <li><strong>Docker SQLite-Rechte:</strong> Ein Problem mit fehlenden Schreibrechten beim Einhängen lokaler Verzeichnisse unter Linux-Host-Systemen wurde behoben, indem das Dateisystem-Volume (`./data:/app/data`) in ein natives Docker-Volume (`urlaubsplaner_data:/app/data`) umgewandelt wurde.</li>
@@ -585,7 +598,7 @@ export default function AboutPage() {
             <div className="relative pl-6 border-l-2 border-slate-200 dark:border-slate-700">
               <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-white dark:bg-slate-900 border-2 border-slate-300 dark:border-slate-600" />
               <div className="flex items-center gap-3 mb-2">
-                <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 m-0">Version 0.3.5</h3>
+                <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-200 m-0">Version 0.3.5</h3>
               </div>
               <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
                 <li><strong>Passwort-Fix über HTTP:</strong> Das Cookie-Attribut <code>secure</code> wurde deaktiviert, damit die Anmeldung über unverschlüsselte lokale Netzwerkverbindungen (z. B. auf dem Raspberry Pi) nicht vom Browser blockiert wird.</li>
@@ -596,7 +609,7 @@ export default function AboutPage() {
             <div className="relative pl-6 border-l-2 border-slate-200 dark:border-slate-700">
               <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-white dark:bg-slate-900 border-2 border-slate-300 dark:border-slate-600" />
               <div className="flex items-center gap-3 mb-2">
-                <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-300 m-0">Version 0.3.4</h3>
+                <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-300 m-0">Version 0.3.4</h3>
               </div>
               <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
                 <li><strong>Port-Korrektur:</strong> Die Portweiterleitung in <code>docker-compose.yml</code> wurde auf <code>8666:8666</code> korrigiert, um Erreichbarkeitsprobleme zu beheben.</li>
@@ -608,7 +621,7 @@ export default function AboutPage() {
             <div className="relative pl-6 border-l-2 border-slate-200 dark:border-slate-700">
               <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-white dark:bg-slate-900 border-2 border-slate-300 dark:border-slate-600" />
               <div className="flex items-center gap-3 mb-2">
-                <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-300 m-0">Version 0.3.3</h3>
+                <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-300 m-0">Version 0.3.3</h3>
               </div>
               <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
                 <li><strong>Docker Fix 3:</strong> Die Datenbank-URL wurde im Dockerfile wieder auf <code>/app/prisma/dev.db</code> zurückgesetzt, um Berechtigungsfehler (<em>unable to open database file</em>) bei existierenden Volume-Mounts zu beheben.</li>
@@ -620,7 +633,7 @@ export default function AboutPage() {
             <div className="relative pl-6 border-l-2 border-slate-200 dark:border-slate-700">
               <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-white dark:bg-slate-900 border-2 border-slate-300 dark:border-slate-600" />
               <div className="flex items-center gap-3 mb-2">
-                <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-300 m-0">Version 0.3.2</h3>
+                <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-300 m-0">Version 0.3.2</h3>
               </div>
               <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
                 <li><strong>Docker Fix 2:</strong> Behebung von <code>Cannot find module</code> Fehlern für <code>dotenv</code> und <code>@prisma/config</code> beim Starten des Containers.</li>
@@ -631,7 +644,7 @@ export default function AboutPage() {
             <div className="relative pl-6 border-l-2 border-slate-200 dark:border-slate-700">
               <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-white dark:bg-slate-900 border-2 border-slate-300 dark:border-slate-600" />
               <div className="flex items-center gap-3 mb-2">
-                <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-300 m-0">Version 0.3.1</h3>
+                <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-300 m-0">Version 0.3.1</h3>
               </div>
               <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
                 <li><strong>Docker Fix:</strong> Die neue <code>prisma.config.ts</code> wird nun ordnungsgemäß ins Production-Image kopiert.</li>
@@ -642,7 +655,7 @@ export default function AboutPage() {
             <div className="relative pl-6 border-l-2 border-slate-200 dark:border-slate-700">
               <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-white dark:bg-slate-900 border-2 border-slate-300 dark:border-slate-600" />
               <div className="flex items-center gap-3 mb-2">
-                <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-300 m-0">Version 0.3.0</h3>
+                <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-300 m-0">Version 0.3.0</h3>
               </div>
               <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
                 <li><strong>Prisma 7 Upgrade:</strong> Vollständiges Upgrade auf Prisma 7.8 unter Verwendung des neuen <code>@prisma/adapter-libsql</code> für verbesserte Performance und &quot;Rust-free&quot; Execution.</li>
@@ -654,7 +667,7 @@ export default function AboutPage() {
             <div className="relative pl-6 border-l-2 border-slate-200 dark:border-slate-700">
               <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-white dark:bg-slate-900 border-2 border-slate-300 dark:border-slate-600" />
               <div className="flex items-center gap-3 mb-2">
-                <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-300 m-0">Version 0.2.3 & 0.2.2</h3>
+                <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-300 m-0">Version 0.2.3 & 0.2.2</h3>
               </div>
               <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
                 <li><strong>Standard-Port:</strong> Wechsel von 3000 auf 8666, um Konflikte mit anderen Diensten zu vermeiden.</li>
@@ -666,7 +679,7 @@ export default function AboutPage() {
             <div className="relative pl-6 border-l-2 border-slate-200 dark:border-slate-700">
               <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-white dark:bg-slate-900 border-2 border-slate-300 dark:border-slate-600" />
               <div className="flex items-center gap-3 mb-2">
-                <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-300 m-0">Version 0.2.1</h3>
+                <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-300 m-0">Version 0.2.1</h3>
                 <span className="text-xs px-2 py-1 bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 rounded font-medium">Release</span>
               </div>
               <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
@@ -679,7 +692,7 @@ export default function AboutPage() {
             <div className="relative pl-6 border-l-2 border-slate-200 dark:border-slate-700">
               <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-white dark:bg-slate-900 border-2 border-slate-300 dark:border-slate-600" />
               <div className="flex items-center gap-3 mb-2">
-                <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-300 m-0">Version 0.2.0</h3>
+                <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-300 m-0">Version 0.2.0</h3>
               </div>
               <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
                 <li><strong>UI/UX Redesign:</strong> Wechsel auf ein tiefes Anthrazit im Darkmode und Einführung der neuen <code>#0088c2</code> Brand-Farbe.</li>
@@ -695,7 +708,7 @@ export default function AboutPage() {
             <div className="relative pl-6 border-l-2 border-slate-200 dark:border-slate-700">
               <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full bg-white dark:bg-slate-900 border-2 border-slate-300 dark:border-slate-600" />
               <div className="flex items-center gap-3 mb-2">
-                <h3 className="text-lg font-semibold text-slate-800 dark:text-slate-300 m-0">Version 0.1.0</h3>
+                <h3 className="text-lg font-semibold text-slate-700 dark:text-slate-300 m-0">Version 0.1.0</h3>
                 <span className="text-xs px-2 py-1 bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 rounded font-medium">Initial Release</span>
               </div>
               <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
