@@ -133,14 +133,14 @@ export default function BudgetList({
   }
 
   return (
-    <div className="w-full max-w-7xl mx-auto p-4 sm:p-6 md:p-8 flex flex-col gap-8 animate-in fade-in duration-300">
+    <div className="w-full max-w-7xl mx-auto p-2 sm:p-4 md:p-6 lg:p-8 pt-1 sm:pt-2 md:pt-4 flex flex-col gap-6 md:gap-8 animate-in fade-in duration-300">
       {/* Top Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-800 pb-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 dark:border-slate-800 pb-2 sm:pb-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-800 dark:text-slate-100 tracking-tight">
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-slate-800 dark:text-slate-100 tracking-tight">
             Budget- &amp; Reisekosten
           </h1>
-          <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
+          <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5">
             Verwalte Reisebudgets, erfasse gemeinsame Ausgaben und begleiche Salden transparent.
           </p>
         </div>

@@ -84,18 +84,20 @@ export default function DashboardHome() {
   // const sicknessDays = ...
 
   return (
-    <div className="max-w-[1600px] w-full mx-auto p-6 md:p-10 flex flex-col gap-10">
+    <div className="max-w-[1600px] w-full mx-auto p-2 sm:p-4 md:p-6 lg:p-8 pt-1 sm:pt-2 md:pt-4 flex flex-col gap-6 md:gap-8">
       
-      {/* Stats Row */}
-      <div className="flex flex-wrap items-center gap-3 md:gap-4 text-sm md:text-lg text-slate-600 dark:text-slate-300 border-b border-slate-200 dark:border-[var(--border-subtle)] pb-6 font-medium">
-        <span className="font-bold text-slate-800 dark:text-slate-100">{selectedYear}</span>
-        <span className="w-px h-5 bg-slate-300 dark:bg-slate-700 hidden md:block"></span>
-        <span className="flex items-center gap-2">
-          Gesamturlaub <strong className="text-slate-800 dark:text-slate-100">{totalRemainingLeave} / {totalAnnualLeave}</strong>
+      {/* Stats Row / Header */}
+      <div className="flex flex-wrap items-center gap-3 md:gap-4 text-xs sm:text-sm md:text-base text-slate-600 dark:text-slate-300 border-b border-slate-200 dark:border-[var(--border-subtle)] pb-2 sm:pb-4 font-medium">
+        <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-slate-800 dark:text-slate-100 tracking-tight">
+          {selectedYear}
+        </h1>
+        <span className="w-px h-5 bg-slate-300 dark:bg-slate-700 hidden sm:block" />
+        <span className="flex items-center gap-1.5">
+          Gesamturlaub <strong className="font-bold text-slate-800 dark:text-slate-100">{totalRemainingLeave} / {totalAnnualLeave}</strong>
         </span>
-        <span className="w-px h-5 bg-slate-300 dark:bg-slate-700 hidden md:block"></span>
-        <span className="flex items-center gap-2">
-          Geplante Reisen <strong className="text-slate-800 dark:text-slate-100">{upcomingTrips.length}</strong>
+        <span className="w-px h-5 bg-slate-300 dark:bg-slate-700 hidden sm:block" />
+        <span className="flex items-center gap-1.5">
+          Geplante Reisen <strong className="font-bold text-slate-800 dark:text-slate-100">{upcomingTrips.length}</strong>
         </span>
       </div>
 

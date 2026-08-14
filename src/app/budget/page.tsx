@@ -78,7 +78,7 @@ export default async function BudgetPage() {
   const currentYear = new Date().getFullYear()
 
   return (
-    <main className="flex-1 flex flex-col min-h-0 bg-[var(--bg)]">
+    <div className="flex-1 w-full h-full bg-transparent overflow-y-auto overflow-x-hidden custom-scrollbar">
       <StoreHydrator
         profiles={profilesRaw}
         entries={entries}
@@ -91,6 +91,6 @@ export default async function BudgetPage() {
         profiles={profilesRaw}
         initialYear={currentYear}
       />
-    </main>
+    </div>
   )
 }

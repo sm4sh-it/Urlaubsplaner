@@ -266,9 +266,11 @@ export default function YearCalendar() {
   }
 
   return (
-    <div className="flex-1 flex flex-col p-2 sm:p-4 md:p-8 overflow-hidden select-none">
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 pb-4 sm:pb-6 shrink-0">
-        <h2 className="font-bold text-slate-800 dark:text-slate-200 text-lg sm:text-xl tracking-tight">Jahresübersicht {selectedYear}</h2>
+    <div className="flex-1 flex flex-col p-2 sm:p-4 md:p-6 lg:p-8 pt-1 sm:pt-2 md:pt-4 overflow-hidden select-none">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 pb-2 sm:pb-4 shrink-0">
+        <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-slate-800 dark:text-slate-100 tracking-tight">
+          Jahresübersicht {selectedYear}
+        </h1>
         {pressedKey && VALID_KEYS[pressedKey] && (
           <div className="text-xs bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800 px-3 py-1 rounded-lg font-medium shadow-xs animate-in fade-in">
             Aktiv: <strong className="font-bold">{TYPE_DESCRIPTIONS[VALID_KEYS[pressedKey]] || VALID_KEYS[pressedKey]}</strong> (Klicken zum Einfügen)
@@ -277,13 +279,11 @@ export default function YearCalendar() {
       </div>
       
       <div className="flex-1 flex flex-col min-h-0 overflow-x-auto overflow-y-auto custom-scrollbar -webkit-overflow-scrolling-touch pr-2 pb-4">
-        {/* Header (Tage 1-31) */}
-        <div className="grid grid-cols-[38px_repeat(31,minmax(24px,1fr))] md:grid-cols-[48px_repeat(31,minmax(35px,1fr))] min-w-max gap-1 md:gap-1.5 mb-2 shrink-0">
-          <div className="bg-transparent flex items-center sticky left-0 z-20">
-            
-          </div>
+        {/* Header (Tage 1-31) - Sticky vertically */}
+        <div className="grid grid-cols-[38px_repeat(31,minmax(24px,1fr))] md:grid-cols-[48px_repeat(31,minmax(35px,1fr))] min-w-max gap-1 md:gap-1.5 mb-2 shrink-0 sticky top-0 z-30 bg-stone-100/95 dark:bg-[#050a0f]/95 backdrop-blur-md py-1">
+          <div className="bg-stone-100 dark:bg-[#050a0f] flex items-center sticky left-0 z-40" />
           {Array.from({ length: 31 }, (_, i) => i + 1).map(day => (
-            <div key={day} className="bg-transparent flex items-center justify-center text-xs font-bold text-slate-400">
+            <div key={day} className="flex items-center justify-center text-xs font-bold text-slate-400">
               {day}
             </div>
           ))}

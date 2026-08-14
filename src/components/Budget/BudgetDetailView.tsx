@@ -121,7 +121,7 @@ export default function BudgetDetailView({
   }
 
   return (
-    <div className="w-full max-w-7xl mx-auto p-4 sm:p-6 md:p-8 flex flex-col gap-6 animate-in fade-in duration-300">
+    <div className="w-full max-w-7xl mx-auto p-2 sm:p-4 md:p-6 lg:p-8 pt-1 sm:pt-2 md:pt-4 flex flex-col gap-6 animate-in fade-in duration-300">
       {/* Back button & Title Bar */}
       <div className="flex flex-col gap-3">
         <div className="flex items-center justify-between">
@@ -155,7 +155,7 @@ export default function BudgetDetailView({
         {/* Title & Dates */}
         <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-black text-slate-800 dark:text-slate-100 tracking-tight">
+            <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-slate-800 dark:text-slate-100 tracking-tight">
               {budget.name}
             </h1>
             <div className="flex flex-wrap items-center gap-3 text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">

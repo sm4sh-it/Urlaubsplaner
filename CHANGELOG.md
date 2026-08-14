@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.6.1] - 2026-08-14
+### Fixed & Improved
+- **Scrollverhalten & Verlaufshintergrund auf allen Budget-Seiten:** Behebung des Scrollfehlers auf der Hauptübersicht (`/budget`) und der Reisedetailseite (`/budget/[tripBudgetId]`). Die Seiten nutzen nun den einheitlichen, flüssigen Scroll-Container und lassen den dynamischen Verlaufshintergrund nahtlos durchscheinen.
+- **Sticky Kalender-Tage (Vertikales Scrollen):** Die Tage-Kopfzeile (1–31) bleibt nun beim vertikalen Scrollen auf kleineren Bildschirmen oben fixiert (`sticky top-0`), sodass beim Durchscrollen der Monate stets die Tagesnummern sichtbar bleiben (analog zur fixierten Monatsspalte beim horizontalen Scrollen).
+- **Harmonisierte Überschriften & Responsive Spacing:** Perfekt vereinheitlichte Überschriftenhöhen, Schriftgrößen und optimierte Abstände auf der Kalender-, Budget- und Home-Seite zur maximalen Platzausnutzung auf mobilen Geräten.
+
 ## [1.6.0] - 2026-08-14
 ### Added & Improved
 - **Vollwertiges Modul "Budget- & Reisekostenverwaltung":**
