@@ -69,6 +69,22 @@ export default async function BudgetDetailPage({ params }: BudgetDetailPageProps
     notFound()
   }
 
+  // Sicherstellen, dass die Standard-Kategorie "Ausgleich" für bestehende Budgets existiert
+  const hasAusgleich = budgetRaw.categories.some(
+    (c) => c.name.trim().toLowerCase() === "ausgleich"
+  )
+  if (!hasAusgleich) {
+    const ausgleichCat = await prisma.budgetCategory.create({
+      data: {
+        budgetId: budgetRaw.id,
+        name: "Ausgleich",
+        icon: "arrow-right-left",
+        color: "#06b6d4",
+      },
+    })
+    budgetRaw.categories.push(ausgleichCat as any)
+  }
+
   // Format Types
   const entries: CalendarEntry[] = entriesRaw.map((e: any) => ({
     id: e.id,

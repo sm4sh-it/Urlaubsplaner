@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache"
 import { prisma } from "@/lib/prisma"
-import { DEFAULT_BUDGET_CATEGORIES } from "@/lib/budgetUtils"
+import { DEFAULT_BUDGET_CATEGORIES, calculateTotalExpenses } from "@/lib/budgetUtils"
 import { z } from "zod"
 
 // --- Zod Validation Schemas ---
@@ -84,6 +84,7 @@ export async function getTripBudgets(year?: number) {
         participants: true,
         expenses: {
           include: {
+            category: true,
             splits: true,
           },
         },
@@ -150,6 +151,22 @@ export async function getTripBudgetById(id: string) {
 
     if (!budget) {
       return { success: false, error: "Budget nicht gefunden" }
+    }
+
+    // Sicherstellen, dass die Standard-Kategorie "Ausgleich" für bestehende Budgets existiert
+    const hasAusgleich = budget.categories.some(
+      (c) => c.name.trim().toLowerCase() === "ausgleich"
+    )
+    if (!hasAusgleich) {
+      const ausgleichCat = await prisma.budgetCategory.create({
+        data: {
+          budgetId: budget.id,
+          name: "Ausgleich",
+          icon: "arrow-right-left",
+          color: "#06b6d4",
+        },
+      })
+      budget.categories.push(ausgleichCat as any)
     }
 
     return { success: true, data: budget }
@@ -327,6 +344,42 @@ export async function deleteBudgetCategory(categoryId: string, budgetId: string)
 }
 
 /**
+ * Stellt alle fehlenden Standard-Kategorien für ein Budget wieder her
+ */
+export async function restoreDefaultBudgetCategories(budgetId: string) {
+  try {
+    const existing = await prisma.budgetCategory.findMany({
+      where: { budgetId },
+    })
+
+    const existingNames = new Set(
+      existing.map((c) => c.name.trim().toLowerCase())
+    )
+
+    const missing = DEFAULT_BUDGET_CATEGORIES.filter(
+      (cat) => !existingNames.has(cat.name.trim().toLowerCase())
+    )
+
+    if (missing.length > 0) {
+      await prisma.budgetCategory.createMany({
+        data: missing.map((cat) => ({
+          budgetId,
+          name: cat.name,
+          icon: cat.icon,
+          color: cat.color,
+        })),
+      })
+    }
+
+    revalidatePath(`/budget/${budgetId}`)
+    return { success: true, count: missing.length }
+  } catch (error: any) {
+    console.error("Fehler beim Wiederherstellen der Standardkategorien:", error)
+    return { success: false, error: error.message || "Fehler beim Wiederherstellen" }
+  }
+}
+
+/**
  * Erfasst eine neue Ausgabe inkl. Splits
  */
 export async function addBudgetExpense(budgetId: string, input: z.infer<typeof expenseSchema>) {
@@ -435,7 +488,12 @@ export async function syncTripCostWithBudget(budgetId: string) {
     const budget = await prisma.tripBudget.findUnique({
       where: { id: budgetId },
       include: {
-        expenses: true,
+        categories: true,
+        expenses: {
+          include: {
+            category: true,
+          },
+        },
       },
     })
 
@@ -447,7 +505,7 @@ export async function syncTripCostWithBudget(budgetId: string) {
       return { success: false, error: "Dieses Budget ist mit keiner Reise im Kalender verknüpft." }
     }
 
-    const totalCost = budget.expenses.reduce((sum, exp) => sum + (exp.amount || 0), 0)
+    const totalCost = calculateTotalExpenses(budget.expenses as any, budget.categories as any)
 
     const updateData: { cost: number; budget?: number | null } = {
       cost: totalCost,

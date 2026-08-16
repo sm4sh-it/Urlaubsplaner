@@ -11,6 +11,7 @@ import {
   DollarSign,
   Receipt,
   Layers,
+  RotateCcw,
 } from "lucide-react"
 import { BudgetCategory, BudgetExpense } from "@/types"
 import {
@@ -18,8 +19,10 @@ import {
   calculateCategoryBreakdown,
   calculateDailyAverage,
   calculateTotalExpenses,
+  isSettlementExpense,
+  DEFAULT_BUDGET_CATEGORIES,
 } from "@/lib/budgetUtils"
-import { deleteBudgetCategory } from "@/app/actions/budgetActions"
+import { deleteBudgetCategory, restoreDefaultBudgetCategories } from "@/app/actions/budgetActions"
 import { useRouter } from "next/navigation"
 import CategoryIcon from "./CategoryIcon"
 
@@ -44,24 +47,51 @@ export default function AnalyticsTab({
 }: AnalyticsTabProps) {
   const router = useRouter()
   const [deletingCatId, setDeletingCatId] = useState<string | null>(null)
+  const [isRestoring, setIsRestoring] = useState(false)
+
+  const existingCatNames = useMemo(
+    () => new Set(categories.map((c) => c.name.trim().toLowerCase())),
+    [categories]
+  )
+  const missingDefaultsCount = useMemo(
+    () =>
+      DEFAULT_BUDGET_CATEGORIES.filter(
+        (cat) => !existingCatNames.has(cat.name.trim().toLowerCase())
+      ).length,
+    [existingCatNames]
+  )
+
+  const handleRestoreDefaults = async () => {
+    setIsRestoring(true)
+    try {
+      await restoreDefaultBudgetCategories(budgetId)
+      router.refresh()
+    } catch (err) {
+      console.error("Fehler beim Wiederherstellen:", err)
+      alert("Fehler beim Wiederherstellen der Kategorien.")
+    } finally {
+      setIsRestoring(false)
+    }
+  }
 
   const breakdown = useMemo(
     () => calculateCategoryBreakdown(expenses, categories),
     [expenses, categories]
   )
 
-  const totalSpent = useMemo(() => calculateTotalExpenses(expenses), [expenses])
+  const totalSpent = useMemo(() => calculateTotalExpenses(expenses, categories), [expenses, categories])
 
   const dailyAverage = useMemo(
-    () => calculateDailyAverage(expenses, startDate, endDate),
-    [expenses, startDate, endDate]
+    () => calculateDailyAverage(expenses, startDate, endDate, categories),
+    [expenses, startDate, endDate, categories]
   )
 
-  // Find biggest single expense
+  // Find biggest single travel expense (excluding debt settlement)
   const topExpense = useMemo(() => {
-    if (expenses.length === 0) return null
-    return [...expenses].sort((a, b) => b.amount - a.amount)[0]
-  }, [expenses])
+    const travelExpenses = expenses.filter((e) => !isSettlementExpense(e, categories))
+    if (travelExpenses.length === 0) return null
+    return [...travelExpenses].sort((a, b) => b.amount - a.amount)[0]
+  }, [expenses, categories])
 
   const handleDeleteCategory = async (catId: string, catName: string) => {
     if (!confirm(`Möchtest du die Kategorie "${catName}" wirklich löschen?`)) {
@@ -211,10 +241,22 @@ export default function AnalyticsTab({
 
       {/* Category Management List */}
       <div className="bg-white dark:bg-[#0d1117] border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
           <h3 className="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
             Alle verfügbaren Kategorien ({categories.length})
           </h3>
+
+          {missingDefaultsCount > 0 && (
+            <button
+              onClick={handleRestoreDefaults}
+              disabled={isRestoring}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold text-brand-600 dark:text-brand-400 bg-brand-500/10 hover:bg-brand-500/20 border border-brand-500/30 transition-colors cursor-pointer disabled:opacity-50"
+              title="Fehlende Standard-Kategorien (z. B. Ausgleich) wiederherstellen"
+            >
+              <RotateCcw className={`w-3.5 h-3.5 ${isRestoring ? "animate-spin" : ""}`} />
+              <span>Standard wiederherstellen ({missingDefaultsCount})</span>
+            </button>
+          )}
         </div>
 
         <div className="flex flex-wrap gap-2.5">

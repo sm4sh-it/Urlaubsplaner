@@ -86,12 +86,25 @@ export default function AboutPage() {
             </h2>
 
             <div className="space-y-8">
-              {/* V 1.6.2 */}
+              {/* V 1.6.6 */}
               <div className="relative pl-7 border-l-2 border-brand-500">
                 <div className="absolute -left-[9px] top-1.5 h-4 w-4 rounded-full bg-brand-500 ring-4 ring-white dark:ring-[#0d1117]" />
                 <div className="flex items-center gap-3 mb-3">
-                  <h3 className="text-lg font-bold text-slate-700 dark:text-slate-200 m-0">Version 1.6.2</h3>
+                  <h3 className="text-lg font-bold text-slate-700 dark:text-slate-200 m-0">Version 1.6.6</h3>
                   <span className="text-xs px-3 py-1 bg-brand-100 dark:bg-brand-500/20 text-brand-700 dark:text-brand-300 rounded-full font-bold">Aktuell</span>
+                </div>
+                <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
+                  <li><strong>Neues Einstellungs-Dashboard:</strong> Vollständige Umstellung der Einstellungsseite auf interaktive Profilkacheln mit Wochentags-Vorschau und fokussiertem Modal-Dialog (<code>ProfileModal</code>) zum Anlegen und Bearbeiten von Benutzerprofilen.</li>
+                  <li><strong>Budget-Kategorie „Ausgleich“ &amp; Standard-Wiederherstellung:</strong> Neue Standard-Kategorie für Schuldentransfers (fließt nicht in Gesamtkosten, gleicht aber Salden ab). Automatische Bereitstellung für bestehende Budgets sowie neuer Button zur Wiederherstellung fehlender Standardkategorien.</li>
+                  <li><strong>Kalender-Optimierungen:</strong> Fixierte Kalendertage (1–31) beim vertikalen Scrollen auf kleinen Bildschirmen, Farbangleichung der Tagesziffern an die Monate und Verfeinerung der Zelltöne auf <code>slate-700</code> / <code>slate-300</code>.</li>
+                </ul>
+              </div>
+
+              {/* V 1.6.2 */}
+              <div className="relative pl-7 border-l-2 border-slate-200 dark:border-slate-800">
+                <div className="absolute -left-[9px] top-1.5 h-4 w-4 rounded-full bg-slate-300 dark:bg-slate-700 ring-4 ring-white dark:ring-[#0d1117]" />
+                <div className="flex items-center gap-3 mb-3">
+                  <h3 className="text-lg font-bold text-slate-700 dark:text-slate-200 m-0">Version 1.6.2</h3>
                 </div>
                 <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
                   <li><strong>Lokale Kategorie-Icons &amp; Icon-Picker:</strong> Zuweisung moderner Lucide-Icons für alle Standard-Ausgabekategorien sowie interaktiver Icon-Picker im Kategorie-Modal zur individuellen Zuweisung bei Neuanlage.</li>

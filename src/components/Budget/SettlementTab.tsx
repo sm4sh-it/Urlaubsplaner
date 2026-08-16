@@ -11,12 +11,14 @@ import {
   TrendingUp,
   Coins,
   Share2,
+  ArrowRightLeft,
 } from "lucide-react"
-import { BudgetExpense, BudgetParticipant } from "@/types"
+import { BudgetCategory, BudgetExpense, BudgetParticipant, DebtSettlement } from "@/types"
 import {
   formatCurrency,
   calculateParticipantBalances,
   calculateSmartSettlements,
+  calculateTotalExpenses,
 } from "@/lib/budgetUtils"
 
 interface SettlementTabProps {
@@ -24,6 +26,8 @@ interface SettlementTabProps {
   currency: string
   participants: BudgetParticipant[]
   expenses: BudgetExpense[]
+  categories?: BudgetCategory[]
+  onSettleDebt?: (settlement: DebtSettlement) => void
 }
 
 export default function SettlementTab({
@@ -31,6 +35,8 @@ export default function SettlementTab({
   currency,
   participants,
   expenses,
+  categories,
+  onSettleDebt,
 }: SettlementTabProps) {
   const [copied, setCopied] = useState(false)
 
@@ -45,8 +51,8 @@ export default function SettlementTab({
   )
 
   const totalSpent = useMemo(
-    () => expenses.reduce((sum, e) => sum + (e.amount || 0), 0),
-    [expenses]
+    () => calculateTotalExpenses(expenses, categories),
+    [expenses, categories]
   )
 
   const handleCopySummary = () => {
@@ -131,43 +137,56 @@ export default function SettlementTab({
             {settlements.map((s, idx) => (
               <div
                 key={idx}
-                className="flex items-center justify-between p-4 rounded-xl bg-slate-50/80 dark:bg-slate-900/40 border border-slate-100 dark:border-slate-800/60 shadow-xs"
+                className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between p-4 rounded-xl bg-slate-50/80 dark:bg-slate-900/40 border border-slate-100 dark:border-slate-800/60 shadow-xs gap-3"
               >
-                {/* Debtor (From) */}
-                <div className="flex items-center gap-2.5 min-w-0">
-                  <div
-                    className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-white shadow-xs shrink-0"
-                    style={{ backgroundColor: s.from.color || "#3b82f6" }}
-                  >
-                    {s.from.name.charAt(0).toUpperCase()}
+                <div className="flex items-center justify-between flex-1 min-w-0">
+                  {/* Debtor (From) */}
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <div
+                      className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-white shadow-xs shrink-0"
+                      style={{ backgroundColor: s.from.color || "#3b82f6" }}
+                    >
+                      {s.from.name.charAt(0).toUpperCase()}
+                    </div>
+                    <span className="font-bold text-sm text-slate-700 dark:text-slate-200 truncate">
+                      {s.from.name}
+                    </span>
                   </div>
-                  <span className="font-bold text-sm text-slate-700 dark:text-slate-200 truncate">
-                    {s.from.name}
-                  </span>
+
+                  {/* Amount Arrow */}
+                  <div className="flex flex-col items-center px-3 shrink-0">
+                    <span className="text-xs font-bold text-slate-700 dark:text-slate-200">
+                      {formatCurrency(s.amount, currency)}
+                    </span>
+                    <div className="flex items-center text-slate-400">
+                      <ArrowRight className="w-4 h-4 text-brand-500" />
+                    </div>
+                  </div>
+
+                  {/* Creditor (To) */}
+                  <div className="flex items-center gap-2.5 min-w-0 justify-end">
+                    <span className="font-bold text-sm text-slate-700 dark:text-slate-200 truncate text-right">
+                      {s.to.name}
+                    </span>
+                    <div
+                      className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-white shadow-xs shrink-0"
+                      style={{ backgroundColor: s.to.color || "#3b82f6" }}
+                    >
+                      {s.to.name.charAt(0).toUpperCase()}
+                    </div>
+                  </div>
                 </div>
 
-                {/* Amount Arrow */}
-                <div className="flex flex-col items-center px-3 shrink-0">
-                  <span className="text-xs font-bold text-slate-700 dark:text-slate-200">
-                    {formatCurrency(s.amount, currency)}
-                  </span>
-                  <div className="flex items-center text-slate-400">
-                    <ArrowRight className="w-4 h-4 text-brand-500" />
-                  </div>
-                </div>
-
-                {/* Creditor (To) */}
-                <div className="flex items-center gap-2.5 min-w-0 justify-end">
-                  <span className="font-bold text-sm text-slate-700 dark:text-slate-200 truncate text-right">
-                    {s.to.name}
-                  </span>
-                  <div
-                    className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-white shadow-xs shrink-0"
-                    style={{ backgroundColor: s.to.color || "#3b82f6" }}
+                {onSettleDebt && (
+                  <button
+                    onClick={() => onSettleDebt(s)}
+                    className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-cyan-700 dark:text-cyan-300 bg-cyan-50 dark:bg-cyan-950/50 hover:bg-cyan-100 dark:hover:bg-cyan-900/60 border border-cyan-200 dark:border-cyan-800/80 transition-all cursor-pointer shadow-xs shrink-0"
+                    title="Diese Ausgleichszahlung direkt als Beleg erfassen"
                   >
-                    {s.to.name.charAt(0).toUpperCase()}
-                  </div>
-                </div>
+                    <ArrowRightLeft className="w-3.5 h-3.5" />
+                    <span>Ausgleichen</span>
+                  </button>
+                )}
               </div>
             ))}
           </div>

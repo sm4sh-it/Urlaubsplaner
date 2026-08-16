@@ -6,8 +6,32 @@ export const DEFAULT_BUDGET_CATEGORIES = [
   { name: "Verpflegung & Gastro", icon: "utensils", color: "#10b981" },
   { name: "Aktivitäten & Kultur", icon: "ticket", color: "#f59e0b" },
   { name: "Shopping & Souvenirs", icon: "shopping-bag", color: "#ec4899" },
+  { name: "Ausgleich", icon: "arrow-right-left", color: "#06b6d4" },
   { name: "Sonstiges", icon: "tag", color: "#64748b" },
 ]
+
+/**
+ * Prüft, ob eine Kategorie als Ausgleichskategorie (Schuldenausgleich / Transfer) fungiert
+ */
+export function isSettlementCategory(category?: { name?: string | null } | null): boolean {
+  if (!category?.name) return false
+  const n = category.name.trim().toLowerCase()
+  return n === "ausgleich" || n === "ausgleichszahlung" || n === "settlement"
+}
+
+/**
+ * Prüft, ob ein Beleg eine Ausgleichszahlung ist
+ */
+export function isSettlementExpense(expense: BudgetExpense, categories?: BudgetCategory[]): boolean {
+  if (expense.category) {
+    return isSettlementCategory(expense.category)
+  }
+  if (expense.categoryId && categories) {
+    const cat = categories.find((c) => c.id === expense.categoryId)
+    return isSettlementCategory(cat)
+  }
+  return false
+}
 
 /**
  * Formatiert Beträge standardkonform im de-DE Format mit Währungssymbol
@@ -23,10 +47,12 @@ export function formatCurrency(amount: number | null | undefined, currency: stri
 }
 
 /**
- * Berechnet die Gesamtsumme aller Ausgaben eines Reise-Budgets
+ * Berechnet die Gesamtsumme aller tatsächlichen Ausgaben eines Reise-Budgets (ohne Ausgleichszahlungen)
  */
-export function calculateTotalExpenses(expenses: BudgetExpense[]): number {
-  return expenses.reduce((sum, exp) => sum + (exp.amount || 0), 0)
+export function calculateTotalExpenses(expenses: BudgetExpense[], categories?: BudgetCategory[]): number {
+  return expenses
+    .filter((exp) => !isSettlementExpense(exp, categories))
+    .reduce((sum, exp) => sum + (exp.amount || 0), 0)
 }
 
 export interface CategoryBreakdownItem {
@@ -40,23 +66,26 @@ export interface CategoryBreakdownItem {
 }
 
 /**
- * Aggregiert alle Ausgaben nach Kategorien inkl. Prozentanteilen
+ * Aggregiert alle Ausgaben nach Kategorien inkl. Prozentanteilen (ohne reine Ausgleichszahlungen)
  */
 export function calculateCategoryBreakdown(
   expenses: BudgetExpense[],
   categories: BudgetCategory[]
 ): CategoryBreakdownItem[] {
-  const total = calculateTotalExpenses(expenses)
+  const total = calculateTotalExpenses(expenses, categories)
   const categoryMap = new Map<string, { amount: number; count: number }>()
 
-  // Map Categories
-  categories.forEach((cat) => {
+  // Map Categories (excluding Ausgleich from trip expense distribution)
+  const travelCategories = categories.filter((c) => !isSettlementCategory(c))
+
+  travelCategories.forEach((cat) => {
     categoryMap.set(cat.id, { amount: 0, count: 0 })
   })
   categoryMap.set("uncategorized", { amount: 0, count: 0 })
 
-  // Sum up expenses
+  // Sum up expenses (skip Ausgleich)
   expenses.forEach((exp) => {
+    if (isSettlementExpense(exp, categories)) return
     const key = exp.categoryId || "uncategorized"
     const current = categoryMap.get(key) || { amount: 0, count: 0 }
     categoryMap.set(key, {
@@ -67,7 +96,7 @@ export function calculateCategoryBreakdown(
 
   const results: CategoryBreakdownItem[] = []
 
-  categories.forEach((cat) => {
+  travelCategories.forEach((cat) => {
     const data = categoryMap.get(cat.id)
     if (data && data.amount > 0) {
       results.push({
@@ -218,9 +247,10 @@ export function calculateSmartSettlements(
 export function calculateDailyAverage(
   expenses: BudgetExpense[],
   startDate?: string | null,
-  endDate?: string | null
+  endDate?: string | null,
+  categories?: BudgetCategory[]
 ): { avgPerDay: number; daysCount: number } {
-  const total = calculateTotalExpenses(expenses)
+  const total = calculateTotalExpenses(expenses, categories)
   if (total === 0) return { avgPerDay: 0, daysCount: 0 }
 
   if (startDate && endDate) {
@@ -234,8 +264,13 @@ export function calculateDailyAverage(
     }
   }
 
-  // Fallback: Number of distinct expense dates
-  const distinctDates = new Set(expenses.map((e) => e.date).filter(Boolean))
+  // Fallback: Number of distinct expense dates (excluding Ausgleich)
+  const distinctDates = new Set(
+    expenses
+      .filter((e) => !isSettlementExpense(e, categories))
+      .map((e) => e.date)
+      .filter(Boolean)
+  )
   const daysCount = Math.max(1, distinctDates.size)
   return {
     avgPerDay: total / daysCount,

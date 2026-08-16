@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.6.6] - 2026-08-16
+### Added & Improved
+- **Neues Einstellungs- & Profil-Dashboard (Kachel- & Modal-Workflow):**
+  - **Profil-Kacheln:** Alle Benutzerprofile werden nun als informative Kacheln mit Farb-Avatar, Bundesland im Klartext, Urlaubsansprüchen und aktiven Wochentag-Chips dargestellt.
+  - **Neues Profil-Modal (`ProfileModal`):** Vollständig konsistenter Dialog zum Erstellen und Bearbeiten von Profilen mit Farbwähler, Schnellpaletten, Bundeslandauswahl, Kontingenten und Wochentagsschaltern.
+  - **Visuelles Feedback:** Optische Toast-Bestätigung beim Speichern, Erstellen oder Löschen von Profilen.
+- **Budget-Kategorie „Ausgleich“ & Standard-Kategorien Wiederherstellung:**
+  - Neue vordefinierte Standard-Kategorie `Ausgleich` für Schuldenbegleichungen zwischen Teilnehmern (inkl. automatischer Bereitstellung für alle bestehenden Budgets).
+  - Ausgleichszahlungen fließen **nicht** in die Gesamtausgaben der Reise, die Kategorieverteilung oder die synchronisierten Reisekosten ein, werden aber voll in den individuellen Teilnehmer-Salden („Wer schuldet wem wie viel?“) angerechnet.
+  - Ein-Klick-Aktion *„Ausgleichen“* im Saldenausgleichs-Tab zum direkten Vorbefüllen des Ausgaben-Modals.
+  - **Standard-Kategorien wiederherstellen:** Neuer Button im Kategorie-Modal und im Analytics-Tab sowie Schnell-Vorlagen-Chips für fehlende Standardkategorien (z. B. bei älteren Budgets oder versehentlich gelöschten Kategorien).
+- **Kalender-Optimierungen:**
+  - Fixierte Kalendertage (1–31) beim vertikalen Scrollen auf kleineren Bildschirmen (`sticky top-0`) mit transparentem Hintergrund.
+  - Farbangleichung der Kalendertage an die Monatsnamen (`slate-500` / `slate-300`).
+  - Zellentexte `--status-text` harmonisiert auf `slate-700` (`#334155`) im Light-Mode und `slate-300` (`#cbd5e1`) im Dark-Mode.
+
 ## [1.6.2] - 2026-08-14
 ### Added & Improved
 - **Lokale Kategorie-Icons & Icon-Auswahl im Budget:**

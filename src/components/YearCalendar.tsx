@@ -280,10 +280,10 @@ export default function YearCalendar() {
       
       <div className="flex-1 flex flex-col min-h-0 overflow-x-auto overflow-y-auto custom-scrollbar -webkit-overflow-scrolling-touch pr-2 pb-4">
         {/* Header (Tage 1-31) */}
-        <div className="grid grid-cols-[38px_repeat(31,minmax(24px,1fr))] md:grid-cols-[48px_repeat(31,minmax(35px,1fr))] min-w-max gap-1 md:gap-1.5 mb-2 shrink-0">
-          <div className="bg-transparent flex items-center sticky left-0 z-20" />
+        <div className="grid grid-cols-[38px_repeat(31,minmax(24px,1fr))] md:grid-cols-[48px_repeat(31,minmax(35px,1fr))] min-w-max gap-1 md:gap-1.5 mb-2 shrink-0 sticky top-0 z-30 bg-transparent">
+          <div className="bg-transparent flex items-center sticky left-0 z-30" />
           {Array.from({ length: 31 }, (_, i) => i + 1).map(day => (
-            <div key={day} className="bg-transparent flex items-center justify-center text-xs font-medium text-slate-400 dark:text-slate-500">
+            <div key={day} className="bg-transparent flex items-center justify-center text-xs font-bold text-slate-500 dark:text-slate-300 md:text-slate-600 dark:md:text-slate-300 md:font-semibold">
               {day}
             </div>
           ))}

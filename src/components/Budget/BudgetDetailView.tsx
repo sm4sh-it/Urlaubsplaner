@@ -55,6 +55,14 @@ export default function BudgetDetailView({
   // Modals state
   const [isExpenseModalOpen, setIsExpenseModalOpen] = useState(false)
   const [expenseToEdit, setExpenseToEdit] = useState<BudgetExpense | null>(null)
+  const [initialExpenseData, setInitialExpenseData] = useState<{
+    title?: string
+    amount?: number | string
+    categoryId?: string
+    payerId?: string
+    splitParticipantIds?: string[]
+    notes?: string
+  } | null>(null)
   const [isAddParticipantModalOpen, setIsAddParticipantModalOpen] = useState(false)
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false)
   const [isEditBudgetModalOpen, setIsEditBudgetModalOpen] = useState(false)
@@ -65,13 +73,13 @@ export default function BudgetDetailView({
 
   // Calculate Metrics
   const totalSpent = useMemo(
-    () => calculateTotalExpenses(budget.expenses),
-    [budget.expenses]
+    () => calculateTotalExpenses(budget.expenses, budget.categories),
+    [budget.expenses, budget.categories]
   )
 
   const dailyAvg = useMemo(
-    () => calculateDailyAverage(budget.expenses, budget.startDate, budget.endDate),
-    [budget.expenses, budget.startDate, budget.endDate]
+    () => calculateDailyAverage(budget.expenses, budget.startDate, budget.endDate, budget.categories),
+    [budget.expenses, budget.startDate, budget.endDate, budget.categories]
   )
 
   const perPersonAvg = useMemo(() => {
@@ -354,6 +362,7 @@ export default function BudgetDetailView({
             participants={budget.participants}
             onOpenExpenseModal={(exp) => {
               setExpenseToEdit(exp || null)
+              setInitialExpenseData(null)
               setIsExpenseModalOpen(true)
             }}
           />
@@ -377,6 +386,22 @@ export default function BudgetDetailView({
             currency={budget.currency}
             participants={budget.participants}
             expenses={budget.expenses}
+            categories={budget.categories}
+            onSettleDebt={(settlement) => {
+              const ausgleichCat = budget.categories.find(
+                (c) => c.name.trim().toLowerCase() === "ausgleich"
+              )
+              setExpenseToEdit(null)
+              setInitialExpenseData({
+                title: `Ausgleich: ${settlement.from.name} an ${settlement.to.name}`,
+                amount: settlement.amount,
+                categoryId: ausgleichCat?.id || budget.categories[0]?.id || "",
+                payerId: settlement.from.id,
+                splitParticipantIds: [settlement.to.id],
+                notes: "Ausgleichszahlung für Saldenausgleich",
+              })
+              setIsExpenseModalOpen(true)
+            }}
           />
         )}
 
@@ -397,12 +422,14 @@ export default function BudgetDetailView({
         onClose={() => {
           setIsExpenseModalOpen(false)
           setExpenseToEdit(null)
+          setInitialExpenseData(null)
         }}
         budgetId={budget.id}
         currency={budget.currency}
         participants={budget.participants}
         categories={budget.categories}
         expenseToEdit={expenseToEdit}
+        initialExpenseData={initialExpenseData}
         defaultDate={budget.startDate || undefined}
         onOpenCategoryModal={() => setIsCategoryModalOpen(true)}
       />
@@ -421,6 +448,7 @@ export default function BudgetDetailView({
         isOpen={isCategoryModalOpen}
         onClose={() => setIsCategoryModalOpen(false)}
         budgetId={budget.id}
+        existingCategories={budget.categories}
       />
 
       {/* Edit Budget Meta Modal */}

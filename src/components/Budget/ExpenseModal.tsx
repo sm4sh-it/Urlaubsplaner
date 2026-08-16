@@ -1,9 +1,9 @@
 "use client"
 
 import React, { useState, useEffect } from "react"
-import { X, Plus, DollarSign, Calendar, Tag, User, Users, AlignLeft, Check } from "lucide-react"
+import { X, Plus, DollarSign, Calendar, Tag, User, Users, AlignLeft, Check, ArrowRightLeft } from "lucide-react"
 import { BudgetCategory, BudgetExpense, BudgetParticipant } from "@/types"
-import { formatCurrency } from "@/lib/budgetUtils"
+import { formatCurrency, isSettlementCategory } from "@/lib/budgetUtils"
 import { addBudgetExpense, updateBudgetExpense } from "@/app/actions/budgetActions"
 import { useRouter } from "next/navigation"
 
@@ -15,6 +15,14 @@ interface ExpenseModalProps {
   participants: BudgetParticipant[]
   categories: BudgetCategory[]
   expenseToEdit?: BudgetExpense | null
+  initialExpenseData?: {
+    title?: string
+    amount?: number | string
+    categoryId?: string
+    payerId?: string
+    splitParticipantIds?: string[]
+    notes?: string
+  } | null
   defaultDate?: string
   onOpenCategoryModal?: () => void
 }
@@ -27,6 +35,7 @@ export default function ExpenseModal({
   participants,
   categories,
   expenseToEdit,
+  initialExpenseData,
   defaultDate,
   onOpenCategoryModal,
 }: ExpenseModalProps) {
@@ -79,6 +88,19 @@ export default function ExpenseModal({
         setSplitMode("equal")
         setCustomSplits({})
       }
+    } else if (initialExpenseData) {
+      setTitle(initialExpenseData.title || "")
+      setAmount(initialExpenseData.amount !== undefined ? initialExpenseData.amount.toString() : "")
+      setDate(defaultDate || todayStr)
+      setNotes(initialExpenseData.notes || "")
+      setCategoryId(initialExpenseData.categoryId || categories[0]?.id || "")
+      setPayerId(initialExpenseData.payerId || participants[0]?.id || "")
+      setSplitMode("equal")
+      setSelectedParticipantIds(
+        initialExpenseData.splitParticipantIds || participants.map((p) => p.id)
+      )
+      setCustomSplits({})
+      setError(null)
     } else {
       setTitle("")
       setAmount("")
@@ -92,7 +114,7 @@ export default function ExpenseModal({
       setCustomSplits({})
       setError(null)
     }
-  }, [isOpen, expenseToEdit, participants, categories, defaultDate])
+  }, [isOpen, expenseToEdit, initialExpenseData, participants, categories, defaultDate])
 
   const parsedAmount = parseFloat(amount) || 0
 
@@ -329,7 +351,14 @@ export default function ExpenseModal({
               </div>
               <select
                 value={categoryId}
-                onChange={(e) => setCategoryId(e.target.value)}
+                onChange={(e) => {
+                  const newCatId = e.target.value
+                  setCategoryId(newCatId)
+                  const chosenCat = categories.find((c) => c.id === newCatId)
+                  if (isSettlementCategory(chosenCat) && !title) {
+                    setTitle("Ausgleichszahlung")
+                  }
+                }}
                 className="w-full px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#161f28]/70 text-slate-700 dark:text-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500"
               >
                 <option value="">-- Ohne Kategorie --</option>
@@ -341,6 +370,19 @@ export default function ExpenseModal({
               </select>
             </div>
           </div>
+
+          {/* Info Banner if Ausgleich category is chosen */}
+          {categories.find((c) => c.id === categoryId && isSettlementCategory(c)) && (
+            <div className="flex items-start gap-2.5 p-3 rounded-xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-800 dark:text-cyan-200 text-xs animate-in fade-in">
+              <ArrowRightLeft className="w-4 h-4 text-cyan-600 dark:text-cyan-400 shrink-0 mt-0.5" />
+              <div className="flex flex-col gap-0.5">
+                <span className="font-bold">Ausgleichszahlung (Schuldentransfer)</span>
+                <span className="text-cyan-700 dark:text-cyan-300">
+                  Wird direkt in den Salden verrechnet, fließt aber <strong>nicht</strong> in die Gesamtsumme der Reisekosten ein.
+                </span>
+              </div>
+            </div>
+          )}
 
           {/* Payer (Bezahlt von) */}
           <div>

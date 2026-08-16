@@ -90,7 +90,7 @@ export default function BudgetList({
   // Overall Statistics
   const overallStats = useMemo(() => {
     const totalSpent = filteredBudgets.reduce(
-      (sum, b) => sum + calculateTotalExpenses(b.expenses),
+      (sum, b) => sum + calculateTotalExpenses(b.expenses, b.categories),
       0
     )
     const totalBudgetLimit = filteredBudgets.reduce(
@@ -283,7 +283,7 @@ export default function BudgetList({
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredBudgets.map((budget) => {
-            const totalSpent = calculateTotalExpenses(budget.expenses)
+            const totalSpent = calculateTotalExpenses(budget.expenses, budget.categories)
             const hasLimit = budget.totalBudget && budget.totalBudget > 0
             const percentUsed = hasLimit
               ? Math.min(100, (totalSpent / budget.totalBudget!) * 100)

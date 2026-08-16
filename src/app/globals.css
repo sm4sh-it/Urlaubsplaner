@@ -167,10 +167,10 @@ body {
 
 /* Status Classes */
 :root {
-  --status-text: #0f172a;
+  --status-text: #334155; /* slate-700 */
 }
 .dark {
-  --status-text: #ffffff;
+  --status-text: #cbd5e1; /* slate-300 */
 }
 
 .status-u   { background: var(--color-vacation) !important; color: var(--status-text) !important; }
