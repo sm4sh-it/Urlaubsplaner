@@ -3,6 +3,12 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
+  --breakpoint-sm: 720px;
+  --breakpoint-md: 1200px;
+  --breakpoint-lg: 1320px;
+  --breakpoint-xl: 1440px;
+  --breakpoint-2xl: 1536px;
+
   --color-bg: var(--bg);
   --color-fg: var(--fg);
   --color-surface: var(--surface);
@@ -16,11 +22,11 @@
   --color-brand-200: #bae6fd;
   --color-brand-300: #7dd3fc;
   --color-brand-400: #38bdf8;
-  --color-brand-500: #0ea5e9;
-  --color-brand-600: #0284c7;
-  --color-brand-700: #0369a1;
-  --color-brand-800: #075985;
-  --color-brand-900: #0c4a6e;
+  --color-brand-500: #0088c2;
+  --color-brand-600: #0077ad;
+  --color-brand-700: #006594;
+  --color-brand-800: #00547a;
+  --color-brand-900: #004361;
   
   /* Status Colors */
   --color-feiertag-bg: var(--feiertag-bg);
@@ -111,8 +117,8 @@ body {
 
 .dark body {
   background-image: 
-    radial-gradient(circle at 15% 15%, rgba(0, 136, 194, 0.12) 0%, transparent 35%),
-    radial-gradient(circle at 85% 75%, rgba(0, 136, 194, 0.08) 0%, transparent 35%);
+    radial-gradient(circle at 15% 15%, rgba(0, 136, 194, 0.16) 0%, transparent 35%),
+    radial-gradient(circle at 85% 75%, rgba(0, 136, 194, 0.12) 0%, transparent 35%);
   background-attachment: fixed;
 }
 
@@ -245,6 +251,53 @@ body {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
   gap: 24px;
+}
+
+/* Card System from Design Preview */
+.card-interactive {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: transform 0.25s ease, background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+  cursor: pointer;
+}
+
+.card-interactive:hover {
+  background: var(--surface-hover);
+  border-color: rgba(0, 136, 194, 0.6) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px -4px var(--brand-glow), 0 2px 4px -2px var(--brand-glow);
+}
+
+.card-static {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+/* Glassmorphism Action Button from Design Preview */
+.btn-glass {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 8px 16px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: transform 0.25s ease, background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+  cursor: pointer;
+}
+
+.btn-glass:hover {
+  background: var(--surface-hover);
+  border-color: rgba(0, 136, 194, 0.65) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px var(--brand-glow);
 }
 
 /* Vacation Tile / Card */
@@ -380,3 +433,53 @@ body {
   white-space: nowrap;
   max-width: 100%;
 }
+
+/* Kalender-Picker Icon Styling */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 0.7;
+  filter: brightness(0) saturate(100%) invert(40%) sepia(20%) saturate(800%) hue-rotate(165deg) brightness(95%) contrast(90%);
+  transition: opacity 0.2s ease, filter 0.2s ease, transform 0.2s ease;
+  border-radius: 4px;
+}
+input[type="date"]:hover::-webkit-calendar-picker-indicator {
+  opacity: 1;
+  filter: brightness(0) saturate(100%) invert(45%) sepia(80%) saturate(1500%) hue-rotate(165deg) brightness(105%) contrast(95%);
+  transform: scale(1.08);
+}
+.dark input[type="date"]::-webkit-calendar-picker-indicator {
+  opacity: 0.95;
+  filter: brightness(0) saturate(100%) invert(88%) sepia(5%) saturate(300%) hue-rotate(180deg) brightness(110%) contrast(95%);
+}
+.dark input[type="date"]:hover::-webkit-calendar-picker-indicator {
+  opacity: 1;
+  filter: brightness(0) saturate(100%) invert(60%) sepia(90%) saturate(1800%) hue-rotate(165deg) brightness(120%) contrast(95%);
+  transform: scale(1.08);
+}
+
+/* 3D Keycap Styling für Tastaturkürzel */
+kbd.keycap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono, monospace);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 6px;
+  background-color: #f1f5f9;
+  color: #334155;
+  border: 1px solid #cbd5e1;
+  box-shadow: 0 2px 0 0 #94a3b8;
+  line-height: 1;
+  user-select: none;
+  vertical-align: middle;
+}
+.dark kbd.keycap {
+  background-color: #1e293b;
+  color: #e2e8f0;
+  border: 1px solid #334155;
+  box-shadow: 0 2px 0 0 #0f172a;
+}
+
+

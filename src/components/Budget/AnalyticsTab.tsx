@@ -25,6 +25,7 @@ import {
 import { deleteBudgetCategory, restoreDefaultBudgetCategories } from "@/app/actions/budgetActions"
 import { useRouter } from "next/navigation"
 import CategoryIcon from "./CategoryIcon"
+import { useStore } from "@/store/useStore"
 
 interface AnalyticsTabProps {
   budgetId: string
@@ -64,11 +65,28 @@ export default function AnalyticsTab({
   const handleRestoreDefaults = async () => {
     setIsRestoring(true)
     try {
-      await restoreDefaultBudgetCategories(budgetId)
-      router.refresh()
-    } catch (err) {
+      const res = await restoreDefaultBudgetCategories(budgetId)
+      if (res.success) {
+        useStore.getState().addToast({
+          type: "success",
+          title: "Kategorien wiederhergestellt",
+          description: "Fehlende Standard-Kategorien wurden hinzugefügt.",
+        })
+        router.refresh()
+      } else {
+        useStore.getState().addToast({
+          type: "error",
+          title: "Fehler beim Wiederherstellen",
+          description: res.error || "Fehler beim Wiederherstellen der Kategorien.",
+        })
+      }
+    } catch (err: any) {
       console.error("Fehler beim Wiederherstellen:", err)
-      alert("Fehler beim Wiederherstellen der Kategorien.")
+      useStore.getState().addToast({
+        type: "error",
+        title: "Fehler",
+        description: err.message || "Fehler beim Wiederherstellen der Kategorien.",
+      })
     } finally {
       setIsRestoring(false)
     }
@@ -101,27 +119,36 @@ export default function AnalyticsTab({
     setDeletingCatId(catId)
     try {
       await deleteBudgetCategory(catId, budgetId)
+      useStore.getState().addToast({
+        type: "info",
+        title: "Kategorie gelöscht",
+        description: `Kategorie "${catName}" wurde entfernt.`,
+      })
       router.refresh()
-    } catch (err) {
+    } catch (err: any) {
       console.error("Fehler beim Löschen der Kategorie:", err)
-      alert("Fehler beim Löschen.")
+      useStore.getState().addToast({
+        type: "error",
+        title: "Fehler beim Löschen",
+        description: err.message || "Die Kategorie konnte nicht gelöscht werden.",
+      })
     } finally {
       setDeletingCatId(null)
     }
   }
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-6 md:gap-8">
       {/* Top Highlights Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {/* Daily Average */}
-        <div className="bg-white dark:bg-[#0d1117] border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-xs flex flex-col justify-between">
+        <div className="bg-white dark:bg-[#0d141d]/75 backdrop-blur-xl border border-slate-200 dark:border-white/10 rounded-2xl sm:rounded-3xl p-5 shadow-xs flex flex-col justify-between">
           <span className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
             <Calendar className="w-3.5 h-3.5 text-brand-500" />
             Ø Kosten pro Reisetag
           </span>
           <div className="my-2">
-            <span className="text-2xl font-bold text-slate-700 dark:text-slate-300">
+            <span className="text-2xl font-bold font-mono text-slate-800 dark:text-slate-100">
               {formatCurrency(dailyAverage.avgPerDay, currency)}
             </span>
           </div>
@@ -131,13 +158,13 @@ export default function AnalyticsTab({
         </div>
 
         {/* Top Single Expense */}
-        <div className="bg-white dark:bg-[#0d1117] border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-xs flex flex-col justify-between">
+        <div className="bg-white dark:bg-[#0d141d]/75 backdrop-blur-xl border border-slate-200 dark:border-white/10 rounded-2xl sm:rounded-3xl p-5 shadow-xs flex flex-col justify-between">
           <span className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
             <TrendingUp className="w-3.5 h-3.5 text-amber-500" />
             Größte Einzelausgabe
           </span>
           <div className="my-2">
-            <span className="text-2xl font-bold text-slate-700 dark:text-slate-300">
+            <span className="text-2xl font-bold font-mono text-slate-800 dark:text-slate-100">
               {topExpense ? formatCurrency(topExpense.amount, currency) : "-"}
             </span>
           </div>
@@ -147,13 +174,13 @@ export default function AnalyticsTab({
         </div>
 
         {/* Categories Count */}
-        <div className="bg-white dark:bg-[#0d1117] border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-xs flex flex-col justify-between">
+        <div className="bg-white dark:bg-[#0d141d]/75 backdrop-blur-xl border border-slate-200 dark:border-white/10 rounded-2xl sm:rounded-3xl p-5 shadow-xs flex flex-col justify-between">
           <span className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
             <Layers className="w-3.5 h-3.5 text-emerald-500" />
             Aktive Kategorien
           </span>
           <div className="my-2">
-            <span className="text-2xl font-bold text-slate-700 dark:text-slate-300">
+            <span className="text-2xl font-bold font-mono text-slate-800 dark:text-slate-100">
               {breakdown.length}
             </span>
             <span className="text-xs text-slate-400 dark:text-slate-500 font-medium ml-1.5">von {categories.length}</span>
@@ -165,10 +192,10 @@ export default function AnalyticsTab({
       </div>
 
       {/* Category Breakdown & Progress Bars */}
-      <div className="bg-white dark:bg-[#0d1117] border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm flex flex-col gap-6">
+      <div className="bg-white dark:bg-[#0d141d]/75 backdrop-blur-xl border border-slate-200 dark:border-white/10 rounded-2xl sm:rounded-3xl p-6 shadow-sm flex flex-col gap-6">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-lg font-bold text-slate-700 dark:text-slate-300">
+            <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100">
               Ausgaben nach Kategorie
             </h2>
             <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-0.5">
@@ -177,7 +204,7 @@ export default function AnalyticsTab({
           </div>
           <button
             onClick={onOpenCategoryModal}
-            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-800/90 hover:bg-brand-50 dark:hover:bg-brand-500/10 hover:text-brand-600 dark:hover:text-brand-400 border border-slate-200 dark:border-slate-700/80 transition-colors cursor-pointer"
+            className="btn-glass inline-flex items-center gap-1.5 font-semibold text-xs sm:text-sm text-slate-700 dark:text-slate-200"
           >
             <Plus className="w-3.5 h-3.5 text-brand-500" />
             <span>Kategorie anlegen</span>
@@ -191,7 +218,7 @@ export default function AnalyticsTab({
         ) : (
           <div className="flex flex-col gap-4">
             {/* Visual Multi-Segment Bar */}
-            <div className="w-full h-4 rounded-full overflow-hidden flex bg-slate-100 dark:bg-slate-800">
+            <div className="w-full h-4 rounded-full overflow-hidden flex bg-slate-100 dark:bg-white/10">
               {breakdown.map((item) => (
                 <div
                   key={item.id}
@@ -210,7 +237,7 @@ export default function AnalyticsTab({
               {breakdown.map((item) => (
                 <div
                   key={item.id}
-                  className="flex items-center justify-between p-3.5 rounded-xl bg-slate-50/80 dark:bg-slate-900/40 border border-slate-100 dark:border-slate-800/60"
+                  className="flex items-center justify-between p-3.5 rounded-2xl bg-slate-50/80 dark:bg-[#070c12]/60 border border-slate-200/80 dark:border-white/10"
                 >
                   <div className="flex items-center gap-3 min-w-0">
                     <div
@@ -218,7 +245,7 @@ export default function AnalyticsTab({
                       style={{ backgroundColor: item.color }}
                     />
                     <div className="flex flex-col min-w-0">
-                      <span className="font-bold text-sm text-slate-700 dark:text-slate-200 truncate">
+                      <span className="font-bold text-sm text-slate-800 dark:text-slate-100 truncate">
                         {item.name}
                       </span>
                       <span className="text-xs text-slate-400 dark:text-slate-500 font-medium">
@@ -228,7 +255,7 @@ export default function AnalyticsTab({
                   </div>
 
                   <div className="text-right shrink-0">
-                    <span className="font-bold text-sm text-slate-700 dark:text-slate-200">
+                    <span className="font-bold font-mono text-sm text-slate-800 dark:text-slate-100">
                       {formatCurrency(item.amount, currency)}
                     </span>
                   </div>
@@ -240,7 +267,7 @@ export default function AnalyticsTab({
       </div>
 
       {/* Category Management List */}
-      <div className="bg-white dark:bg-[#0d1117] border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
+      <div className="bg-white dark:bg-[#0d141d]/75 backdrop-blur-xl border border-slate-200 dark:border-white/10 rounded-2xl sm:rounded-3xl p-6 shadow-sm">
         <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
           <h3 className="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
             Alle verfügbaren Kategorien ({categories.length})
@@ -250,10 +277,10 @@ export default function AnalyticsTab({
             <button
               onClick={handleRestoreDefaults}
               disabled={isRestoring}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold text-brand-600 dark:text-brand-400 bg-brand-500/10 hover:bg-brand-500/20 border border-brand-500/30 transition-colors cursor-pointer disabled:opacity-50"
+              className="btn-glass inline-flex items-center gap-1.5 font-semibold text-xs text-brand-600 dark:text-brand-400 disabled:opacity-50"
               title="Fehlende Standard-Kategorien (z. B. Ausgleich) wiederherstellen"
             >
-              <RotateCcw className={`w-3.5 h-3.5 ${isRestoring ? "animate-spin" : ""}`} />
+              <RotateCcw className={`w-3.5 h-3.5 text-brand-500 ${isRestoring ? "animate-spin" : ""}`} />
               <span>Standard wiederherstellen ({missingDefaultsCount})</span>
             </button>
           )}
@@ -263,7 +290,7 @@ export default function AnalyticsTab({
           {categories.map((cat) => (
             <div
               key={cat.id}
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-900/40 text-xs font-medium text-slate-700 dark:text-slate-300"
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl border border-slate-200/80 dark:border-white/10 bg-slate-50/80 dark:bg-[#070c12]/60 text-xs font-medium text-slate-700 dark:text-slate-300"
             >
               <div
                 className="w-5 h-5 rounded-lg flex items-center justify-center text-white shrink-0"

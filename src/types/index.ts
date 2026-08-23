@@ -133,6 +133,16 @@ export interface DebtSettlement {
   amount: number
 }
 
+export type ToastType = "success" | "error" | "info"
+
+export interface ToastMessage {
+  id: string
+  type: ToastType
+  title: string
+  description?: string
+  duration?: number
+}
+
 export interface StoreState {
   profiles: Profile[]
   activeProfileIds: string[]
@@ -144,6 +154,7 @@ export interface StoreState {
   selectedYear: number
   isSidebarOpen: boolean
   activeSidebarPanel: 'legend' | 'statistics'
+  toasts: ToastMessage[]
   
   // Actions
   setProfiles: (profiles: Profile[]) => void
@@ -159,4 +170,7 @@ export interface StoreState {
   setSelectedYear: (year: number) => void
   toggleSidebar: () => void
   setActiveSidebarPanel: (panel: 'legend' | 'statistics') => void
+  addToast: (toast: Omit<ToastMessage, 'id'>) => void
+  removeToast: (id: string) => void
 }
+

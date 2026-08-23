@@ -9,10 +9,30 @@ Statt manuellem Rechnen bietet dir die App eine klare Jahresübersicht inklusive
 - **Tastaturgesteuert:** Blitzschnelle Eingabe per Tastendruck (`U` für Urlaub, `K` für Krank, `M` für Mobiles Arbeiten, `Shift+U` / `Shift+M` für halbe Tage).
 - **Multi-User fähig:** Profile für verschiedene Personen mit eigenen Farben anlegen und gleichzeitig im Kalender vergleichen.
 - **Reisen & Halbtage:** Ganztägige und halbe Reisen (Vormittag/Nachmittag) planen inkl. automatischer Urlaubs-Abzüge und Transportmittel-Erfassung (z.B. Bus, Flugzeug, Auto).
-- **Budget- & Reisekostenverwaltung:** Reisebudgets festlegen, gemeinsame Ausgaben flexibel aufteilen (gleichmäßig oder individuell), Kategorien auswerten und automatischer Saldenausgleich (*„Wer schuldet wem wie viel?“*) mit WhatsApp-Export.
+- **Budget- & Reisekostenverwaltung:** Reisebudgets festlegen, gemeinsame Ausgaben flexibel aufteilen (gleichmäßig oder individuell), Kategorien auswerten und automatischer Saldenausgleich (*„Wer schuldet wem wie viel?“*) mit 1-Klick-Abrechnungsexport.
 - **Auto-Sync:** Feiertage und Schulferien aller deutschen Bundesländer werden automatisch geladen.
 - **Statistiken & Resturlaub:** Detailliertes Dashboard mit Burn-Down-Charts, Verfallsdatum-Warnung und Transportmittel-Auswertungen.
 - **Sicher & Self-Hosted:** Optionaler Passwortschutz (`AUTH_ENABLED`) und einfaches Hosting via Docker.
+
+## Screenshots
+
+### 📊 Dashboard & Jahres-Aktivitätsübersicht
+![Dashboard & Jahres-Aktivitätsübersicht](public/screenshots/01_dashboard_dark.png)
+
+### 📅 Jahreskalender mit Schnell-Legende & Tastatursteuerung
+![Jahreskalender Ansicht mit Legende](public/screenshots/02b_calendar_legend_dark.png)
+
+### 💰 Budget- & Reisekostenverwaltung
+| Hauptübersicht & KPIs | Belegerfassung & flexible Splits |
+| :---: | :---: |
+| ![Budget Hauptübersicht](public/screenshots/03_budget_overview_dark.png) | ![Ausgaben Details](public/screenshots/04_budget_detail_expenses_dark.png) |
+
+| Ausgaben nach Kategorien | Smarter Saldenausgleich |
+| :---: | :---: |
+| ![Kategorien & Analytics](public/screenshots/05_budget_detail_analytics_dark.png) | ![Smarter Saldenausgleich](public/screenshots/06_budget_detail_settlement_dark.png) |
+
+### 📈 Statistiken & Urlaubsanalyse
+![Statistiken Dashboard](public/screenshots/08_statistics_dark.png)
 
 ## Installation via Docker Compose (Empfohlen)
 

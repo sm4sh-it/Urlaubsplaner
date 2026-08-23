@@ -3,7 +3,9 @@
 import * as React from "react"
 import { Profile } from "@/types"
 import { createProfile, updateProfile } from "@/app/actions"
+import { PROFILE_PRESET_COLORS } from "@/lib/profileUtils"
 import { useRouter } from "next/navigation"
+import { useStore } from "@/store/useStore"
 import {
   X,
   UserPlus,
@@ -12,9 +14,7 @@ import {
   Calendar,
   MapPin,
   Clock,
-  Briefcase,
   Layers,
-  Sparkles,
 } from "lucide-react"
 
 interface ProfileModalProps {
@@ -23,18 +23,6 @@ interface ProfileModalProps {
   profileToEdit?: Profile | null
   onSaveSuccess: (savedProfile: Profile) => void
 }
-
-const PRESET_COLORS = [
-  "#10b981", // Emerald
-  "#0ea5e9", // Sky
-  "#3b82f6", // Blue
-  "#8b5cf6", // Purple
-  "#ec4899", // Pink
-  "#f59e0b", // Amber
-  "#f97316", // Orange
-  "#06b6d4", // Cyan
-  "#64748b", // Slate
-]
 
 const GERMAN_STATES = [
   { code: "BW", name: "Baden-Württemberg" },
@@ -159,15 +147,25 @@ export default function ProfileModal({
 
       if (profileToEdit) {
         const res = await updateProfile(profileToEdit.id, finalData)
-        if (res.success && res.profile) {
+        if (res.profile) {
           onSaveSuccess(res.profile as Profile)
+          useStore.getState().addToast({
+            type: "success",
+            title: "Profil aktualisiert",
+            description: `Die Einstellungen für "${res.profile.name}" wurden gespeichert.`,
+          })
           onClose()
           router.refresh()
         }
       } else {
         const res = await createProfile(finalData)
-        if (res.success && res.profile) {
+        if (res.profile) {
           onSaveSuccess(res.profile as Profile)
+          useStore.getState().addToast({
+            type: "success",
+            title: "Profil angelegt",
+            description: `Profil "${res.profile.name}" wurde erfolgreich erstellt.`,
+          })
           onClose()
           router.refresh()
         }
@@ -175,6 +173,11 @@ export default function ProfileModal({
     } catch (err: any) {
       console.error("Fehler beim Speichern des Profils:", err)
       setError(err.message || "Unerwarteter Fehler beim Speichern.")
+      useStore.getState().addToast({
+        type: "error",
+        title: "Fehler beim Speichern",
+        description: err.message || "Das Profil konnte nicht gespeichert werden.",
+      })
     } finally {
       setIsSubmitting(false)
     }
@@ -187,36 +190,24 @@ export default function ProfileModal({
   return (
     <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200 overflow-y-auto">
       <div
-        className="relative w-full max-w-xl bg-white dark:bg-[#0d1117] border border-slate-200 dark:border-slate-800 rounded-3xl shadow-2xl overflow-hidden my-8"
+        className="relative w-full max-w-xl bg-white dark:bg-[#0d141d] border border-slate-200 dark:border-white/10 rounded-3xl shadow-2xl overflow-hidden my-8"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Modal Header */}
-        <div className="flex items-center justify-between px-6 py-5 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/30">
-          <div className="flex items-center gap-3">
-            <div
-              className="w-10 h-10 rounded-2xl flex items-center justify-center text-white shadow-md"
-              style={{ backgroundColor: formData.color || "#10b981" }}
-            >
-              {profileToEdit ? (
-                <Edit3 className="w-5 h-5" />
-              ) : (
-                <UserPlus className="w-5 h-5" />
-              )}
-            </div>
-            <div>
-              <h2 className="text-lg font-bold text-slate-700 dark:text-slate-200">
-                {profileToEdit ? `Profil bearbeiten` : `Neues Profil anlegen`}
-              </h2>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                {profileToEdit
-                  ? `Passe die Einstellungen für ${profileToEdit.name} an.`
-                  : `Erstelle ein neues Urlaubskonto für die Jahresplanung.`}
-              </p>
-            </div>
+        {/* Modal Header (Clean ohne vorangestelltes Icon) */}
+        <div className="flex items-center justify-between px-6 py-5 border-b border-slate-100 dark:border-white/10 bg-slate-50/50 dark:bg-[#070c12]/40">
+          <div>
+            <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100">
+              {profileToEdit ? `Profil bearbeiten` : `Neues Profil anlegen`}
+            </h2>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+              {profileToEdit
+                ? `Passe die Einstellungen für ${profileToEdit.name} an.`
+                : `Erstelle ein neues Urlaubskonto für die Jahresplanung.`}
+            </p>
           </div>
           <button
             onClick={onClose}
-            className="p-2 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+            className="p-2 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-white/10 transition-colors cursor-pointer"
             aria-label="Schließen"
           >
             <X className="w-5 h-5" />
@@ -242,7 +233,7 @@ export default function ProfileModal({
               placeholder="z. B. Alex, Partner, Kind..."
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-900/60 text-slate-700 dark:text-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 font-medium transition-all"
+              className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50/80 dark:bg-[#070c12]/60 text-slate-800 dark:text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 font-medium transition-all"
             />
           </div>
 
@@ -258,31 +249,31 @@ export default function ProfileModal({
                   type="color"
                   value={formData.color}
                   onChange={(e) => setFormData({ ...formData, color: e.target.value })}
-                  className="h-10 w-12 rounded-xl cursor-pointer border border-slate-200 dark:border-slate-800 p-1 bg-white dark:bg-slate-900"
+                  className="h-10 w-12 rounded-xl cursor-pointer border border-slate-200 dark:border-white/10 p-1 bg-white dark:bg-[#0d141d]"
                 />
                 <input
                   required
                   type="text"
                   value={formData.color}
                   onChange={(e) => setFormData({ ...formData, color: e.target.value })}
-                  className="w-28 px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-900/60 text-slate-700 dark:text-slate-200 text-xs font-mono font-medium focus:ring-2 focus:ring-brand-500/20 focus:outline-none"
+                  className="w-28 px-3 py-2 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50/80 dark:bg-[#070c12]/60 text-slate-800 dark:text-slate-100 text-xs font-mono font-medium focus:ring-2 focus:ring-brand-500/20 focus:outline-none"
                 />
               </div>
 
               {/* Color Presets */}
               <div className="flex flex-wrap items-center gap-1.5 flex-1">
-                {PRESET_COLORS.map((c) => (
+                {PROFILE_PRESET_COLORS.map(({ name, hex }) => (
                   <button
-                    key={c}
+                    key={hex}
                     type="button"
-                    onClick={() => setFormData({ ...formData, color: c })}
+                    onClick={() => setFormData({ ...formData, color: hex })}
                     className={`w-6 h-6 rounded-full transition-transform cursor-pointer border-2 ${
-                      formData.color.toLowerCase() === c.toLowerCase()
+                      formData.color?.toLowerCase() === hex.toLowerCase()
                         ? "border-slate-700 dark:border-white scale-110 shadow-sm"
                         : "border-transparent hover:scale-105"
                     }`}
-                    style={{ backgroundColor: c }}
-                    title={c}
+                    style={{ backgroundColor: hex }}
+                    title={`${name} (${hex})`}
                   />
                 ))}
               </div>
@@ -298,7 +289,7 @@ export default function ProfileModal({
             <select
               value={formData.stateCode}
               onChange={(e) => setFormData({ ...formData, stateCode: e.target.value })}
-              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-900/60 text-slate-700 dark:text-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 font-medium cursor-pointer"
+              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50/80 dark:bg-[#070c12]/60 text-slate-800 dark:text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 font-medium cursor-pointer"
             >
               {GERMAN_STATES.map((st) => (
                 <option key={st.code} value={st.code}>
@@ -314,7 +305,7 @@ export default function ProfileModal({
               <Layers className="w-3.5 h-3.5 text-brand-500" />
               Urlaubsanspruch &amp; Kontingente
             </label>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-slate-50/80 dark:bg-slate-900/40 border border-slate-100 dark:border-slate-800/60 rounded-2xl p-3.5">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-slate-50/80 dark:bg-[#070c12]/60 border border-slate-200/80 dark:border-white/10 rounded-2xl p-3.5">
               <div>
                 <span className="block text-[11px] font-semibold text-slate-500 dark:text-slate-400 mb-1">
                   Startjahr
@@ -331,7 +322,7 @@ export default function ProfileModal({
                       startYear: parseInt(e.target.value) || new Date().getFullYear(),
                     })
                   }
-                  className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#161f28] text-slate-700 dark:text-slate-200 text-xs font-bold focus:ring-2 focus:ring-brand-500/20 focus:outline-none"
+                  className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-white/10 bg-white dark:bg-[#0d141d] text-slate-800 dark:text-slate-100 text-xs font-mono font-bold focus:ring-2 focus:ring-brand-500/20 focus:outline-none"
                 />
               </div>
 
@@ -350,13 +341,13 @@ export default function ProfileModal({
                       annualLeave: parseFloat(e.target.value) || 0,
                     })
                   }
-                  className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#161f28] text-slate-700 dark:text-slate-200 text-xs font-bold focus:ring-2 focus:ring-brand-500/20 focus:outline-none"
+                  className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-white/10 bg-white dark:bg-[#0d141d] text-slate-800 dark:text-slate-100 text-xs font-mono font-bold focus:ring-2 focus:ring-brand-500/20 focus:outline-none"
                 />
               </div>
 
               <div>
-                <span className="block text-[11px] font-semibold text-slate-500 dark:text-slate-400 mb-1">
-                  Resturlaub
+                <span className="block text-[11px] font-semibold text-slate-500 dark:text-slate-400 mb-1 truncate" title="Resturlaub zum Startjahr">
+                  Start-Resturlaub
                 </span>
                 <input
                   required
@@ -369,7 +360,7 @@ export default function ProfileModal({
                       remainingLeave: parseFloat(e.target.value) || 0,
                     })
                   }
-                  className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#161f28] text-slate-700 dark:text-slate-200 text-xs font-bold focus:ring-2 focus:ring-brand-500/20 focus:outline-none"
+                  className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-white/10 bg-white dark:bg-[#0d141d] text-slate-800 dark:text-slate-100 text-xs font-mono font-bold focus:ring-2 focus:ring-brand-500/20 focus:outline-none"
                 />
               </div>
 
@@ -388,7 +379,7 @@ export default function ProfileModal({
                       additionalLeave: parseFloat(e.target.value) || 0,
                     })
                   }
-                  className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#161f28] text-slate-700 dark:text-slate-200 text-xs font-bold focus:ring-2 focus:ring-brand-500/20 focus:outline-none"
+                  className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 dark:border-white/10 bg-white dark:bg-[#0d141d] text-slate-800 dark:text-slate-100 text-xs font-mono font-bold focus:ring-2 focus:ring-brand-500/20 focus:outline-none"
                 />
               </div>
             </div>
@@ -406,7 +397,7 @@ export default function ProfileModal({
               placeholder="31.03"
               value={expiryInput}
               onChange={(e) => setExpiryInput(e.target.value)}
-              className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-900/60 text-slate-700 dark:text-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 font-medium"
+              className="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50/80 dark:bg-[#070c12]/60 text-slate-800 dark:text-slate-100 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 font-medium"
             />
           </div>
 
@@ -424,10 +415,10 @@ export default function ProfileModal({
                     key={day.value}
                     type="button"
                     onClick={() => handleWorkingDayChange(day.value)}
-                    className={`w-11 h-10 rounded-xl flex items-center justify-center text-sm font-bold transition-all duration-200 cursor-pointer ${
+                    className={`w-11 h-10 rounded-xl flex items-center justify-center text-sm font-mono font-bold transition-all duration-200 cursor-pointer ${
                       isSelected
-                        ? "bg-brand-600 text-white shadow-md ring-2 ring-brand-500/50"
-                        : "bg-slate-100 dark:bg-slate-900/80 text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-slate-800 hover:bg-slate-200 dark:hover:bg-slate-800"
+                        ? "bg-brand-600 text-white shadow-md shadow-brand-500/20 ring-2 ring-brand-500/50"
+                        : "bg-slate-100 dark:bg-[#070c12]/60 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-white/10 hover:bg-slate-200/80 dark:hover:bg-white/10"
                     }`}
                   >
                     {day.label}
@@ -438,27 +429,27 @@ export default function ProfileModal({
           </div>
 
           {/* Modal Footer */}
-          <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-100 dark:border-slate-800">
+          <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-100 dark:border-white/10">
             <button
               type="button"
               onClick={onClose}
-              className="px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+              className="px-4 py-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/10 rounded-xl font-medium transition-colors cursor-pointer text-sm"
             >
               Abbrechen
             </button>
             <button
               type="submit"
               disabled={isSubmitting}
-              className="px-6 py-2.5 rounded-xl text-xs sm:text-sm font-bold text-white bg-gradient-to-r from-brand-600 to-sky-500 hover:from-brand-500 hover:to-sky-400 shadow-md shadow-brand-500/20 transition-all cursor-pointer disabled:opacity-50 flex items-center gap-2"
+              className="px-6 py-2 text-brand-600 dark:text-brand-400 hover:bg-brand-50 dark:hover:bg-brand-500/10 rounded-xl font-semibold flex items-center gap-2 transition-colors cursor-pointer text-sm disabled:opacity-50"
             >
               {profileToEdit ? (
                 <>
-                  <Edit3 className="w-4 h-4" />
+                  <Edit3 className="w-4 h-4 text-brand-500" />
                   <span>{isSubmitting ? "Wird gespeichert..." : "Änderungen speichern"}</span>
                 </>
               ) : (
                 <>
-                  <UserPlus className="w-4 h-4" />
+                  <UserPlus className="w-4 h-4 text-brand-500" />
                   <span>{isSubmitting ? "Wird angelegt..." : "Profil anlegen"}</span>
                 </>
               )}

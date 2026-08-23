@@ -83,12 +83,12 @@ export default function VacationBurnDownWidget() {
   }, [selectedYear, entries, trips, holidays, activeProfile, overrides])
 
   return (
-    <div className="bg-white dark:bg-[#0d1117] rounded-xl border border-slate-200 dark:border-slate-800 p-6 flex flex-col shadow-xl h-full w-full min-h-[350px]">
+    <div className="bg-white dark:bg-[#0d141d]/75 backdrop-blur-xl rounded-2xl sm:rounded-3xl border border-slate-200 dark:border-white/10 p-5 sm:p-6 shadow-sm flex flex-col h-full w-full min-h-[350px]">
       <h3 className="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Urlaubs-Guthaben Verlauf</h3>
-      <p className="text-xs text-slate-500 mb-6">Wie schnell verbrauchst du deinen Urlaub im Jahr {selectedYear}?</p>
+      <p className="text-xs text-slate-500 dark:text-slate-400 mb-6">Wie schnell verbrauchst du deinen Urlaub im Jahr {selectedYear}?</p>
       
       {data.length === 0 ? (
-        <div className="text-slate-500 text-sm my-auto text-center flex-1 flex items-center justify-center">Kein aktives Profil gewählt.</div>
+        <div className="text-slate-400 dark:text-slate-500 text-sm my-auto text-center flex-1 flex items-center justify-center">Kein aktives Profil gewählt.</div>
       ) : (
         <div className="flex-1 w-full min-h-[250px]">
           <ResponsiveContainer width="100%" height="100%">
@@ -99,12 +99,23 @@ export default function VacationBurnDownWidget() {
                   <stop offset="95%" stopColor="#10b981" stopOpacity={0}/>
                 </linearGradient>
               </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
-              <XAxis dataKey="month" stroke="#64748b" tick={{fill: '#64748b', fontSize: 12}} tickLine={false} axisLine={false} />
-              <YAxis stroke="#64748b" tick={{fill: '#64748b', fontSize: 12}} tickLine={false} axisLine={false} />
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--border, #e2e8f0)" vertical={false} />
+              <XAxis dataKey="month" stroke="#64748b" tick={{ fill: '#64748b', fontSize: 12 }} tickLine={false} axisLine={false} />
+              <YAxis stroke="#64748b" tick={{ fill: '#64748b', fontSize: 12 }} tickLine={false} axisLine={false} />
               <Tooltip 
-                contentStyle={{ backgroundColor: '#1e293b', borderColor: '#334155', borderRadius: '0.5rem', color: '#f8fafc' }}
-                itemStyle={{ color: '#10b981' }}
+                cursor={{ strokeDasharray: '3 3', stroke: '#94a3b8' }}
+                content={({ active, payload, label }) => {
+                  if (!active || !payload || !payload.length) return null
+                  return (
+                    <div className="bg-white dark:bg-[#0d141d] border border-slate-200 dark:border-white/10 rounded-xl p-2.5 shadow-xl text-xs flex flex-col gap-1">
+                      <p className="font-medium text-slate-500 dark:text-slate-400">{label}</p>
+                      <p className="font-bold text-slate-800 dark:text-slate-100 flex items-center justify-between gap-3">
+                        <span>Resturlaub:</span>
+                        <span className="text-emerald-600 dark:text-emerald-400 font-mono font-bold">{payload[0]?.value} Tage</span>
+                      </p>
+                    </div>
+                  )
+                }}
               />
               <Area type="monotone" dataKey="resturlaub" name="Resturlaub" stroke="#10b981" strokeWidth={3} fillOpacity={1} fill="url(#colorResturlaub)" />
             </AreaChart>

@@ -2,12 +2,27 @@
 
 import { useState, useRef, useEffect } from "react"
 import Link from "next/link"
-import { CalendarDays, Settings, ChevronLeft, ChevronRight, LogOut, HelpCircle, Menu, X, Users, Check } from "lucide-react"
+import { 
+  CalendarDays, 
+  Settings, 
+  ChevronLeft, 
+  ChevronRight, 
+  LogOut, 
+  HelpCircle, 
+  Menu, 
+  X, 
+  Users, 
+  Check, 
+  BookHeart,
+  Sun,
+  Moon
+} from "lucide-react"
 import { ThemeToggle } from "./ThemeToggle"
 import ProfileSelector from "./ProfileSelector"
 import HelpModal from "./HelpModal"
 import { useStore } from "@/store/useStore"
 import { usePathname, useRouter } from "next/navigation"
+import { useTheme } from "next-themes"
 import { logout } from "@/app/actions"
 
 export default function Navbar() {
@@ -22,6 +37,7 @@ export default function Navbar() {
   const toggleActiveProfile = useStore((state) => state.toggleActiveProfile)
   const pathname = usePathname()
   const router = useRouter()
+  const { theme, setTheme } = useTheme()
 
   const isLogin = pathname === '/login'
 
@@ -52,17 +68,18 @@ export default function Navbar() {
 
   return (
     <header className="sticky top-0 z-50 w-full h-16 flex items-center justify-between px-4 md:px-6 border-b border-slate-200/80 dark:border-white/10 bg-white/80 dark:bg-[#050a0f]/60 backdrop-blur-md shadow-sm shrink-0">
-      <div className="flex items-center gap-2">
+      {/* Left Area: Mobile Menu Toggle & Logo */}
+      <div className="flex items-center gap-2 shrink-0">
         {!isLogin && (
           <button 
-            className="md:hidden p-2 -ml-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-md transition-colors"
+            className="md:hidden p-2 -ml-2 text-slate-600 dark:text-slate-300 hover:text-brand-600 dark:hover:text-brand-400 hover:scale-105 active:scale-95 transition-all cursor-pointer rounded-lg"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-label="Menü öffnen"
           >
-            {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
         )}
-        <Link href="/" className="flex items-center gap-2.5 font-bold text-lg md:text-xl tracking-tight">
+        <Link href="/" className="flex items-center gap-2.5 font-bold text-lg md:text-xl tracking-tight shrink-0">
           <img src="/logo.svg" alt="Logo" className="h-8.5 w-8.5 md:h-9 md:w-9 object-contain" />
           <span className="hidden sm:inline-block font-bold">
             <span className="text-brand-600 dark:text-brand-500">sm4sh's</span>{" "}
@@ -71,8 +88,9 @@ export default function Navbar() {
         </Link>
       </div>
 
+      {/* Center Area: Desktop Main Nav Links */}
       {!isLogin && (
-        <div className="hidden md:flex items-center gap-8 h-16">
+        <div className="hidden md:flex items-center gap-5 xl:gap-8 h-16 shrink-0">
           <Link 
             href="/" 
             className={`relative h-16 flex items-center text-sm font-semibold transition-colors ${
@@ -116,143 +134,162 @@ export default function Navbar() {
         </div>
       )}
 
-      <div className="flex items-center gap-1 md:gap-1.5">
+      {/* Right Area: Controls & Action Icons */}
+      <div className="flex items-center gap-1.5 md:gap-2 shrink-0">
         {!isLogin && (
           <>
+            {/* Year Selector */}
             <div className="flex items-center gap-1 text-slate-700 dark:text-slate-300 font-mono text-sm">
               <button 
                 onClick={() => {
                   if (selectedYear > 2022) setSelectedYear(selectedYear - 1)
                 }}
                 disabled={selectedYear <= 2022}
-                className="p-2 sm:p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors cursor-pointer min-h-[44px] min-w-[44px] sm:min-h-0 sm:min-w-0 flex items-center justify-center text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 disabled:opacity-30 disabled:cursor-not-allowed"
+                className="p-1.5 text-slate-500 hover:text-brand-600 dark:text-slate-400 dark:hover:text-brand-400 hover:scale-110 active:scale-95 transition-all duration-200 cursor-pointer min-h-[40px] min-w-[40px] sm:min-h-0 sm:min-w-0 flex items-center justify-center disabled:opacity-30 disabled:hover:scale-100 disabled:cursor-not-allowed"
                 aria-label="Vorheriges Jahr"
               >
                 <ChevronLeft className="h-4 w-4" />
               </button>
-              <span className="font-bold px-1.5 py-0.5 text-base">{selectedYear}</span>
+              <span className="font-bold px-1 py-0.5 text-base">{selectedYear}</span>
               <button 
                 onClick={() => {
                   const currentYear = new Date().getFullYear()
                   if (selectedYear < currentYear + 4) setSelectedYear(selectedYear + 1)
                 }}
                 disabled={selectedYear >= new Date().getFullYear() + 4}
-                className="p-2 sm:p-1.5 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors cursor-pointer min-h-[44px] min-w-[44px] sm:min-h-0 sm:min-w-0 flex items-center justify-center text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 disabled:opacity-30 disabled:cursor-not-allowed"
+                className="p-1.5 text-slate-500 hover:text-brand-600 dark:text-slate-400 dark:hover:text-brand-400 hover:scale-110 active:scale-95 transition-all duration-200 cursor-pointer min-h-[40px] min-w-[40px] sm:min-h-0 sm:min-w-0 flex items-center justify-center disabled:opacity-30 disabled:hover:scale-100 disabled:cursor-not-allowed"
                 aria-label="Nächstes Jahr"
               >
                 <ChevronRight className="h-4 w-4" />
               </button>
             </div>
 
-            <div className="h-4 w-[1px] bg-slate-200 dark:bg-slate-800 mx-1 hidden sm:block" />
+            <div className="h-4 w-[1px] bg-slate-200 dark:bg-slate-800 mx-0.5 hidden sm:block" />
 
+            {/* Profile Selector */}
             <div className="hidden sm:block">
               <ProfileSelector />
             </div>
 
-            <div className="h-4 w-[1px] bg-slate-200 dark:bg-slate-800 mx-1 hidden sm:block" />
+            <div className="h-4 w-[1px] bg-slate-200 dark:bg-slate-800 mx-0.5 hidden sm:block" />
           </>
         )}
 
-        <div className="hidden sm:block">
+        {/* Action Icons Group (Theme, Archive, Help, Settings, Logout) */}
+        <div className="hidden sm:flex items-center gap-1.5">
           <ThemeToggle />
+
+          {!isLogin && (
+            <>
+              {/* Reise-Archiv Icon Link */}
+              <Link
+                href="/archive"
+                className={`p-1.5 transition-all duration-200 hover:scale-110 active:scale-95 cursor-pointer flex items-center justify-center ${
+                  pathname.startsWith('/archive')
+                    ? 'text-brand-600 dark:text-brand-400 scale-105'
+                    : 'text-slate-500 hover:text-brand-600 dark:text-slate-400 dark:hover:text-brand-400'
+                }`}
+                title="Reise-Archiv"
+                aria-label="Reise-Archiv anzeigen"
+              >
+                <BookHeart className="h-5 w-5" />
+              </Link>
+
+              {/* Help Button */}
+              <button 
+                onClick={() => setIsHelpOpen(true)}
+                className="p-1.5 text-slate-500 hover:text-brand-600 dark:text-slate-400 dark:hover:text-brand-400 hover:scale-110 active:scale-95 transition-all duration-200 cursor-pointer flex items-center justify-center"
+                aria-label="Hilfe & Tastaturkürzel anzeigen"
+                title="Hilfe & Tastaturkürzel"
+              >
+                <HelpCircle className="h-5 w-5" />
+              </button>
+
+              {/* Settings Link */}
+              <Link
+                href="/settings"
+                className={`p-1.5 transition-all duration-200 hover:scale-110 active:scale-95 cursor-pointer flex items-center justify-center ${
+                  pathname === '/settings'
+                    ? 'text-brand-600 dark:text-brand-400 scale-105'
+                    : 'text-slate-500 hover:text-brand-600 dark:text-slate-400 dark:hover:text-brand-400'
+                }`}
+                title="Einstellungen"
+                aria-label="Einstellungen"
+              >
+                <Settings className="h-5 w-5" />
+              </Link>
+
+              {/* Logout Button */}
+              <button 
+                onClick={handleLogout} 
+                className="p-1.5 text-slate-500 hover:text-rose-600 dark:text-slate-400 dark:hover:text-rose-400 hover:scale-110 active:scale-95 transition-all duration-200 cursor-pointer flex items-center justify-center" 
+                title="Abmelden"
+                aria-label="Abmelden"
+              >
+                <LogOut className="h-5 w-5" />
+              </button>
+            </>
+          )}
         </div>
-
-        {!isLogin && (
-          <>
-            <div className="h-4 w-[1px] bg-slate-200 dark:bg-slate-800 mx-1 hidden sm:block" />
-
-            <button 
-              onClick={() => setIsHelpOpen(true)}
-              className="p-2 sm:p-1.5 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800/80 rounded-xl transition-colors cursor-pointer hidden sm:flex items-center justify-center"
-              aria-label="Hilfe & Tastaturkürzel anzeigen"
-            >
-              <HelpCircle className="h-4.5 w-4.5" />
-            </button>
-
-            <div className="h-4 w-[1px] bg-slate-200 dark:bg-slate-800 mx-1 hidden sm:block" />
-
-            <Link
-              href="/settings"
-              className={`p-2 sm:p-1.5 rounded-xl transition-colors cursor-pointer hidden sm:flex items-center justify-center ${
-                pathname === '/settings'
-                  ? 'text-brand-600 dark:text-brand-400 bg-brand-50 dark:bg-brand-500/10'
-                  : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800/80'
-              }`}
-              aria-label="Einstellungen"
-            >
-              <Settings className="h-4.5 w-4.5" />
-            </Link>
-
-            <div className="h-4 w-[1px] bg-slate-200 dark:bg-slate-800 mx-1 hidden sm:block" />
-
-            <button 
-              onClick={handleLogout} 
-              className="p-2 sm:p-1.5 text-slate-500 hover:text-red-600 dark:text-slate-400 dark:hover:text-red-400 hover:bg-slate-100 dark:hover:bg-slate-800/80 rounded-xl transition-colors cursor-pointer hidden sm:flex items-center justify-center" 
-              title="Abmelden"
-            >
-              <LogOut className="h-4.5 w-4.5" />
-            </button>
-
-            {/* Mobile Menu Toggle Button */}
-            <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="sm:hidden p-2 text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800/80 rounded-xl transition-colors cursor-pointer min-h-[44px] min-w-[44px] flex items-center justify-center ml-0.5"
-              aria-label="Menü öffnen"
-            >
-              {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-            </button>
-          </>
-        )}
       </div>
 
-      {/* Mobile Drawer Navigation Menu */}
-      {isMobileMenuOpen && !isLogin && (
+      {/* Mobile Menü Drawer */}
+      {isMobileMenuOpen && (
         <div 
           ref={mobileMenuRef}
-          className="absolute top-16 left-0 right-0 bg-white/95 dark:bg-[#0d1117]/95 backdrop-blur-xl border-b border-slate-200 dark:border-slate-800 shadow-2xl md:hidden flex flex-col p-4 gap-2 z-[100] animate-in slide-in-from-top-2 max-h-[calc(100vh-4rem)] overflow-y-auto"
+          className="md:hidden absolute top-16 left-0 right-0 bg-white/95 dark:bg-[#0d1117]/95 backdrop-blur-xl border-b border-slate-200 dark:border-slate-800 shadow-xl py-3 px-4 flex flex-col gap-2 z-50 animate-in fade-in slide-in-from-top-2 duration-200 max-h-[calc(100vh-4rem)] overflow-y-auto"
         >
-          {/* Hauptnavigation */}
-          <div className="flex flex-col gap-0.5">
+          {/* Hauptlinks auf Mobile */}
+          <div className="flex flex-col gap-1 py-1">
             <Link 
               href="/" 
-              className={`px-3 py-2.5 text-sm transition-all flex items-center justify-between ${
+              className={`px-3 py-2.5 rounded-xl text-sm font-semibold transition-colors flex items-center justify-between hover:bg-slate-100 dark:hover:bg-slate-800/80 ${
                 pathname === '/' 
-                  ? 'text-brand-600 dark:text-brand-400 font-bold border-l-2 border-brand-500 pl-3' 
-                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 font-semibold'
+                  ? 'text-brand-600 dark:text-brand-400 font-bold border-l-2 border-brand-500 pl-3 bg-brand-500/5' 
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
               }`}
             >
               Home
             </Link>
             <Link 
               href="/calendar" 
-              className={`px-3 py-2.5 text-sm transition-all flex items-center justify-between ${
+              className={`px-3 py-2.5 rounded-xl text-sm font-semibold transition-colors flex items-center justify-between hover:bg-slate-100 dark:hover:bg-slate-800/80 ${
                 pathname.startsWith('/calendar') 
-                  ? 'text-brand-600 dark:text-brand-400 font-bold border-l-2 border-brand-500 pl-3' 
-                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 font-semibold'
+                  ? 'text-brand-600 dark:text-brand-400 font-bold border-l-2 border-brand-500 pl-3 bg-brand-500/5' 
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
               }`}
             >
               Kalenderansicht
             </Link>
             <Link 
               href="/budget" 
-              className={`px-3 py-2.5 text-sm transition-all flex items-center justify-between ${
+              className={`px-3 py-2.5 rounded-xl text-sm font-semibold transition-colors flex items-center justify-between hover:bg-slate-100 dark:hover:bg-slate-800/80 ${
                 pathname.startsWith('/budget') 
-                  ? 'text-brand-600 dark:text-brand-400 font-bold border-l-2 border-brand-500 pl-3' 
-                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 font-semibold'
+                  ? 'text-brand-600 dark:text-brand-400 font-bold border-l-2 border-brand-500 pl-3 bg-brand-500/5' 
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
               }`}
             >
               Budget
             </Link>
             <Link 
               href="/statistics" 
-              className={`px-3 py-2.5 text-sm transition-all flex items-center justify-between ${
+              className={`px-3 py-2.5 rounded-xl text-sm font-semibold transition-colors flex items-center justify-between hover:bg-slate-100 dark:hover:bg-slate-800/80 ${
                 pathname.startsWith('/statistics') 
-                  ? 'text-brand-600 dark:text-brand-400 font-bold border-l-2 border-brand-500 pl-3' 
-                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 font-semibold'
+                  ? 'text-brand-600 dark:text-brand-400 font-bold border-l-2 border-brand-500 pl-3 bg-brand-500/5' 
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
               }`}
             >
               Statistiken
+            </Link>
+            <Link 
+              href="/archive" 
+              className={`px-3 py-2.5 rounded-xl text-sm font-semibold transition-colors flex items-center justify-between hover:bg-slate-100 dark:hover:bg-slate-800/80 ${
+                pathname.startsWith('/archive') 
+                  ? 'text-brand-600 dark:text-brand-400 font-bold border-l-2 border-brand-500 pl-3 bg-brand-500/5' 
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
+              }`}
+            >
+              Archiv
             </Link>
           </div>
           
@@ -271,7 +308,7 @@ export default function Navbar() {
                   <button
                     key={profile.id}
                     onClick={() => toggleActiveProfile(profile.id)}
-                    className={`flex items-center justify-between px-3 py-2 text-sm transition-colors cursor-pointer ${
+                    className={`flex items-center justify-between px-3 py-2 rounded-xl text-sm transition-colors cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800/80 ${
                       isActive 
                         ? 'text-slate-700 dark:text-slate-200 font-bold' 
                         : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
@@ -290,34 +327,60 @@ export default function Navbar() {
 
           <div className="h-px bg-slate-200/80 dark:bg-slate-800/80 my-1" />
           
-          {/* Neben-Aktionen & Theme */}
-          <div className="flex items-center justify-between px-3 py-2 text-sm font-medium text-slate-600 dark:text-slate-300">
-            <span>Design-Modus</span>
-            <ThemeToggle />
-          </div>
+          {/* Redesigned Design-Modus Zeile (vollständig klickbar mit kompaktem Toggle) */}
+          <button
+            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+            className="px-3 py-2.5 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 flex items-center gap-2.5 hover:bg-slate-100 dark:hover:bg-slate-800/80 transition-colors cursor-pointer w-full text-left group"
+          >
+            <div className="flex items-center gap-2">
+              <span className="text-slate-600 dark:text-slate-300">Design:</span>
+              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors text-xs font-semibold">
+                {theme === "dark" ? (
+                  <>
+                    <Moon className="h-3.5 w-3.5 text-brand-400" />
+                    <span>Dunkel</span>
+                  </>
+                ) : (
+                  <>
+                    <Sun className="h-3.5 w-3.5 text-amber-500" />
+                    <span>Hell</span>
+                  </>
+                )}
+              </div>
+            </div>
+          </button>
+
+          {/* Einstellungen */}
           <Link 
             href="/settings" 
-            className="px-3 py-2.5 text-sm font-medium text-slate-600 dark:text-slate-300 flex items-center gap-3 hover:text-brand-600 dark:hover:text-brand-400 transition-colors"
+            className="px-3 py-2.5 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 flex items-center gap-3 hover:bg-slate-100 dark:hover:bg-slate-800/80 hover:text-brand-600 dark:hover:text-brand-400 transition-colors"
           >
-            <Settings className="h-5 w-5 text-slate-400" /> Einstellungen
+            <Settings className="h-4.5 w-4.5 text-slate-400" />
+            <span>Einstellungen</span>
           </Link>
+
+          {/* Hilfe */}
           <button 
             onClick={() => { setIsHelpOpen(true); setIsMobileMenuOpen(false); }}
-            className="px-3 py-2.5 text-sm font-medium text-slate-600 dark:text-slate-300 flex items-center gap-3 text-left w-full hover:text-brand-600 dark:hover:text-brand-400 transition-colors cursor-pointer"
+            className="px-3 py-2.5 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 flex items-center gap-3 text-left w-full hover:bg-slate-100 dark:hover:bg-slate-800/80 hover:text-brand-600 dark:hover:text-brand-400 transition-colors cursor-pointer"
           >
-            <HelpCircle className="h-5 w-5 text-slate-400" /> Hilfe
+            <HelpCircle className="h-4.5 w-4.5 text-slate-400" />
+            <span>Hilfe &amp; Tastaturkürzel</span>
           </button>
+
+          {/* Abmelden */}
           <button 
             onClick={handleLogout}
-            className="px-3 py-2.5 text-sm font-medium text-red-600 dark:text-red-400 flex items-center gap-3 text-left w-full hover:text-red-700 dark:hover:text-red-300 transition-colors cursor-pointer"
+            className="px-3 py-2.5 rounded-xl text-sm font-medium text-red-600 dark:text-red-400 flex items-center gap-3 text-left w-full hover:bg-red-50 dark:hover:bg-red-950/20 transition-colors cursor-pointer"
           >
-            <LogOut className="h-5 w-5" /> Abmelden
+            <LogOut className="h-4.5 w-4.5 text-red-500" />
+            <span>Abmelden</span>
           </button>
         </div>
       )}
 
+      {/* Help Modal */}
       <HelpModal isOpen={isHelpOpen} onClose={() => setIsHelpOpen(false)} />
     </header>
   )
 }
-

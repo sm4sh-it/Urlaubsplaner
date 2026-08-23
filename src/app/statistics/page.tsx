@@ -43,7 +43,7 @@ export default async function StatisticsPage() {
 
   return (
     <div className="flex-1 w-full h-full overflow-y-auto overflow-x-hidden custom-scrollbar">
-      <div className="flex flex-col p-4 md:p-8 w-full max-w-[1600px] mx-auto gap-4 md:gap-6">
+      <div className="max-w-[1600px] w-full mx-auto p-3 sm:p-5 md:p-8 pt-2 sm:pt-4 md:pt-6 pb-24 md:pb-28 flex flex-col gap-4 md:gap-6">
         <StoreHydrator profiles={profilesRaw} entries={entries} overrides={overrides} trips={tripsRaw as any} />
       
         {/* Zeile 1: Urlaubs-Guthaben, Kosten vs. Reisedauer, Feiertags-Effizienz */}

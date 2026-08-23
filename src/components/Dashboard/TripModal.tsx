@@ -1,11 +1,12 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { X, Save, Trash2 } from "lucide-react"
+import { X, Save, Trash2, ChevronDown, Calendar, Palmtree, MapPin, DollarSign, FileText, Compass, Users } from "lucide-react"
 import { useStore } from "@/store/useStore"
 import { Trip, TripType, TripStatus } from "@/types"
 import { createTrip, updateTrip, deleteTrip } from "@/app/actions/tripActions"
 import { COUNTRIES } from "@/lib/countries"
+import Avatar from "@/components/ui/Avatar"
 
 interface TripModalProps {
   isOpen: boolean
@@ -81,7 +82,7 @@ export default function TripModal({ isOpen, onClose, trip }: TripModalProps) {
             : activeProfileIds.filter(id => id !== 'ALLE_FERIEN'),
           externalParticipants: "",
           type: TYPE_OPTIONS[0] as TripType,
-          status: STATUS_OPTIONS[1] as TripStatus, // Default to "In Planung" so it shows in the calendar by default
+          status: STATUS_OPTIONS[1] as TripStatus, // Default to "In Planung"
           location: "",
           country: "",
           travelType: "",
@@ -95,7 +96,7 @@ export default function TripModal({ isOpen, onClose, trip }: TripModalProps) {
       }
       setShowConfirmDelete(false)
     }
-  }, [isOpen, trip, activeProfileIds])
+  }, [isOpen, trip, activeProfileIds, profiles])
 
   if (!isOpen) return null
 
@@ -138,7 +139,6 @@ export default function TripModal({ isOpen, onClose, trip }: TripModalProps) {
       let savedTrip: Trip;
       if (trip) {
         savedTrip = await updateTrip(trip.id, payload) as Trip
-        // update local store optimally
         const currentTrips = useStore.getState().trips
         useStore.getState().setTrips(currentTrips.map(t => t.id === savedTrip.id ? savedTrip : t))
       } else {
@@ -159,10 +159,20 @@ export default function TripModal({ isOpen, onClose, trip }: TripModalProps) {
         useStore.getState().setEntries(filteredEntries)
       }
 
+      useStore.getState().addToast({
+        type: "success",
+        title: trip ? "Reise aktualisiert" : "Reise erfolgreich angelegt",
+        description: `${savedTrip.title} wurde gespeichert.`,
+      })
+
       onClose()
     } catch (error: any) {
       console.error("Failed to save trip", error)
-      alert("Fehler beim Speichern der Reise: " + (error.message || "Unbekannter Fehler"))
+      useStore.getState().addToast({
+        type: "error",
+        title: "Fehler beim Speichern",
+        description: error.message || "Die Reise konnte nicht gespeichert werden.",
+      })
     } finally {
       setIsSaving(false)
     }
@@ -175,9 +185,19 @@ export default function TripModal({ isOpen, onClose, trip }: TripModalProps) {
       await deleteTrip(trip.id)
       const currentTrips = useStore.getState().trips
       useStore.getState().setTrips(currentTrips.filter(t => t.id !== trip.id))
+      useStore.getState().addToast({
+        type: "info",
+        title: "Reise gelöscht",
+        description: `${trip.title} wurde entfernt.`,
+      })
       onClose()
-    } catch (error) {
+    } catch (error: any) {
       console.error("Failed to delete trip", error)
+      useStore.getState().addToast({
+        type: "error",
+        title: "Fehler beim Löschen",
+        description: error.message || "Die Reise konnte nicht gelöscht werden.",
+      })
     } finally {
       setIsSaving(false)
     }
@@ -192,35 +212,58 @@ export default function TripModal({ isOpen, onClose, trip }: TripModalProps) {
   }
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md animate-in fade-in-50">
       <div 
-        className="bg-white dark:bg-[var(--surface)] w-full max-w-3xl max-h-[90vh] rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-slate-200 dark:border-[var(--border-subtle)]"
+        className="bg-white dark:bg-[#0d141d] w-full max-w-3xl max-h-[90vh] rounded-3xl shadow-2xl flex flex-col overflow-hidden border border-slate-200 dark:border-white/10"
         onClick={e => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between p-6 border-b border-slate-100 dark:border-[var(--border-subtle)] bg-slate-50/50 dark:bg-black/20 shrink-0">
-          <h2 className="text-lg sm:text-xl font-bold text-slate-700 dark:text-slate-200">
-            {trip ? "Reise bearbeiten" : "Neue Reise anlegen"}
-          </h2>
-          <button onClick={onClose} className="p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors">
+        {/* Header */}
+        <div className="flex items-center justify-between p-5 sm:p-6 border-b border-slate-100 dark:border-white/10 bg-slate-50/50 dark:bg-[#070c12]/40 shrink-0">
+          <div>
+            <h2 className="text-lg sm:text-xl font-bold text-slate-800 dark:text-slate-100">
+              {trip ? "Reise bearbeiten" : "Neue Reise anlegen"}
+            </h2>
+            <p className="text-xs text-slate-400 dark:text-slate-500 mt-0.5">
+              Urlaubszeitraum, Teilnehmer und Reisedetails verwalten
+            </p>
+          </div>
+          <button 
+            onClick={onClose} 
+            className="p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-white/5 rounded-full transition-colors cursor-pointer"
+            aria-label="Modal schließen"
+          >
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        <div className="p-6 overflow-y-auto custom-scrollbar">
-          <form id="trip-form" onSubmit={handleSave} className="flex flex-col gap-8">
+        <div className="p-5 sm:p-6 overflow-y-auto custom-scrollbar">
+          <form id="trip-form" onSubmit={handleSave} className="flex flex-col gap-7">
             
             {/* Grunddaten */}
             <section className="flex flex-col gap-4">
-              <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-500 border-b border-slate-100 dark:border-slate-800 pb-2">Grunddaten</h3>
+              <h3 className="text-xs font-bold uppercase tracking-wider text-brand-600 dark:text-brand-400 border-b border-slate-100 dark:border-white/10 pb-2">
+                1. Grunddaten & Zeitraum
+              </h3>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="flex flex-col gap-1 md:col-span-2">
-                  <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Titel der Reise *</label>
-                  <input required value={title} onChange={e => updateForm({ title: e.target.value })} type="text" placeholder="z.B. Sommerurlaub Italien" className="px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all" />
+                <div className="flex flex-col gap-1.5 md:col-span-2">
+                  <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                    Titel der Reise *
+                  </label>
+                  <input 
+                    required 
+                    value={title} 
+                    onChange={e => updateForm({ title: e.target.value })} 
+                    type="text" 
+                    placeholder="z. B. Sommerurlaub Mallorca" 
+                    className="bg-white dark:bg-[#070c12]/70 border border-slate-200 dark:border-white/10 text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-600 focus:border-brand-500/80 focus:ring-2 focus:ring-brand-500/20 rounded-xl px-3.5 py-2.5 text-sm transition-all outline-none" 
+                  />
                 </div>
                 
-                <div className="flex flex-col gap-1">
-                  <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Startdatum *</label>
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                    Startdatum *
+                  </label>
                   <input 
                     required 
                     value={startDate} 
@@ -233,32 +276,34 @@ export default function TripModal({ isOpen, onClose, trip }: TripModalProps) {
                       }
                     }} 
                     type="date" 
-                    className="px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 focus:ring-2 focus:ring-brand-500 outline-none" 
+                    className="bg-white dark:bg-[#070c12]/70 border border-slate-200 dark:border-white/10 text-slate-800 dark:text-slate-100 focus:border-brand-500/80 focus:ring-2 focus:ring-brand-500/20 rounded-xl px-3.5 py-2.5 text-sm transition-all outline-none font-mono" 
                   />
                 </div>
                 
-                <div className="flex flex-col gap-1">
-                  <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Enddatum *</label>
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                    Enddatum *
+                  </label>
                   <input 
                     required 
                     value={endDate} 
                     min={startDate || undefined}
                     onChange={e => updateForm({ endDate: e.target.value })} 
                     type="date" 
-                    className="px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 focus:ring-2 focus:ring-brand-500 outline-none" 
+                    className="bg-white dark:bg-[#070c12]/70 border border-slate-200 dark:border-white/10 text-slate-800 dark:text-slate-100 focus:border-brand-500/80 focus:ring-2 focus:ring-brand-500/20 rounded-xl px-3.5 py-2.5 text-sm transition-all outline-none font-mono" 
                   />
                 </div>
 
-                <div className="flex flex-col gap-1 md:col-span-2 mt-1">
-                  <div className="flex flex-wrap items-center justify-between gap-3 p-3 bg-slate-50 dark:bg-slate-800/40 rounded-xl border border-slate-200/80 dark:border-slate-700/60">
-                    <label className="flex items-center gap-2.5 cursor-pointer font-semibold text-sm text-slate-700 dark:text-slate-200 select-none">
+                <div className="flex flex-col gap-1 md:col-span-2">
+                  <div className="flex flex-wrap items-center justify-between gap-3 p-3.5 bg-slate-50/80 dark:bg-[#070c12]/50 rounded-2xl border border-slate-200/80 dark:border-white/10">
+                    <label className="flex items-center gap-2.5 cursor-pointer font-semibold text-xs sm:text-sm text-slate-700 dark:text-slate-200 select-none">
                       <input 
                         type="checkbox"
                         checked={isHalfDay}
                         onChange={e => updateForm({ isHalfDay: e.target.checked })}
                         className="w-4 h-4 rounded text-brand-600 focus:ring-brand-500 cursor-pointer"
                       />
-                      <span>Halber Tag</span>
+                      <span>Halber Urlaubstag (0.5)</span>
                     </label>
 
                     {isHalfDay && (
@@ -269,7 +314,7 @@ export default function TripModal({ isOpen, onClose, trip }: TripModalProps) {
                           className={`px-3 py-1 text-xs font-bold rounded-lg transition-all cursor-pointer ${
                             halfDayType === "VORMITTAG" || !halfDayType
                               ? 'bg-brand-600 text-white shadow-xs'
-                              : 'bg-slate-200/80 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-600'
+                              : 'bg-slate-200/80 dark:bg-[#161f28] text-slate-600 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-[#1e2a36]'
                           }`}
                         >
                           Vormittag (AM)
@@ -280,7 +325,7 @@ export default function TripModal({ isOpen, onClose, trip }: TripModalProps) {
                           className={`px-3 py-1 text-xs font-bold rounded-lg transition-all cursor-pointer ${
                             halfDayType === "NACHMITTAG"
                               ? 'bg-brand-600 text-white shadow-xs'
-                              : 'bg-slate-200/80 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-600'
+                              : 'bg-slate-200/80 dark:bg-[#161f28] text-slate-600 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-[#1e2a36]'
                           }`}
                         >
                           Nachmittag (PM)
@@ -294,82 +339,153 @@ export default function TripModal({ isOpen, onClose, trip }: TripModalProps) {
 
             {/* Teilnehmer */}
             <section className="flex flex-col gap-4">
-              <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-500 border-b border-slate-100 dark:border-slate-800 pb-2">Teilnehmer</h3>
+              <h3 className="text-xs font-bold uppercase tracking-wider text-brand-600 dark:text-brand-400 border-b border-slate-100 dark:border-white/10 pb-2">
+                2. Teilnehmer & Profile
+              </h3>
               
               <div className="flex flex-col gap-2">
-                <label className="text-sm font-medium text-slate-700 dark:text-slate-300">App-Profile (Für Kalender-Sync) *</label>
+                <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                  App-Profile (Für Kalender-Sync) *
+                </label>
                 <div className="flex flex-wrap gap-2">
                   {profiles.filter(p => p.id !== 'ALLE_FERIEN').map(p => {
                     const isSelected = selectedProfileIds.includes(p.id)
                     return (
-                      <div 
+                      <button 
+                        type="button"
                         key={p.id}
                         onClick={() => toggleProfile(p.id)}
-                        className={`px-3 py-1.5 rounded-lg text-sm cursor-pointer border transition-colors flex items-center gap-2 ${isSelected ? 'bg-brand-50 dark:bg-brand-500/20 border-brand-200 dark:border-brand-500/30 text-brand-700 dark:text-brand-300' : 'bg-slate-50 dark:bg-slate-800/50 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-slate-300'}`}
+                        className={`px-3 py-1.5 rounded-xl text-xs font-semibold cursor-pointer border transition-all flex items-center gap-2 ${
+                          isSelected 
+                            ? 'bg-brand-500/15 border-brand-500/40 text-brand-700 dark:text-brand-300 ring-1 ring-brand-500/30 font-bold' 
+                            : 'bg-slate-100/80 dark:bg-[#161f28]/80 border-slate-200 dark:border-white/5 text-slate-600 dark:text-slate-400 hover:border-slate-300 dark:hover:border-white/10'
+                        }`}
                       >
-                        <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: p.color }}></div>
-                        {p.name}
-                      </div>
+                        <Avatar name={p.name} color={p.color} size="xs" />
+                        <span>{p.name}</span>
+                      </button>
                     )
                   })}
                 </div>
-                {selectedProfileIds.length === 0 && <span className="text-xs text-red-500">Bitte wähle mindestens ein Profil aus.</span>}
+                {selectedProfileIds.length === 0 && (
+                  <span className="text-xs text-rose-500 font-medium">Bitte wähle mindestens ein Profil aus.</span>
+                )}
               </div>
 
-              <div className="flex flex-col gap-1">
-                <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Externe Teilnehmer (Optional)</label>
-                <input value={externalParticipants} onChange={e => updateForm({ externalParticipants: e.target.value })} type="text" placeholder="z.B. Oma, Opa, Hund" className="px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 focus:ring-2 focus:ring-brand-500 outline-none" />
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                  Externe Teilnehmer (Optional)
+                </label>
+                <input 
+                  value={externalParticipants} 
+                  onChange={e => updateForm({ externalParticipants: e.target.value })} 
+                  type="text" 
+                  placeholder="z. B. Oma, Freunde, Hund" 
+                  className="bg-white dark:bg-[#070c12]/70 border border-slate-200 dark:border-white/10 text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-600 focus:border-brand-500/80 focus:ring-2 focus:ring-brand-500/20 rounded-xl px-3.5 py-2.5 text-sm transition-all outline-none" 
+                />
               </div>
             </section>
 
-            {/* Klassifizierung */}
+            {/* Klassifizierung & Status */}
             <section className="flex flex-col gap-4">
-              <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-500 border-b border-slate-100 dark:border-slate-800 pb-2">Klassifizierung & Status</h3>
+              <h3 className="text-xs font-bold uppercase tracking-wider text-brand-600 dark:text-brand-400 border-b border-slate-100 dark:border-white/10 pb-2">
+                3. Klassifizierung & Status
+              </h3>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="flex flex-col gap-1">
-                  <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Art der Reise *</label>
-                  <select required value={type} onChange={e => updateForm({ type: e.target.value as TripType })} className="px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 focus:ring-2 focus:ring-brand-500 outline-none appearance-none">
-                    {TYPE_OPTIONS.map(opt => <option key={opt} value={opt}>{opt}</option>)}
-                  </select>
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                    Art der Reise *
+                  </label>
+                  <div className="relative">
+                    <select 
+                      required 
+                      value={type} 
+                      onChange={e => updateForm({ type: e.target.value as TripType })} 
+                      className="w-full appearance-none bg-white dark:bg-[#070c12]/70 border border-slate-200 dark:border-white/10 text-slate-800 dark:text-slate-100 focus:border-brand-500/80 focus:ring-2 focus:ring-brand-500/20 rounded-xl px-3.5 py-2.5 pr-9 text-sm transition-all outline-none cursor-pointer"
+                    >
+                      {TYPE_OPTIONS.map(opt => <option key={opt} value={opt} className="bg-white dark:bg-[#0d141d]">{opt}</option>)}
+                    </select>
+                    <ChevronDown className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                  </div>
                 </div>
 
-                <div className="flex flex-col gap-1">
-                  <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Aktueller Status *</label>
-                  <select required value={status} onChange={e => updateForm({ status: e.target.value as TripStatus })} className="px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 focus:ring-2 focus:ring-brand-500 outline-none appearance-none">
-                    {STATUS_OPTIONS.map(opt => <option key={opt} value={opt}>{opt}</option>)}
-                  </select>
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                    Aktueller Status *
+                  </label>
+                  <div className="relative">
+                    <select 
+                      required 
+                      value={status} 
+                      onChange={e => updateForm({ status: e.target.value as TripStatus })} 
+                      className="w-full appearance-none bg-white dark:bg-[#070c12]/70 border border-slate-200 dark:border-white/10 text-slate-800 dark:text-slate-100 focus:border-brand-500/80 focus:ring-2 focus:ring-brand-500/20 rounded-xl px-3.5 py-2.5 pr-9 text-sm transition-all outline-none cursor-pointer"
+                    >
+                      {STATUS_OPTIONS.map(opt => <option key={opt} value={opt} className="bg-white dark:bg-[#0d141d]">{opt}</option>)}
+                    </select>
+                    <ChevronDown className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                  </div>
                 </div>
               </div>
             </section>
 
             {/* Reisedetails */}
             <section className="flex flex-col gap-4">
-              <h3 className="text-sm font-semibold uppercase tracking-wider text-slate-500 border-b border-slate-100 dark:border-slate-800 pb-2">Details (Optional)</h3>
+              <h3 className="text-xs font-bold uppercase tracking-wider text-brand-600 dark:text-brand-400 border-b border-slate-100 dark:border-white/10 pb-2">
+                4. Reisedetails & Kosten (Optional)
+              </h3>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="flex flex-col gap-1">
-                  <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Land</label>
-                  <input list="countries" value={country} onChange={e => updateForm({ country: e.target.value })} type="text" placeholder="Land auswählen oder tippen..." className="px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 focus:ring-2 focus:ring-brand-500 outline-none" />
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                    Land
+                  </label>
+                  <input 
+                    list="countries" 
+                    value={country} 
+                    onChange={e => updateForm({ country: e.target.value })} 
+                    type="text" 
+                    placeholder="Land auswählen oder tippen..." 
+                    className="bg-white dark:bg-[#070c12]/70 border border-slate-200 dark:border-white/10 text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-600 focus:border-brand-500/80 focus:ring-2 focus:ring-brand-500/20 rounded-xl px-3.5 py-2.5 text-sm transition-all outline-none" 
+                  />
                   <datalist id="countries">
                     {COUNTRIES.map(c => <option key={c} value={c} />)}
                   </datalist>
                 </div>
 
-                <div className="flex flex-col gap-1">
-                  <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Ort</label>
-                  <input value={location} onChange={e => updateForm({ location: e.target.value })} type="text" placeholder="z.B. Banyalbufar" className="px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 focus:ring-2 focus:ring-brand-500 outline-none" />
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                    Ort / Region
+                  </label>
+                  <input 
+                    value={location} 
+                    onChange={e => updateForm({ location: e.target.value })} 
+                    type="text" 
+                    placeholder="z. B. Palma de Mallorca" 
+                    className="bg-white dark:bg-[#070c12]/70 border border-slate-200 dark:border-white/10 text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-600 focus:border-brand-500/80 focus:ring-2 focus:ring-brand-500/20 rounded-xl px-3.5 py-2.5 text-sm transition-all outline-none" 
+                  />
                 </div>
 
-                <div className="flex flex-col gap-1">
-                  <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Reisetyp</label>
-                  <select value={travelType} onChange={e => updateForm({ travelType: e.target.value })} className="px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 focus:ring-2 focus:ring-brand-500 outline-none appearance-none">
-                    {TRAVEL_TYPE_OPTIONS.map(opt => <option key={opt} value={opt}>{opt || "Bitte wählen..."}</option>)}
-                  </select>
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                    Reiseart
+                  </label>
+                  <div className="relative">
+                    <select 
+                      value={travelType} 
+                      onChange={e => updateForm({ travelType: e.target.value })} 
+                      className="w-full appearance-none bg-white dark:bg-[#070c12]/70 border border-slate-200 dark:border-white/10 text-slate-800 dark:text-slate-100 focus:border-brand-500/80 focus:ring-2 focus:ring-brand-500/20 rounded-xl px-3.5 py-2.5 pr-9 text-sm transition-all outline-none cursor-pointer"
+                    >
+                      {TRAVEL_TYPE_OPTIONS.map(opt => <option key={opt} value={opt} className="bg-white dark:bg-[#0d141d]">{opt || "Bitte wählen..."}</option>)}
+                    </select>
+                    <ChevronDown className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                  </div>
                 </div>
 
                 <div className="flex flex-col gap-2 md:col-span-2">
-                  <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Transportmittel (Mehrfachauswahl)</label>
+                  <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                    Transportmittel (Mehrfachauswahl)
+                  </label>
                   <div className="flex flex-wrap gap-2">
                     {TRANSPORT_OPTIONS.filter(opt => opt !== "").map(opt => {
                       const isSelected = transport.includes(opt)
@@ -382,10 +498,10 @@ export default function TripModal({ isOpen, onClose, trip }: TripModalProps) {
                               transport: isSelected ? transport.filter(t => t !== opt) : [...transport, opt]
                             })
                           }}
-                          className={`px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
+                          className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer border ${
                             isSelected 
-                              ? 'bg-blue-100 dark:bg-blue-900/40 text-blue-800 dark:text-blue-300' 
-                              : 'bg-slate-100 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'
+                              ? 'bg-brand-500/15 border-brand-500/40 text-brand-600 dark:text-brand-300 ring-1 ring-brand-500/20 font-bold' 
+                              : 'bg-slate-100/80 dark:bg-[#161f28]/80 border-slate-200 dark:border-white/5 text-slate-600 dark:text-slate-400 hover:border-slate-300 dark:hover:border-white/10'
                           }`}
                         >
                           {opt}
@@ -396,43 +512,73 @@ export default function TripModal({ isOpen, onClose, trip }: TripModalProps) {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
-                <div className="flex flex-col gap-1">
-                  <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Geplantes Budget (€)</label>
-                  <input value={budget} onChange={e => updateForm({ budget: e.target.value ? Number(e.target.value) : "" })} type="number" min="0" step="0.01" placeholder="0.00" className="px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 focus:ring-2 focus:ring-brand-500 outline-none" />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-1">
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                    Geplantes Budget (€)
+                  </label>
+                  <input 
+                    value={budget} 
+                    onChange={e => updateForm({ budget: e.target.value ? Number(e.target.value) : "" })} 
+                    type="number" 
+                    min="0" 
+                    step="0.01" 
+                    placeholder="0.00" 
+                    className="bg-white dark:bg-[#070c12]/70 border border-slate-200 dark:border-white/10 text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-600 focus:border-brand-500/80 focus:ring-2 focus:ring-brand-500/20 rounded-xl px-3.5 py-2.5 text-sm transition-all outline-none font-mono" 
+                  />
                 </div>
-                <div className="flex flex-col gap-1">
-                  <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Tatsächliche Kosten (€)</label>
-                  <input value={cost} onChange={e => updateForm({ cost: e.target.value ? Number(e.target.value) : "" })} type="number" min="0" step="0.01" placeholder="0.00" className="px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 focus:ring-2 focus:ring-brand-500 outline-none" />
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                    Tatsächliche Kosten (€)
+                  </label>
+                  <input 
+                    value={cost} 
+                    onChange={e => updateForm({ cost: e.target.value ? Number(e.target.value) : "" })} 
+                    type="number" 
+                    min="0" 
+                    step="0.01" 
+                    placeholder="0.00" 
+                    className="bg-white dark:bg-[#070c12]/70 border border-slate-200 dark:border-white/10 text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-600 focus:border-brand-500/80 focus:ring-2 focus:ring-brand-500/20 rounded-xl px-3.5 py-2.5 text-sm transition-all outline-none font-mono" 
+                  />
                 </div>
               </div>
 
-              <div className="flex flex-col gap-1 mt-2">
-                <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Notizen / Links</label>
-                <textarea value={notes} onChange={e => updateForm({ notes: e.target.value })} rows={3} placeholder="Hotel links, Checklisten, etc." className="px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 focus:ring-2 focus:ring-brand-500 outline-none resize-none"></textarea>
+              <div className="flex flex-col gap-1.5 mt-1">
+                <label className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                  Notizen / Links
+                </label>
+                <textarea 
+                  value={notes} 
+                  onChange={e => updateForm({ notes: e.target.value })} 
+                  rows={3} 
+                  placeholder="Hotel-Links, Adressen, Packlisten, Buchungsnummern..." 
+                  className="bg-white dark:bg-[#070c12]/70 border border-slate-200 dark:border-white/10 text-slate-800 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-600 focus:border-brand-500/80 focus:ring-2 focus:ring-brand-500/20 rounded-xl px-3.5 py-2.5 text-sm transition-all outline-none resize-none"
+                />
               </div>
             </section>
 
           </form>
         </div>
 
-        <div className="p-4 border-t border-slate-100 dark:border-[var(--border-subtle)] bg-slate-50 dark:bg-black/20 flex justify-between shrink-0">
+        {/* Footer Actions (TripModal Standard) */}
+        <div className="p-4 sm:p-5 border-t border-slate-100 dark:border-white/10 bg-slate-50 dark:bg-black/20 flex items-center justify-between shrink-0">
           {trip ? (
             <button 
               type="button"
               onClick={handleDelete}
               disabled={isSaving}
-              className="px-4 py-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-lg font-medium flex items-center gap-2 transition-colors"
+              className="px-4 py-2 text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-500/10 rounded-lg font-medium flex items-center gap-2 transition-colors cursor-pointer text-sm disabled:opacity-50"
             >
-              <Trash2 className="w-4 h-4" /> Löschen
+              <Trash2 className="w-4 h-4" /> 
+              <span>Löschen</span>
             </button>
-          ) : null}
+          ) : <div />}
           
-          <div className="flex gap-3">
+          <div className="flex items-center gap-3">
             <button 
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg font-medium transition-colors"
+              className="px-4 py-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg font-medium transition-colors cursor-pointer text-sm"
             >
               Abbrechen
             </button>
@@ -440,9 +586,10 @@ export default function TripModal({ isOpen, onClose, trip }: TripModalProps) {
               type="submit"
               form="trip-form"
               disabled={isSaving || selectedProfileIds.length === 0}
-              className="px-6 py-2 text-brand-600 dark:text-brand-500 hover:bg-brand-50 dark:hover:bg-brand-500/10 disabled:opacity-50 rounded-lg font-medium flex items-center gap-2 transition-colors"
+              className="px-6 py-2 text-brand-600 dark:text-brand-400 hover:bg-brand-50 dark:hover:bg-brand-500/10 rounded-lg font-medium flex items-center gap-2 transition-colors cursor-pointer text-sm disabled:opacity-50"
             >
-              <Save className="w-4 h-4" /> {isSaving ? "Speichert..." : "Speichern"}
+              <Save className="w-4 h-4" /> 
+              <span>{isSaving ? "Speichert..." : "Speichern"}</span>
             </button>
           </div>
         </div>
@@ -450,3 +597,4 @@ export default function TripModal({ isOpen, onClose, trip }: TripModalProps) {
     </div>
   )
 }
+

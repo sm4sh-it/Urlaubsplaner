@@ -14,6 +14,7 @@ export const useStore = create<StoreState>((set) => ({
   selectedYear: new Date().getFullYear(),
   isSidebarOpen: true,
   activeSidebarPanel: 'statistics',
+  toasts: [],
 
   setProfiles: (profiles) => set({ profiles }),
   setOverrides: (overrides) => set({ overrides }),
@@ -55,5 +56,24 @@ export const useStore = create<StoreState>((set) => ({
   
   toggleSidebar: () => set((state) => ({ isSidebarOpen: !state.isSidebarOpen })),
   
-  setActiveSidebarPanel: (panel) => set({ activeSidebarPanel: panel })
+  setActiveSidebarPanel: (panel) => set({ activeSidebarPanel: panel }),
+
+  addToast: (toastData) => {
+    const id = `toast-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+    const newToast = { id, duration: 3500, ...toastData }
+    set((state) => ({ toasts: [...state.toasts, newToast] }))
+
+    // Auto-remove after duration
+    if (newToast.duration && newToast.duration > 0) {
+      setTimeout(() => {
+        set((state) => ({
+          toasts: state.toasts.filter((t) => t.id !== id),
+        }))
+      }, newToast.duration)
+    }
+  },
+
+  removeToast: (id) => set((state) => ({
+    toasts: state.toasts.filter((t) => t.id !== id),
+  }))
 }))

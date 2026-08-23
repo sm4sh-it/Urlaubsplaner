@@ -19,7 +19,9 @@ import {
   calculateParticipantBalances,
   calculateSmartSettlements,
   calculateTotalExpenses,
+  copyToClipboard,
 } from "@/lib/budgetUtils"
+import { useStore } from "@/store/useStore"
 
 interface SettlementTabProps {
   budgetName: string
@@ -55,7 +57,7 @@ export default function SettlementTab({
     [expenses, categories]
   )
 
-  const handleCopySummary = () => {
+  const handleCopySummary = async () => {
     let text = `📊 *Kostenabrechnung: ${budgetName}*\n`
     text += `Gesamtausgaben: ${formatCurrency(totalSpent, currency)}\n\n`
     text += `*Saldenübersicht:*\n`
@@ -73,21 +75,34 @@ export default function SettlementTab({
       })
     }
 
-    navigator.clipboard.writeText(text)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2500)
+    const success = await copyToClipboard(text)
+    if (success) {
+      setCopied(true)
+      useStore.getState().addToast({
+        type: "info",
+        title: "In Zwischenablage kopiert",
+        description: "Die Abrechnungsübersicht wurde in die Zwischenablage kopiert.",
+      })
+      setTimeout(() => setCopied(false), 2500)
+    } else {
+      useStore.getState().addToast({
+        type: "error",
+        title: "Kopieren fehlgeschlagen",
+        description: "Der Zugriff auf die Zwischenablage wurde vom Browser blockiert.",
+      })
+    }
   }
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-6 md:gap-8">
       {/* Top Banner: Smart Settlement Actions */}
-      <div className="bg-gradient-to-r from-brand-600/10 via-sky-500/10 to-indigo-500/10 border border-brand-500/20 rounded-2xl p-5 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <div className="bg-white dark:bg-[#0d141d]/75 backdrop-blur-xl border border-slate-200 dark:border-white/10 rounded-2xl sm:rounded-3xl p-5 sm:p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-sm">
         <div className="flex items-center gap-3.5">
-          <div className="p-3 rounded-xl bg-brand-500 text-white shadow-md shadow-brand-500/25 shrink-0">
+          <div className="p-3 rounded-2xl bg-brand-50 dark:bg-brand-500/10 text-brand-500 shrink-0">
             <Scale className="w-6 h-6" />
           </div>
           <div>
-            <h2 className="text-lg font-bold text-slate-700 dark:text-slate-200">
+            <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100">
               Smarter Saldenausgleich
             </h2>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
@@ -99,7 +114,7 @@ export default function SettlementTab({
 
         <button
           onClick={handleCopySummary}
-          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm text-slate-700 dark:text-slate-200 bg-white dark:bg-[#161f28] hover:bg-slate-50 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-xs hover:shadow-md transition-all cursor-pointer shrink-0"
+          className="btn-glass inline-flex items-center gap-2 font-semibold text-xs sm:text-sm text-slate-700 dark:text-slate-200 shrink-0"
         >
           {copied ? (
             <>
@@ -109,16 +124,15 @@ export default function SettlementTab({
           ) : (
             <>
               <Copy className="w-4 h-4 text-brand-500" />
-              <span>Abrechnung kopieren (WhatsApp)</span>
+              <span>Abrechnung kopieren</span>
             </>
           )}
         </button>
       </div>
 
       {/* Suggested Settlements Section */}
-      <div className="bg-white dark:bg-[#0d1117] border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm flex flex-col gap-4">
-        <h3 className="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider flex items-center gap-2">
-          <Coins className="w-4 h-4 text-brand-500" />
+      <div className="bg-white dark:bg-[#0d141d]/75 backdrop-blur-xl border border-slate-200 dark:border-white/10 rounded-2xl sm:rounded-3xl p-6 shadow-sm flex flex-col gap-4">
+        <h3 className="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
           Wer schuldet wem wie viel?
         </h3>
 
@@ -137,7 +151,7 @@ export default function SettlementTab({
             {settlements.map((s, idx) => (
               <div
                 key={idx}
-                className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between p-4 rounded-xl bg-slate-50/80 dark:bg-slate-900/40 border border-slate-100 dark:border-slate-800/60 shadow-xs gap-3"
+                className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between p-4 rounded-2xl bg-slate-50/80 dark:bg-[#070c12]/60 border border-slate-200/80 dark:border-white/10 shadow-xs gap-3"
               >
                 <div className="flex items-center justify-between flex-1 min-w-0">
                   {/* Debtor (From) */}
@@ -148,14 +162,14 @@ export default function SettlementTab({
                     >
                       {s.from.name.charAt(0).toUpperCase()}
                     </div>
-                    <span className="font-bold text-sm text-slate-700 dark:text-slate-200 truncate">
+                    <span className="font-bold text-sm text-slate-800 dark:text-slate-100 truncate">
                       {s.from.name}
                     </span>
                   </div>
 
                   {/* Amount Arrow */}
                   <div className="flex flex-col items-center px-3 shrink-0">
-                    <span className="text-xs font-bold text-slate-700 dark:text-slate-200">
+                    <span className="text-xs font-bold font-mono text-slate-800 dark:text-slate-100">
                       {formatCurrency(s.amount, currency)}
                     </span>
                     <div className="flex items-center text-slate-400">
@@ -165,7 +179,7 @@ export default function SettlementTab({
 
                   {/* Creditor (To) */}
                   <div className="flex items-center gap-2.5 min-w-0 justify-end">
-                    <span className="font-bold text-sm text-slate-700 dark:text-slate-200 truncate text-right">
+                    <span className="font-bold text-sm text-slate-800 dark:text-slate-100 truncate text-right">
                       {s.to.name}
                     </span>
                     <div
@@ -180,7 +194,7 @@ export default function SettlementTab({
                 {onSettleDebt && (
                   <button
                     onClick={() => onSettleDebt(s)}
-                    className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-cyan-700 dark:text-cyan-300 bg-cyan-50 dark:bg-cyan-950/50 hover:bg-cyan-100 dark:hover:bg-cyan-900/60 border border-cyan-200 dark:border-cyan-800/80 transition-all cursor-pointer shadow-xs shrink-0"
+                    className="btn-glass inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold text-cyan-600 dark:text-cyan-400 shrink-0"
                     title="Diese Ausgleichszahlung direkt als Beleg erfassen"
                   >
                     <ArrowRightLeft className="w-3.5 h-3.5" />
@@ -194,7 +208,7 @@ export default function SettlementTab({
       </div>
 
       {/* Individual Balances Cards */}
-      <div className="bg-white dark:bg-[#0d1117] border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm flex flex-col gap-4">
+      <div className="bg-white dark:bg-[#0d141d]/75 backdrop-blur-xl border border-slate-200 dark:border-white/10 rounded-2xl sm:rounded-3xl p-6 shadow-sm flex flex-col gap-4">
         <h3 className="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
           Individuelle Saldenübersicht ({balances.length} Personen)
         </h3>
@@ -207,30 +221,30 @@ export default function SettlementTab({
             return (
               <div
                 key={b.participant.id}
-                className="p-4 rounded-xl border border-slate-200/80 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/30 flex flex-col justify-between gap-3"
+                className="p-4 rounded-2xl border border-slate-200/80 dark:border-white/10 bg-slate-50/80 dark:bg-[#070c12]/60 flex flex-col justify-between gap-3"
               >
                 {/* Person Header */}
                 <div className="flex items-center justify-between gap-2">
                   <div className="flex items-center gap-2.5 min-w-0">
                     <div
-                      className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold text-white shadow-xs shrink-0"
+                      className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-white shadow-xs shrink-0"
                       style={{ backgroundColor: b.participant.color || "#3b82f6" }}
                     >
                       {b.participant.name.charAt(0).toUpperCase()}
                     </div>
-                    <span className="font-bold text-sm text-slate-700 dark:text-slate-200 truncate">
+                    <span className="font-bold text-sm text-slate-800 dark:text-slate-100 truncate">
                       {b.participant.name}
                     </span>
                   </div>
 
                   {/* Net Balance Badge */}
                   <span
-                    className={`px-2.5 py-1 rounded-full text-xs font-bold shrink-0 ${
+                    className={`px-2.5 py-1 rounded-full text-xs font-bold font-mono shrink-0 ${
                       isCreditor
                         ? "bg-emerald-100 dark:bg-emerald-500/15 text-emerald-700 dark:text-emerald-300"
                         : isDebtor
                         ? "bg-rose-100 dark:bg-rose-500/15 text-rose-700 dark:text-rose-300"
-                        : "bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400"
+                        : "bg-slate-100 dark:bg-white/10 text-slate-600 dark:text-slate-300"
                     }`}
                   >
                     {isCreditor ? "+" : ""}
@@ -239,17 +253,17 @@ export default function SettlementTab({
                 </div>
 
                 {/* Sub details: Paid vs Share */}
-                <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 pt-2 border-t border-slate-100 dark:border-slate-800/80">
+                <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 pt-2 border-t border-slate-200/60 dark:border-white/5">
                   <div className="flex flex-col">
                     <span className="text-[10px] uppercase font-semibold text-slate-400">Ausgelegt</span>
-                    <span className="font-bold text-slate-700 dark:text-slate-300">
+                    <span className="font-bold font-mono text-slate-800 dark:text-slate-200">
                       {formatCurrency(b.totalPaid, currency)}
                     </span>
                   </div>
 
                   <div className="flex flex-col text-right">
                     <span className="text-[10px] uppercase font-semibold text-slate-400">Eigenanteil</span>
-                    <span className="font-bold text-slate-700 dark:text-slate-300">
+                    <span className="font-bold font-mono text-slate-800 dark:text-slate-200">
                       {formatCurrency(b.totalShare, currency)}
                     </span>
                   </div>

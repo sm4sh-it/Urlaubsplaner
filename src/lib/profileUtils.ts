@@ -106,3 +106,32 @@ export function getProfileStatsForYear(
   cache.set(cacheKey, result)
   return result
 }
+
+export const PROFILE_PRESET_COLORS = [
+  { name: "Sky Blue", hex: "#0284c7" },
+  { name: "Indigo", hex: "#6366f1" },
+  { name: "Violett", hex: "#8b5cf6" },
+  { name: "Fuchsia", hex: "#d946ef" },
+  { name: "Beere", hex: "#e11d48" },
+  { name: "Koralle", hex: "#f43f5e" },
+  { name: "Bernstein", hex: "#d97706" },
+  { name: "Smaragd", hex: "#059669" },
+  { name: "Petrol", hex: "#0d9488" },
+  { name: "Cyan", hex: "#0891b2" },
+  { name: "Royal Blau", hex: "#2563eb" },
+  { name: "Schiefer", hex: "#475569" },
+] as const
+
+/**
+ * Erzeugt kompakte 1-2 Buchstaben-Initialen aus einem Namen
+ * z.B. "Sascha" -> "SA", "Laura Müller" -> "LM"
+ */
+export function getInitials(name?: string | null): string {
+  if (!name) return "?"
+  const parts = name.trim().split(/\s+/)
+  if (parts.length >= 2) {
+    return (parts[0][0] + parts[1][0]).toUpperCase()
+  }
+  return name.slice(0, 2).toUpperCase()
+}
+

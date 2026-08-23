@@ -1,5 +1,28 @@
 # Changelog
 
+## [1.8.0] - 2026-08-23
+### Added & Improved
+- **Midnight Glass Design System (Globales Redesign):**
+  - **Karten- & Container-Ästhetik:** Umstellung aller Views (Dashboard, Kalender-Sidebar, Budget, Statistiken, Archiv, Einstellungen, Hilfe) auf edles Midnight Glass Design (`bg-white dark:bg-[#0d141d]/75 backdrop-blur-xl border border-slate-200 dark:border-white/10 rounded-2xl sm:rounded-3xl shadow-sm`).
+  - **Standardisierte Content-Breite:** Vereinheitlichung auf `max-w-[1600px] mx-auto p-3 sm:p-5 md:p-8 pt-2 sm:pt-4 md:pt-6 pb-24 md:pb-28` über alle Seiten hinweg.
+  - **Bereinigung der Überschriften (Regel 1.1):** Striktes Entfernen von Icons vor H1-, H2- und H3-Überschriften für einen cleanen, modernen Look.
+  - **2-Stufige Button-Hierarchie:**
+    - **1. Ebene (Seiten-Aktionen):** Glassmorphism-Buttons (`.btn-glass`) mit dezentem Lift- & Glow-Effekt.
+    - **2. Ebene (Modals & Pop-ups):** Schlichter, unaufdringlicher Text- & Accent-Button Standard (`TripModal`, `CreateBudgetModal`, `ExpenseModal`, `CategoryModal`, `AddParticipantModal`, `ProfileModal`, `HelpModal`).
+  - **Disketten-Icons (`Save`):** Einheitliches Speichern-Icon in allen Formularen und Modals.
+  - **Typografie & Zahlen:** Durchgehende Monospace-Hervorhebung (`font-mono font-bold`) für Beträge, Währungen, Salden, Zähler und Datumsangaben.
+- **Vollständig integriertes Toast- & Notification-System:**
+  - Anbindung aller Kernaktionen an das Midnight Glass Toast-System (Erstellen, Bearbeiten, Löschen von Reisen, Budgets, Ausgaben, Kategorien, Teilnehmern, Profilen sowie Feiertage-Sync und WhatsApp-Abrechnungsexport).
+  - Vollständige Eliminierung aller alten Browser-`alert()` Dialoge zugunsten animierter `success`, `info` und `error` Toasts.
+- **Fluide & Responsive Jahres-Aktivitätsübersicht (WQHD & 4K optimiert):**
+  - Umstellung der 53-Wochen-Heatmap auf ein dynamisches CSS-Grid (`repeat(weeksCount, minmax(0, 1fr))`), das sich stufenlos bis zur vollen 1600px Content-Breite auf WQHD- und 4K-Monitoren vergrößert.
+  - Pixelgenaue Ausrichtung der Monats- und Wochentagszeilen per Grid-Koppelung.
+  - Verstärkter Kachel-Schatten im Light Mode für optimalen Kontrast (`shadow-[0_1px_3px_rgba(15,23,42,0.22)]`) und vergrößerter Freiraum ohne Hover-Abschneiden (`hover:scale-130`).
+  - Eleganter `min-w-[960px]` Fallback mit horizontalem Scrollen auf kleinen Tablet-/Mobil-Bildschirmen.
+- **Statistik-Dashboard & Widget-Verbesserungen:**
+  - Neue thematische Icons in der Kachel *„Urlaubsverteilung über die Jahre“*: `Parasol` (Urlaub) und `Bandage` (Krankheit).
+  - Korrektur von doppelten Währungszeichen im Chart *„Kosten vs. Reisedauer“*.
+
 ## [1.6.6] - 2026-08-16
 ### Added & Improved
 - **Neues Einstellungs- & Profil-Dashboard (Kachel- & Modal-Workflow):**

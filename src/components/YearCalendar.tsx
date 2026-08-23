@@ -53,6 +53,24 @@ const HALF_TO_FULL: Record<string, string> = {
   '6': 'S'
 }
 
+const ENTRY_ALIASES: Record<string, string> = {
+  'UE': 'Ü',
+  'ue': 'Ü',
+  'U-2': '2',
+  'u-2': '2',
+  'K-2': '3',
+  'k-2': '3',
+  'Ü-2': '4',
+  'UE-2': '4',
+  'ue-2': '4',
+  'M-2': '5',
+  'm-2': '5',
+  'S-2': '6',
+  's-2': '6',
+}
+
+const normalizeEntryCode = (code: string): string => ENTRY_ALIASES[code] || code
+
 const HALF_TO_LABEL: Record<string, string> = {
   '2': 'U/2',
   '3': 'K/2',
@@ -421,8 +439,7 @@ export default function YearCalendar() {
                                 let entryType: string | null = tripEntry?.type || entryLookup[lookupKey] || null
                                 
                                 if (!entryType) return null
-                                
-                                const parts = entryType.split(',')
+                                const parts = entryType.split(',').map(normalizeEntryCode)
 
                                 // Render stacked half-days (from manual entries or merged half-day trips)
                                 if (parts.length === 2) {
@@ -445,8 +462,9 @@ export default function YearCalendar() {
                                   )
                                 }
                                 
-                                const typeClass = ENTRY_CLASSES[entryType] || "bg-slate-200 text-slate-700 dark:text-slate-200"
-                                const label = HALF_TO_LABEL[entryType] || entryType
+                                const normType = normalizeEntryCode(entryType)
+                                const typeClass = ENTRY_CLASSES[normType] || "bg-slate-200 text-slate-700 dark:text-slate-200"
+                                const label = HALF_TO_LABEL[normType] || normType
                                 
                                 return (
                                   <div 

@@ -112,10 +112,10 @@ export function TransportWidget() {
   const rankColors = ['#10b981', '#14b8a6', '#06b6d4', '#0284c7', '#38bdf8', '#818cf8', '#84cc16']
 
   return (
-    <div className="bg-white dark:bg-[#0d1117] rounded-xl border border-slate-200 dark:border-slate-800 p-6 flex flex-col shadow-xl h-full">
+    <div className="bg-white dark:bg-[#0d141d]/75 backdrop-blur-xl rounded-2xl sm:rounded-3xl border border-slate-200 dark:border-white/10 p-5 sm:p-6 shadow-sm flex flex-col h-full">
       <h3 className="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-6">Transportmittel</h3>
       {stats.list.length === 0 ? (
-        <div className="text-slate-500 text-sm my-auto text-center">Keine Daten vorhanden</div>
+        <div className="text-slate-400 dark:text-slate-500 text-sm my-auto text-center">Keine Daten vorhanden</div>
       ) : (
         <div className="flex flex-col gap-3">
           {stats.list.map(([type, count], idx) => {
@@ -124,7 +124,7 @@ export function TransportWidget() {
             const color = `color-mix(in srgb, var(--brand) ${opacity}%, transparent)`
             return (
               <div key={type} className="flex items-center gap-3">
-                <div className="flex items-center justify-center w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800/80 text-slate-300" style={{ color }}>
+                <div className="flex items-center justify-center w-8 h-8 rounded-full bg-slate-100 dark:bg-[#161f28] text-slate-300" style={{ color }}>
                   {getIcon(type)}
                 </div>
                 <div className="flex-1 text-sm font-medium" style={{ color }}>{type}</div>
@@ -219,14 +219,14 @@ export function AvgDurationWidget() {
   }, [trips, activeProfileIds, selectedYear])
 
   return (
-    <div className="bg-white dark:bg-[#0d1117] rounded-xl border border-slate-200 dark:border-slate-800 p-6 flex flex-col shadow-xl h-full justify-start">
+    <div className="bg-white dark:bg-[#0d141d]/75 backdrop-blur-xl rounded-2xl sm:rounded-3xl border border-slate-200 dark:border-white/10 p-5 sm:p-6 shadow-sm flex flex-col h-full justify-start">
       <h3 className="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Ø Urlaubsdauer</h3>
       <div className="flex items-end gap-2 mb-2">
         <span className="text-4xl font-bold text-blue-500 dark:text-blue-400">{avgData.allTime}</span>
-        <span className="text-sm text-slate-500 mb-1">Tage (Gesamt)</span>
+        <span className="text-sm text-slate-500 dark:text-slate-400 mb-1">Tage (Gesamt)</span>
       </div>
       
-      <div className="mt-3 flex flex-col gap-2 border-t border-slate-100 dark:border-slate-800 pt-4">
+      <div className="mt-3 flex flex-col gap-2 border-t border-slate-100 dark:border-white/10 pt-4">
         {avgData.history.map(h => (
           <div key={h.year} className="flex items-center justify-between text-sm">
             <span className="text-slate-500 dark:text-slate-400">{h.year}</span>
@@ -261,10 +261,10 @@ export function CountryWidget() {
   const colors = ['#3b82f6', '#0ea5e9', '#06b6d4', '#14b8a6', '#10b981']
 
   return (
-    <div className="bg-white dark:bg-[#0d1117] rounded-xl border border-slate-200 dark:border-slate-800 p-6 flex flex-col shadow-xl h-full">
+    <div className="bg-white dark:bg-[#0d141d]/75 backdrop-blur-xl rounded-2xl sm:rounded-3xl border border-slate-200 dark:border-white/10 p-5 sm:p-6 shadow-sm flex flex-col h-full">
       <h3 className="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-6">Beliebtes Reiseland</h3>
       {stats.list.length === 0 ? (
-        <div className="text-slate-500 text-sm my-auto text-center">Keine Länder eingetragen</div>
+        <div className="text-slate-400 dark:text-slate-500 text-sm my-auto text-center">Keine Länder eingetragen</div>
       ) : (
         <div className="flex flex-col gap-3">
           {stats.list.map(([country, count], idx) => {
@@ -278,7 +278,7 @@ export function CountryWidget() {
                 </div>
                 <div className="flex-1 flex flex-col">
                   <div className={cn("text-slate-700 dark:text-slate-200", isTop ? "font-bold text-base" : "font-medium text-sm")}>{country}</div>
-                  {isTop && <div className="text-xs text-slate-500">Meistbesucht</div>}
+                  {isTop && <div className="text-xs text-slate-400 dark:text-slate-500">Meistbesucht</div>}
                 </div>
                 <div className={cn("font-bold", isTop ? "text-lg" : "text-sm")} style={{ color }}>{percentage}%</div>
               </div>
@@ -326,28 +326,28 @@ export function BudgetWidget() {
   }, [trips, activeProfileIds, selectedYear])
 
   return (
-    <div className="bg-white dark:bg-[#0d1117] rounded-xl border border-slate-200 dark:border-slate-800 p-6 flex flex-col shadow-xl h-full justify-start">
+    <div className="bg-white dark:bg-[#0d141d]/75 backdrop-blur-xl rounded-2xl sm:rounded-3xl border border-slate-200 dark:border-white/10 p-5 sm:p-6 shadow-sm flex flex-col h-full justify-start">
       <h3 className="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">
         Budget vs. Realität
       </h3>
       {budgetData.validTrips === 0 ? (
-         <div className="text-slate-500 text-sm mt-2">Trage bei deinen Reisen geplantes Budget und tatsächliche Kosten ein, um hier dein Finanz-Karma zu sehen.</div>
+         <div className="text-slate-400 dark:text-slate-500 text-sm mt-2">Trage bei deinen Reisen geplantes Budget und tatsächliche Kosten ein, um hier dein Finanz-Karma zu sehen.</div>
       ) : (
         <>
           <div className="flex items-end gap-2 mb-2">
             <span className={`text-4xl font-bold ${budgetData.avgDev > 0 ? 'text-[#f85149]' : 'text-[#39d353]'}`}>
               {budgetData.avgDev > 0 ? '+' : ''}{budgetData.avgDev.toFixed(1)}%
             </span>
-            <span className="text-sm text-slate-500 mb-1 leading-tight">
+            <span className="text-sm text-slate-500 dark:text-slate-400 mb-1 leading-tight">
               Abweichung <br/>im Schnitt
             </span>
           </div>
 
-          <div className="mt-3 flex flex-col gap-2 border-t border-slate-100 dark:border-slate-800 pt-4">
+          <div className="mt-3 flex flex-col gap-2 border-t border-slate-100 dark:border-white/10 pt-4">
             {budgetData.history.map(h => (
               <div key={h.year} className="flex items-center justify-between text-sm">
                 <span className="text-slate-500 dark:text-slate-400">{h.year}</span>
-                <span className={cn("font-medium", h.valid > 0 ? (h.dev > 0 ? 'text-[#f85149]' : 'text-[#39d353]') : 'text-slate-400')}>
+                <span className={cn("font-medium", h.valid > 0 ? (h.dev > 0 ? 'text-[#f85149]' : 'text-[#39d353]') : 'text-slate-400 dark:text-slate-500')}>
                   {h.valid > 0 ? `${h.dev > 0 ? '+' : ''}${h.dev.toFixed(1)}%` : '-'}
                 </span>
               </div>
@@ -445,14 +445,14 @@ export function BridgeDaysWidget() {
   }, [entries, trips, activeProfileIds, profiles, holidays, selectedYear])
 
   return (
-    <div className="bg-white dark:bg-[#0d1117] rounded-xl border border-slate-200 dark:border-slate-800 p-6 flex flex-col shadow-xl h-full justify-start">
+    <div className="bg-white dark:bg-[#0d141d]/75 backdrop-blur-xl rounded-2xl sm:rounded-3xl border border-slate-200 dark:border-white/10 p-5 sm:p-6 shadow-sm flex flex-col h-full justify-start">
       <h3 className="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Genutzte Brückentage</h3>
       <div className="flex items-end gap-2 mb-2">
         <span className="text-4xl font-bold text-brand-500">{bridgeData.allTime}</span>
-        <span className="text-sm text-slate-500 mb-1">Tage (Gesamt)</span>
+        <span className="text-sm text-slate-500 dark:text-slate-400 mb-1">Tage (Gesamt)</span>
       </div>
 
-      <div className="mt-3 flex flex-col gap-2 border-t border-slate-100 dark:border-slate-800 pt-4">
+      <div className="mt-3 flex flex-col gap-2 border-t border-slate-100 dark:border-white/10 pt-4">
         {bridgeData.history.map(h => (
           <div key={h.year} className="flex items-center justify-between text-sm">
             <span className="text-slate-500 dark:text-slate-400">{h.year}</span>
@@ -616,7 +616,7 @@ export function WorkRatioWidget() {
   if (!stats) return null
 
   return (
-    <div className="bg-white dark:bg-[#0d1117] rounded-xl border border-slate-200 dark:border-slate-800 p-6 flex flex-col shadow-xl h-full">
+    <div className="bg-white dark:bg-[#0d141d]/75 backdrop-blur-xl rounded-2xl sm:rounded-3xl border border-slate-200 dark:border-white/10 p-5 sm:p-6 shadow-sm flex flex-col h-full">
       <div className="mb-4">
         <h3 className="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
           Work - No Work {selectedYear}
@@ -625,10 +625,10 @@ export function WorkRatioWidget() {
       </div>
       
       <div className="flex flex-col gap-3 flex-1">
-        <div className="flex justify-between items-center pb-2 border-b border-slate-100 dark:border-slate-800">
+        <div className="flex justify-between items-center pb-2 border-b border-slate-100 dark:border-white/10">
           <span className="text-slate-500 dark:text-slate-400 text-sm">Mögliche Arbeitstage</span>
           <div className="flex items-center gap-2">
-            <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">
+            <span className="text-xs px-2 py-0.5 rounded-full font-medium bg-slate-100 dark:bg-[#161f28] text-slate-600 dark:text-slate-400">
               {stats.ratio.toFixed(1)}% Abwesenheit
             </span>
             <span className="font-bold text-slate-700 dark:text-slate-300">{stats.totalWorkDays}</span>
@@ -656,12 +656,12 @@ export function WorkRatioWidget() {
           </div>
         )}
         
-        <div className="mt-auto pt-4 border-t border-slate-100 dark:border-slate-800">
+        <div className="mt-auto pt-4 border-t border-slate-100 dark:border-white/10">
           <div className="flex justify-between items-center mb-1">
             <span className="text-slate-700 dark:text-slate-300 font-medium text-sm">Tatsächliche Arbeitstage</span>
             <span className="font-bold text-lg text-slate-600 dark:text-slate-400">{stats.netWorkDays}</span>
           </div>
-          <div className="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-2 mt-2 flex overflow-hidden">
+          <div className="w-full bg-slate-100 dark:bg-[#161f28] rounded-full h-2 mt-2 flex overflow-hidden">
             {stats.totalWorkDays > 0 && (
               <>
                 <div className="h-full bg-slate-500 dark:bg-slate-400" style={{ width: `${(stats.netWorkDays / stats.totalWorkDays) * 100}%` }}></div>
@@ -710,7 +710,7 @@ export function VacationHabitsWidget() {
   }, [trips, activeProfileIds, selectedYear])
 
   return (
-    <div className="bg-white dark:bg-[#0d1117] rounded-xl border border-slate-200 dark:border-slate-800 p-6 flex flex-col shadow-xl justify-start h-full">
+    <div className="bg-white dark:bg-[#0d141d]/75 backdrop-blur-xl rounded-2xl sm:rounded-3xl border border-slate-200 dark:border-white/10 p-5 sm:p-6 shadow-sm flex flex-col justify-start h-full">
       <div className="mb-4">
         <h3 className="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
           Urlaubsgewohnheiten
@@ -724,7 +724,7 @@ export function VacationHabitsWidget() {
             <span className="text-slate-600 dark:text-slate-300">Kurztrips (1-3 Tage)</span>
             <span className="font-semibold text-slate-700 dark:text-slate-200">{stats.short}</span>
           </div>
-          <div className="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-2 overflow-hidden">
+          <div className="w-full bg-slate-100 dark:bg-[#161f28] rounded-full h-2 overflow-hidden">
             <div className="bg-[#10b981] dark:bg-[#059669] h-full rounded-full transition-all duration-500" style={{ width: stats.total ? `${(stats.short / stats.total) * 100}%` : '0%' }}></div>
           </div>
         </div>
@@ -734,7 +734,7 @@ export function VacationHabitsWidget() {
             <span className="text-slate-600 dark:text-slate-300">Normal (4-10 Tage)</span>
             <span className="font-semibold text-slate-700 dark:text-slate-200">{stats.medium}</span>
           </div>
-          <div className="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-2 overflow-hidden">
+          <div className="w-full bg-slate-100 dark:bg-[#161f28] rounded-full h-2 overflow-hidden">
             <div className="bg-[#3b82f6] dark:bg-[#2563eb] h-full rounded-full transition-all duration-500" style={{ width: stats.total ? `${(stats.medium / stats.total) * 100}%` : '0%' }}></div>
           </div>
         </div>
@@ -744,7 +744,7 @@ export function VacationHabitsWidget() {
             <span className="text-slate-600 dark:text-slate-300">Langurlaub (11-20 Tage)</span>
             <span className="font-semibold text-slate-700 dark:text-slate-200">{stats.long}</span>
           </div>
-          <div className="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-2 overflow-hidden">
+          <div className="w-full bg-slate-100 dark:bg-[#161f28] rounded-full h-2 overflow-hidden">
             <div className="bg-[#8b5cf6] dark:bg-[#7c3aed] h-full rounded-full transition-all duration-500" style={{ width: stats.total ? `${(stats.long / stats.total) * 100}%` : '0%' }}></div>
           </div>
         </div>
@@ -755,7 +755,7 @@ export function VacationHabitsWidget() {
               <span className="text-slate-700 dark:text-slate-300 font-medium">Was ist arbeiten? (&gt;20 Tage)</span>
               <span className="font-semibold text-amber-500 dark:text-amber-400">{stats.extreme}</span>
             </div>
-            <div className="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-2 overflow-hidden">
+            <div className="w-full bg-slate-100 dark:bg-[#161f28] rounded-full h-2 overflow-hidden">
               <div className="bg-[#f59e0b] dark:bg-[#d97706] h-full rounded-full transition-all duration-500" style={{ width: stats.total ? `${(stats.extreme / stats.total) * 100}%` : '0%' }}></div>
             </div>
           </div>
@@ -782,7 +782,7 @@ export function HolidayEfficiencyWidget() {
 
   if (!data || data.blocks.length === 0) {
     return (
-      <div className="bg-white dark:bg-[#0d1117] rounded-xl border border-slate-200 dark:border-slate-800 p-6 flex flex-col shadow-xl h-full justify-between">
+      <div className="bg-white dark:bg-[#0d141d]/75 backdrop-blur-xl rounded-2xl sm:rounded-3xl border border-slate-200 dark:border-white/10 p-5 sm:p-6 shadow-sm flex flex-col h-full justify-between">
         <h3 className="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Feiertags-Effizienz</h3>
         <div className="flex flex-col items-center justify-center flex-1 text-slate-400 dark:text-slate-500 my-auto">
           <span className="text-xs">Keine Feiertags-Blöcke genutzt</span>
@@ -792,7 +792,7 @@ export function HolidayEfficiencyWidget() {
   }
 
   return (
-    <div className="bg-white dark:bg-[#0d1117] rounded-xl border border-slate-200 dark:border-slate-800 p-6 flex flex-col shadow-xl h-full justify-between">
+    <div className="bg-white dark:bg-[#0d141d]/75 backdrop-blur-xl rounded-2xl sm:rounded-3xl border border-slate-200 dark:border-white/10 p-5 sm:p-6 shadow-sm flex flex-col h-full justify-between">
       <div className="flex items-start justify-between mb-3">
         <div>
           <h3 className="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">Feiertags-Effizienz</h3>
@@ -810,20 +810,20 @@ export function HolidayEfficiencyWidget() {
 
       <div className="mt-2 space-y-1.5 flex-1 overflow-y-auto custom-scrollbar pr-1">
         {data.blocks.map((block, i) => (
-          <div key={i} className="flex items-center justify-between p-2 rounded-lg bg-slate-50 dark:bg-[#161b22] border border-slate-100 dark:border-slate-800 gap-2">
+          <div key={i} className="flex items-center justify-between p-2.5 rounded-xl bg-slate-50/80 dark:bg-[#161f28]/65 border border-slate-200/80 dark:border-white/10 gap-2">
             <div className="flex items-center gap-2 min-w-0 flex-1">
               <span className="text-xs font-semibold text-slate-700 dark:text-slate-200 truncate" title={block.holidaysIncluded.join(', ')}>
                 {block.holidaysIncluded.join(', ')}
               </span>
-              <span className="text-[10px] text-slate-400 dark:text-slate-500 shrink-0">
+              <span className="text-[10px] text-slate-400 dark:text-slate-500 shrink-0 font-mono">
                 ({new Date(block.startDate).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' })} - {new Date(block.endDate).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit' })})
               </span>
             </div>
             <div className="flex items-center gap-2 shrink-0">
-              <span className="text-[10px] font-medium text-slate-500 dark:text-slate-400">
+              <span className="text-[10px] font-medium text-slate-500 dark:text-slate-400 font-mono">
                 {block.usedVacationDays}U / {block.totalFreeDays}F
               </span>
-              <span className="px-2 py-0.5 rounded bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 text-xs font-bold whitespace-nowrap min-w-[44px] text-center">
+              <span className="px-2 py-0.5 rounded-lg bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 text-xs font-bold whitespace-nowrap min-w-[44px] text-center font-mono">
                 {block.multiplier.toFixed(1)}x
               </span>
             </div>
@@ -890,10 +890,10 @@ export function PeakTravelMonthWidget() {
   const colors = ['#f59e0b', '#3b82f6', '#10b981', '#8b5cf6']
 
   return (
-    <div className="bg-white dark:bg-[#0d1117] rounded-xl border border-slate-200 dark:border-slate-800 p-6 flex flex-col shadow-xl h-full justify-start">
+    <div className="bg-white dark:bg-[#0d141d]/75 backdrop-blur-xl rounded-2xl sm:rounded-3xl border border-slate-200 dark:border-white/10 p-5 sm:p-6 shadow-sm flex flex-col h-full justify-start">
       <h3 className="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-4">Top Reisemonat</h3>
       {stats.list.length === 0 ? (
-        <div className="text-slate-500 text-sm my-auto text-center">Keine Urlaubstage eingetragen</div>
+        <div className="text-slate-400 dark:text-slate-500 text-sm my-auto text-center">Keine Urlaubstage eingetragen</div>
       ) : (
         <div className="flex flex-col gap-3 mt-1">
           {stats.list.slice(0, 3).map((item, idx) => {
@@ -905,10 +905,10 @@ export function PeakTravelMonthWidget() {
                   <CalendarDays className={isTop ? "w-5 h-5" : "w-4 h-4"} />
                 </div>
                 <div className="flex-1 flex flex-col min-w-0">
-                  <div className={cn("text-slate-700 dark:text-slate-200 truncate", isTop ? "font-bold text-base" : "font-medium text-sm")}>{item.month}</div>
+                  <div className={cn("text-slate-700 dark:text-slate-200", isTop ? "font-bold text-base" : "font-medium text-sm")}>{item.month}</div>
                   {isTop && <div className="text-xs text-amber-500 dark:text-amber-400 font-medium">Beliebtester Monat (Gesamt)</div>}
                 </div>
-                <div className={cn("font-bold shrink-0 ml-1", isTop ? "text-lg" : "text-sm")} style={{ color }}>
+                <div className={cn("font-bold shrink-0 ml-1 font-mono", isTop ? "text-lg" : "text-sm")} style={{ color }}>
                   {item.count} {item.count === 1 ? 'Tag' : 'Tage'}
                 </div>
               </div>

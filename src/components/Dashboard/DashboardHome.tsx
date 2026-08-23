@@ -1,14 +1,17 @@
 "use client"
 
 import { useState, useMemo } from "react"
+import Link from "next/link"
 import { useStore } from "@/store/useStore"
 import { Trip } from "@/types"
 import TripCard from "./TripCard"
 import TripModal from "./TripModal"
 import { getProfileStatsForYear } from "@/lib/profileUtils"
 import { calculateTripVacationCost, isVacationCostingDay, tripOverlapsYear } from "@/lib/tripUtils"
-import { Plus, ChevronDown, ChevronUp } from "lucide-react"
+import { Plus, ArrowRight } from "lucide-react"
 import YearlyContributionGraph from "./YearlyContributionGraph"
+import EmptyState from "@/components/ui/EmptyState"
+import AvatarGroup from "@/components/ui/AvatarGroup"
 
 export default function DashboardHome() {
   const trips = useStore(state => state.trips)
@@ -21,7 +24,6 @@ export default function DashboardHome() {
 
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedTrip, setSelectedTrip] = useState<Trip | null>(null)
-  const [isArchiveOpen, setIsArchiveOpen] = useState(false)
 
   const handleOpenNew = () => {
     setSelectedTrip(null)
@@ -33,17 +35,29 @@ export default function DashboardHome() {
     setIsModalOpen(true)
   }
 
-  const { upcomingTrips, archivedTrips } = useMemo(() => {
+  // Active trips for selected profiles
+  const { upcomingTrips, pastTripsSelectedYear, totalArchivedCount } = useMemo(() => {
     const active = trips.filter(trip => 
       trip.profiles.some(p => activeProfileIds.includes(p.id))
     )
     const todayStr = new Date().toISOString().split('T')[0]
+    
     const upcoming = active.filter(t => t.endDate >= todayStr)
-    const archived = active.filter(t => t.endDate < todayStr)
+    const allArchived = active.filter(t => t.endDate < todayStr)
+    
+    // For Dashboard: only show past trips belonging to selectedYear
+    const pastThisYear = allArchived
+      .filter(t => tripOverlapsYear(t, selectedYear))
+      .sort((a, b) => b.endDate.localeCompare(a.endDate))
+
     upcoming.sort((a, b) => a.startDate.localeCompare(b.startDate))
-    archived.sort((a, b) => b.endDate.localeCompare(a.endDate))
-    return { upcomingTrips: upcoming, archivedTrips: archived }
-  }, [trips, activeProfileIds])
+
+    return { 
+      upcomingTrips: upcoming, 
+      pastTripsSelectedYear: pastThisYear,
+      totalArchivedCount: allArchived.length
+    }
+  }, [trips, activeProfileIds, selectedYear])
 
   const { totalRemainingLeave, totalAnnualLeave } = useMemo(() => {
     let remaining = 0
@@ -80,38 +94,35 @@ export default function DashboardHome() {
     return { totalRemainingLeave: remaining, totalAnnualLeave: annual }
   }, [activeProfileIds, profiles, selectedYear, overrides, entries, trips, holidays])
 
-  // Count sickness days in selected year (removed from display as requested)
-  // const sicknessDays = ...
-
   return (
-    <div className="max-w-[1600px] w-full mx-auto p-2 sm:p-4 md:p-6 lg:p-8 pt-1 sm:pt-2 md:pt-4 flex flex-col gap-6 md:gap-8">
+    <div className="max-w-[1600px] w-full mx-auto p-3 sm:p-5 md:p-8 pt-2 sm:pt-4 md:pt-6 pb-24 md:pb-28 flex flex-col gap-6 md:gap-8">
       
       {/* Stats Row / Header */}
-      <div className="flex flex-wrap items-center gap-3 md:gap-4 text-xs sm:text-sm md:text-base text-slate-600 dark:text-slate-300 border-b border-slate-200 dark:border-[var(--border-subtle)] pb-2 sm:pb-4 font-medium">
-        <span className="font-bold text-slate-700 dark:text-slate-300 text-lg sm:text-xl tracking-tight">
+      <div className="flex flex-wrap items-center gap-3 md:gap-4 text-xs sm:text-sm md:text-base text-slate-600 dark:text-slate-300 border-b border-slate-200 dark:border-white/10 pb-2 sm:pb-4 font-medium">
+        <span className="font-bold text-slate-700 dark:text-slate-200 text-lg sm:text-xl tracking-tight">
           {selectedYear}
         </span>
         <span className="w-px h-5 bg-slate-300 dark:bg-slate-700 hidden sm:block" />
         <span className="flex items-center gap-1.5">
-          Gesamturlaub <strong className="font-bold text-slate-700 dark:text-slate-300">{totalRemainingLeave} / {totalAnnualLeave}</strong>
+          Gesamturlaub <strong className="font-bold text-slate-700 dark:text-slate-200">{totalRemainingLeave} / {totalAnnualLeave}</strong>
         </span>
         <span className="w-px h-5 bg-slate-300 dark:bg-slate-700 hidden sm:block" />
         <span className="flex items-center gap-1.5">
-          Geplante Reisen <strong className="font-bold text-slate-700 dark:text-slate-300">{upcomingTrips.length}</strong>
+          Geplante Reisen <strong className="font-bold text-slate-700 dark:text-slate-200">{upcomingTrips.length}</strong>
         </span>
       </div>
 
       <YearlyContributionGraph />
 
-      {/* Active Trips */}
-      <div className="flex flex-col gap-6">
+      {/* Active Trips Section */}
+      <div className="flex flex-col gap-5">
         <div className="flex justify-between items-center border-b border-slate-200 dark:border-white/10 pb-4">
-          <h2 className="text-lg sm:text-xl font-bold text-slate-700 dark:text-slate-300">
+          <h2 className="text-lg sm:text-xl font-bold text-slate-700 dark:text-slate-200">
             Anstehende Reisen & Urlaube
           </h2>
           <button 
             onClick={handleOpenNew}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl font-semibold text-sm text-slate-700 dark:text-slate-200 bg-white dark:bg-[#161f28]/70 hover:bg-[#fafafa] dark:hover:bg-[#1e2a36]/90 border border-slate-300 dark:border-slate-700/80 hover:border-brand-500/50 dark:hover:border-brand-500/50 hover:-translate-y-0.5 hover:shadow-md hover:shadow-brand-500/10 active:translate-y-0 active:scale-[0.98] transition-all duration-300 backdrop-blur-md cursor-pointer"
+            className="btn-glass inline-flex items-center gap-2 font-semibold text-sm text-slate-700 dark:text-slate-200"
           >
             <Plus className="w-4 h-4 text-brand-500 shrink-0" />
             <span>Neue Reise</span>
@@ -119,9 +130,13 @@ export default function DashboardHome() {
         </div>
 
         {upcomingTrips.length === 0 ? (
-          <div className="text-center py-16 bg-white/50 dark:bg-white/5 border border-dashed border-slate-300 dark:border-slate-700 rounded-2xl text-slate-400 dark:text-slate-500">
-            Aktuell sind keine Reisen geplant.
-          </div>
+          <EmptyState
+            variant="card"
+            title="Noch keine Reisen geplant"
+            description="Erstelle deine erste Urlaubsreise oder Kurztrips, um Budgets und freie Tage automatisch zu berechnen."
+            actionLabel="Neue Reise anlegen"
+            onAction={handleOpenNew}
+          />
         ) : (
           <div className="vacation-grid">
             {upcomingTrips.map(trip => (
@@ -131,53 +146,96 @@ export default function DashboardHome() {
         )}
       </div>
 
-      {/* Archive Section */}
-      {archivedTrips.length > 0 && (
-        <div className="mt-8 border-t border-slate-200 dark:border-white/10 pt-8">
-          <button 
-            onClick={() => setIsArchiveOpen(!isArchiveOpen)}
-            className="flex justify-between items-center w-full text-left text-xl font-bold text-slate-700 dark:text-slate-200 hover:text-brand-500 transition-colors"
-          >
-            Archivierte & Vergangene Urlaube
-            {isArchiveOpen ? <ChevronUp className="w-6 h-6 text-slate-400" /> : <ChevronDown className="w-6 h-6 text-slate-400" />}
-          </button>
+      {/* Past Trips of Selected Year */}
+      <div className="bg-white dark:bg-[#0d141d]/75 backdrop-blur-xl border border-slate-200 dark:border-white/10 rounded-3xl p-5 sm:p-6 shadow-sm flex flex-col gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100 dark:border-white/10">
+          <div>
+            <h3 className="text-base font-bold text-slate-700 dark:text-slate-200 flex items-center gap-2">
+              <span>Vergangene Reisen</span>
+              <span className="text-xs px-2 py-0.5 rounded-md bg-slate-100 dark:bg-[#161f28] text-slate-500 dark:text-slate-400 font-mono font-bold">
+                {selectedYear}
+              </span>
+            </h3>
+            <p className="text-xs text-slate-400 dark:text-slate-500">
+              {pastTripsSelectedYear.length === 1
+                ? "1 abgeschlossene Reise in diesem Jahr"
+                : `${pastTripsSelectedYear.length} abgeschlossene Reisen in diesem Jahr`}
+            </p>
+          </div>
 
-          {isArchiveOpen && (
-            <div className="mt-6 overflow-x-auto">
-              <table className="w-full text-left text-sm text-slate-600 dark:text-slate-300 border-collapse">
-                <thead>
-                  <tr className="border-b border-slate-200 dark:border-slate-800">
-                    <th className="py-3 px-4 font-medium text-slate-500">Titel</th>
-                    <th className="py-3 px-4 font-medium text-slate-500">Zeitraum</th>
-                    <th className="py-3 px-4 font-medium text-slate-500">Dauer</th>
-                    <th className="py-3 px-4 font-medium text-slate-500">Typ</th>
-                    <th className="py-3 px-4 font-medium text-slate-500">Kosten</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {archivedTrips.map(trip => {
-                    const start = new Date(trip.startDate).toLocaleDateString('de-DE')
-                    const end = new Date(trip.endDate).toLocaleDateString('de-DE')
-                    return (
-                      <tr 
-                        key={trip.id} 
-                        onClick={() => handleOpenEdit(trip)}
-                        className="border-b border-slate-100 dark:border-slate-800/50 hover:bg-slate-50 dark:hover:bg-slate-800/30 cursor-pointer transition-colors"
-                      >
-                        <td className="py-4 px-4 font-medium text-slate-700 dark:text-slate-200">{trip.title}</td>
-                        <td className="py-4 px-4">{start} - {end}</td>
-                        <td className="py-4 px-4">{trip.isHalfDay ? (trip.duration === 1 ? "0.5 Tag" : `${trip.duration * 0.5} Tage`) : `${trip.duration} Tage`}</td>
-                        <td className="py-4 px-4">{trip.type}</td>
-                        <td className="py-4 px-4">{trip.cost ? `€${trip.cost.toFixed(2)}` : '-'}</td>
-                      </tr>
-                    )
-                  })}
-                </tbody>
-              </table>
-            </div>
-          )}
+          <Link
+            href="/archive"
+            className="inline-flex items-center gap-1.5 text-xs font-bold text-brand-600 dark:text-brand-400 hover:text-brand-700 dark:hover:text-brand-300 transition-colors self-start sm:self-auto"
+          >
+            <span>Zum vollständigen Archiv ({totalArchivedCount})</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
         </div>
-      )}
+
+        {pastTripsSelectedYear.length === 0 ? (
+          <div className="py-8 text-center text-xs text-slate-400 dark:text-slate-500">
+            Bislang keine vergangenen Reisen im Jahr {selectedYear}.
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs sm:text-sm text-slate-600 dark:text-slate-300 border-collapse">
+              <thead>
+                <tr className="border-b border-slate-100 dark:border-white/10 text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
+                  <th className="py-3 px-3 font-semibold">Reise</th>
+                  <th className="py-3 px-3 font-semibold">Zeitraum</th>
+                  <th className="py-3 px-3 font-semibold">Dauer</th>
+                  <th className="py-3 px-3 font-semibold hidden md:table-cell">Ort / Land</th>
+                  <th className="py-3 px-3 font-semibold hidden sm:table-cell">Typ</th>
+                  <th className="py-3 px-3 font-semibold">Teilnehmer</th>
+                  <th className="py-3 px-3 font-semibold text-right">Kosten</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100 dark:divide-white/5">
+                {pastTripsSelectedYear.map(trip => {
+                  const start = new Date(trip.startDate).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' })
+                  const end = new Date(trip.endDate).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' })
+                  const locationText = [trip.location, trip.country].filter(Boolean).join(", ")
+                  const tripProfiles = (trip.profiles || [])
+                    .map(pRef => profiles.find(p => p.id === pRef.id))
+                    .filter(Boolean) as { id: string; name: string; color: string }[]
+
+                  return (
+                    <tr 
+                      key={trip.id} 
+                      onClick={() => handleOpenEdit(trip)}
+                      className="hover:bg-slate-50 dark:hover:bg-brand-500/[0.04] cursor-pointer transition-colors group"
+                    >
+                      <td className="py-3 px-3 font-bold text-slate-800 dark:text-slate-100 group-hover:text-brand-500 transition-colors">
+                        {trip.title}
+                      </td>
+                      <td className="py-3 px-3 text-slate-500 dark:text-slate-400 font-mono text-xs whitespace-nowrap">
+                        {start} – {end}
+                      </td>
+                      <td className="py-3 px-3 whitespace-nowrap text-xs font-semibold">
+                        {trip.isHalfDay ? (trip.duration === 1 ? "0.5 Tag" : `${trip.duration * 0.5} Tage`) : `${trip.duration} Tage`}
+                      </td>
+                      <td className="py-3 px-3 hidden md:table-cell text-slate-500 dark:text-slate-400 truncate max-w-[200px]">
+                        {locationText || "—"}
+                      </td>
+                      <td className="py-3 px-3 hidden sm:table-cell">
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-slate-100 dark:bg-[#161f28] text-slate-600 dark:text-slate-300">
+                          {trip.type}
+                        </span>
+                      </td>
+                      <td className="py-3 px-3">
+                        <AvatarGroup profiles={tripProfiles} size="xs" max={3} />
+                      </td>
+                      <td className="py-3 px-3 text-right font-mono font-bold text-slate-800 dark:text-slate-100 whitespace-nowrap">
+                        {trip.cost != null && trip.cost > 0 ? `${trip.cost.toFixed(2)} €` : "—"}
+                      </td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
 
       <TripModal 
         isOpen={isModalOpen}

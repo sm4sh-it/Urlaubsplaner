@@ -27,7 +27,7 @@ export function DonutChart({ title, segments, emptyText = "Keine Daten vorhanden
   const isEmpty = segments.length === 0 || totalPercent === 0
 
   return (
-    <div className={cn("bg-white dark:bg-[#0d1117] rounded-xl border border-slate-200 dark:border-slate-800 p-5 sm:p-6 flex flex-col shadow-xl h-full justify-between", className)}>
+    <div className={cn("bg-white dark:bg-[#0d141d]/75 backdrop-blur-xl rounded-2xl sm:rounded-3xl border border-slate-200 dark:border-white/10 p-5 sm:p-6 shadow-sm flex flex-col h-full justify-between", className)}>
       <h3 className="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-4">{title}</h3>
       {isEmpty ? (
         <div className="text-slate-500 text-sm my-auto text-center">{emptyText}</div>
@@ -173,7 +173,7 @@ export function DualDonutChart({
   }
 
   return (
-    <div className={cn("bg-white dark:bg-[#0d1117] rounded-xl border border-slate-200 dark:border-slate-800 p-5 sm:p-6 flex flex-col shadow-xl h-full min-h-[220px] justify-between", className)}>
+    <div className={cn("bg-white dark:bg-[#0d141d]/75 backdrop-blur-xl rounded-2xl sm:rounded-3xl border border-slate-200 dark:border-white/10 p-5 sm:p-6 flex flex-col shadow-sm h-full min-h-[220px] justify-between", className)}>
       <h3 className="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-4">{title}</h3>
       {isEmpty ? (
         <div className="text-slate-500 text-sm my-auto text-center">{emptyText}</div>

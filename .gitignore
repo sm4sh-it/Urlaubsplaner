@@ -57,13 +57,20 @@ prisma/*.db*
 # Docker SQLite data folder
 /data
 
-# Mockups / Old Designs / Plans
+# Mockups / Old Designs / Plans / Backups
 /new Design/
 implementation_plan.md
 *.plan.md
 task.md
 walkthrough.md
 scratch/
+/scratch/
+*backup*
+*.backup
+*.bak
+/backups/
+/backup/
+.tempmediaStorage/
 
 # AI Agent Instructions
 AGENTS.md

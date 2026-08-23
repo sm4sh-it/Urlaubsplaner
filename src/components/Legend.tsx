@@ -2,6 +2,7 @@
 
 import { useStore } from "@/store/useStore"
 import { ChevronUp, ChevronDown } from "lucide-react"
+import Kbd from "@/components/ui/Kbd"
 
 export default function Legend() {
   const activeSidebarPanel = useStore(state => state.activeSidebarPanel)
@@ -9,107 +10,113 @@ export default function Legend() {
   const isOpen = activeSidebarPanel === 'legend'
 
   return (
-    <div className="bg-white dark:bg-[var(--surface)] rounded-xl shadow-sm border border-slate-200 dark:border-[var(--border-subtle)] p-4 sm:p-6 flex flex-col gap-4 shrink-0 min-h-[56px]">
+    <div className="bg-white dark:bg-[#0d141d]/75 backdrop-blur-xl rounded-2xl sm:rounded-3xl border border-slate-200 dark:border-white/10 p-4 sm:p-5 shadow-sm flex flex-col gap-4 shrink-0 min-h-[56px]">
       <div 
-        className="flex items-center justify-between cursor-pointer group min-h-[44px] sm:min-h-[40px] py-1 shrink-0"
+        className="flex items-center justify-between cursor-pointer group min-h-[40px] py-1 shrink-0 select-none"
         onClick={() => setActiveSidebarPanel(isOpen ? 'statistics' : 'legend')}
       >
-        <h2 className="font-semibold text-base sm:text-lg text-slate-700 dark:text-slate-200">Legende</h2>
-        <button className="p-2 sm:p-1 group-hover:bg-slate-100 dark:group-hover:bg-slate-800 rounded-md transition-colors shrink-0 cursor-pointer">
-          {isOpen ? <ChevronUp className="w-5 h-5 text-slate-500" /> : <ChevronDown className="w-5 h-5 text-slate-500" />}
+        <h2 className="font-bold text-sm sm:text-base text-slate-800 dark:text-slate-100">
+          Legende
+        </h2>
+        <button className="p-1.5 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-white/10 transition-colors shrink-0 cursor-pointer">
+          {isOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
         </button>
       </div>
 
       {isOpen && (
-        <div className="flex flex-col gap-6 mt-2">
+        <div className="flex flex-col gap-5 mt-1">
           {/* Abwesenheit */}
-      <div className="flex flex-col gap-3">
-        <div className="text-[11px] uppercase tracking-[0.1em] text-[var(--color-brand)] font-bold border-b border-slate-200 dark:border-[var(--border-subtle)] pb-1.5">Abwesenheit</div>
-        <div className="flex flex-col gap-2.5">
-          <div className="flex items-center gap-3 text-[13px] text-slate-700 dark:text-slate-200">
-            <div className="w-7 h-6 rounded flex items-center justify-center text-[10px] font-bold status-u shrink-0">U</div>
-            <span>Urlaub (Voll)</span>
-            <span className="hidden md:inline-flex ml-auto font-mono text-[11px] bg-slate-100 dark:bg-white/5 px-1.5 py-0.5 rounded text-slate-500 dark:text-[var(--fg)] shrink-0">U</span>
+          <div className="flex flex-col gap-2.5">
+            <div className="text-[11px] uppercase tracking-wider text-brand-600 dark:text-brand-400 font-bold border-b border-slate-100 dark:border-white/10 pb-1.5">
+              Abwesenheit
+            </div>
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center gap-2.5 text-xs text-slate-700 dark:text-slate-200">
+                <div className="w-7 h-6 rounded-md flex items-center justify-center text-[10px] font-mono font-bold status-u shrink-0 shadow-xs">U</div>
+                <span className="font-medium">Urlaub (Voll)</span>
+                <span className="hidden md:inline-flex ml-auto shrink-0"><Kbd>U</Kbd></span>
+              </div>
+              <div className="flex items-center gap-2.5 text-xs text-slate-700 dark:text-slate-200">
+                <div className="w-7 h-6 rounded-md flex items-center justify-center text-[10px] font-mono font-bold status-u-2 shrink-0 shadow-xs">U/2</div>
+                <span className="font-medium">Urlaub (Halb)</span>
+                <span className="hidden md:inline-flex ml-auto shrink-0"><Kbd keys={["⇧", "U"]} /></span>
+              </div>
+              <div className="flex items-center gap-2.5 text-xs text-slate-700 dark:text-slate-200">
+                <div className="w-7 h-6 rounded-md flex items-center justify-center text-[10px] font-mono font-bold status-k shrink-0 shadow-xs">K</div>
+                <span className="font-medium">Krank (Voll)</span>
+                <span className="hidden md:inline-flex ml-auto shrink-0"><Kbd>K</Kbd></span>
+              </div>
+              <div className="flex items-center gap-2.5 text-xs text-slate-700 dark:text-slate-200">
+                <div className="w-7 h-6 rounded-md flex items-center justify-center text-[10px] font-mono font-bold status-k-2 shrink-0 shadow-xs">K/2</div>
+                <span className="font-medium">Krank (Halb)</span>
+                <span className="hidden md:inline-flex ml-auto shrink-0"><Kbd keys={["⇧", "K"]} /></span>
+              </div>
+              <div className="flex items-center gap-2.5 text-xs text-slate-700 dark:text-slate-200">
+                <div className="w-7 h-6 rounded-md flex items-center justify-center text-[10px] font-mono font-bold status-s shrink-0 shadow-xs">S</div>
+                <span className="font-medium">Sonderurlaub (Voll)</span>
+                <span className="hidden md:inline-flex ml-auto shrink-0"><Kbd>S</Kbd></span>
+              </div>
+              <div className="flex items-center gap-2.5 text-xs text-slate-700 dark:text-slate-200">
+                <div className="w-7 h-6 rounded-md flex items-center justify-center text-[10px] font-mono font-bold status-s-2 shrink-0 shadow-xs">S/2</div>
+                <span className="font-medium">Sonderurlaub (Halb)</span>
+                <span className="hidden md:inline-flex ml-auto shrink-0"><Kbd keys={["⇧", "S"]} /></span>
+              </div>
+              <div className="flex items-center gap-2.5 text-xs text-slate-700 dark:text-slate-200">
+                <div className="w-7 h-6 rounded-md flex items-center justify-center text-[10px] font-mono font-bold status-a shrink-0 shadow-xs">A</div>
+                <span className="font-medium">Auszeit/Sabbatical</span>
+                <span className="hidden md:inline-flex ml-auto shrink-0"><Kbd>A</Kbd></span>
+              </div>
+              <div className="flex items-center gap-2.5 text-xs text-slate-700 dark:text-slate-200">
+                <div className="w-7 h-6 rounded-md flex items-center justify-center text-[10px] font-mono font-bold status-ue shrink-0 shadow-xs">Ü</div>
+                <span className="font-medium">Überstunden (Voll)</span>
+                <span className="hidden md:inline-flex ml-auto shrink-0"><Kbd>Ü</Kbd></span>
+              </div>
+              <div className="flex items-center gap-2.5 text-xs text-slate-700 dark:text-slate-200">
+                <div className="w-7 h-6 rounded-md flex items-center justify-center text-[10px] font-mono font-bold status-ue-2 shrink-0 shadow-xs">Ü/2</div>
+                <span className="font-medium">Überstunden (Halb)</span>
+                <span className="hidden md:inline-flex ml-auto shrink-0"><Kbd keys={["⇧", "Ü"]} /></span>
+              </div>
+            </div>
           </div>
-          <div className="flex items-center gap-3 text-[13px] text-slate-700 dark:text-slate-200">
-            <div className="w-7 h-6 rounded flex items-center justify-center text-[10px] font-bold status-u-2 shrink-0">U/2</div>
-            <span>Urlaub (Halb)</span>
-            <span className="hidden md:inline-flex ml-auto font-mono text-[11px] bg-slate-100 dark:bg-white/5 px-1.5 py-0.5 rounded text-slate-500 dark:text-[var(--fg)] shrink-0">⇧ U</span>
-          </div>
-          <div className="flex items-center gap-3 text-[13px] text-slate-700 dark:text-slate-200">
-            <div className="w-7 h-6 rounded flex items-center justify-center text-[10px] font-bold status-k shrink-0">K</div>
-            <span>Krank (Voll)</span>
-            <span className="hidden md:inline-flex ml-auto font-mono text-[11px] bg-slate-100 dark:bg-white/5 px-1.5 py-0.5 rounded text-slate-500 dark:text-[var(--fg)] shrink-0">K</span>
-          </div>
-          <div className="flex items-center gap-3 text-[13px] text-slate-700 dark:text-slate-200">
-            <div className="w-7 h-6 rounded flex items-center justify-center text-[10px] font-bold status-k-2 shrink-0">K/2</div>
-            <span>Krank (Halb)</span>
-            <span className="hidden md:inline-flex ml-auto font-mono text-[11px] bg-slate-100 dark:bg-white/5 px-1.5 py-0.5 rounded text-slate-500 dark:text-[var(--fg)] shrink-0">⇧ K</span>
-          </div>
-          <div className="flex items-center gap-3 text-[13px] text-slate-700 dark:text-slate-200">
-            <div className="w-7 h-6 rounded flex items-center justify-center text-[10px] font-bold status-s shrink-0">S</div>
-            <span>Sonderurlaub (Voll)</span>
-            <span className="hidden md:inline-flex ml-auto font-mono text-[11px] bg-slate-100 dark:bg-white/5 px-1.5 py-0.5 rounded text-slate-500 dark:text-[var(--fg)] shrink-0">S</span>
-          </div>
-          <div className="flex items-center gap-3 text-[13px] text-slate-700 dark:text-slate-200">
-            <div className="w-7 h-6 rounded flex items-center justify-center text-[10px] font-bold status-s-2 shrink-0">S/2</div>
-            <span>Sonderurlaub (Halb)</span>
-            <span className="hidden md:inline-flex ml-auto font-mono text-[11px] bg-slate-100 dark:bg-white/5 px-1.5 py-0.5 rounded text-slate-500 dark:text-[var(--fg)] shrink-0">⇧ S</span>
-          </div>
-          <div className="flex items-center gap-3 text-[13px] text-slate-700 dark:text-slate-200">
-            <div className="w-7 h-6 rounded flex items-center justify-center text-[10px] font-bold status-a shrink-0">A</div>
-            <span>Auszeit/Sabbatical</span>
-            <span className="hidden md:inline-flex ml-auto font-mono text-[11px] bg-slate-100 dark:bg-white/5 px-1.5 py-0.5 rounded text-slate-500 dark:text-[var(--fg)] shrink-0">A</span>
-          </div>
-          <div className="flex items-center gap-3 text-[13px] text-slate-700 dark:text-slate-200">
-            <div className="w-7 h-6 rounded flex items-center justify-center text-[10px] font-bold status-ue shrink-0">Ü</div>
-            <span>Überstunden (Voll)</span>
-            <span className="hidden md:inline-flex ml-auto font-mono text-[11px] bg-slate-100 dark:bg-white/5 px-1.5 py-0.5 rounded text-slate-500 dark:text-[var(--fg)] shrink-0">Ü</span>
-          </div>
-          <div className="flex items-center gap-3 text-[13px] text-slate-700 dark:text-slate-200">
-            <div className="w-7 h-6 rounded flex items-center justify-center text-[10px] font-bold status-ue-2 shrink-0">Ü/2</div>
-            <span>Überstunden (Halb)</span>
-            <span className="hidden md:inline-flex ml-auto font-mono text-[11px] bg-slate-100 dark:bg-white/5 px-1.5 py-0.5 rounded text-slate-500 dark:text-[var(--fg)] shrink-0">⇧ Ü</span>
-          </div>
-        </div>
-      </div>
 
-      {/* Arbeit & Flexibilität */}
-      <div className="flex flex-col gap-3">
-        <div className="text-[11px] uppercase tracking-[0.1em] text-[var(--color-brand)] font-bold border-b border-slate-200 dark:border-[var(--border-subtle)] pb-1.5">Arbeit & Flexibilität</div>
-        <div className="flex flex-col gap-2.5">
-          <div className="flex items-center gap-3 text-[13px] text-slate-700 dark:text-slate-200">
-            <div className="w-7 h-6 rounded flex items-center justify-center text-[10px] font-bold status-m shrink-0">M</div>
-            <span>Mobiles Arbeiten</span>
-            <span className="hidden md:inline-flex ml-auto font-mono text-[11px] bg-slate-100 dark:bg-white/5 px-1.5 py-0.5 rounded text-slate-500 dark:text-[var(--fg)] shrink-0">M</span>
+          {/* Arbeit & Flexibilität */}
+          <div className="flex flex-col gap-2.5">
+            <div className="text-[11px] uppercase tracking-wider text-brand-600 dark:text-brand-400 font-bold border-b border-slate-100 dark:border-white/10 pb-1.5">
+              Arbeit &amp; Flexibilität
+            </div>
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center gap-2.5 text-xs text-slate-700 dark:text-slate-200">
+                <div className="w-7 h-6 rounded-md flex items-center justify-center text-[10px] font-mono font-bold status-m shrink-0 shadow-xs">M</div>
+                <span className="font-medium">Mobiles Arbeiten</span>
+                <span className="hidden md:inline-flex ml-auto shrink-0"><Kbd>M</Kbd></span>
+              </div>
+              <div className="flex items-center gap-2.5 text-xs text-slate-700 dark:text-slate-200">
+                <div className="w-7 h-6 rounded-md flex items-center justify-center text-[10px] font-mono font-bold status-m-2 shrink-0 shadow-xs">M/2</div>
+                <span className="font-medium">Mob. Arb. (Halb)</span>
+                <span className="hidden md:inline-flex ml-auto shrink-0"><Kbd keys={["⇧", "M"]} /></span>
+              </div>
+              <div className="flex items-center gap-2.5 text-xs text-slate-700 dark:text-slate-200">
+                <div className="w-7 h-6 rounded-md flex items-center justify-center text-[10px] font-mono font-bold status-b shrink-0 shadow-xs">B</div>
+                <span className="font-medium">Bildungsurlaub</span>
+                <span className="hidden md:inline-flex ml-auto shrink-0"><Kbd>B</Kbd></span>
+              </div>
+              <div className="flex items-center gap-2.5 text-xs text-slate-700 dark:text-slate-200">
+                <div className="w-7 h-6 rounded-md flex items-center justify-center text-[10px] font-mono font-bold status-d shrink-0 shadow-xs">D</div>
+                <span className="font-medium">Dienstreise</span>
+                <span className="hidden md:inline-flex ml-auto shrink-0"><Kbd>D</Kbd></span>
+              </div>
+              <div className="flex items-center gap-2.5 text-xs text-slate-700 dark:text-slate-200">
+                <div className="w-7 h-6 rounded-md flex items-center justify-center text-[10px] font-mono font-bold status-x shrink-0 shadow-xs">X</div>
+                <span className="font-medium">Blockiert</span>
+                <span className="hidden md:inline-flex ml-auto shrink-0"><Kbd>X</Kbd></span>
+              </div>
+            </div>
           </div>
-          <div className="flex items-center gap-3 text-[13px] text-slate-700 dark:text-slate-200">
-            <div className="w-7 h-6 rounded flex items-center justify-center text-[10px] font-bold status-m-2 shrink-0">M/2</div>
-            <span>Mob. Arb. (Halb)</span>
-            <span className="hidden md:inline-flex ml-auto font-mono text-[11px] bg-slate-100 dark:bg-white/5 px-1.5 py-0.5 rounded text-slate-500 dark:text-[var(--fg)] shrink-0">⇧ M</span>
-          </div>
-          <div className="flex items-center gap-3 text-[13px] text-slate-700 dark:text-slate-200">
-            <div className="w-7 h-6 rounded flex items-center justify-center text-[10px] font-bold status-b shrink-0">B</div>
-            <span>Bildungsurlaub</span>
-            <span className="hidden md:inline-flex ml-auto font-mono text-[11px] bg-slate-100 dark:bg-white/5 px-1.5 py-0.5 rounded text-slate-500 dark:text-[var(--fg)] shrink-0">B</span>
-          </div>
-          <div className="flex items-center gap-3 text-[13px] text-slate-700 dark:text-slate-200">
-            <div className="w-7 h-6 rounded flex items-center justify-center text-[10px] font-bold status-d shrink-0">D</div>
-            <span>Dienstreise</span>
-            <span className="hidden md:inline-flex ml-auto font-mono text-[11px] bg-slate-100 dark:bg-white/5 px-1.5 py-0.5 rounded text-slate-500 dark:text-[var(--fg)] shrink-0">D</span>
-          </div>
-          <div className="flex items-center gap-3 text-[13px] text-slate-700 dark:text-slate-200">
-            <div className="w-7 h-6 rounded flex items-center justify-center text-[10px] font-bold status-x shrink-0">X</div>
-            <span>Blockiert</span>
-            <span className="hidden md:inline-flex ml-auto font-mono text-[11px] bg-slate-100 dark:bg-white/5 px-1.5 py-0.5 rounded text-slate-500 dark:text-[var(--fg)] shrink-0">X</span>
-          </div>
-        </div>
-      </div>
 
-      <div className="hidden md:block text-[12px] leading-relaxed text-slate-500 dark:text-[var(--muted)] pt-2 border-t border-slate-200 dark:border-[var(--border-subtle)]">
-        <strong>Eintragen:</strong> Taste gedrückt halten (z.B. 'U') und auf den Tag klicken. Für halbe Tage zusätzlich <code>Shift</code> halten.<br /><br />
-        <strong>Löschen:</strong> Tag einfach ohne gedrückte Taste anklicken.
-      </div>
+          <div className="hidden md:block text-[11px] leading-relaxed text-slate-500 dark:text-slate-400 p-3 rounded-xl bg-slate-50/80 dark:bg-[#070c12]/60 border border-slate-200/80 dark:border-white/10">
+            <p><strong className="text-slate-700 dark:text-slate-200">Eintragen:</strong> Taste gedrückt halten (z. B. <Kbd>U</Kbd>) und auf den Tag klicken. Für halbe Tage zusätzlich <Kbd>Shift</Kbd> halten.</p>
+            <p className="mt-2"><strong className="text-slate-700 dark:text-slate-200">Löschen:</strong> Tag einfach ohne gedrückte Taste anklicken.</p>
+          </div>
         </div>
       )}
     </div>

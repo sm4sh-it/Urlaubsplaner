@@ -1,12 +1,14 @@
 {
   "name": "urlaubsplaner",
-  "version": "1.6.6",
+  "version": "1.8.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "seed": "tsx scripts/seed_demo_data.ts",
+    "screenshots": "tsx scripts/take_screenshots.ts"
   },
   "dependencies": {
     "@libsql/client": "^0.17.3",
@@ -33,7 +35,9 @@
     "eslint": "^9",
     "eslint-config-next": "^16.2.10",
     "prisma": "^7.9.0",
+    "puppeteer-core": "^25.7.0",
     "tailwindcss": "^4",
+    "tsx": "^4.23.12",
     "typescript": "^6.0.3"
   }
 }

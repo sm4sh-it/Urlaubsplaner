@@ -6,6 +6,7 @@ import { BudgetExpense, BudgetParticipant } from "@/types"
 import { formatCurrency, calculateParticipantBalances } from "@/lib/budgetUtils"
 import { deleteBudgetParticipant } from "@/app/actions/budgetActions"
 import { useRouter } from "next/navigation"
+import { useStore } from "@/store/useStore"
 
 interface ParticipantsTabProps {
   budgetId: string
@@ -47,10 +48,19 @@ export default function ParticipantsTab({
     setDeletingId(participantId)
     try {
       await deleteBudgetParticipant(participantId, budgetId)
+      useStore.getState().addToast({
+        type: "info",
+        title: "Teilnehmer entfernt",
+        description: `"${name}" wurde aus dem Budget entfernt.`,
+      })
       router.refresh()
-    } catch (err) {
+    } catch (err: any) {
       console.error("Fehler beim Löschen des Teilnehmers:", err)
-      alert("Fehler beim Entfernen des Teilnehmers.")
+      useStore.getState().addToast({
+        type: "error",
+        title: "Fehler beim Entfernen",
+        description: err.message || "Teilnehmer konnte nicht entfernt werden.",
+      })
     } finally {
       setDeletingId(null)
     }
@@ -59,10 +69,9 @@ export default function ParticipantsTab({
   return (
     <div className="flex flex-col gap-6">
       {/* Header Toolbar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white dark:bg-[#0d1117] border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-xs">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white dark:bg-[#0d141d]/75 backdrop-blur-xl border border-slate-200 dark:border-white/10 rounded-2xl sm:rounded-3xl p-5 shadow-xs">
         <div>
-          <h2 className="text-lg font-bold text-slate-700 dark:text-slate-200 flex items-center gap-2">
-            <Users className="w-5 h-5 text-brand-500" />
+          <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100">
             Reiseteilnehmer ({participants.length})
           </h2>
           <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
@@ -72,7 +81,7 @@ export default function ParticipantsTab({
 
         <button
           onClick={onOpenAddParticipant}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl font-semibold text-xs sm:text-sm text-slate-700 dark:text-slate-200 bg-white dark:bg-[#161f28]/70 hover:bg-[#fafafa] dark:hover:bg-[#1e2a36]/90 border border-slate-300 dark:border-slate-700/80 hover:border-brand-500/50 dark:hover:border-brand-500/50 hover:-translate-y-0.5 hover:shadow-md hover:shadow-brand-500/10 active:translate-y-0 active:scale-[0.98] transition-all duration-300 backdrop-blur-md cursor-pointer shrink-0"
+          className="btn-glass inline-flex items-center gap-2 font-semibold text-xs sm:text-sm text-slate-700 dark:text-slate-200 shrink-0"
         >
           <UserPlus className="w-4 h-4 text-brand-500 shrink-0" />
           <span>Teilnehmer hinzufügen</span>
@@ -88,7 +97,7 @@ export default function ParticipantsTab({
           return (
             <div
               key={b.participant.id}
-              className="bg-white dark:bg-[#0d1117] border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-xs flex flex-col justify-between gap-4"
+              className="bg-white dark:bg-[#0d141d]/75 backdrop-blur-xl border border-slate-200 dark:border-white/10 rounded-2xl sm:rounded-3xl p-5 shadow-xs flex flex-col justify-between gap-4"
             >
               {/* Header */}
               <div className="flex items-start justify-between gap-3">
@@ -102,7 +111,7 @@ export default function ParticipantsTab({
 
                   <div className="flex flex-col min-w-0">
                     <div className="flex items-center gap-2">
-                      <span className="font-bold text-base text-slate-700 dark:text-slate-200 truncate">
+                      <span className="font-bold text-base text-slate-800 dark:text-slate-100 truncate">
                         {b.participant.name}
                       </span>
                       {isGuest && (
@@ -131,16 +140,16 @@ export default function ParticipantsTab({
               </div>
 
               {/* Financial Box */}
-              <div className="grid grid-cols-2 gap-2 p-3 rounded-xl bg-slate-50/80 dark:bg-slate-900/40 border border-slate-100 dark:border-slate-800/60 text-xs">
+              <div className="grid grid-cols-2 gap-2 p-3.5 rounded-2xl bg-slate-50/80 dark:bg-[#070c12]/60 border border-slate-200/80 dark:border-white/10 text-xs">
                 <div className="flex flex-col">
                   <span className="text-[10px] uppercase font-semibold text-slate-400 dark:text-slate-500">Ausgelegt</span>
-                  <span className="font-semibold text-slate-700 dark:text-slate-200 text-sm">
+                  <span className="font-bold font-mono text-slate-800 dark:text-slate-100 text-sm">
                     {formatCurrency(b.totalPaid, currency)}
                   </span>
                 </div>
                 <div className="flex flex-col text-right">
                   <span className="text-[10px] uppercase font-semibold text-slate-400 dark:text-slate-500">Eigenanteil</span>
-                  <span className="font-semibold text-slate-700 dark:text-slate-200 text-sm">
+                  <span className="font-bold font-mono text-slate-800 dark:text-slate-100 text-sm">
                     {formatCurrency(b.totalShare, currency)}
                   </span>
                 </div>

@@ -1,26 +1,21 @@
-import { Info, History, Heart, ExternalLink } from "lucide-react"
+import { ExternalLink } from "lucide-react"
 
 export default function AboutPage() {
   return (
-    <div className="flex-1 w-full h-full overflow-y-auto custom-scrollbar p-4 md:p-8">
-      <div className="max-w-[1200px] mx-auto w-full">
-        <div className="bg-white dark:bg-[#0d1117] rounded-2xl shadow-xl border border-slate-200 dark:border-slate-800 p-6 md:p-10 space-y-8">
+    <div className="flex-1 w-full h-full overflow-y-auto custom-scrollbar">
+      <main className="max-w-[1600px] w-full mx-auto p-3 sm:p-5 md:p-8 pt-2 sm:pt-4 md:pt-6 pb-24 md:pb-28 flex flex-col gap-6">
+        <div className="bg-white dark:bg-[#0d141d]/75 backdrop-blur-xl rounded-3xl shadow-sm border border-slate-200 dark:border-white/10 p-6 sm:p-8 md:p-10 space-y-8">
           
           {/* Header */}
-          <div className="flex items-center gap-4 border-b border-slate-100 dark:border-slate-800 pb-6">
-            <div className="p-3.5 bg-brand-100 dark:bg-brand-500/20 rounded-2xl text-brand-600 dark:text-brand-400 shrink-0">
-              <Info className="h-8 w-8" />
-            </div>
-            <div>
-              <h1 className="text-xl sm:text-2xl font-bold text-slate-700 dark:text-slate-300">Über das Projekt</h1>
-              <p className="text-sm font-medium text-slate-500 dark:text-slate-400">sm4sh's Urlaubsplaner</p>
-            </div>
+          <div className="border-b border-slate-100 dark:border-white/10 pb-6">
+            <h1 className="text-xl sm:text-2xl font-bold text-slate-800 dark:text-slate-100">Über das Projekt</h1>
+            <p className="text-xs sm:text-sm font-medium text-slate-500 dark:text-slate-400 mt-1">sm4sh's Urlaubsplaner</p>
           </div>
 
           <div className="max-w-none space-y-6">
             {/* Intro */}
-            <div className="bg-slate-50 dark:bg-slate-900/60 rounded-2xl p-6 border border-slate-100 dark:border-slate-800 space-y-4">
-              <p className="text-base md:text-lg leading-relaxed text-slate-700 dark:text-slate-200 font-medium">
+            <div className="bg-slate-50/80 dark:bg-[#161f28]/65 rounded-2xl p-6 border border-slate-200/80 dark:border-white/10 space-y-4">
+              <p className="text-base md:text-lg leading-relaxed text-slate-800 dark:text-slate-100 font-medium">
                 <strong className="text-brand-600 dark:text-brand-400">sm4sh's Urlaubsplaner</strong> wurde entwickelt, damit du deine freie Zeit optimal planen und dein Urlaubsbudget immer perfekt im Blick behalten kannst – ganz für dich allein oder gemeinsam mit deinen Liebsten.
               </p>
               <p className="text-sm md:text-base leading-relaxed text-slate-600 dark:text-slate-300">
@@ -29,20 +24,20 @@ export default function AboutPage() {
             </div>
 
             {/* Credits Grid */}
-            <div className="mt-8 pt-6 border-t border-slate-100 dark:border-slate-800">
-              <h2 className="text-xl font-bold text-slate-700 dark:text-slate-200 mb-2 flex items-center gap-2">
-                <Heart className="w-5 h-5 text-red-500" /> Danksagung &amp; Credits
+            <div className="mt-8 pt-6 border-t border-slate-100 dark:border-white/10">
+              <h2 className="text-lg sm:text-xl font-bold text-slate-800 dark:text-slate-100 mb-2">
+                Danksagung &amp; Credits
               </h2>
-              <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">
+              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mb-4">
                 Ein Projekt wie dieses baut auf großartigen Ideen und offenen Datenquellen auf.
               </p>
               <div className="grid sm:grid-cols-3 gap-4">
-                <div className="bg-slate-50 dark:bg-slate-900/60 p-4 rounded-xl border border-slate-100 dark:border-slate-800">
+                <div className="bg-slate-50/80 dark:bg-[#161f28]/65 p-5 rounded-2xl border border-slate-200/80 dark:border-white/10 hover:border-brand-500/40 hover:-translate-y-0.5 hover:shadow-md hover:shadow-brand-500/5 transition-all">
                   <a 
                     href="https://www.sl-urlaubsplaner.de/" 
                     target="_blank" 
                     rel="noopener noreferrer" 
-                    className="font-bold text-slate-700 dark:text-slate-200 text-sm mb-1 inline-flex items-center gap-1.5 hover:text-brand-600 dark:hover:text-brand-400 transition-colors"
+                    className="font-bold text-slate-800 dark:text-slate-100 text-sm mb-1 inline-flex items-center gap-1.5 hover:text-brand-600 dark:hover:text-brand-400 transition-colors"
                   >
                     SL Urlaubsplaner <ExternalLink className="w-3.5 h-3.5 text-slate-400" />
                   </a>
@@ -50,12 +45,12 @@ export default function AboutPage() {
                     Ein großes Dankeschön für die ursprüngliche Inspiration zu diesem Projekt.
                   </p>
                 </div>
-                <div className="bg-slate-50 dark:bg-slate-900/60 p-4 rounded-xl border border-slate-100 dark:border-slate-800">
+                <div className="bg-slate-50/80 dark:bg-[#161f28]/65 p-5 rounded-2xl border border-slate-200/80 dark:border-white/10 hover:border-brand-500/40 hover:-translate-y-0.5 hover:shadow-md hover:shadow-brand-500/5 transition-all">
                   <a 
                     href="https://ferien-api.de/" 
                     target="_blank" 
                     rel="noopener noreferrer" 
-                    className="font-bold text-slate-700 dark:text-slate-200 text-sm mb-1 inline-flex items-center gap-1.5 hover:text-brand-600 dark:hover:text-brand-400 transition-colors"
+                    className="font-bold text-slate-800 dark:text-slate-100 text-sm mb-1 inline-flex items-center gap-1.5 hover:text-brand-600 dark:hover:text-brand-400 transition-colors"
                   >
                     ferien-api.de <ExternalLink className="w-3.5 h-3.5 text-slate-400" />
                   </a>
@@ -63,12 +58,12 @@ export default function AboutPage() {
                     Für die zuverlässigen Daten zu Schulferien in ganz Deutschland.
                   </p>
                 </div>
-                <div className="bg-slate-50 dark:bg-slate-900/60 p-4 rounded-xl border border-slate-100 dark:border-slate-800">
+                <div className="bg-slate-50/80 dark:bg-[#161f28]/65 p-5 rounded-2xl border border-slate-200/80 dark:border-white/10 hover:border-brand-500/40 hover:-translate-y-0.5 hover:shadow-md hover:shadow-brand-500/5 transition-all">
                   <a 
                     href="https://feiertage-api.de/" 
                     target="_blank" 
                     rel="noopener noreferrer" 
-                    className="font-bold text-slate-700 dark:text-slate-200 text-sm mb-1 inline-flex items-center gap-1.5 hover:text-brand-600 dark:hover:text-brand-400 transition-colors"
+                    className="font-bold text-slate-800 dark:text-slate-100 text-sm mb-1 inline-flex items-center gap-1.5 hover:text-brand-600 dark:hover:text-brand-400 transition-colors"
                   >
                     feiertage-api.de <ExternalLink className="w-3.5 h-3.5 text-slate-400" />
                   </a>
@@ -80,20 +75,34 @@ export default function AboutPage() {
             </div>
 
             {/* Changelog Header */}
-            <h2 className="flex items-center gap-2 mt-10 mb-6 text-xl font-bold border-b border-slate-100 dark:border-slate-800 pb-3 text-slate-700 dark:text-slate-200">
-              <History className="h-6 w-6 text-brand-500" />
+            <h2 className="mt-10 mb-6 text-xl font-bold border-b border-slate-100 dark:border-white/10 pb-3 text-slate-800 dark:text-slate-100">
               Changelog
             </h2>
 
             <div className="space-y-8">
-              {/* V 1.6.6 */}
+              {/* V 1.8.0 */}
               <div className="relative pl-7 border-l-2 border-brand-500">
-                <div className="absolute -left-[9px] top-1.5 h-4 w-4 rounded-full bg-brand-500 ring-4 ring-white dark:ring-[#0d1117]" />
+                <div className="absolute -left-[9px] top-1.5 h-4 w-4 rounded-full bg-brand-500 ring-4 ring-white dark:ring-[#0d141d] shadow-sm shadow-brand-500/50" />
                 <div className="flex items-center gap-3 mb-3">
-                  <h3 className="text-lg font-bold text-slate-700 dark:text-slate-200 m-0">Version 1.6.6</h3>
-                  <span className="text-xs px-3 py-1 bg-brand-100 dark:bg-brand-500/20 text-brand-700 dark:text-brand-300 rounded-full font-bold">Aktuell</span>
+                  <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100 m-0">Version 1.8.0</h3>
+                  <span className="text-xs px-2.5 py-0.5 bg-brand-500/15 border border-brand-500/20 text-brand-600 dark:text-brand-400 rounded-full font-bold">Aktuell</span>
                 </div>
-                <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
+                <ul className="list-disc list-outside ml-4 mt-2 space-y-1.5 text-sm text-slate-600 dark:text-slate-300">
+                  <li><strong>Midnight Glass Design System:</strong> Umfassende Modernisierung aller Oberflächen, KPI-Wells und Modals im Midnight-Slate-Look (<code>bg-white dark:bg-[#0d141d]/75 backdrop-blur-xl border border-slate-200 dark:border-white/10</code>) und standardisierte Content-Breite (1600px).</li>
+                  <li><strong>Clean Header &amp; Button-Hierarchie:</strong> Bereinigung der Überschriften von vorangestellten Icons (Regel 1.1), Glassmorphism-Buttons (<code>.btn-glass</code>) für Seiten-Aktionen und schlichte Text-Buttons für Modals und Pop-ups.</li>
+                  <li><strong>Globales Toast- &amp; Notification-System:</strong> Vollständige Ablösung alter Browser-Dialoge (<code>alert</code>) durch elegante, animierte Toasts mit Erfolgs-, Info- und Fehlerrückmeldungen bei allen Aktionen.</li>
+                  <li><strong>Fluide &amp; Responsive Jahres-Aktivitätsübersicht:</strong> 53-Wochen Heatmap skaliert nun stufenlos mit der Content-Breite auf WQHD- und 4K-Monitoren, besitzt pixelgenaue Monatsbeschriftungen, verbesserten Kontrast im Light Mode und optimierten Hover-Freiraum.</li>
+                  <li><strong>Statistik &amp; Budget Feinschliff:</strong> Neue thematische Icons (<code>Parasol</code> &amp; <code>Bandage</code>), Disketten-Speichern-Icons in Modals und Korrekturen bei Währungssymbolen.</li>
+                </ul>
+              </div>
+
+              {/* V 1.6.6 */}
+              <div className="relative pl-7 border-l-2 border-slate-200 dark:border-white/10">
+                <div className="absolute -left-[9px] top-1.5 h-4 w-4 rounded-full bg-slate-300 dark:bg-slate-700 ring-4 ring-white dark:ring-[#0d141d]" />
+                <div className="flex items-center gap-3 mb-3">
+                  <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100 m-0">Version 1.6.6</h3>
+                </div>
+                <ul className="list-disc list-outside ml-4 mt-2 space-y-1.5 text-sm text-slate-600 dark:text-slate-300">
                   <li><strong>Neues Einstellungs-Dashboard:</strong> Vollständige Umstellung der Einstellungsseite auf interaktive Profilkacheln mit Wochentags-Vorschau und fokussiertem Modal-Dialog (<code>ProfileModal</code>) zum Anlegen und Bearbeiten von Benutzerprofilen.</li>
                   <li><strong>Budget-Kategorie „Ausgleich“ &amp; Standard-Wiederherstellung:</strong> Neue Standard-Kategorie für Schuldentransfers (fließt nicht in Gesamtkosten, gleicht aber Salden ab). Automatische Bereitstellung für bestehende Budgets sowie neuer Button zur Wiederherstellung fehlender Standardkategorien.</li>
                   <li><strong>Kalender-Optimierungen:</strong> Fixierte Kalendertage (1–31) beim vertikalen Scrollen auf kleinen Bildschirmen, Farbangleichung der Tagesziffern an die Monate und Verfeinerung der Zelltöne auf <code>slate-700</code> / <code>slate-300</code>.</li>
@@ -101,12 +110,12 @@ export default function AboutPage() {
               </div>
 
               {/* V 1.6.2 */}
-              <div className="relative pl-7 border-l-2 border-slate-200 dark:border-slate-800">
-                <div className="absolute -left-[9px] top-1.5 h-4 w-4 rounded-full bg-slate-300 dark:bg-slate-700 ring-4 ring-white dark:ring-[#0d1117]" />
+              <div className="relative pl-7 border-l-2 border-slate-200 dark:border-white/10">
+                <div className="absolute -left-[9px] top-1.5 h-4 w-4 rounded-full bg-slate-300 dark:bg-slate-700 ring-4 ring-white dark:ring-[#0d141d]" />
                 <div className="flex items-center gap-3 mb-3">
-                  <h3 className="text-lg font-bold text-slate-700 dark:text-slate-200 m-0">Version 1.6.2</h3>
+                  <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100 m-0">Version 1.6.2</h3>
                 </div>
-                <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
+                <ul className="list-disc list-outside ml-4 mt-2 space-y-1.5 text-sm text-slate-600 dark:text-slate-300">
                   <li><strong>Lokale Kategorie-Icons &amp; Icon-Picker:</strong> Zuweisung moderner Lucide-Icons für alle Standard-Ausgabekategorien sowie interaktiver Icon-Picker im Kategorie-Modal zur individuellen Zuweisung bei Neuanlage.</li>
                   <li><strong>Harmonisiertes 3-Stufen-Typografie- &amp; Farbsystem:</strong> Bereinigung harter Textfarben und überladener Schriftgewichte (Entfernung von <code>font-extrabold</code>) zugunsten eines harmonischen 3-Ebenen-Systems mit verifizierten WCAG AA/AAA Kontrastwerten.</li>
                   <li><strong>Kalender-Lesbarkeit im Light-Mode:</strong> Dunkle, kontrastreiche Textfarben für alle Buchstabeneinträge und Behebung von unleserlichen Einträgen bei halben Tagen (<code>U/2</code>, <code>K/2</code>, etc.) auf diagonalen Verlaufshintergründen.</li>
@@ -114,12 +123,12 @@ export default function AboutPage() {
               </div>
 
               {/* V 1.6.1 */}
-              <div className="relative pl-7 border-l-2 border-slate-200 dark:border-slate-800">
-                <div className="absolute -left-[9px] top-1.5 h-4 w-4 rounded-full bg-slate-300 dark:bg-slate-700 ring-4 ring-white dark:ring-[#0d1117]" />
+              <div className="relative pl-7 border-l-2 border-slate-200 dark:border-white/10">
+                <div className="absolute -left-[9px] top-1.5 h-4 w-4 rounded-full bg-slate-300 dark:bg-slate-700 ring-4 ring-white dark:ring-[#0d141d]" />
                 <div className="flex items-center gap-3 mb-3">
-                  <h3 className="text-lg font-bold text-slate-700 dark:text-slate-200 m-0">Version 1.6.1</h3>
+                  <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100 m-0">Version 1.6.1</h3>
                 </div>
-                <ul className="list-disc list-outside ml-4 mt-2 space-y-1 text-slate-600 dark:text-slate-400">
+                <ul className="list-disc list-outside ml-4 mt-2 space-y-1.5 text-sm text-slate-600 dark:text-slate-300">
                   <li><strong>Scrollverhalten auf allen Budget-Seiten:</strong> Behebung des Scrollfehlers auf den Budget-Übersichts- und Detailseiten inklusive dynamischem Verlaufshintergrund.</li>
                   <li><strong>Sticky Kalender-Tage &amp; Responsive Layout:</strong> Die Kopfzeile mit den Tagen (1–31) bleibt nun beim vertikalen Scrollen auf kleineren Bildschirmen oben fixiert (analog zur fixierten Monatsspalte beim horizontalen Scrollen).</li>
                   <li><strong>Harmonisierte Überschriften &amp; Spacing:</strong> Optimierung der Überschriftenhöhen, Schriftgrößen und Abstände auf der Kalender-, Budget- und Home-Seite zur maximalen Platzausnutzung auf mobilen Geräten.</li>
@@ -735,7 +744,7 @@ export default function AboutPage() {
           </div>
         </div>
       </div>
-    </div>
+    </main>
   </div>
 )
 }

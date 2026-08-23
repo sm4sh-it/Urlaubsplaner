@@ -165,9 +165,9 @@ export default function Statistics() {
 
   if (activeProfileIds.length === 0) {
     return (
-      <div className="bg-white dark:bg-[var(--surface)] rounded-xl shadow-sm border border-slate-200 dark:border-[var(--border-subtle)] p-4 flex flex-col min-h-0 shrink-0">
-        <h2 className="font-semibold text-lg mb-4 text-slate-700 dark:text-slate-200">Statistik</h2>
-        <div className="text-sm text-slate-500">Bitte wähle ein Profil aus.</div>
+      <div className="bg-white dark:bg-[#0d141d]/75 backdrop-blur-xl rounded-2xl sm:rounded-3xl border border-slate-200 dark:border-white/10 p-4 sm:p-5 shadow-sm flex flex-col min-h-0 shrink-0">
+        <h2 className="font-bold text-sm sm:text-base text-slate-800 dark:text-slate-100 mb-2">Statistik</h2>
+        <div className="text-xs text-slate-400 dark:text-slate-500">Bitte wähle ein Profil aus.</div>
       </div>
     )
   }
@@ -176,9 +176,9 @@ export default function Statistics() {
 
   if (!stats) {
     return (
-      <div className="bg-white dark:bg-[var(--surface)] rounded-xl shadow-sm border border-slate-200 dark:border-[var(--border-subtle)] p-4 flex flex-col min-h-0 shrink-0">
-        <h2 className="font-semibold text-lg mb-4 text-slate-700 dark:text-slate-200">Statistik ({activeProfile.name})</h2>
-        <div className="text-sm text-slate-500">
+      <div className="bg-white dark:bg-[#0d141d]/75 backdrop-blur-xl rounded-2xl sm:rounded-3xl border border-slate-200 dark:border-white/10 p-4 sm:p-5 shadow-sm flex flex-col min-h-0 shrink-0">
+        <h2 className="font-bold text-sm sm:text-base text-slate-800 dark:text-slate-100 mb-2">Statistik ({activeProfile.name})</h2>
+        <div className="text-xs text-slate-400 dark:text-slate-500">
           Profil ist für das Jahr {selectedYear} nicht aktiv (Startjahr: {activeProfile.startYear}).
         </div>
       </div>
@@ -189,84 +189,113 @@ export default function Statistics() {
   const restUrlaubAktuell = verfuegbar - totalUrlaub
 
   return (
-    <div className="bg-white dark:bg-[var(--surface)] rounded-xl shadow-sm border border-slate-200 dark:border-[var(--border-subtle)] p-3 sm:p-4 flex flex-col min-h-[56px] shrink-0">
+    <div className="bg-white dark:bg-[#0d141d]/75 backdrop-blur-xl rounded-2xl sm:rounded-3xl border border-slate-200 dark:border-white/10 p-4 sm:p-5 shadow-sm flex flex-col min-h-[56px] shrink-0">
       <div 
-        className="flex items-center justify-between cursor-pointer group mb-2 sm:mb-4 min-h-[44px] sm:min-h-[40px] py-1 shrink-0"
+        className="flex items-center justify-between cursor-pointer group min-h-[40px] py-1 shrink-0 select-none"
         onClick={() => setActiveSidebarPanel(isOpen ? 'legend' : 'statistics')}
       >
-        <h2 className="font-semibold text-base sm:text-lg text-slate-700 dark:text-slate-200">
-          Statistik ({activeProfile.name})
-        </h2>
-        <button className="p-2 sm:p-1 group-hover:bg-slate-100 dark:group-hover:bg-slate-800 rounded-md transition-colors shrink-0 cursor-pointer">
-          {isOpen ? <ChevronUp className="w-5 h-5 text-slate-500" /> : <ChevronDown className="w-5 h-5 text-slate-500" />}
+        <div className="flex items-center gap-2 min-w-0">
+          <h2 className="font-bold text-sm sm:text-base text-slate-800 dark:text-slate-100 truncate">
+            Statistik
+          </h2>
+          <span className="text-xs px-2 py-0.5 rounded-md bg-brand-500/10 text-brand-600 dark:text-brand-400 font-semibold truncate max-w-[120px]">
+            {activeProfile.name}
+          </span>
+        </div>
+        <button className="p-1.5 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-white/10 transition-colors shrink-0 cursor-pointer">
+          {isOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
         </button>
       </div>
 
       {isOpen && (
         <>
           {activeProfile.remainingLeave > 0 && (
-        <div className={`mb-4 text-xs p-2 rounded border ${
-          ungenutzterResturlaub > 0 
-            ? "bg-amber-50 dark:bg-amber-900/20 text-amber-800 dark:text-amber-400 border-amber-200 dark:border-amber-800/50" 
-            : "bg-emerald-50 dark:bg-emerald-900/20 text-emerald-800 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800/50"
-        }`}>
-          {ungenutzterResturlaub > 0 ? (
-            <span><strong>Achtung:</strong> Plane noch {ungenutzterResturlaub} weitere Tage bis zum {activeProfile.remainingLeaveExpiryDate.split('-').reverse().join('.')}, um keinen Resturlaub zu verlieren.</span>
-          ) : (
-            <span><strong>Super:</strong> Dein kompletter Resturlaub ist bis zum Stichtag sicher eingeplant!</span>
+            <div className={`mt-3 mb-2 text-xs p-3 rounded-xl border flex items-start gap-2 ${
+              ungenutzterResturlaub > 0 
+                ? "bg-amber-500/10 text-amber-800 dark:text-amber-300 border-amber-500/20" 
+                : "bg-emerald-500/10 text-emerald-800 dark:text-emerald-300 border-emerald-500/20"
+            }`}>
+              {ungenutzterResturlaub > 0 ? (
+                <span><strong>Achtung:</strong> Plane noch <strong>{ungenutzterResturlaub}</strong> weitere Tage bis zum <strong>{activeProfile.remainingLeaveExpiryDate.split('-').reverse().join('.')}</strong>, um keinen Resturlaub zu verlieren.</span>
+              ) : (
+                <span><strong>Super:</strong> Dein kompletter Resturlaub ist bis zum Stichtag sicher eingeplant!</span>
+              )}
+            </div>
           )}
-        </div>
-      )}
-      
-      <div className="space-y-4 mb-6 shrink-0">
-        <div className="grid grid-cols-2 gap-2 text-sm">
-          <div className="text-slate-500 dark:text-slate-400">Anspruch:</div>
-          <div className="font-medium text-right dark:text-slate-200">{verfuegbar} Tage</div>
           
-          <div className="text-slate-500 dark:text-slate-400">Genommen:</div>
-          <div className="font-medium text-right text-emerald-600 dark:text-[#1b8a5a]">{totalUrlaub} Tage</div>
-          
-          <div className="text-slate-500 dark:text-slate-400 font-semibold border-t border-slate-100 dark:border-[var(--border-subtle)] pt-2 mt-1">Rest gesamt:</div>
-          <div className="font-bold text-right border-t border-slate-100 dark:border-[var(--border-subtle)] pt-2 mt-1 text-slate-700 dark:text-slate-200">{restUrlaubAktuell} Tage</div>
-          
-          {ungenutzterResturlaub > 0 && (
-            <>
-              <div className="text-amber-600 dark:text-amber-500 text-xs">Davon verfallen am Stichtag:</div>
-              <div className="font-bold text-right text-amber-600 dark:text-amber-500 text-xs">-{ungenutzterResturlaub} Tage</div>
+          <div className="space-y-3 mt-3 mb-4 shrink-0">
+            <div className="bg-slate-50/80 dark:bg-[#070c12]/60 rounded-xl p-3 border border-slate-200/80 dark:border-white/10 space-y-2 text-xs">
+              <div className="flex justify-between items-center text-slate-500 dark:text-slate-400">
+                <span>Anspruch:</span>
+                <span className="font-mono font-semibold text-slate-700 dark:text-slate-200">{verfuegbar} Tage</span>
+              </div>
               
-              <div className="text-slate-500 dark:text-slate-400 font-semibold border-t border-slate-100 dark:border-[var(--border-subtle)] pt-2 mt-1">Übertrag ins nächste Jahr:</div>
-              <div className="font-bold text-right border-t border-slate-100 dark:border-[var(--border-subtle)] pt-2 mt-1 text-emerald-600 dark:text-[#1b8a5a]">{Math.max(0, restUrlaubAktuell - ungenutzterResturlaub)} Tage</div>
-            </>
-          )}
-        </div>
+              <div className="flex justify-between items-center text-slate-500 dark:text-slate-400">
+                <span>Genommen:</span>
+                <span className="font-mono font-bold text-emerald-600 dark:text-emerald-400">{totalUrlaub} Tage</span>
+              </div>
+              
+              <div className="flex justify-between items-center font-semibold border-t border-slate-200/80 dark:border-white/10 pt-2 text-slate-700 dark:text-slate-200 text-sm">
+                <span>Rest gesamt:</span>
+                <span className="font-mono font-bold text-brand-600 dark:text-brand-400">{restUrlaubAktuell} Tage</span>
+              </div>
+              
+              {ungenutzterResturlaub > 0 && (
+                <>
+                  <div className="flex justify-between items-center text-amber-600 dark:text-amber-400 pt-1 text-[11px]">
+                    <span>Davon verfallen am Stichtag:</span>
+                    <span className="font-mono font-bold">-{ungenutzterResturlaub} Tage</span>
+                  </div>
+                  
+                  <div className="flex justify-between items-center text-emerald-600 dark:text-emerald-400 pt-1 border-t border-slate-200/80 dark:border-white/10 text-[11px] font-semibold">
+                    <span>Übertrag ins nächste Jahr:</span>
+                    <span className="font-mono font-bold">{Math.max(0, restUrlaubAktuell - ungenutzterResturlaub)} Tage</span>
+                  </div>
+                </>
+              )}
+            </div>
 
-        <div className="grid grid-cols-2 gap-2 text-sm pt-2 border-t border-slate-100 dark:border-[var(--border-subtle)]">
-          <div className="text-slate-500 dark:text-slate-400">Krankheitstage:</div>
-          <div className="font-medium text-right text-red-600 dark:text-[#b0413e]">{totalKrank} Tage</div>
-          
-          <div className="text-slate-500 dark:text-slate-400">Mobiles Arbeiten:</div>
-          <div className="font-medium text-right text-blue-600 dark:text-[#1a5fb4]">{totalMobile} Tage</div>
-        </div>
-      </div>
-
-      <h3 className="font-medium text-sm text-slate-700 dark:text-slate-300 mb-2">Pro Monat</h3>
-      <div className="flex-1 overflow-y-auto pr-2 space-y-2 text-xs">
-        {SHORT_MONTHS.map((month, i) => {
-          const stats = monthlyStats[i]
-          if (stats.urlaub === 0 && stats.krank === 0 && stats.mobile === 0) return null
-          
-          return (
-            <div key={month} className="flex justify-between items-center py-1 border-b border-slate-100 dark:border-[var(--border-subtle)] last:border-0">
-              <span className="font-medium w-8 dark:text-slate-300">{month}</span>
-              <div className="flex gap-3">
-                {stats.urlaub > 0 && <span className="text-emerald-600 dark:text-[#1b8a5a]">{stats.urlaub} U</span>}
-                {stats.krank > 0 && <span className="text-red-600 dark:text-[#b0413e]">{stats.krank} K</span>}
-                {stats.mobile > 0 && <span className="text-blue-600 dark:text-[#1a5fb4]">{stats.mobile} M</span>}
+            <div className="bg-slate-50/80 dark:bg-[#070c12]/60 rounded-xl p-3 border border-slate-200/80 dark:border-white/10 space-y-2 text-xs">
+              <div className="flex justify-between items-center text-slate-500 dark:text-slate-400">
+                <span className="flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-rose-500" />
+                  Krankheitstage:
+                </span>
+                <span className="font-mono font-semibold text-rose-600 dark:text-rose-400">{totalKrank} Tage</span>
+              </div>
+              
+              <div className="flex justify-between items-center text-slate-500 dark:text-slate-400">
+                <span className="flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-blue-500" />
+                  Mobiles Arbeiten:
+                </span>
+                <span className="font-mono font-semibold text-blue-600 dark:text-blue-400">{totalMobile} Tage</span>
               </div>
             </div>
-          )
-        })}
-      </div>
+          </div>
+
+          <div className="pt-2 border-t border-slate-100 dark:border-white/10">
+            <h3 className="font-semibold text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">
+              Pro Monat
+            </h3>
+            <div className="flex-1 overflow-y-auto pr-1 space-y-1.5 text-xs max-h-48 custom-scrollbar">
+              {SHORT_MONTHS.map((month, i) => {
+                const stats = monthlyStats[i]
+                if (stats.urlaub === 0 && stats.krank === 0 && stats.mobile === 0) return null
+                
+                return (
+                  <div key={month} className="flex justify-between items-center py-1 px-2 rounded-lg bg-slate-50/50 dark:bg-[#070c12]/40 border border-slate-100 dark:border-white/5">
+                    <span className="font-mono font-bold text-slate-600 dark:text-slate-300 w-8">{month}</span>
+                    <div className="flex items-center gap-2 text-[11px] font-mono font-bold">
+                      {stats.urlaub > 0 && <span className="px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">{stats.urlaub} U</span>}
+                      {stats.krank > 0 && <span className="px-1.5 py-0.5 rounded bg-rose-500/10 text-rose-600 dark:text-rose-400">{stats.krank} K</span>}
+                      {stats.mobile > 0 && <span className="px-1.5 py-0.5 rounded bg-blue-500/10 text-blue-600 dark:text-blue-400">{stats.mobile} M</span>}
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
         </>
       )}
     </div>

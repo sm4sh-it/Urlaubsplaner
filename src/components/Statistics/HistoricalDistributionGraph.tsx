@@ -4,7 +4,7 @@ import { useStore } from "@/store/useStore"
 import { useState, useMemo } from "react"
 import { SHORT_MONTHS } from "@/lib/dateUtils"
 import { isVacationCostingDay } from "@/lib/tripUtils"
-import { CalendarDays, Pill } from "lucide-react"
+import { Parasol, Bandage } from "lucide-react"
 
 export default function HistoricalDistributionGraph() {
   const [viewMode, setViewMode] = useState<'Urlaub' | 'Krankheit'>('Urlaub')
@@ -142,28 +142,28 @@ export default function HistoricalDistributionGraph() {
   }
 
   return (
-    <div className="bg-white dark:bg-[#0d1117] rounded-xl border border-slate-200 dark:border-slate-800 p-4 sm:p-5 flex flex-col shadow-xl justify-start w-full h-full">
+    <div className="bg-white dark:bg-[#0d141d]/75 backdrop-blur-xl rounded-2xl sm:rounded-3xl border border-slate-200 dark:border-white/10 p-4 sm:p-5 flex flex-col shadow-sm justify-start w-full h-full">
       <div className="flex flex-col items-center gap-3 mb-4">
-        <div className="flex bg-slate-100 dark:bg-[#161b22] rounded-full p-1 border border-slate-200 dark:border-slate-700/50">
+        <div className="flex bg-slate-100 dark:bg-[#070c12]/60 rounded-full p-1 border border-slate-200/80 dark:border-white/10">
           <button
             onClick={() => setViewMode('Urlaub')}
-            className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs sm:text-sm font-semibold transition-all duration-300 ${
+            className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs sm:text-sm font-semibold transition-all duration-300 cursor-pointer ${
               viewMode === 'Urlaub' 
                 ? 'bg-[#238636] text-white shadow-sm' 
-                : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-800'
+                : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 hover:bg-slate-200/60 dark:hover:bg-slate-800'
             }`}
           >
-            <CalendarDays className="w-4 h-4" /> Urlaub
+            <Parasol className="w-4 h-4" /> Urlaub
           </button>
           <button
             onClick={() => setViewMode('Krankheit')}
-            className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs sm:text-sm font-semibold transition-all duration-300 ${
+            className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs sm:text-sm font-semibold transition-all duration-300 cursor-pointer ${
               viewMode === 'Krankheit' 
                 ? 'bg-[#da3633] text-white shadow-sm' 
-                : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-800'
+                : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 hover:bg-slate-200/60 dark:hover:bg-slate-800'
             }`}
           >
-            <Pill className="w-4 h-4" /> Krankheit
+            <Bandage className="w-4 h-4" /> Krankheit
           </button>
         </div>
         

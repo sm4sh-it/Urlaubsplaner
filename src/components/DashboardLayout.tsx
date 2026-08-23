@@ -21,7 +21,7 @@ export default function DashboardLayout({
   const toggleSidebar = useStore(state => state.toggleSidebar)
 
   React.useEffect(() => {
-    if (typeof window !== 'undefined' && window.innerWidth < 768) {
+    if (typeof window !== 'undefined' && window.innerWidth < 1200) {
       useStore.setState({ isSidebarOpen: false })
     }
   }, [])
@@ -51,7 +51,7 @@ export default function DashboardLayout({
       <button
         onClick={toggleSidebar}
         className={cn(
-          "absolute top-4 sm:top-8 z-40 flex items-center justify-center w-8 h-12 bg-slate-200/80 hover:bg-slate-300 dark:bg-slate-800/80 dark:hover:bg-slate-700 text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-slate-100 transition-all duration-300 rounded-l-xl backdrop-blur-md shadow-md cursor-pointer",
+          "absolute top-4 sm:top-8 z-40 flex items-center justify-center w-8 h-12 bg-white/90 hover:bg-white dark:bg-[#0d141d]/90 dark:hover:bg-[#161f28] border-y border-l border-slate-200 dark:border-white/10 text-slate-500 hover:text-brand-600 dark:text-slate-400 dark:hover:text-brand-400 transition-all duration-300 rounded-l-2xl backdrop-blur-md shadow-md cursor-pointer",
           isSidebarOpen ? "right-[296px] sm:right-84" : "right-2 sm:right-4"
         )}
         title={isSidebarOpen ? "Seitenleiste ausblenden" : "Seitenleiste einblenden"}

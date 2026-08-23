@@ -42,7 +42,7 @@ export default function YearlyContributionGraph() {
     }
   }
 
-  const { days, months } = useMemo(() => {
+  const { days, months, weeksCount } = useMemo(() => {
     const yearStart = new Date(selectedYear, 0, 1)
     const yearEnd = new Date(selectedYear, 11, 31)
     
@@ -71,7 +71,7 @@ export default function YearlyContributionGraph() {
       // Track months
       if (isCurrentYear && currentDate.getDate() === 1) {
         monthsArray.push({
-          label: currentDate.toLocaleString('default', { month: 'short' }),
+          label: currentDate.toLocaleString('de-DE', { month: 'short' }),
           colIndex: Math.floor(daysArray.length / 7)
         })
       }
@@ -154,7 +154,8 @@ export default function YearlyContributionGraph() {
       currentDate.setDate(currentDate.getDate() + 1)
     }
 
-    return { days: daysArray, months: monthsArray }
+    const weeksCount = Math.ceil(daysArray.length / 7)
+    return { days: daysArray, months: monthsArray, weeksCount }
   }, [selectedYear, entries, trips, activeProfileIds, profiles, holidays])
 
   const getDayStyle = (day: typeof days[0]) => {
@@ -173,14 +174,14 @@ export default function YearlyContributionGraph() {
 
     if (day.amColor) {
       return {
-        background: `linear-gradient(135deg, ${day.amColor} 50%, var(--surface-bright, rgba(203, 213, 225, 0.3)) 50%)`,
+        background: `linear-gradient(135deg, ${day.amColor} 50%, var(--surface-bright) 50%)`,
         opacity: day.isIdea ? 0.5 : 1
       }
     }
 
     if (day.pmColor) {
       return {
-        background: `linear-gradient(135deg, var(--surface-bright, rgba(203, 213, 225, 0.3)) 50%, ${day.pmColor} 50%)`,
+        background: `linear-gradient(135deg, var(--surface-bright) 50%, ${day.pmColor} 50%)`,
         opacity: day.isIdea ? 0.5 : 1
       }
     }
@@ -189,61 +190,101 @@ export default function YearlyContributionGraph() {
   }
 
   const getDayClass = (day: typeof days[0]) => {
-    if (!day.isCurrentYear) return 'bg-transparent'
+    if (!day.isCurrentYear) return 'bg-transparent pointer-events-none opacity-0 shadow-none'
     if (!day.fullColor && !day.amColor && !day.pmColor) {
       return day.monthIndex % 2 === 0 
-        ? 'bg-slate-100 dark:bg-[var(--border)]' 
-        : 'bg-slate-200 dark:bg-white/10'
+        ? 'bg-slate-100 dark:bg-slate-800/40' 
+        : 'bg-slate-200/80 dark:bg-slate-800/70'
     }
     return ''
   }
 
   return (
-    <div className="flex flex-col gap-4 border-b border-slate-200 dark:border-[var(--border-subtle)] pb-8 pt-4 items-center">
-      <div className="text-lg font-bold text-slate-700 dark:text-slate-300 mb-2">
-        Jahresübersicht {selectedYear}
-      </div>
-      
-      <div className="flex max-w-full justify-center">
-        {/* Days of week labels */}
-        <div className="flex flex-col gap-1 text-xs font-medium text-slate-400 mr-4 mt-[30px]">
-          <span className="h-5 leading-5">Mo</span>
-          <span className="h-5 leading-5 invisible">Di</span>
-          <span className="h-5 leading-5">Mi</span>
-          <span className="h-5 leading-5 invisible">Do</span>
-          <span className="h-5 leading-5">Fr</span>
-          <span className="h-5 leading-5 invisible">Sa</span>
-          <span className="h-5 leading-5">So</span>
+    <div className="flex flex-col gap-4 w-full">
+      {/* Header (Clean ohne Icon, ohne Kasten) */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-200/80 dark:border-white/10">
+        <div>
+          <h3 className="text-base font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
+            <span>Jahres-Aktivitätsübersicht</span>
+            <span className="text-xs px-2 py-0.5 rounded-md bg-brand-500/10 text-brand-600 dark:text-brand-400 font-mono font-bold">
+              {selectedYear}
+            </span>
+          </h3>
         </div>
 
-        <div className="overflow-x-auto custom-scrollbar pb-4 pl-1">
-          <div className="min-w-max pr-4">
+        {/* Schnelllegende */}
+        <div className="flex flex-wrap items-center gap-3 text-[11px] font-medium text-slate-500 dark:text-slate-400">
+          <div className="flex items-center gap-1.5">
+            <span className="w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: 'var(--color-vacation)' }} />
+            <span>Urlaub</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <span className="w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: 'var(--color-mobile)' }} />
+            <span>Mobiles Arbeiten</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <span className="w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: 'var(--color-sick)' }} />
+            <span>Krank</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <span className="w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: 'var(--color-special)' }} />
+            <span>Sonder</span>
+          </div>
+        </div>
+      </div>
+      
+      {/* Heatmap Grid - Responsive fluid up to 1600px, graceful scroll on < 1000px */}
+      <div className="w-full overflow-x-auto custom-scrollbar p-1 sm:p-2">
+        <div className="w-full min-w-[960px] flex items-start px-2 py-3">
+          {/* Days of week labels */}
+          <div className="flex flex-col select-none mr-2 sm:mr-3 shrink-0">
+            {/* Header spacer to match month labels row */}
+            <div className="h-5 mb-2" />
+            <div className="grid grid-rows-7 gap-1 sm:gap-1.5 text-[10px] sm:text-xs font-mono font-bold text-slate-400 dark:text-slate-500">
+              <span className="flex items-center justify-end aspect-square">Mo</span>
+              <span className="flex items-center justify-end aspect-square invisible">Di</span>
+              <span className="flex items-center justify-end aspect-square">Mi</span>
+              <span className="flex items-center justify-end aspect-square invisible">Do</span>
+              <span className="flex items-center justify-end aspect-square">Fr</span>
+              <span className="flex items-center justify-end aspect-square invisible">Sa</span>
+              <span className="flex items-center justify-end aspect-square">So</span>
+            </div>
+          </div>
+
+          {/* Main Grid Area */}
+          <div className="flex-1 flex flex-col min-w-0">
             {/* Months Row */}
-            <div className="relative h-6 mb-1.5 flex text-xs font-medium text-slate-400">
+            <div
+              className="grid gap-1 sm:gap-1.5 h-5 mb-2 text-[10px] sm:text-xs font-mono font-bold text-slate-400 dark:text-slate-500 select-none"
+              style={{
+                gridTemplateColumns: `repeat(${weeksCount}, minmax(0, 1fr))`,
+              }}
+            >
               {months.map((m, i) => (
-                <div 
-                  key={i} 
-                  className="absolute"
-                  style={{ left: `${m.colIndex * 24}px` }}
+                <div
+                  key={i}
+                  className="truncate"
+                  style={{ gridColumnStart: m.colIndex + 1 }}
                 >
                   {m.label}
                 </div>
               ))}
             </div>
 
-            <div 
-              className="grid gap-1"
+            {/* Days 7-row Heatmap Grid */}
+            <div
+              className="grid gap-1 sm:gap-1.5"
               style={{
-                gridTemplateRows: 'repeat(7, 20px)',
-                gridAutoFlow: 'column',
-                gridAutoColumns: '20px'
+                gridTemplateColumns: `repeat(${weeksCount}, minmax(0, 1fr))`,
+                gridTemplateRows: "repeat(7, minmax(0, 1fr))",
+                gridAutoFlow: "column",
               }}
             >
               {days.map((day) => (
                 <div
                   key={day.date}
-                  title={`${day.date}${day.labelText ? ` (${day.labelText})` : ''}`}
-                  className={`w-5 h-5 rounded-sm ${getDayClass(day)} transition-all duration-300 hover:ring-2 hover:ring-brand-500 hover:scale-110 cursor-pointer shadow-sm`}
+                  title={`${day.date}${day.labelText ? ` (${day.labelText})` : ""}`}
+                  className={`aspect-square w-full rounded-[4px] sm:rounded-[6px] ${getDayClass(day)} transition-all duration-150 hover:ring-2 hover:ring-brand-500 hover:scale-130 hover:z-30 cursor-pointer shadow-[0_1px_3px_rgba(15,23,42,0.22)] dark:shadow-none`}
                   style={getDayStyle(day)}
                 />
               ))}
@@ -254,3 +295,4 @@ export default function YearlyContributionGraph() {
     </div>
   )
 }
+

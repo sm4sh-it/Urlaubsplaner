@@ -1,11 +1,12 @@
 "use client"
 
 import React, { useState, useEffect } from "react"
-import { X, Plus, DollarSign, Calendar, Tag, User, Users, AlignLeft, Check, ArrowRightLeft } from "lucide-react"
+import { X, Plus, Save, DollarSign, Calendar, Tag, User, Users, AlignLeft, Check, ArrowRightLeft } from "lucide-react"
 import { BudgetCategory, BudgetExpense, BudgetParticipant } from "@/types"
 import { formatCurrency, isSettlementCategory } from "@/lib/budgetUtils"
 import { addBudgetExpense, updateBudgetExpense } from "@/app/actions/budgetActions"
 import { useRouter } from "next/navigation"
+import { useStore } from "@/store/useStore"
 
 interface ExpenseModalProps {
   isOpen: boolean
@@ -148,6 +149,10 @@ export default function ExpenseModal({
     setSelectedParticipantIds(participants.map((p) => p.id))
   }
 
+  const handleDeselectAll = () => {
+    setSelectedParticipantIds([])
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!title.trim()) {
@@ -226,9 +231,20 @@ export default function ExpenseModal({
         })
         if (!res.success) {
           setError(res.error || "Fehler beim Aktualisieren")
+          useStore.getState().addToast({
+            type: "error",
+            title: "Fehler beim Speichern",
+            description: res.error || "Die Ausgabe konnte nicht aktualisiert werden.",
+          })
           setIsSubmitting(false)
           return
         }
+
+        useStore.getState().addToast({
+          type: "success",
+          title: "Ausgabe aktualisiert",
+          description: `"${title.trim()}" (${formatCurrency(parsedAmount, currency)}) gespeichert.`,
+        })
       } else {
         const res = await addBudgetExpense(budgetId, {
           title: title.trim(),
@@ -241,15 +257,31 @@ export default function ExpenseModal({
         })
         if (!res.success) {
           setError(res.error || "Fehler beim Erfassen")
+          useStore.getState().addToast({
+            type: "error",
+            title: "Fehler beim Erfassen",
+            description: res.error || "Die Ausgabe konnte nicht gespeichert werden.",
+          })
           setIsSubmitting(false)
           return
         }
+
+        useStore.getState().addToast({
+          type: "success",
+          title: "Ausgabe erfasst",
+          description: `"${title.trim()}" (${formatCurrency(parsedAmount, currency)}) hinzugefügt.`,
+        })
       }
 
       onClose()
       router.refresh()
     } catch (err: any) {
       setError(err.message || "Unerwarteter Fehler")
+      useStore.getState().addToast({
+        type: "error",
+        title: "Fehler",
+        description: err.message || "Ein unerwarteter Fehler ist aufgetreten.",
+      })
     } finally {
       setIsSubmitting(false)
     }
@@ -259,20 +291,15 @@ export default function ExpenseModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="relative w-full max-w-lg bg-white dark:bg-[#0d1117] border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[92vh]">
+      <div className="relative w-full max-w-lg bg-white dark:bg-[#0d141d] border border-slate-200 dark:border-white/10 rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[92vh]">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-800/80 shrink-0">
-          <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-xl bg-brand-50 dark:bg-brand-500/10 text-brand-500">
-              <DollarSign className="w-5 h-5" />
-            </div>
-            <h2 className="text-lg font-bold text-slate-700 dark:text-slate-200">
-              {expenseToEdit ? "Ausgabe bearbeiten" : "Neue Ausgabe erfassen"}
-            </h2>
-          </div>
+        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-white/10 shrink-0">
+          <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100">
+            {expenseToEdit ? "Ausgabe bearbeiten" : "Neue Ausgabe erfassen"}
+          </h2>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-white/10 transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -298,7 +325,7 @@ export default function ExpenseModal({
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="z. B. Abendessen, Mietwagen, Hotel"
-                className="w-full px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#161f28]/70 text-slate-700 dark:text-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500"
+                className="w-full px-3.5 py-2 rounded-xl border border-slate-200/80 dark:border-white/10 bg-slate-50/80 dark:bg-[#070c12]/60 text-slate-800 dark:text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500"
               />
             </div>
             <div>
@@ -313,7 +340,7 @@ export default function ExpenseModal({
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
                 placeholder="0.00"
-                className="w-full px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#161f28]/70 text-slate-700 dark:text-slate-200 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500"
+                className="w-full px-3.5 py-2 rounded-xl border border-slate-200/80 dark:border-white/10 bg-slate-50/80 dark:bg-[#070c12]/60 text-slate-800 dark:text-slate-100 text-sm font-bold font-mono focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500"
               />
             </div>
           </div>
@@ -330,7 +357,7 @@ export default function ExpenseModal({
                 required
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
-                className="w-full px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#161f28]/70 text-slate-700 dark:text-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500"
+                className="w-full px-3.5 py-2 rounded-xl border border-slate-200/80 dark:border-white/10 bg-slate-50/80 dark:bg-[#070c12]/60 text-slate-800 dark:text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 font-mono"
               />
             </div>
             <div>
@@ -359,7 +386,7 @@ export default function ExpenseModal({
                     setTitle("Ausgleichszahlung")
                   }
                 }}
-                className="w-full px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#161f28]/70 text-slate-700 dark:text-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500"
+                className="w-full px-3.5 py-2 rounded-xl border border-slate-200/80 dark:border-white/10 bg-slate-50/80 dark:bg-[#070c12]/60 text-slate-700 dark:text-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 cursor-pointer"
               >
                 <option value="">-- Ohne Kategorie --</option>
                 {categories.map((c) => (
@@ -383,7 +410,6 @@ export default function ExpenseModal({
               </div>
             </div>
           )}
-
           {/* Payer (Bezahlt von) */}
           <div>
             <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5 flex items-center gap-1">
@@ -401,7 +427,7 @@ export default function ExpenseModal({
                     className={`flex items-center gap-2 p-2.5 rounded-xl border text-xs font-semibold transition-all cursor-pointer ${
                       isSelected
                         ? "bg-brand-50 dark:bg-brand-500/15 border-brand-500/50 text-brand-700 dark:text-brand-300 ring-1 ring-brand-500/30"
-                        : "bg-slate-50/80 dark:bg-slate-900/40 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:border-slate-300"
+                        : "bg-slate-50/80 dark:bg-[#070c12]/60 border-slate-200/80 dark:border-white/10 text-slate-700 dark:text-slate-300 hover:border-slate-300"
                     }`}
                   >
                     <div
@@ -416,13 +442,13 @@ export default function ExpenseModal({
           </div>
 
           {/* Split Mode Selector */}
-          <div className="border-t border-slate-100 dark:border-slate-800 pt-3">
+          <div className="border-t border-slate-100 dark:border-white/10 pt-3">
             <div className="flex items-center justify-between mb-2">
               <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider flex items-center gap-1">
                 <Users className="w-3.5 h-3.5 text-brand-500" />
                 Aufteilung (Split) *
               </label>
-              <div className="flex items-center p-0.5 rounded-lg bg-slate-100 dark:bg-slate-800/80 text-xs font-semibold">
+              <div className="flex items-center p-0.5 rounded-lg bg-slate-100 dark:bg-white/10 text-xs font-semibold">
                 <button
                   type="button"
                   onClick={() => setSplitMode("equal")}
@@ -453,47 +479,62 @@ export default function ExpenseModal({
                       : "text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"
                   }`}
                 >
-                  Individuell
+                  Individuell (€)
                 </button>
               </div>
             </div>
 
-            {/* Split Mode 1: Equal Split Checkboxes */}
+            {/* Split Mode 1: Equal Checkbox List */}
             {splitMode === "equal" && (
-              <div className="flex flex-col gap-2 bg-slate-50/80 dark:bg-slate-900/40 border border-slate-100 dark:border-slate-800/60 rounded-xl p-3">
-                <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 mb-1">
-                  <span>
-                    {selectedParticipantIds.length} von {participants.length} Personen beteiligt
+              <div className="flex flex-col gap-2">
+                <div className="flex items-center justify-between text-xs text-slate-400 dark:text-slate-500">
+                  <span className="font-mono">
+                    Ø Anteil pro Kopf:{" "}
+                    <strong className="text-slate-700 dark:text-slate-200 font-bold">
+                      {formatCurrency(equalShare, currency)}
+                    </strong>
                   </span>
-                  {selectedParticipantIds.length > 0 && parsedAmount > 0 && (
-                    <span className="font-bold text-brand-600 dark:text-brand-400">
-                      Ø {equalShare.toFixed(2)} {currency} / Person
-                    </span>
-                  )}
+                  <div className="flex gap-2">
+                    <button
+                      type="button"
+                      onClick={handleSelectAll}
+                      className="text-brand-600 dark:text-brand-400 hover:underline cursor-pointer"
+                    >
+                      Alle
+                    </button>
+                    <span>•</span>
+                    <button
+                      type="button"
+                      onClick={handleDeselectAll}
+                      className="text-slate-400 hover:underline cursor-pointer"
+                    >
+                      Keine
+                    </button>
+                  </div>
                 </div>
 
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                <div className="grid grid-cols-2 gap-2">
                   {participants.map((p) => {
-                    const isChecked = selectedParticipantIds.includes(p.id)
+                    const isSelected = selectedParticipantIds.includes(p.id)
                     return (
                       <button
                         key={p.id}
                         type="button"
                         onClick={() => handleToggleParticipant(p.id)}
-                        className={`flex items-center justify-between p-2 rounded-lg text-xs font-medium transition-colors cursor-pointer border ${
-                          isChecked
-                            ? "bg-white dark:bg-[#161f28] border-brand-500/40 text-slate-700 dark:text-slate-200 shadow-xs"
-                            : "bg-transparent border-transparent text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
+                        className={`flex items-center justify-between p-2 rounded-xl border text-xs font-semibold transition-all cursor-pointer ${
+                          isSelected
+                            ? "bg-brand-50/80 dark:bg-brand-500/15 border-brand-500/40 text-brand-700 dark:text-brand-300"
+                            : "bg-slate-50/80 dark:bg-[#070c12]/60 border-slate-200/80 dark:border-white/10 text-slate-500 dark:text-slate-400 hover:border-slate-300 opacity-60"
                         }`}
                       >
-                        <div className="flex items-center gap-1.5 truncate">
+                        <div className="flex items-center gap-2 truncate">
                           <div
                             className="w-2.5 h-2.5 rounded-full shrink-0"
                             style={{ backgroundColor: p.color || "#3b82f6" }}
                           />
                           <span className="truncate">{p.name}</span>
                         </div>
-                        {isChecked && <Check className="w-3.5 h-3.5 text-brand-500 shrink-0 ml-1" />}
+                        {isSelected && <Check className="w-3.5 h-3.5 text-brand-500 shrink-0" />}
                       </button>
                     )
                   })}
@@ -503,13 +544,13 @@ export default function ExpenseModal({
 
             {/* Split Mode 2: Custom Amount Inputs */}
             {splitMode === "custom" && (
-              <div className="flex flex-col gap-2.5 bg-slate-50/80 dark:bg-slate-900/40 border border-slate-100 dark:border-slate-800/60 rounded-xl p-3">
+              <div className="flex flex-col gap-2.5 bg-slate-50/80 dark:bg-[#070c12]/60 border border-slate-200/80 dark:border-white/10 rounded-2xl p-3">
                 <div className="flex items-center justify-between text-xs mb-1">
-                  <span className="text-slate-500 dark:text-slate-400">
+                  <span className="text-slate-500 dark:text-slate-400 font-mono">
                     Gesamt: {parsedAmount.toFixed(2)} {currency}
                   </span>
                   <span
-                    className={`font-bold ${
+                    className={`font-bold font-mono ${
                       Math.abs(customDiff) < 0.01
                         ? "text-emerald-500"
                         : "text-rose-500"
@@ -527,7 +568,7 @@ export default function ExpenseModal({
                     return (
                       <div
                         key={p.id}
-                        className="flex items-center justify-between gap-3 p-1.5 bg-white dark:bg-[#161f28] border border-slate-200/80 dark:border-slate-800 rounded-lg"
+                        className="flex items-center justify-between gap-3 p-2 bg-white dark:bg-[#0d141d] border border-slate-200/80 dark:border-white/10 rounded-xl"
                       >
                         <div className="flex items-center gap-2 min-w-0">
                           <div
@@ -547,7 +588,7 @@ export default function ExpenseModal({
                             value={currentVal}
                             onChange={(e) => handleCustomSplitChange(p.id, e.target.value)}
                             placeholder="0.00"
-                            className="w-24 px-2 py-1 text-right text-xs font-bold rounded-md border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/60 text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-brand-500"
+                            className="w-24 px-2 py-1 text-right text-xs font-bold font-mono rounded-md border border-slate-200/80 dark:border-white/10 bg-slate-50/80 dark:bg-[#070c12]/60 text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-1 focus:ring-brand-500"
                           />
                           <span className="text-xs text-slate-400 font-medium">{currency}</span>
                         </div>
@@ -570,27 +611,27 @@ export default function ExpenseModal({
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               placeholder="z. B. Belegnummer, Link, Aufteilungsgrund..."
-              className="w-full px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#161f28]/70 text-slate-700 dark:text-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500"
+              className="w-full px-3.5 py-2 rounded-xl border border-slate-200/80 dark:border-white/10 bg-slate-50/80 dark:bg-[#070c12]/60 text-slate-800 dark:text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500"
             />
           </div>
 
-          {/* Footer Actions */}
-          <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-100 dark:border-slate-800/80 shrink-0">
+          {/* Footer Actions (Pop-up 2nd Level - Schlichter Button Standard) */}
+          <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-100 dark:border-white/10 shrink-0">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+              className="px-4 py-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/10 rounded-xl font-medium transition-colors cursor-pointer text-sm"
             >
               Abbrechen
             </button>
             <button
               type="submit"
               disabled={isSubmitting}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm text-slate-700 dark:text-slate-200 bg-white dark:bg-[#161f28]/70 hover:bg-[#fafafa] dark:hover:bg-[#1e2a36]/90 border border-slate-300 dark:border-slate-700/80 hover:border-brand-500/50 dark:hover:border-brand-500/50 hover:-translate-y-0.5 hover:shadow-md hover:shadow-brand-500/10 active:translate-y-0 active:scale-[0.98] transition-all duration-300 backdrop-blur-md cursor-pointer disabled:opacity-50"
+              className="px-6 py-2 text-brand-600 dark:text-brand-400 hover:bg-brand-50 dark:hover:bg-brand-500/10 rounded-xl font-semibold flex items-center gap-2 transition-colors cursor-pointer text-sm disabled:opacity-50"
             >
-              <Plus className="w-4 h-4 text-brand-500 shrink-0" />
+              <Save className="w-4 h-4 text-brand-500 shrink-0" />
               <span>
-                {isSubmitting ? "Wird gespeichert..." : expenseToEdit ? "Ausgabe aktualisieren" : "Ausgabe erfassen"}
+                {isSubmitting ? "Wird gespeichert..." : expenseToEdit ? "Speichern" : "Ausgabe erfassen"}
               </span>
             </button>
           </div>

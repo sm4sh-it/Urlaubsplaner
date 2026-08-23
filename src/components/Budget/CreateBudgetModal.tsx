@@ -1,10 +1,11 @@
 "use client"
 
 import React, { useState, useEffect } from "react"
-import { X, Plus, Trash2, Calendar, DollarSign, Users, Plane } from "lucide-react"
+import { X, Plus, Save, Trash2, Calendar, DollarSign, Users, Plane } from "lucide-react"
 import { Profile, Trip } from "@/types"
 import { createTripBudget, updateTripBudget } from "@/app/actions/budgetActions"
 import { useRouter } from "next/navigation"
+import { useStore } from "@/store/useStore"
 
 interface CreateBudgetModalProps {
   isOpen: boolean
@@ -141,9 +142,20 @@ export default function CreateBudgetModal({
         })
         if (!res.success) {
           setError(res.error || "Fehler beim Aktualisieren")
+          useStore.getState().addToast({
+            type: "error",
+            title: "Fehler beim Speichern",
+            description: res.error || "Das Reise-Budget konnte nicht aktualisiert werden.",
+          })
           setIsSubmitting(false)
           return
         }
+
+        useStore.getState().addToast({
+          type: "success",
+          title: "Budget aktualisiert",
+          description: `Änderungen an "${name.trim()}" wurden gespeichert.`,
+        })
       } else {
         // Collect initial participants
         const initialParticipants = [
@@ -180,9 +192,20 @@ export default function CreateBudgetModal({
 
         if (!res.success) {
           setError(res.error || "Fehler beim Erstellen")
+          useStore.getState().addToast({
+            type: "error",
+            title: "Fehler beim Erstellen",
+            description: res.error || "Das Reise-Budget konnte nicht angelegt werden.",
+          })
           setIsSubmitting(false)
           return
         }
+
+        useStore.getState().addToast({
+          type: "success",
+          title: "Budget angelegt",
+          description: `Reise-Budget "${name.trim()}" wurde erfolgreich erstellt.`,
+        })
 
         if (res.data?.id) {
           onClose()
@@ -195,6 +218,11 @@ export default function CreateBudgetModal({
       router.refresh()
     } catch (err: any) {
       setError(err.message || "Unerwarteter Fehler")
+      useStore.getState().addToast({
+        type: "error",
+        title: "Fehler",
+        description: err.message || "Ein unerwarteter Fehler ist aufgetreten.",
+      })
     } finally {
       setIsSubmitting(false)
     }
@@ -204,20 +232,15 @@ export default function CreateBudgetModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="relative w-full max-w-xl bg-white dark:bg-[#0d1117] border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+      <div className="relative w-full max-w-xl bg-white dark:bg-[#0d141d] border border-slate-200 dark:border-white/10 rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-800/80 shrink-0">
-          <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-xl bg-brand-50 dark:bg-brand-500/10 text-brand-500">
-              <DollarSign className="w-5 h-5" />
-            </div>
-            <h2 className="text-lg font-bold text-slate-700 dark:text-slate-200">
-              {budgetToEdit ? "Reise-Budget bearbeiten" : "Neues Reise-Budget anlegen"}
-            </h2>
-          </div>
+        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-white/10 shrink-0">
+          <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100">
+            {budgetToEdit ? "Reise-Budget bearbeiten" : "Neues Reise-Budget anlegen"}
+          </h2>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-white/10 transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -241,7 +264,7 @@ export default function CreateBudgetModal({
                 <select
                   value={selectedTripId}
                   onChange={(e) => handleTripChange(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 text-slate-700 dark:text-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200/80 dark:border-white/10 bg-slate-50/80 dark:bg-[#070c12]/60 text-slate-700 dark:text-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500"
                 >
                   <option value="">-- Eigenständiges Budget (Keine Verknüpfung) --</option>
                   {trips.map((t) => (
@@ -265,7 +288,7 @@ export default function CreateBudgetModal({
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="z. B. Sommerurlaub Mallorca, Roadtrip Norwegen"
-              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#161f28]/70 text-slate-700 dark:text-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500"
+              className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200/80 dark:border-white/10 bg-slate-50/80 dark:bg-[#070c12]/60 text-slate-800 dark:text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500"
             />
           </div>
 
@@ -278,7 +301,7 @@ export default function CreateBudgetModal({
               <select
                 value={currency}
                 onChange={(e) => setCurrency(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#161f28]/70 text-slate-700 dark:text-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200/80 dark:border-white/10 bg-slate-50/80 dark:bg-[#070c12]/60 text-slate-700 dark:text-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 cursor-pointer"
               >
                 <option value="EUR">EUR (€)</option>
                 <option value="USD">USD ($)</option>
@@ -298,7 +321,7 @@ export default function CreateBudgetModal({
                   value={totalBudget}
                   onChange={(e) => setTotalBudget(e.target.value)}
                   placeholder="z. B. 1500"
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#161f28]/70 text-slate-700 dark:text-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200/80 dark:border-white/10 bg-slate-50/80 dark:bg-[#070c12]/60 text-slate-800 dark:text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 font-mono"
                 />
               </div>
             </div>
@@ -320,7 +343,7 @@ export default function CreateBudgetModal({
                     setEndDate(newStart)
                   }
                 }}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#161f28]/70 text-slate-700 dark:text-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200/80 dark:border-white/10 bg-slate-50/80 dark:bg-[#070c12]/60 text-slate-800 dark:text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 font-mono"
               />
             </div>
             <div>
@@ -332,16 +355,15 @@ export default function CreateBudgetModal({
                 value={endDate}
                 min={startDate || undefined}
                 onChange={(e) => setEndDate(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#161f28]/70 text-slate-700 dark:text-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200/80 dark:border-white/10 bg-slate-50/80 dark:bg-[#070c12]/60 text-slate-800 dark:text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 font-mono"
               />
             </div>
           </div>
 
           {/* Participants Selection (Only when creating) */}
           {!budgetToEdit && (
-            <div className="border-t border-slate-100 dark:border-slate-800 pt-4">
-              <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
-                <Users className="w-4 h-4 text-brand-500" />
+            <div className="border-t border-slate-100 dark:border-white/10 pt-4">
+              <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">
                 Reiseteilnehmer auswählen *
               </label>
               
@@ -356,7 +378,7 @@ export default function CreateBudgetModal({
                       className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer border ${
                         isSelected
                           ? "bg-brand-50 dark:bg-brand-500/15 border-brand-500/40 text-brand-700 dark:text-brand-300 shadow-xs"
-                          : "bg-slate-50 dark:bg-slate-800/60 border-slate-200 dark:border-slate-700/60 text-slate-500 dark:text-slate-400 hover:border-slate-300 opacity-60"
+                          : "bg-slate-50/80 dark:bg-[#070c12]/60 border-slate-200/80 dark:border-white/10 text-slate-500 dark:text-slate-400 hover:border-slate-300 opacity-60"
                       }`}
                     >
                       <div
@@ -404,12 +426,12 @@ export default function CreateBudgetModal({
                     }
                   }}
                   placeholder="Externen Gast hinzufügen (z. B. Freund)..."
-                  className="flex-1 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#161f28]/70 text-slate-700 dark:text-slate-200 text-xs focus:outline-none focus:ring-1 focus:ring-brand-500"
+                  className="flex-1 px-3.5 py-2 rounded-xl border border-slate-200/80 dark:border-white/10 bg-slate-50/80 dark:bg-[#070c12]/60 text-slate-800 dark:text-slate-100 text-xs focus:outline-none focus:ring-1 focus:ring-brand-500"
                 />
                 <button
                   type="button"
                   onClick={handleAddGuest}
-                  className="px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-brand-50 dark:hover:bg-brand-500/10 text-slate-700 dark:text-slate-300 hover:text-brand-600 text-xs font-semibold border border-slate-200 dark:border-slate-700 transition-colors flex items-center gap-1 cursor-pointer"
+                  className="px-3 py-2 rounded-xl bg-slate-100 dark:bg-white/10 hover:bg-brand-50 dark:hover:bg-brand-500/10 text-slate-700 dark:text-slate-300 hover:text-brand-600 text-xs font-semibold border border-slate-200/80 dark:border-white/10 transition-colors flex items-center gap-1 cursor-pointer"
                 >
                   <Plus className="w-3.5 h-3.5" />
                   <span>Gast</span>
@@ -418,22 +440,22 @@ export default function CreateBudgetModal({
             </div>
           )}
 
-          {/* Footer Actions */}
-          <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-100 dark:border-slate-800/80 shrink-0">
+          {/* Footer Actions (Pop-up 2nd Level - Schlichter Button Standard) */}
+          <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-100 dark:border-white/10 shrink-0">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-xl text-sm font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+              className="px-4 py-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/10 rounded-xl font-medium transition-colors cursor-pointer text-sm"
             >
               Abbrechen
             </button>
             <button
               type="submit"
               disabled={isSubmitting}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm text-slate-700 dark:text-slate-200 bg-white dark:bg-[#161f28]/70 hover:bg-[#fafafa] dark:hover:bg-[#1e2a36]/90 border border-slate-300 dark:border-slate-700/80 hover:border-brand-500/50 dark:hover:border-brand-500/50 hover:-translate-y-0.5 hover:shadow-md hover:shadow-brand-500/10 active:translate-y-0 active:scale-[0.98] transition-all duration-300 backdrop-blur-md cursor-pointer disabled:opacity-50"
+              className="px-6 py-2 text-brand-600 dark:text-brand-400 hover:bg-brand-50 dark:hover:bg-brand-500/10 rounded-xl font-semibold flex items-center gap-2 transition-colors cursor-pointer text-sm disabled:opacity-50"
             >
-              <Plus className="w-4 h-4 text-brand-500 shrink-0" />
-              <span>{isSubmitting ? "Wird gespeichert..." : budgetToEdit ? "Änderungen speichern" : "Budget erstellen"}</span>
+              <Save className="w-4 h-4 text-brand-500 shrink-0" />
+              <span>{isSubmitting ? "Wird gespeichert..." : budgetToEdit ? "Speichern" : "Budget anlegen"}</span>
             </button>
           </div>
         </form>
