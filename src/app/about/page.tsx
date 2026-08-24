@@ -31,7 +31,7 @@ export default function AboutPage() {
               <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mb-4">
                 Ein Projekt wie dieses baut auf großartigen Ideen und offenen Datenquellen auf.
               </p>
-              <div className="grid sm:grid-cols-3 gap-4">
+              <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div className="bg-slate-50/80 dark:bg-[#161f28]/65 p-5 rounded-2xl border border-slate-200/80 dark:border-white/10 hover:border-brand-500/40 hover:-translate-y-0.5 hover:shadow-md hover:shadow-brand-500/5 transition-all">
                   <a 
                     href="https://www.sl-urlaubsplaner.de/" 
@@ -69,6 +69,19 @@ export default function AboutPage() {
                   </a>
                   <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
                     Für die gesetzlichen Feiertage aller deutschen Bundesländer.
+                  </p>
+                </div>
+                <div className="bg-slate-50/80 dark:bg-[#161f28]/65 p-5 rounded-2xl border border-slate-200/80 dark:border-white/10 hover:border-brand-500/40 hover:-translate-y-0.5 hover:shadow-md hover:shadow-brand-500/5 transition-all">
+                  <a 
+                    href="https://polyformproject.org/licenses/noncommercial/1.0.0/" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="font-bold text-slate-800 dark:text-slate-100 text-sm mb-1 inline-flex items-center gap-1.5 hover:text-brand-600 dark:hover:text-brand-400 transition-colors"
+                  >
+                    Lizenz &amp; Nutzung <ExternalLink className="w-3.5 h-3.5 text-slate-400" />
+                  </a>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                    PolyForm Noncommercial 1.0.0 – Frei für Privat &amp; Self-Hosting.
                   </p>
                 </div>
               </div>

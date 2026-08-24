@@ -82,4 +82,7 @@ Ein großes Dankeschön geht an die Bereitsteller der kostenfreien APIs für Fei
 - **[feiertage-api.de](https://feiertage-api.de/)** – Gesetzliche Feiertage der Bundesländer
 
 ## Lizenz
-Dieses Projekt steht unter der [MIT Lizenz](LICENSE).
+Dieses Projekt steht unter der **[PolyForm Noncommercial License 1.0.0](LICENSE)**.
+
+- ✅ **Erlaubt:** Kostenlose private Nutzung, Modifikation und Self-Hosting für Familien, Freunde, Vereine und den Eigenbedarf.
+- ❌ **Untersagt:** Kommerzielle Nutzung, Weiterverkauf oder das kostenpflichtige Anbieten als gehosteter Cloud-Dienst (SaaS) ohne vorherige schriftliche Genehmigung des Urhebers.
