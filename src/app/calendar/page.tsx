@@ -1,7 +1,6 @@
 import { prisma } from '@/lib/prisma'
 import YearCalendar from '@/components/YearCalendar'
-import Legend from '@/components/Legend'
-import Statistics from '@/components/Statistics'
+import CalendarSidebar from '@/components/CalendarSidebar'
 import StoreHydrator from '@/components/StoreHydrator'
 import { CalendarEntry, EntryType } from '@/types'
 
@@ -47,12 +46,7 @@ export default async function Home() {
       <StoreHydrator profiles={profilesRaw} entries={entries} overrides={overrides} trips={tripsRaw as any} />
       <DashboardLayout 
         calendar={<YearCalendar />}
-        sidebar={
-          <>
-            <Statistics />
-            <Legend />
-          </>
-        }
+        sidebar={<CalendarSidebar />}
       />
     </>
   )

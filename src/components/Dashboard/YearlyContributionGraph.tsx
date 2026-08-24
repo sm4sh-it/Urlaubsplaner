@@ -235,19 +235,19 @@ export default function YearlyContributionGraph() {
       
       {/* Heatmap Grid - Responsive fluid up to 1600px, graceful scroll on < 1000px */}
       <div className="w-full overflow-x-auto custom-scrollbar p-1 sm:p-2">
-        <div className="w-full min-w-[960px] flex items-start px-2 py-3">
+        <div className="w-full min-w-[960px] flex items-stretch px-2 py-3">
           {/* Days of week labels */}
           <div className="flex flex-col select-none mr-2 sm:mr-3 shrink-0">
             {/* Header spacer to match month labels row */}
             <div className="h-5 mb-2" />
-            <div className="grid grid-rows-7 gap-1 sm:gap-1.5 text-[10px] sm:text-xs font-mono font-bold text-slate-400 dark:text-slate-500">
-              <span className="flex items-center justify-end aspect-square">Mo</span>
-              <span className="flex items-center justify-end aspect-square invisible">Di</span>
-              <span className="flex items-center justify-end aspect-square">Mi</span>
-              <span className="flex items-center justify-end aspect-square invisible">Do</span>
-              <span className="flex items-center justify-end aspect-square">Fr</span>
-              <span className="flex items-center justify-end aspect-square invisible">Sa</span>
-              <span className="flex items-center justify-end aspect-square">So</span>
+            <div className="flex-1 grid grid-rows-7 gap-1 sm:gap-1.5 text-[10px] sm:text-xs font-mono font-bold text-slate-400 dark:text-slate-500">
+              <span className="flex items-center justify-end">Mo</span>
+              <span className="flex items-center justify-end invisible">Di</span>
+              <span className="flex items-center justify-end">Mi</span>
+              <span className="flex items-center justify-end invisible">Do</span>
+              <span className="flex items-center justify-end">Fr</span>
+              <span className="flex items-center justify-end invisible">Sa</span>
+              <span className="flex items-center justify-end">So</span>
             </div>
           </div>
 

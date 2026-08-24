@@ -194,23 +194,8 @@ body {
 .status-s-2 { background: linear-gradient(135deg, var(--color-special) 50%, var(--surface) 50%) !important; color: var(--status-text) !important; }
 .status-a   { background: var(--color-auszeit) !important; color: var(--status-text) !important; }
 .status-a-2 { background: linear-gradient(135deg, var(--color-auszeit) 50%, var(--surface) 50%) !important; color: var(--status-text) !important; }
-.status-m {
-  background-color: var(--color-mobile) !important;
-  color: var(--status-text) !important;
-  border: 1px solid rgba(0,0,0,0.08) !important;
-}
-.dark .status-m {
-  border: 1px solid rgba(255,255,255,0.1) !important;
-}
-
-.status-m-2 {
-  background: linear-gradient(135deg, var(--color-mobile) 50%, var(--surface-bright) 50%) !important;
-  color: var(--status-text) !important;
-  border: 1px solid rgba(0,0,0,0.08) !important;
-}
-.dark .status-m-2 {
-  border: 1px solid rgba(255,255,255,0.1) !important;
-}
+.status-m   { background: var(--color-mobile) !important; color: var(--status-text) !important; }
+.status-m-2 { background: linear-gradient(135deg, var(--color-mobile) 50%, var(--surface) 50%) !important; color: var(--status-text) !important; }
 
 .status-x   { 
   background: repeating-linear-gradient(

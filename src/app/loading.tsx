@@ -3,7 +3,7 @@ import { Skeleton, TripCardSkeleton } from "@/components/ui/Skeleton"
 export default function RootLoading() {
   return (
     <div className="flex-1 w-full h-full overflow-y-auto overflow-x-hidden custom-scrollbar">
-      <main className="max-w-[1600px] w-full mx-auto p-3 sm:p-5 md:p-8 pt-2 sm:pt-4 md:pt-6 pb-24 md:pb-28 flex flex-col gap-6 md:gap-8 animate-pulse">
+      <main className="max-w-[1600px] w-full mx-auto p-4 sm:p-6 md:p-8 pt-5 sm:pt-6 md:pt-8 pb-24 md:pb-28 flex flex-col gap-6 md:gap-8 animate-pulse">
         
         {/* Stats Row Placeholder */}
         <div className="flex items-center gap-4 pb-4 border-b border-slate-200 dark:border-white/10">

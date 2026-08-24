@@ -1,12 +1,13 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { X, Save, Trash2, ChevronDown, Calendar, Palmtree, MapPin, DollarSign, FileText, Compass, Users } from "lucide-react"
+import { X, Save, Trash2, ChevronDown, Calendar, Palmtree, MapPin, DollarSign, FileText, Compass, Users, Download } from "lucide-react"
 import { useStore } from "@/store/useStore"
 import { Trip, TripType, TripStatus } from "@/types"
 import { createTrip, updateTrip, deleteTrip } from "@/app/actions/tripActions"
 import { COUNTRIES } from "@/lib/countries"
 import Avatar from "@/components/ui/Avatar"
+import { downloadTripIcs } from "@/lib/icsUtils"
 
 interface TripModalProps {
   isOpen: boolean
@@ -200,6 +201,51 @@ export default function TripModal({ isOpen, onClose, trip }: TripModalProps) {
       })
     } finally {
       setIsSaving(false)
+    }
+  }
+
+  const handleIcsExport = () => {
+    if (!title.trim() || !startDate) {
+      useStore.getState().addToast({
+        type: "error",
+        title: "Unvollständige Reisedaten",
+        description: "Bitte gib mindestens einen Titel und ein Startdatum an, um den Kalenderexport durchzuführen.",
+      })
+      return
+    }
+
+    try {
+      const filename = downloadTripIcs(
+        {
+          id: trip?.id,
+          title: title.trim(),
+          startDate,
+          endDate: endDate || startDate,
+          type,
+          status,
+          location,
+          country,
+          travelType,
+          transport,
+          notes,
+          selectedProfileIds,
+          externalParticipants,
+        },
+        profiles
+      )
+
+      useStore.getState().addToast({
+        type: "success",
+        title: "Kalenderdatei heruntergeladen",
+        description: `"${filename}" wurde erfolgreich exportiert.`,
+      })
+    } catch (err: any) {
+      console.error("Fehler beim ICS Export:", err)
+      useStore.getState().addToast({
+        type: "error",
+        title: "Fehler beim Export",
+        description: "Die Kalenderdatei konnte nicht generiert werden.",
+      })
     }
   }
 
@@ -561,24 +607,39 @@ export default function TripModal({ isOpen, onClose, trip }: TripModalProps) {
         </div>
 
         {/* Footer Actions (TripModal Standard) */}
-        <div className="p-4 sm:p-5 border-t border-slate-100 dark:border-white/10 bg-slate-50 dark:bg-black/20 flex items-center justify-between shrink-0">
-          {trip ? (
-            <button 
-              type="button"
-              onClick={handleDelete}
-              disabled={isSaving}
-              className="px-4 py-2 text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-500/10 rounded-lg font-medium flex items-center gap-2 transition-colors cursor-pointer text-sm disabled:opacity-50"
-            >
-              <Trash2 className="w-4 h-4" /> 
-              <span>Löschen</span>
-            </button>
-          ) : <div />}
+        <div className="p-4 sm:p-5 border-t border-slate-100 dark:border-white/10 bg-slate-50 dark:bg-black/20 flex flex-wrap items-center justify-between gap-3 shrink-0">
+          <div className="flex items-center gap-2">
+            {trip && (
+              <button 
+                type="button"
+                onClick={handleDelete}
+                disabled={isSaving}
+                className="px-3.5 py-2 text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-500/10 rounded-xl font-medium flex items-center gap-1.5 transition-colors cursor-pointer text-sm disabled:opacity-50"
+              >
+                <Trash2 className="w-4 h-4" /> 
+                <span>Löschen</span>
+              </button>
+            )}
+
+            {/* Kalender Export Button */}
+            {trip && (
+              <button 
+                type="button"
+                onClick={handleIcsExport}
+                className="px-3.5 py-2 text-slate-700 dark:text-slate-200 hover:bg-slate-200/60 dark:hover:bg-white/10 rounded-xl font-medium flex items-center gap-1.5 transition-colors cursor-pointer text-sm"
+                title="Als .ics Kalenderdatei herunterladen (Apple / Google / Outlook)"
+              >
+                <Download className="w-4 h-4 text-brand-500 shrink-0" />
+                <span>Kalender (.ics)</span>
+              </button>
+            )}
+          </div>
           
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2.5 ml-auto">
             <button 
               type="button"
               onClick={onClose}
-              className="px-4 py-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg font-medium transition-colors cursor-pointer text-sm"
+              className="px-4 py-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl font-medium transition-colors cursor-pointer text-sm"
             >
               Abbrechen
             </button>
@@ -586,7 +647,7 @@ export default function TripModal({ isOpen, onClose, trip }: TripModalProps) {
               type="submit"
               form="trip-form"
               disabled={isSaving || selectedProfileIds.length === 0}
-              className="px-6 py-2 text-brand-600 dark:text-brand-400 hover:bg-brand-50 dark:hover:bg-brand-500/10 rounded-lg font-medium flex items-center gap-2 transition-colors cursor-pointer text-sm disabled:opacity-50"
+              className="px-6 py-2 text-brand-600 dark:text-brand-400 hover:bg-brand-50 dark:hover:bg-brand-500/10 rounded-xl font-medium flex items-center gap-2 transition-colors cursor-pointer text-sm disabled:opacity-50"
             >
               <Save className="w-4 h-4" /> 
               <span>{isSaving ? "Speichert..." : "Speichern"}</span>

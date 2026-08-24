@@ -9,6 +9,7 @@ Statt manuellem Rechnen bietet dir die App eine klare Jahresübersicht inklusive
 - **Tastaturgesteuert:** Blitzschnelle Eingabe per Tastendruck (`U` für Urlaub, `K` für Krank, `M` für Mobiles Arbeiten, `Shift+U` / `Shift+M` für halbe Tage).
 - **Multi-User fähig:** Profile für verschiedene Personen mit eigenen Farben anlegen und gleichzeitig im Kalender vergleichen.
 - **Reisen & Halbtage:** Ganztägige und halbe Reisen (Vormittag/Nachmittag) planen inkl. automatischer Urlaubs-Abzüge und Transportmittel-Erfassung (z.B. Bus, Flugzeug, Auto).
+- **ICS-Kalenderexport:** 1-Klick-Export beliebiger Reisen als standardisierte `.ics`-Datei (RFC 5545) für Apple Kalender, Google Kalender und Microsoft Outlook.
 - **Budget- & Reisekostenverwaltung:** Reisebudgets festlegen, gemeinsame Ausgaben flexibel aufteilen (gleichmäßig oder individuell), Kategorien auswerten und automatischer Saldenausgleich (*„Wer schuldet wem wie viel?“*) mit 1-Klick-Abrechnungsexport.
 - **Auto-Sync:** Feiertage und Schulferien aller deutschen Bundesländer werden automatisch geladen.
 - **Statistiken & Resturlaub:** Detailliertes Dashboard mit Burn-Down-Charts, Verfallsdatum-Warnung und Transportmittel-Auswertungen.
@@ -17,10 +18,14 @@ Statt manuellem Rechnen bietet dir die App eine klare Jahresübersicht inklusive
 ## Screenshots
 
 ### 📊 Dashboard & Jahres-Aktivitätsübersicht
-![Dashboard & Jahres-Aktivitätsübersicht](public/screenshots/01_dashboard_dark.png)
+| 🌙 Dark Mode (Midnight Glass) | ☀️ Light Mode (Clean Stone) |
+| :---: | :---: |
+| ![Dashboard Dark Mode](public/screenshots/01_dashboard_dark.png) | ![Dashboard Light Mode](public/screenshots/01_dashboard.png) |
 
 ### 📅 Jahreskalender mit Schnell-Legende & Tastatursteuerung
-![Jahreskalender Ansicht mit Legende](public/screenshots/02b_calendar_legend_dark.png)
+| 🌙 Dark Mode (mit Seitenleiste) | ☀️ Light Mode (Kalenderübersicht) |
+| :---: | :---: |
+| ![Jahreskalender Dark Mode](public/screenshots/02b_calendar_legend_dark.png) | ![Jahreskalender Light Mode](public/screenshots/02_calendar.png) |
 
 ### 💰 Budget- & Reisekostenverwaltung
 | Hauptübersicht & KPIs | Belegerfassung & flexible Splits |

@@ -95,7 +95,7 @@ export default function DashboardHome() {
   }, [activeProfileIds, profiles, selectedYear, overrides, entries, trips, holidays])
 
   return (
-    <div className="max-w-[1600px] w-full mx-auto p-3 sm:p-5 md:p-8 pt-2 sm:pt-4 md:pt-6 pb-24 md:pb-28 flex flex-col gap-6 md:gap-8">
+    <div className="max-w-[1600px] w-full mx-auto p-4 sm:p-6 md:p-8 pt-5 sm:pt-6 md:pt-8 pb-24 md:pb-28 flex flex-col gap-6 md:gap-8">
       
       {/* Stats Row / Header */}
       <div className="flex flex-wrap items-center gap-3 md:gap-4 text-xs sm:text-sm md:text-base text-slate-600 dark:text-slate-300 border-b border-slate-200 dark:border-white/10 pb-2 sm:pb-4 font-medium">

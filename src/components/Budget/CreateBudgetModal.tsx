@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useMemo } from "react"
 import { X, Plus, Save, Trash2, Calendar, DollarSign, Users, Plane } from "lucide-react"
 import { Profile, Trip } from "@/types"
 import { createTripBudget, updateTripBudget } from "@/app/actions/budgetActions"
@@ -35,6 +35,30 @@ export default function CreateBudgetModal({
   // Real profiles (excluding ALLE_FERIEN)
   const realProfiles = profiles.filter((p) => p.id !== "ALLE_FERIEN")
   
+  // Available Years for Trip Preselection
+  const availableYears = useMemo(() => {
+    const yearSet = new Set<number>()
+    const currYear = new Date().getFullYear()
+    yearSet.add(selectedYear || currYear)
+    yearSet.add(currYear)
+    trips.forEach((t) => {
+      if (t.startDate) {
+        const y = parseInt(t.startDate.slice(0, 4), 10)
+        if (!isNaN(y)) yearSet.add(y)
+      }
+    })
+    return Array.from(yearSet).sort((a, b) => b - a)
+  }, [trips, selectedYear])
+
+  const [filterYear, setFilterYear] = useState<number>(selectedYear || new Date().getFullYear())
+
+  // Filtered trips for the selected year, sorted descending (aktuellste / neueste zuerst)
+  const filteredTrips = useMemo(() => {
+    return trips
+      .filter((t) => t.startDate && t.startDate.startsWith(filterYear.toString()))
+      .sort((a, b) => b.startDate.localeCompare(a.startDate))
+  }, [trips, filterYear])
+
   // Selected Profile IDs
   const [selectedProfileIds, setSelectedProfileIds] = useState<string[]>([])
   
@@ -53,6 +77,10 @@ export default function CreateBudgetModal({
       setStartDate(budgetToEdit.startDate || "")
       setEndDate(budgetToEdit.endDate || "")
       setSelectedTripId(budgetToEdit.tripId || "")
+      if (budgetToEdit.startDate) {
+        const y = parseInt(budgetToEdit.startDate.slice(0, 4), 10)
+        if (!isNaN(y)) setFilterYear(y)
+      }
     } else {
       setName("")
       setCurrency("EUR")
@@ -60,13 +88,14 @@ export default function CreateBudgetModal({
       setStartDate("")
       setEndDate("")
       setSelectedTripId("")
+      setFilterYear(selectedYear || new Date().getFullYear())
       // Default: select all real profiles
       setSelectedProfileIds(realProfiles.map((p) => p.id))
       setGuests([])
       setNewGuestName("")
       setError(null)
     }
-  }, [isOpen, budgetToEdit])
+  }, [isOpen, budgetToEdit, selectedYear])
 
   // Handle Trip Selection auto-fill
   const handleTripChange = (tripId: string) => {
@@ -254,25 +283,53 @@ export default function CreateBudgetModal({
             </div>
           )}
 
-          {/* Optional Trip Link */}
+          {/* Optional Trip Link with Year Preselection */}
           {!budgetToEdit && trips.length > 0 && (
             <div>
               <label className="block text-xs font-semibold text-slate-600 dark:text-slate-300 uppercase tracking-wider mb-1.5">
                 Mit bestehender Reise verknüpfen (Optional)
               </label>
-              <div className="relative">
-                <select
-                  value={selectedTripId}
-                  onChange={(e) => handleTripChange(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200/80 dark:border-white/10 bg-slate-50/80 dark:bg-[#070c12]/60 text-slate-700 dark:text-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500"
-                >
-                  <option value="">-- Eigenständiges Budget (Keine Verknüpfung) --</option>
-                  {trips.map((t) => (
-                    <option key={t.id} value={t.id}>
-                      {t.title} ({t.startDate} {t.endDate ? `bis ${t.endDate}` : ""})
-                    </option>
-                  ))}
-                </select>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                {/* Year Selection */}
+                <div className="sm:col-span-1">
+                  <select
+                    value={filterYear}
+                    onChange={(e) => {
+                      const y = parseInt(e.target.value, 10)
+                      setFilterYear(y)
+                      setSelectedTripId("")
+                    }}
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200/80 dark:border-white/10 bg-slate-50/80 dark:bg-[#070c12]/60 text-slate-700 dark:text-slate-200 text-sm font-mono font-bold focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 cursor-pointer"
+                  >
+                    {availableYears.map((yr: number) => (
+                      <option key={yr} value={yr}>
+                        Jahr {yr}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Filtered Trips Dropdown (Descending order) */}
+                <div className="sm:col-span-2">
+                  <select
+                    value={selectedTripId}
+                    onChange={(e) => handleTripChange(e.target.value)}
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200/80 dark:border-white/10 bg-slate-50/80 dark:bg-[#070c12]/60 text-slate-700 dark:text-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 cursor-pointer"
+                  >
+                    <option value="">-- Keine Verknüpfung (Eigenständig) --</option>
+                    {filteredTrips.length === 0 ? (
+                      <option value="" disabled>
+                        Keine Reisen in {filterYear} vorhanden
+                      </option>
+                    ) : (
+                      filteredTrips.map((t: Trip) => (
+                        <option key={t.id} value={t.id}>
+                          {t.title} ({t.startDate}{t.endDate && t.endDate !== t.startDate ? ` bis ${t.endDate}` : ""})
+                        </option>
+                      ))
+                    )}
+                  </select>
+                </div>
               </div>
             </div>
           )}

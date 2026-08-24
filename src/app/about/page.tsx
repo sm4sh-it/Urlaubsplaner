@@ -3,7 +3,7 @@ import { ExternalLink } from "lucide-react"
 export default function AboutPage() {
   return (
     <div className="flex-1 w-full h-full overflow-y-auto custom-scrollbar">
-      <main className="max-w-[1600px] w-full mx-auto p-3 sm:p-5 md:p-8 pt-2 sm:pt-4 md:pt-6 pb-24 md:pb-28 flex flex-col gap-6">
+      <main className="max-w-[1600px] w-full mx-auto p-4 sm:p-6 md:p-8 pt-5 sm:pt-6 md:pt-8 pb-24 md:pb-28 flex flex-col gap-6">
         <div className="bg-white dark:bg-[#0d141d]/75 backdrop-blur-xl rounded-3xl shadow-sm border border-slate-200 dark:border-white/10 p-6 sm:p-8 md:p-10 space-y-8">
           
           {/* Header */}
@@ -80,12 +80,27 @@ export default function AboutPage() {
             </h2>
 
             <div className="space-y-8">
-              {/* V 1.8.0 */}
+              {/* V 1.8.6 */}
               <div className="relative pl-7 border-l-2 border-brand-500">
                 <div className="absolute -left-[9px] top-1.5 h-4 w-4 rounded-full bg-brand-500 ring-4 ring-white dark:ring-[#0d141d] shadow-sm shadow-brand-500/50" />
                 <div className="flex items-center gap-3 mb-3">
-                  <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100 m-0">Version 1.8.0</h3>
+                  <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100 m-0">Version 1.8.6</h3>
                   <span className="text-xs px-2.5 py-0.5 bg-brand-500/15 border border-brand-500/20 text-brand-600 dark:text-brand-400 rounded-full font-bold">Aktuell</span>
+                </div>
+                <ul className="list-disc list-outside ml-4 mt-2 space-y-1.5 text-sm text-slate-600 dark:text-slate-300">
+                  <li><strong>Unified Glass Kalender-Seitenleiste:</strong> Statistik und Legende in einer einheitlichen Sidebar mit Segmented Control Switcher (<code>Statistik</code> / <code>Legende</code>), integriertem Schließen-Button, schlankem 1-Spalten-Layout ohne Scrollbalken und schwebendem Öffnen-Button auf Header-Höhe (inkl. Auto-Collapse unter 1280px).</li>
+                  <li><strong>RFC 5545 ICS-Kalenderexport:</strong> Direkter 1-Klick-Export von Reisen als <code>.ics</code>-Datei aus dem Bearbeitungs-Modal für Apple Kalender, Google/Android und Outlook.</li>
+                  <li><strong>Smarte Reiseverknüpfung im Budget:</strong> Vorgeschaltetes Jahres-Dropdown und chronologisch absteigende Sortierung bei der Reise-Verknüpfung im Budget-Modal.</li>
+                  <li><strong>Präzise Heatmap Wochentags-Ausrichtung:</strong> Mathematisch exakt synchronisierte Wochentags-Höhe (<code>Mo</code>, <code>Mi</code>, <code>Fr</code>, <code>So</code>) im 7-Zeilen-Kalendergitter.</li>
+                  <li><strong>Feinschliff &amp; Mobile Spacing:</strong> Entfernung störender Konturen bei Mobilem Arbeiten und vergrößerter oberer Freiraum unter der mobilen Navbar.</li>
+                </ul>
+              </div>
+
+              {/* V 1.8.0 */}
+              <div className="relative pl-7 border-l-2 border-slate-200 dark:border-white/10">
+                <div className="absolute -left-[9px] top-1.5 h-4 w-4 rounded-full bg-slate-300 dark:bg-slate-700 ring-4 ring-white dark:ring-[#0d141d]" />
+                <div className="flex items-center gap-3 mb-3">
+                  <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100 m-0">Version 1.8.0</h3>
                 </div>
                 <ul className="list-disc list-outside ml-4 mt-2 space-y-1.5 text-sm text-slate-600 dark:text-slate-300">
                   <li><strong>Midnight Glass Design System:</strong> Umfassende Modernisierung aller Oberflächen, KPI-Wells und Modals im Midnight-Slate-Look (<code>bg-white dark:bg-[#0d141d]/75 backdrop-blur-xl border border-slate-200 dark:border-white/10</code>) und standardisierte Content-Breite (1600px).</li>

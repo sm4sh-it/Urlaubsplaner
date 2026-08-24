@@ -100,7 +100,7 @@ export default function ArchiveClient() {
   }, [allPastTrips, searchQuery, selectedYearFilter, selectedProfileFilter, selectedTypeFilter])
 
   return (
-    <div className="max-w-[1600px] w-full mx-auto p-3 sm:p-5 md:p-8 pt-2 sm:pt-4 md:pt-6 pb-24 md:pb-28 flex flex-col gap-6">
+    <div className="max-w-[1600px] w-full mx-auto p-4 sm:p-6 md:p-8 pt-5 sm:pt-6 md:pt-8 pb-24 md:pb-28 flex flex-col gap-6">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-white/10 pb-5">
         <div>

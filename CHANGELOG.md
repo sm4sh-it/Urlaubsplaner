@@ -1,5 +1,28 @@
 # Changelog
 
+## [1.8.6] - 2026-08-24
+### Added & Improved
+- **Unified Glass Kalender-Seitenleiste (`CalendarSidebar.tsx`):**
+  - Zusammenführung von Statistik und Legende in einen einzigen, durchgängigen Midnight Glass Container.
+  - Neuer Segmented Control Switcher (`[ 📊 Statistik ]` &bull; `[ 📖 Legende ]`) und integrierter Schließen-Button im Header (`PanelRightClose`).
+  - Schlankes 1-Spalten-Layout der Monatsübersicht ohne verschachtelte Scrollbalken und ohne doppelte Kastenrahmen (`divide-y` Typografie-Zeilen).
+  - Schwebender Öffnen-Button (`btn-glass` mit `PanelRightOpen`) exakt bündig auf Höhe der Kalender-Überschrift.
+  - Responsives automatisches Einklappen bei Bildschirmen `< 1280px` beim Laden und bei Fenstergrößenänderungen.
+- **ICS-Kalenderexport nach RFC 5545 (`src/lib/icsUtils.ts`):**
+  - Neuer Action-Button *„Kalender (.ics)“* im Dialog „Reise bearbeiten“ (`TripModal.tsx`).
+  - Direkter clientseitiger Download standardisierter Kalenderdateien mit automatischer Dateinamen-Generierung (`Reisetitel.ics`), exakter Ganztags-Berechnung (`DTEND` +1 Tag) sowie Übernahme von Ort, Status, Kategorie, Transportmittel, Teilnehmern und Notizen.
+  - 100 % kompatibel mit Apple Kalender (iOS/macOS), Google Kalender (Android) und Microsoft Outlook.
+- **Budget-Modal mit intelligenter Reise-Verknüpfung (`CreateBudgetModal.tsx`):**
+  - Vorgeschaltetes Dropdown zur Auswahl des Reisejahres.
+  - Filtert und sortiert Reisen chronologisch absteigend (neueste Reise zuerst), um langes Scrollen bei vielen Reisen zu verhindern.
+- **Perfekt synchronisierte Wochentags-Höhe in der Heatmap (`YearlyContributionGraph.tsx`):**
+  - Mathematisch präzise 7-Zeilen-CSS-Grid-Koppelung (`flex items-stretch` mit `grid grid-rows-7`) für die Wochentage `Mo`, `Mi`, `Fr`, `So` auf dem Dashboard.
+- **Styling- & Kontur-Bereinigung bei Mobilem Arbeiten:**
+  - Entfernung störender grauer Innenrahmen / Konturen bei ganztägigem (`status-m`) und halbtägigem Mobilen Arbeiten (`status-m-2`) im Kalenderraster und in der Legende.
+- **Mobile Layout & Header-Spacing Feinschliff:**
+  - Großzügiger oberer Freiraum unter der fixierten Navigationsleiste (`pt-5 sm:pt-6 md:pt-8`) zur Vermeidung von Überschriften-Kollisionen auf Smartphones.
+  - Kompakte, scrollbare Profilauswahl im Mobile-Menü (`max-h-36 overflow-y-auto`), direkter Link zu *„Über das Projekt & Changelog“* (`/about`) und bereinigter Drawer-Footer (`by sm4sh.it • v1.8.6`).
+
 ## [1.8.0] - 2026-08-23
 ### Added & Improved
 - **Midnight Glass Design System (Globales Redesign):**
