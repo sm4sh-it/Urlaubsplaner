@@ -1,3 +1,6 @@
+# Local working files, scripts and drafts
+/_Work/
+/_work/
 /Workfiles/
 /workfiles/
 
@@ -75,3 +78,4 @@ scratch/
 # AI Agent Instructions
 AGENTS.md
 CLAUDE.md
+GEMINI.md

@@ -93,12 +93,26 @@ export default function AboutPage() {
             </h2>
 
             <div className="space-y-8">
-              {/* V 1.8.6 */}
+              {/* V 1.8.7 */}
               <div className="relative pl-7 border-l-2 border-brand-500">
                 <div className="absolute -left-[9px] top-1.5 h-4 w-4 rounded-full bg-brand-500 ring-4 ring-white dark:ring-[#0d141d] shadow-sm shadow-brand-500/50" />
                 <div className="flex items-center gap-3 mb-3">
-                  <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100 m-0">Version 1.8.6</h3>
+                  <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100 m-0">Version 1.8.7</h3>
                   <span className="text-xs px-2.5 py-0.5 bg-brand-500/15 border border-brand-500/20 text-brand-600 dark:text-brand-400 rounded-full font-bold">Aktuell</span>
+                </div>
+                <ul className="list-disc list-outside ml-4 mt-2 space-y-1.5 text-sm text-slate-600 dark:text-slate-300">
+                  <li><strong>Next.js Sicherheits- &amp; Performance-Update (16.3.4):</strong> Schließt kritische Sicherheitslücken (Remote Code Execution in der AVIF-Bildverarbeitung; GHSA-2xp9-vwfh-vxw4) und aktualisiert <code>postcss</code> sowie <code>sharp</code>.</li>
+                  <li><strong>Core- &amp; Dependency-Upgrades:</strong> Aktualisierung auf React <code>19.3.0</code>, Prisma ORM <code>7.10.0</code> mit LibSQL Driver <code>0.17.4</code> und Tailwind CSS <code>4.3.3</code>.</li>
+                  <li><strong>Bibliotheken &amp; Utilities:</strong> Updates für <code>lucide-react</code> (1.44.0), <code>zod</code> (4.6.1), <code>zustand</code> (5.0.15) und <code>recharts</code> (3.10.1).</li>
+                  <li><strong>Transitive Sicherheitsfixes:</strong> Bereinigung bekannter Schwachstellen in Sub-Abhängigkeiten wie <code>nanoid</code>, <code>js-yaml</code> und <code>brace-expansion</code>.</li>
+                </ul>
+              </div>
+
+              {/* V 1.8.6 */}
+              <div className="relative pl-7 border-l-2 border-slate-200 dark:border-white/10">
+                <div className="absolute -left-[9px] top-1.5 h-4 w-4 rounded-full bg-slate-300 dark:bg-slate-700 ring-4 ring-white dark:ring-[#0d141d]" />
+                <div className="flex items-center gap-3 mb-3">
+                  <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100 m-0">Version 1.8.6</h3>
                 </div>
                 <ul className="list-disc list-outside ml-4 mt-2 space-y-1.5 text-sm text-slate-600 dark:text-slate-300">
                   <li><strong>Unified Glass Kalender-Seitenleiste:</strong> Statistik und Legende in einer einheitlichen Sidebar mit Segmented Control Switcher (<code>Statistik</code> / <code>Legende</code>), integriertem Schließen-Button, schlankem 1-Spalten-Layout ohne Scrollbalken und schwebendem Öffnen-Button auf Header-Höhe (inkl. Auto-Collapse unter 1280px).</li>

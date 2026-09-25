@@ -14,6 +14,8 @@ README.md
 data
 prisma/*.db*
 *.db*
+_Work
+_work
 workfiles
 Workfiles
 scratch

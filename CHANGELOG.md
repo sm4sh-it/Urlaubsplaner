@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.8.7] - 2026-09-25
+### Security & Maintenance
+- **Next.js Sicherheits- & Framework-Update (`16.3.4`):**
+  - Behebung einer kritischen Sicherheitslücke (Remote Code Execution / Unauthenticated RCE in der Image Optimization API bei AVIF-Dateien und auf Windows-Servern; GHSA-2xp9-vwfh-vxw4 & GHSA-p293-qw3h-jr36).
+  - Aktualisierung von `eslint-config-next` auf Version `16.3.4` sowie Bereinigung der transitiven Abhängigkeiten von `postcss` und `sharp`.
+- **Core-Abhängigkeiten & Stabilitätsverbesserungen:**
+  - **React 19 (`19.3.0` & `@types/react`):** Wartungs- und Stabilitätsverbesserungen für React 19 und React DOM.
+  - **Prisma ORM (`7.10.0`):** Upgrade von `prisma`, `@prisma/client` und `@prisma/adapter-libsql` mit frisch generiertem Client sowie LibSQL Driver (`@libsql/client` `0.17.4`).
+  - **Tailwind CSS (`4.3.3` & `@tailwindcss/postcss`):** Patch-Release mit CSS-Compiler- und PostCSS-Fixes.
+  - **UI- & Utility-Bibliotheken:** Aktualisierung von `lucide-react` (`1.44.0`), `zod` (`4.6.1`), `zustand` (`5.0.15`) und `recharts` (`3.10.1`).
+  - **Tooling & Scripts:** Update von `puppeteer-core` (`25.10.0`) und `tsx` (`4.23.13`).
+- **Transitive Sicherheits-Patches (`npm audit fix`):**
+  - Behebung bekannter DoS- und SSRF-Schwachstellen in Hilfsmodulen (`nanoid`, `js-yaml`, `brace-expansion`, `fast-uri`).
+
 ## [1.8.6] - 2026-08-24
 ### Added & Improved
 - **Unified Glass Kalender-Seitenleiste (`CalendarSidebar.tsx`):**

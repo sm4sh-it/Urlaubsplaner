@@ -1,6 +1,6 @@
 {
   "name": "urlaubsplaner",
-  "version": "1.8.6",
+  "version": "1.8.7",
   "license": "PolyForm-Noncommercial-1.0.0",
   "private": true,
   "scripts": {
@@ -12,33 +12,33 @@
     "screenshots": "tsx scripts/take_screenshots.ts"
   },
   "dependencies": {
-    "@libsql/client": "^0.17.3",
-    "@prisma/adapter-libsql": "^7.9.0",
-    "@prisma/client": "^7.9.0",
+    "@libsql/client": "^0.17.4",
+    "@prisma/adapter-libsql": "^7.10.0",
+    "@prisma/client": "^7.10.0",
     "clsx": "^2.1.1",
     "date-fns": "^4.4.0",
     "dotenv": "^17.4.2",
-    "lucide-react": "^1.25.0",
-    "next": "^16.2.10",
+    "lucide-react": "^1.44.0",
+    "next": "^16.3.4",
     "next-themes": "^0.4.6",
-    "react": "^19.2.7",
-    "react-dom": "^19.2.7",
-    "recharts": "^3.10.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "recharts": "^3.10.1",
     "tailwind-merge": "^3.6.0",
-    "zod": "^4.4.3",
-    "zustand": "^5.0.14"
+    "zod": "^4.6.1",
+    "zustand": "^5.0.15"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4",
+    "@tailwindcss/postcss": "^4.3.3",
     "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
     "eslint": "^9",
-    "eslint-config-next": "^16.2.10",
-    "prisma": "^7.9.0",
-    "puppeteer-core": "^25.7.0",
-    "tailwindcss": "^4",
-    "tsx": "^4.23.12",
+    "eslint-config-next": "^16.3.4",
+    "prisma": "^7.10.0",
+    "puppeteer-core": "^25.10.0",
+    "tailwindcss": "^4.3.3",
+    "tsx": "^4.23.13",
     "typescript": "^6.0.3"
   }
 }
