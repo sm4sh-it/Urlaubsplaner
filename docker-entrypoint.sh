@@ -2,7 +2,7 @@
 set -e
 
 echo "Pushing Prisma schema to database..."
-npx -y prisma db push
+./node_modules/.bin/prisma db push || npx prisma db push
 
 echo "Starting Next.js server..."
 exec "$@"

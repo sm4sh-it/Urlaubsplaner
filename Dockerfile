@@ -37,8 +37,8 @@ ENV DATABASE_URL="file:/app/data/dev.db"
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-# Install dotenv for Prisma CLI config loading
-RUN npm install dotenv && \
+# Install dotenv and fixed Prisma CLI for runtime db push
+RUN npm install dotenv prisma@7.10.0 && \
     chown -R nextjs:nodejs /app/node_modules /app/package.json /app/package-lock.json
 
 COPY --from=builder /app/public ./public

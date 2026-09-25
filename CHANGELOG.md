@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.8] - 2026-09-25
+### Fixed
+- **Docker Container Boot-Loop & Prisma CLI Version Pinning (`Dockerfile`, `docker-entrypoint.sh`):**
+  - **Problem:** Das unversionierte Ausführen von `npx -y prisma db push` im Entrypoint-Skript führte nach Veröffentlichung von Prisma 8 (`8.0.0-rc.17`) als `latest`-Tag auf npm zu fatalen Boot-Abbrüchen (`CLI.UNKNOWN_COMMAND: No command registered for push`), da Prisma 8 den Befehl `db push` entfernt hat.
+  - **Lösung:** Die passende Prisma-CLI (`prisma@7.10.0`) wird nun direkt im Produktions-Runner-Stage des Dockerfiles mitinstalliert.
+  - **Vorteile:** Der Container führt die Datenbankschema-Synchronisation lokal über `./node_modules/.bin/prisma db push` aus. Es werden beim Container-Start keine Pakete mehr aus dem Web nachgeladen, wodurch der Container in Millisekunden startet, vollständig offline-fähig ist und gegen unvorhersehbare Upstream-Breaking-Changes geschützt ist.
+
 ## [1.8.7] - 2026-09-25
 ### Security & Maintenance
 - **Next.js Sicherheits- & Framework-Update (`16.3.4`):**
