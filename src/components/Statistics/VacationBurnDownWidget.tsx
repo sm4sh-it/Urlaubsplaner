@@ -3,7 +3,7 @@
 import { useStore } from "@/store/useStore"
 import { useMemo } from "react"
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts"
-import { isVacationCostingDay, calculateTripVacationCost } from "@/lib/tripUtils"
+import { isVacationCostingDay, calculateTripVacationCost, getTripDayVacationCost } from "@/lib/tripUtils"
 import { getProfileStatsForYear } from "@/lib/profileUtils"
 
 const MONTHS = ["Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dez"]
@@ -61,9 +61,7 @@ export default function VacationBurnDownWidget() {
         for (let d = new Date(start); d <= end; d.setUTCDate(d.getUTCDate() + 1)) {
           if (d.getUTCFullYear() === selectedYear && d.getUTCMonth() === month) {
             const dateStr = `${d.getUTCFullYear()}-${String(d.getUTCMonth()+1).padStart(2,'0')}-${String(d.getUTCDate()).padStart(2,'0')}`
-            if (isVacationCostingDay(dateStr, activeProfile, holidays)) {
-              monthTaken += t.isHalfDay ? 0.5 : 1
-            }
+            monthTaken += getTripDayVacationCost(t, dateStr, activeProfile, holidays, entries)
           }
         }
       })

@@ -18,9 +18,11 @@ import {
   Trash2,
   AlertTriangle,
   CheckCircle2,
+  Download,
 } from "lucide-react"
 import { Profile, Trip, TripBudget } from "@/types"
 import { formatCurrency, calculateTotalExpenses } from "@/lib/budgetUtils"
+import { downloadTripBudgetCsv } from "@/lib/csvExportUtils"
 import { deleteTripBudget } from "@/app/actions/budgetActions"
 import CreateBudgetModal from "./CreateBudgetModal"
 import AvatarGroup from "@/components/ui/AvatarGroup"
@@ -142,6 +144,24 @@ export default function BudgetList({
   const handleEdit = (budget: TripBudget) => {
     setBudgetToEdit(budget)
     setIsCreateModalOpen(true)
+  }
+
+  const handleExportCsv = (budget: TripBudget) => {
+    try {
+      const filename = downloadTripBudgetCsv(budget)
+      useStore.getState().addToast({
+        type: "success",
+        title: "CSV exportiert",
+        description: `Die Datei "${filename}" wurde erfolgreich heruntergeladen.`,
+      })
+    } catch (err: any) {
+      console.error("Fehler beim CSV-Export:", err)
+      useStore.getState().addToast({
+        type: "error",
+        title: "Export fehlgeschlagen",
+        description: err.message || "Die CSV-Datei konnte nicht generiert werden.",
+      })
+    }
   }
 
   return (
@@ -339,6 +359,13 @@ export default function BudgetList({
 
                     {/* Actions dropdown/buttons */}
                     <div className="flex items-center gap-1 opacity-80 group-hover:opacity-100 transition-opacity shrink-0">
+                      <button
+                        onClick={() => handleExportCsv(budget)}
+                        className="p-1.5 rounded-lg text-slate-400 hover:text-brand-500 hover:bg-slate-100 dark:hover:bg-white/10 transition-colors cursor-pointer"
+                        title="CSV exportieren"
+                      >
+                        <Download className="w-4 h-4" />
+                      </button>
                       <button
                         onClick={() => handleEdit(budget)}
                         className="p-1.5 rounded-lg text-slate-400 hover:text-brand-500 hover:bg-slate-100 dark:hover:bg-white/10 transition-colors cursor-pointer"

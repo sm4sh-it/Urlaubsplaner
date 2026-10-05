@@ -1,5 +1,32 @@
 # Changelog
 
+## [1.9.0] - 2026-10-04
+### Added & Improved
+- **Dynamische Reisetage & Randtage-Management (`startDayType`, `endDayType`):**
+  - **Abreise nach Feierabend (0 Urlaubstage):** Anreisetage (z. B. Freitagnachmittag oder Donnerstag bei 4-Tage-Woche) können als *„Abreise nach Feierabend (0 Urlaubstage)“* markiert werden. Der reale Reisezeitraum (z. B. Fr–Mo) bleibt für Kalender, ICS-Export und Budget erhalten, verbraucht aber 0 Urlaubstage.
+  - **Rückreise vor Arbeitsbeginn (0 Urlaubstage):** Rückreisetage können als *„Vor Arbeitsbeginn zurück (0 Urlaubstage)“* markiert werden.
+  - **Halbe Reisetage (0.5 Tage):** Start- und Endtage können flexibel als halbe Tage (0.5 Tage) deklariert werden.
+- **Workation-Feature („Zweite Tageshälfte an Arbeitstagen“):**
+  - Bei Halbtagsreisen (`isHalfDay`) kann die verbleibende Arbeitszeit mit *„Mobiles Arbeiten (M)“* oder *„Überstundenabbau (Ü)“* belegt werden.
+  - **Arbeitstage-Schutz:** Mobiles Arbeiten wird ausschließlich an den regulären Werktagen des Profils (`workingDays` minus Feiertage) berechnet und verbucht; Wochenenden bleiben arbeitsfrei.
+- **Krankheit hat Vorrang vor Urlaub („Krankheit bricht Urlaub“):**
+  - Wird ein Nutzer während einer Reise krank, kann der Tag einfach im Kalender als `K` (oder `3` für Halbtag) eingetragen werden.
+  - Das System schreibt die Urlaubstage für diesen Tag automatisch gut (Urlaubskosten = 0).
+  - **Auto-Cleanup Schutz:** Beim Speichern von Reisen werden registrierte Krankheitstage (`K`, `3`) vom Bereinigungsvorgang verschont und niemals überschrieben.
+- **Visualisierung im Jahreskalender:**
+  - Feierabendtage (`TRIP_NONE`) werden mit **35 % Deckkraft** der Urlaubsart dezent leer dargestellt, behalten aber den farbigen Profilrahmen.
+  - Workation-Tage an Werktagen werden als geteilte Zellen (z. B. Urlaubsgrün `U/2` und Mobile-Blau `M/2`) gerendert.
+  - Krankheitstage während einer Reise erscheinen vorrangig rot als `K`.
+- **Kompaktes Dropdown-Design im Reise-Modal:**
+  - Platzsparende Select-Dropdowns unter Start- und Enddatum verhindern Umbrüche auf Smartphones und halten das Formular sauber.
+
+## [1.8.9] - 2026-10-04
+### Added & Improved
+- **CSV-Export für Reise-Budgets (`src/lib/csvExportUtils.ts`):**
+  - Neuer CSV-Export für einzelne Reise-Budgets mit vollständiger Microsoft Excel- und Apple Numbers-Kompatibilität (UTF-8 BOM, Semikolon-Trennzeichen, deutsche Dezimalzahlen).
+  - Exportiert alle Belege, Kategorien, Zahlenden, individuellen Splits und Notizen sowie eine zusammenfassende Kennzahlen- und Saldenübersicht („Wer schuldet wem wie viel?“).
+  - Schneller Download an 3 Stellen: In der Header-Aktionsleiste der Budget-Detailseite, im Tab *„Ausgaben“* (inkl. automatischer Übernahme aktiver Such- und Kategoriefilter) und direkt als Icon-Button auf den Budget-Karten der Hauptübersicht.
+
 ## [1.8.8] - 2026-09-25
 ### Fixed
 - **Docker Container Boot-Loop & Prisma CLI Version Pinning (`Dockerfile`, `docker-entrypoint.sh`):**

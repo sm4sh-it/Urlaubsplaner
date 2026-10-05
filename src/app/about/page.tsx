@@ -93,12 +93,38 @@ export default function AboutPage() {
             </h2>
 
             <div className="space-y-8">
-              {/* V 1.8.8 */}
+              {/* V 1.9.0 */}
               <div className="relative pl-7 border-l-2 border-brand-500">
                 <div className="absolute -left-[9px] top-1.5 h-4 w-4 rounded-full bg-brand-500 ring-4 ring-white dark:ring-[#0d141d] shadow-sm shadow-brand-500/50" />
                 <div className="flex items-center gap-3 mb-3">
-                  <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100 m-0">Version 1.8.8</h3>
+                  <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100 m-0">Version 1.9.0</h3>
                   <span className="text-xs px-2.5 py-0.5 bg-brand-500/15 border border-brand-500/20 text-brand-600 dark:text-brand-400 rounded-full font-bold">Aktuell</span>
+                </div>
+                <ul className="list-disc list-outside ml-4 mt-2 space-y-1.5 text-sm text-slate-600 dark:text-slate-300">
+                  <li><strong>Dynamische Reisetage &amp; Randtage-Management:</strong> Start- und Endtage können flexibel als <em>„Abreise nach Feierabend (0 Urlaubstage)“</em> oder <em>„Vor Arbeitsbeginn zurück“</em> definiert werden. Der reale Reisezeitraum bleibt für Kalender, ICS-Export und Budget erhalten, verbraucht aber 0 Urlaubstage.</li>
+                  <li><strong>Workation-Feature:</strong> Bei Halbtagsreisen kann die verbleibende Arbeitszeit an Werktagen mit <em>„Mobiles Arbeiten (M)“</em> oder <em>„Überstundenabbau (Ü)“</em> belegt werden. Wochenenden und Feiertage bleiben vollkommen arbeitsfrei.</li>
+                  <li><strong>Krankheit hat Vorrang vor Urlaub:</strong> Registrierte Krankheitstage während einer Reise stellen Urlaubstage automatisch frei. Zudem schützt der Auto-Cleanup beim Speichern von Reisen bestehende Krankheitstage vor dem Überschreiben.</li>
+                  <li><strong>Visuelle Veredelung:</strong> Feierabend-Reisetage werden mit 35 % Deckkraft dezent leer dargestellt; Workation-Tage an Werktagen erscheinen als elegante zweigeteilte Zellen.</li>
+                </ul>
+              </div>
+
+              {/* V 1.8.9 */}
+              <div className="relative pl-7 border-l-2 border-slate-200 dark:border-white/10">
+                <div className="absolute -left-[9px] top-1.5 h-4 w-4 rounded-full bg-slate-300 dark:bg-slate-700 ring-4 ring-white dark:ring-[#0d141d]" />
+                <div className="flex items-center gap-3 mb-3">
+                  <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100 m-0">Version 1.8.9</h3>
+                </div>
+                <ul className="list-disc list-outside ml-4 mt-2 space-y-1.5 text-sm text-slate-600 dark:text-slate-300">
+                  <li><strong>CSV-Export für Reise-Budgets:</strong> Export einzelner Reise-Budgets als Excel- und Numbers-kompatible CSV-Datei (UTF-8 BOM, Semikolon, deutsche Dezimalzahlen) inklusive Belege, Splits, Notizen, Kennzahlen und Saldenausgleich („Wer schuldet wem wie viel?“).</li>
+                  <li><strong>Schnellzugriff &amp; Filter-Support:</strong> Download-Aktion im Header der Budget-Detailansicht, im Tab <em>„Ausgaben“</em> (mit automatischer Übernahme aktiver Such- und Kategoriefilter) sowie direkt auf den Reise-Karten der Hauptübersicht.</li>
+                </ul>
+              </div>
+
+              {/* V 1.8.8 */}
+              <div className="relative pl-7 border-l-2 border-slate-200 dark:border-white/10">
+                <div className="absolute -left-[9px] top-1.5 h-4 w-4 rounded-full bg-slate-300 dark:bg-slate-700 ring-4 ring-white dark:ring-[#0d141d]" />
+                <div className="flex items-center gap-3 mb-3">
+                  <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100 m-0">Version 1.8.8</h3>
                 </div>
                 <ul className="list-disc list-outside ml-4 mt-2 space-y-1.5 text-sm text-slate-600 dark:text-slate-300">
                   <li><strong>Docker Container Boot-Loop Bugfix:</strong> Behebung eines schwerwiegenden Startabbruchs (<code>CLI.UNKNOWN_COMMAND</code>), der durch den plötzlichen npm-Release von Prisma 8 RC als <code>latest</code> und das unversionierte <code>npx -y prisma db push</code> ausgelöst wurde.</li>

@@ -29,6 +29,10 @@ export interface Trip {
   isHalfDay?: boolean
   halfDayType?: string | null
   
+  startDayType?: "FULL" | "NONE" | "HALF" | string | null
+  endDayType?: "FULL" | "NONE" | "HALF" | string | null
+  secondaryType?: "M" | "Ü" | string | null
+  
   createdAt: string | Date
   updatedAt: string | Date
 }

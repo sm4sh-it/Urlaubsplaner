@@ -11,6 +11,7 @@ import {
   Users,
   Filter,
   ArrowRightLeft,
+  Download,
 } from "lucide-react"
 import { BudgetCategory, BudgetExpense, BudgetParticipant } from "@/types"
 import { formatCurrency, isSettlementExpense } from "@/lib/budgetUtils"
@@ -26,6 +27,7 @@ interface ExpensesTabProps {
   categories: BudgetCategory[]
   participants: BudgetParticipant[]
   onOpenExpenseModal: (expense?: BudgetExpense | null) => void
+  onExportCsv?: (filteredExpenses?: BudgetExpense[], filterLabel?: string) => void
 }
 
 export default function ExpensesTab({
@@ -35,6 +37,7 @@ export default function ExpensesTab({
   categories,
   participants,
   onOpenExpenseModal,
+  onExportCsv,
 }: ExpensesTabProps) {
   const router = useRouter()
   const [searchTerm, setSearchTerm] = useState("")
@@ -119,14 +122,48 @@ export default function ExpensesTab({
           </div>
         </div>
 
-        {/* Add Expense Button */}
-        <button
-          onClick={() => onOpenExpenseModal(null)}
-          className="btn-glass inline-flex items-center justify-center gap-2 font-semibold text-xs sm:text-sm text-slate-700 dark:text-slate-200 shrink-0"
-        >
-          <Plus className="w-4 h-4 text-brand-500 shrink-0" />
-          <span>Ausgabe erfassen</span>
-        </button>
+        <div className="flex items-center gap-2">
+          {onExportCsv && expenses.length > 0 && (
+            <button
+              onClick={() => {
+                const isFiltered = searchTerm || selectedCategoryFilter !== "all"
+                let filterLabel: string | undefined
+                if (isFiltered) {
+                  const catName = categories.find((c) => c.id === selectedCategoryFilter)?.name
+                  filterLabel = [
+                    searchTerm ? `Suche: "${searchTerm}"` : "",
+                    selectedCategoryFilter === "uncategorized"
+                      ? "Ohne Kategorie"
+                      : catName
+                      ? `Kategorie: ${catName}`
+                      : "",
+                  ]
+                    .filter(Boolean)
+                    .join(", ")
+                }
+                onExportCsv(isFiltered ? filteredExpenses : undefined, filterLabel)
+              }}
+              className="btn-glass inline-flex items-center justify-center gap-1.5 px-3 py-2 font-semibold text-xs sm:text-sm text-slate-700 dark:text-slate-200 shrink-0"
+              title={
+                searchTerm || selectedCategoryFilter !== "all"
+                  ? `Gefilterte Ausgaben (${filteredExpenses.length}) als CSV exportieren`
+                  : "Alle Ausgaben als CSV exportieren"
+              }
+            >
+              <Download className="w-4 h-4 text-brand-500 shrink-0" />
+              <span className="hidden sm:inline">CSV Export</span>
+            </button>
+          )}
+
+          {/* Add Expense Button */}
+          <button
+            onClick={() => onOpenExpenseModal(null)}
+            className="btn-glass inline-flex items-center justify-center gap-2 font-semibold text-xs sm:text-sm text-slate-700 dark:text-slate-200 shrink-0"
+          >
+            <Plus className="w-4 h-4 text-brand-500 shrink-0" />
+            <span>Ausgabe erfassen</span>
+          </button>
+        </div>
       </div>
 
       {/* Expenses List */}

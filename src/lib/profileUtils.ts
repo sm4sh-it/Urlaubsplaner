@@ -1,5 +1,5 @@
 import { Profile, ProfileYearOverride, CalendarEntry, Trip } from "@/types"
-import { calculateTripVacationCost, isVacationCostingDay, tripOverlapsYear } from "@/lib/tripUtils"
+import { calculateTripVacationCost, getTripDayVacationCost, isVacationCostingDay, tripOverlapsYear } from "@/lib/tripUtils"
 
 export interface YearlyStats {
   annualLeave: number
@@ -11,8 +11,8 @@ export interface YearlyStats {
 export function getProfileStatsForYear(
   profile: Profile,
   year: number,
-  overrides: ProfileYearOverride[],
-  entries: CalendarEntry[],
+  overrides: ProfileYearOverride[] = [],
+  entries: CalendarEntry[] = [],
   trips: Trip[] = [],
   holidays: Record<string, any> = {},
   cache: Map<string, YearlyStats | null> = new Map()
@@ -75,8 +75,8 @@ export function getProfileStatsForYear(
             const dayStr = String(d.getUTCDate()).padStart(2, '0')
             const dateStr = `${d.getUTCFullYear()}-${monthStr}-${dayStr}`
             
-            if (isVacationCostingDay(dateStr, profile, holidays)) {
-              const dayCost = t.isHalfDay ? 0.5 : 1
+            const dayCost = getTripDayVacationCost(t, dateStr, profile, holidays, entries)
+            if (dayCost > 0) {
               usedVacation += dayCost
               if (dateStr <= expiryDateString) {
                 usedVacationBeforeExpiry += dayCost

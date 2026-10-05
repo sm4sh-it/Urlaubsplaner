@@ -21,7 +21,7 @@ export async function createTrip(data: any) {
       }
     })
 
-    // Auto-Cleanup of overlapping entries
+    // Auto-Cleanup of overlapping entries (preserve sick days K and 3)
     const blockingStatuses = ["In Planung", "Gebucht", "Abgeschlossen"]
     if (blockingStatuses.includes(newTrip.status)) {
       await prisma.entry.deleteMany({
@@ -30,7 +30,11 @@ export async function createTrip(data: any) {
           date: {
             gte: newTrip.startDate,
             lte: newTrip.endDate
-          }
+          },
+          NOT: [
+            { type: { contains: 'K' } },
+            { type: { contains: '3' } }
+          ]
         }
       })
     }
@@ -66,7 +70,7 @@ export async function updateTrip(id: string, data: any) {
     }
   })
 
-  // Auto-Cleanup of overlapping entries
+  // Auto-Cleanup of overlapping entries (preserve sick days K and 3)
   const blockingStatuses = ["In Planung", "Gebucht", "Abgeschlossen"]
   if (blockingStatuses.includes(updatedTrip.status)) {
     await prisma.entry.deleteMany({
@@ -75,7 +79,11 @@ export async function updateTrip(id: string, data: any) {
         date: {
           gte: updatedTrip.startDate,
           lte: updatedTrip.endDate
-        }
+        },
+        NOT: [
+          { type: { contains: 'K' } },
+          { type: { contains: '3' } }
+        ]
       }
     })
   }

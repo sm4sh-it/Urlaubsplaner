@@ -84,7 +84,7 @@ export default function DashboardHome() {
           let tripTaken = 0
           const profileTrips = trips.filter(t => t.profiles.some(pt => pt.id === id) && tripOverlapsYear(t, selectedYear))
           profileTrips.forEach(t => {
-            tripTaken += calculateTripVacationCost(t, p, holidays, selectedYear)
+            tripTaken += calculateTripVacationCost(t, p, holidays, selectedYear, entries)
           })
 
           remaining += (stats.totalAvailable - standardTaken - tripTaken)

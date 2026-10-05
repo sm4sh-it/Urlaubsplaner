@@ -4,7 +4,7 @@ import { useState, useMemo } from "react"
 import { useStore } from "@/store/useStore"
 import { SHORT_MONTHS } from "@/lib/dateUtils"
 import { getProfileStatsForYear } from "@/lib/profileUtils"
-import { isVacationCostingDay, calculateTripVacationCost, tripOverlapsYear } from "@/lib/tripUtils"
+import { isVacationCostingDay, calculateTripVacationCost, getTripDayVacationCost, tripOverlapsYear } from "@/lib/tripUtils"
 import { calculateHolidayEfficiency } from "@/lib/statisticsUtils"
 import { ChevronUp, ChevronDown } from "lucide-react"
 
@@ -75,7 +75,6 @@ export default function Statistics() {
       if (trip.type === "Urlaub") {
         const start = new Date(trip.startDate)
         const end = new Date(trip.endDate)
-        const dayCost = trip.isHalfDay ? 0.5 : 1
         for (let d = new Date(start); d <= end; d.setUTCDate(d.getUTCDate() + 1)) {
           if (d.getUTCFullYear() !== selectedYear) continue;
           
@@ -83,10 +82,21 @@ export default function Statistics() {
           const dayStr = String(d.getUTCDate()).padStart(2, '0')
           const dateStr = `${d.getUTCFullYear()}-${monthStr}-${dayStr}`
           
-          if (isVacationCostingDay(dateStr, activeProfile, holidays)) {
+          const dayCost = getTripDayVacationCost(trip, dateStr, activeProfile, holidays, entries)
+          if (dayCost > 0) {
             tUrlaub += dayCost
             const m = d.getUTCMonth()
             if (m >= 0 && m < 12) mStats[m].urlaub += dayCost
+          }
+
+          // Workation: Wenn Halbtagsreise mit Begleitstatus Mobiles Arbeiten
+          if (trip.isHalfDay && trip.secondaryType === "M" && isVacationCostingDay(dateStr, activeProfile, holidays)) {
+            const isSick = entries.some(e => e.profileId === activeProfile.id && e.date === dateStr && (e.type.includes('K') || e.type.includes('3')))
+            if (!isSick) {
+              tMobile += 0.5
+              const m = d.getUTCMonth()
+              if (m >= 0 && m < 12) mStats[m].mobile += 0.5
+            }
           }
         }
       }
@@ -148,9 +158,7 @@ export default function Statistics() {
           const dateStr = `${year}-${month}-${day}`
           
           if (dateStr <= expiryDateString) {
-            if (isVacationCostingDay(dateStr, activeProfile, holidays)) {
-              urlaubVorVerfall += 1
-            }
+            urlaubVorVerfall += getTripDayVacationCost(t, dateStr, activeProfile, holidays, entries)
           }
         }
       }

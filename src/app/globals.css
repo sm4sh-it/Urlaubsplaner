@@ -196,6 +196,7 @@ body {
 .status-a-2 { background: linear-gradient(135deg, var(--color-auszeit) 50%, var(--surface) 50%) !important; color: var(--status-text) !important; }
 .status-m   { background: var(--color-mobile) !important; color: var(--status-text) !important; }
 .status-m-2 { background: linear-gradient(135deg, var(--color-mobile) 50%, var(--surface) 50%) !important; color: var(--status-text) !important; }
+.trip-feierabend { background: color-mix(in srgb, var(--color-vacation) 35%, transparent) !important; color: transparent !important; }
 
 .status-x   { 
   background: repeating-linear-gradient(

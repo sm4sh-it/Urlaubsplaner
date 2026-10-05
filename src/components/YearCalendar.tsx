@@ -7,8 +7,7 @@ import { cn } from "@/lib/utils"
 import { EntryType } from "@/types"
 
 import { toggleEntry, getCalendarData } from "@/app/actions"
-
-
+import { isVacationCostingDay } from "@/lib/tripUtils"
 
 const VALID_KEYS: Record<string, EntryType> = {
   'u': 'U', 
@@ -43,6 +42,7 @@ const ENTRY_CLASSES: Record<string, string> = {
   'M': "status-m",
   '5': "status-m-2",
   'A': "status-a",
+  'TRIP_NONE': "trip-feierabend",
 }
 
 const HALF_TO_FULL: Record<string, string> = {
@@ -76,7 +76,8 @@ const HALF_TO_LABEL: Record<string, string> = {
   '3': 'K/2',
   '4': 'Ü/2',
   '5': 'M/2',
-  '6': 'S/2'
+  '6': 'S/2',
+  'TRIP_NONE': '',
 }
 
 const TYPE_DESCRIPTIONS: Record<string, string> = {
@@ -120,9 +121,8 @@ export default function YearCalendar() {
     const validTripStatuses = ["In Planung", "Gebucht", "Abgeschlossen", "Idee"]
     const activeTrips = trips.filter(t => validTripStatuses.includes(t.status))
     
-    const lookup: Record<string, { type: EntryType, title: string, isIdea: boolean }> = {}
+    const lookup: Record<string, { type: EntryType, title: string, isIdea: boolean, isFeierabend?: boolean }> = {}
     for (const t of activeTrips) {
-      const type = mapTripTypeToEntryType(t.type, t.isHalfDay)
       const start = new Date(t.startDate)
       const end = new Date(t.endDate)
       
@@ -131,28 +131,75 @@ export default function YearCalendar() {
         while (current <= end) {
           const dateStr = current.toISOString().split('T')[0]
           const key = `${p.id}_${dateStr}`
+          
+          const isStart = dateStr === t.startDate
+          const isEnd = dateStr === t.endDate
+          const isStartNone = isStart && t.startDayType === "NONE"
+          const isEndNone = isEnd && t.endDayType === "NONE"
+          const isFeierabend = isStartNone || isEndNone
+
+          let dayType: EntryType
+          let dayTitle = t.title
+
+          if (isFeierabend) {
+            dayType = "TRIP_NONE"
+            dayTitle = isStartNone 
+              ? `${t.title} (Abreise nach Feierabend)` 
+              : `${t.title} (Rückreise vor Arbeitsbeginn)`
+          } else {
+            const isStartHalf = isStart && t.startDayType === "HALF"
+            const isEndHalf = isEnd && t.endDayType === "HALF"
+            const isHalfDay = t.isHalfDay || isStartHalf || isEndHalf
+
+            // Prüfung, ob für das Profil ein Arbeitstag vorliegt
+            const fullProfile = profiles.find(prof => prof.id === p.id)
+            const isWorkDay = fullProfile ? isVacationCostingDay(dateStr, fullProfile, holidays) : true
+
+            if (isHalfDay && t.secondaryType && isWorkDay) {
+              const mainType = mapTripTypeToEntryType(t.type, true)
+              const secType = t.secondaryType === "M" ? "5" : (t.secondaryType === "Ü" ? "4" : "")
+              if (secType) {
+                if (t.halfDayType === "NACHMITTAG") {
+                  dayType = `${secType},${mainType}`
+                } else {
+                  dayType = `${mainType},${secType}`
+                }
+              } else {
+                dayType = mainType
+              }
+            } else {
+              dayType = mapTripTypeToEntryType(t.type, isHalfDay)
+            }
+          }
+
           const existing = lookup[key]
-          if (existing && t.isHalfDay && existing.type.length < 5) {
+          if (existing && !isFeierabend && existing.type.length < 5) {
             let combinedType: string
             if (t.halfDayType === "NACHMITTAG") {
-              combinedType = `${existing.type},${type}`
+              combinedType = `${existing.type},${dayType}`
             } else {
-              combinedType = `${type},${existing.type}`
+              combinedType = `${dayType},${existing.type}`
             }
             lookup[key] = {
               type: combinedType as EntryType,
-              title: `${existing.title} / ${t.title}`,
-              isIdea: existing.isIdea && (t.status === "Idee")
+              title: `${existing.title} / ${dayTitle}`,
+              isIdea: existing.isIdea && (t.status === "Idee"),
+              isFeierabend: false
             }
           } else {
-            lookup[key] = { type, title: t.title, isIdea: t.status === "Idee" }
+            lookup[key] = { 
+              type: dayType, 
+              title: dayTitle, 
+              isIdea: t.status === "Idee",
+              isFeierabend
+            }
           }
           current.setUTCDate(current.getUTCDate() + 1)
         }
       }
     }
     return lookup
-  }, [trips])
+  }, [trips, holidays, profiles])
 
   const entryLookup = React.useMemo(() => {
     const lookup: Record<string, EntryType> = {}
@@ -210,15 +257,16 @@ export default function YearCalendar() {
         const profile = profiles.find(p => p.id === pId)
         if (!profile || selectedYear < profile.startYear) continue
 
-        // Block if covered by a trip
+        // Block if covered by a trip (Exception: illness entry K or 3 overrides vacation, or deleting illness)
         const isTripBlock = tripLookup[`${pId}_${date}`]
-        if (isTripBlock) {
-          continue
-        }
-
-        // Optimistic UI update could be added here, but Server Actions are fast enough usually
-        // Let's do optimistic:
         const existing = entries.find(e => e.date === date && e.profileId === pId)
+        if (isTripBlock) {
+          const isSickKey = type === 'K' || type === '3'
+          const isDeletingSick = !type && existing && (existing.type.includes('K') || existing.type.includes('3'))
+          if (!isSickKey && !isDeletingSick) {
+            continue
+          }
+        }
 
         let newType: string | null = null
 
@@ -435,13 +483,30 @@ export default function YearCalendar() {
                                 if (!profile || selectedYear < profile.startYear) return null
 
                                 const lookupKey = `${profileId}_${dayObj.date}`
+                                const manualEntry = entryLookup[lookupKey]
                                 const tripEntry = tripLookup[lookupKey]
-                                let entryType: string | null = tripEntry?.type || entryLookup[lookupKey] || null
+
+                                // Stufe 2: Krankheit bricht Urlaub!
+                                // Manuelle Krankheits-Einträge haben visuell und rechnerisch Vorrang vor Reisen
+                                let entryType: string | null = null
+                                let isFeierabend = false
+                                let cellTitle: string | undefined = undefined
+
+                                if (manualEntry && (manualEntry.includes('K') || manualEntry.includes('3'))) {
+                                  entryType = manualEntry
+                                  cellTitle = tripEntry ? `${weekdayShort} ${formattedDate} - Krankheit (während ${tripEntry.title})` : undefined
+                                } else if (tripEntry) {
+                                  entryType = tripEntry.type
+                                  isFeierabend = Boolean(tripEntry.isFeierabend)
+                                  cellTitle = `${weekdayShort} ${formattedDate} - ${tripEntry.title}`
+                                } else if (manualEntry) {
+                                  entryType = manualEntry
+                                }
                                 
                                 if (!entryType) return null
                                 const parts = entryType.split(',').map(normalizeEntryCode)
 
-                                // Render stacked half-days (from manual entries or merged half-day trips)
+                                // Render stacked half-days (from manual entries or merged half-day trips / workations)
                                 if (parts.length === 2) {
                                   const typeClass1 = ENTRY_CLASSES[HALF_TO_FULL[parts[0]] || parts[0]] || "bg-slate-200 text-slate-700 dark:text-slate-200"
                                   const typeClass2 = ENTRY_CLASSES[HALF_TO_FULL[parts[1]] || parts[1]] || "bg-slate-200 text-slate-700 dark:text-slate-200"
@@ -450,7 +515,7 @@ export default function YearCalendar() {
                                       isCompact ? "border-[1px] flex-1" : "border-2 shrink-0 flex-1",
                                       tripEntry ? (tripEntry.isIdea ? "opacity-50 border-dashed" : "opacity-90") : ""
                                     )} style={{ borderColor: profile.color }}
-                                      title={tripEntry ? `${weekdayShort} ${formattedDate} - ${tripEntry.title}` : undefined}
+                                      title={cellTitle}
                                     >
                                       <div className={cn("flex-1 flex items-center justify-center font-bold w-full leading-none", typeClass1, isCompact ? "text-[0px]" : "text-[8px]")}>
                                         {!isCompact && (HALF_TO_LABEL[parts[0]] || parts[0])}
@@ -473,12 +538,13 @@ export default function YearCalendar() {
                                       "flex items-center justify-center font-bold rounded-sm border-solid shadow-sm w-full h-full",
                                       isCompact ? "border-[1px] text-[0px] flex-1" : "border-2 shrink-0 flex-1 text-[10px]",
                                       typeClass,
-                                      tripEntry ? (tripEntry.isIdea ? "opacity-50 border-dashed" : "opacity-90") : ""
+                                      tripEntry ? (tripEntry.isIdea ? "opacity-50 border-dashed" : "opacity-90") : "",
+                                      isFeierabend && "border-2"
                                     )}
                                     style={{ borderColor: profile.color }}
-                                    title={tripEntry ? `${weekdayShort} ${formattedDate} - ${tripEntry.title}` : undefined}
+                                    title={cellTitle}
                                   >
-                                    {!isCompact && label}
+                                    {!isCompact && !isFeierabend && label}
                                   </div>
                                 )
                               })

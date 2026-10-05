@@ -106,7 +106,19 @@ export function calculateHolidayEfficiency(
       if (!stat) continue
       
       if (!stat.isWeekend && !stat.isHoliday) {
-        if (trip.isHalfDay) {
+        const isStartNone = dateStr === trip.startDate && trip.startDayType === "NONE"
+        const isEndNone = dateStr === trip.endDate && trip.endDayType === "NONE"
+        const isStartHalf = dateStr === trip.startDate && trip.startDayType === "HALF"
+        const isEndHalf = dateStr === trip.endDate && trip.endDayType === "HALF"
+
+        if (isStartNone || isEndNone) {
+          // Feierabend-Tag: regulärer Arbeitstag ohne Urlaubskosten
+          continue
+        }
+
+        const isHalf = trip.isHalfDay || isStartHalf || isEndHalf
+
+        if (isHalf) {
           // Half day trip alone doesn't make the day fully free (if not combined with manual entries, which is rare)
           // For safety, we just mark it as not fully free, unless it was already fully covered by manual entries
           if (!stat.isFree) {

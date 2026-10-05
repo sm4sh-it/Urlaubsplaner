@@ -59,9 +59,22 @@ export default function TripCard({ trip, onClick }: TripCardProps) {
     : `${trip.duration} ${trip.duration === 1 ? 'Tag' : 'Tage'}`
 
   // Day type info string
-  const dayTypeInfo = trip.isHalfDay 
-    ? `Halber Tag (${trip.halfDayType === "NACHMITTAG" ? "Nachmittag" : "Vormittag"})` 
-    : "Ganztägig"
+  let dayTypeInfo = "Ganztägig"
+  if (trip.isHalfDay) {
+    if (trip.secondaryType === "M") {
+      dayTypeInfo = "Halbtags (Urlaub + Mobiles Arbeiten)"
+    } else if (trip.secondaryType === "Ü") {
+      dayTypeInfo = "Halbtags (Urlaub + Überstunden)"
+    } else {
+      dayTypeInfo = `Halber Tag (${trip.halfDayType === "NACHMITTAG" ? "Nachmittag" : "Vormittag"})`
+    }
+  } else if (trip.startDayType === "NONE" && trip.endDayType === "NONE") {
+    dayTypeInfo = "Abreise n. Feierabend & Rückreise früh"
+  } else if (trip.startDayType === "NONE") {
+    dayTypeInfo = "Abreise nach Feierabend"
+  } else if (trip.endDayType === "NONE") {
+    dayTypeInfo = "Rückreise vor Arbeitsbeginn"
+  }
 
   // Map trip profile IDs to full profile objects
   const tripProfiles = (trip.profiles || [])

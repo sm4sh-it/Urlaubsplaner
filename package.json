@@ -1,6 +1,6 @@
 {
   "name": "urlaubsplaner",
-  "version": "1.8.8",
+  "version": "1.9.0",
   "license": "PolyForm-Noncommercial-1.0.0",
   "private": true,
   "scripts": {
@@ -8,6 +8,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "test:trips": "tsx scripts/test_trip_calculations.ts",
     "seed": "tsx scripts/seed_demo_data.ts",
     "screenshots": "tsx scripts/take_screenshots.ts"
   },

@@ -19,8 +19,10 @@ import {
   Plane,
   AlertCircle,
   Check,
+  Download,
 } from "lucide-react"
 import { BudgetExpense, BudgetParticipant, Profile, Trip, TripBudget } from "@/types"
+import { downloadTripBudgetCsv } from "@/lib/csvExportUtils"
 import {
   formatCurrency,
   calculateTotalExpenses,
@@ -133,6 +135,27 @@ export default function BudgetDetailView({
     }
   }
 
+  const handleExportCsv = (filteredExpenses?: BudgetExpense[], filterLabel?: string) => {
+    try {
+      const filename = downloadTripBudgetCsv(budget, {
+        customExpenses: filteredExpenses,
+        filterLabel,
+      })
+      useStore.getState().addToast({
+        type: "success",
+        title: "CSV exportiert",
+        description: `Die Datei "${filename}" wurde erfolgreich heruntergeladen.`,
+      })
+    } catch (err: any) {
+      console.error("Fehler beim CSV-Export:", err)
+      useStore.getState().addToast({
+        type: "error",
+        title: "Export fehlgeschlagen",
+        description: err.message || "Die CSV-Datei konnte nicht erstellt werden.",
+      })
+    }
+  }
+
   const handleDeleteBudget = async () => {
     if (!confirm(`Möchtest du das Reise-Budget "${budget.name}" wirklich löschen?`)) {
       return
@@ -171,6 +194,14 @@ export default function BudgetDetailView({
 
           {/* Action buttons */}
           <div className="flex items-center gap-2">
+            <button
+              onClick={() => handleExportCsv()}
+              className="btn-glass inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200"
+              title="Budget & Ausgaben als CSV exportieren"
+            >
+              <Download className="w-3.5 h-3.5 text-brand-500" />
+              <span>CSV Export</span>
+            </button>
             <button
               onClick={() => setIsEditBudgetModalOpen(true)}
               className="btn-glass inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200"
@@ -393,6 +424,7 @@ export default function BudgetDetailView({
               setInitialExpenseData(null)
               setIsExpenseModalOpen(true)
             }}
+            onExportCsv={handleExportCsv}
           />
         )}
 

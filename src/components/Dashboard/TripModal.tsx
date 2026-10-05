@@ -40,14 +40,17 @@ export default function TripModal({ isOpen, onClose, trip }: TripModalProps) {
     budget: "" as number | "",
     cost: "" as number | "",
     isHalfDay: false,
-    halfDayType: "VORMITTAG"
+    halfDayType: "VORMITTAG",
+    startDayType: "FULL" as "FULL" | "NONE" | "HALF",
+    endDayType: "FULL" as "FULL" | "NONE" | "HALF",
+    secondaryType: "" as "" | "M" | "Ü"
   })
 
   const updateForm = (updates: Partial<typeof formData>) => {
     setFormData(prev => ({ ...prev, ...updates }))
   }
 
-  const { title, startDate, endDate, selectedProfileIds, externalParticipants, type, status, location, country, travelType, transport, notes, budget, cost, isHalfDay, halfDayType } = formData
+  const { title, startDate, endDate, selectedProfileIds, externalParticipants, type, status, location, country, travelType, transport, notes, budget, cost, isHalfDay, halfDayType, startDayType, endDayType, secondaryType } = formData
 
   const [isSaving, setIsSaving] = useState(false)
   const [showConfirmDelete, setShowConfirmDelete] = useState(false)
@@ -71,7 +74,10 @@ export default function TripModal({ isOpen, onClose, trip }: TripModalProps) {
           budget: trip.budget || "",
           cost: trip.cost || "",
           isHalfDay: trip.isHalfDay || false,
-          halfDayType: trip.halfDayType || "VORMITTAG"
+          halfDayType: trip.halfDayType || "VORMITTAG",
+          startDayType: (trip.startDayType as "FULL" | "NONE" | "HALF") || "FULL",
+          endDayType: (trip.endDayType as "FULL" | "NONE" | "HALF") || "FULL",
+          secondaryType: (trip.secondaryType as "" | "M" | "Ü") || ""
         })
       } else {
         setFormData({
@@ -92,7 +98,10 @@ export default function TripModal({ isOpen, onClose, trip }: TripModalProps) {
           budget: "",
           cost: "",
           isHalfDay: false,
-          halfDayType: "VORMITTAG"
+          halfDayType: "VORMITTAG",
+          startDayType: "FULL",
+          endDayType: "FULL",
+          secondaryType: ""
         })
       }
       setShowConfirmDelete(false)
@@ -116,6 +125,7 @@ export default function TripModal({ isOpen, onClose, trip }: TripModalProps) {
     setIsSaving(true)
     
     const duration = calculateDuration(startDate, endDate)
+    const isMultiDay = startDate !== endDate
     const payload = {
       title,
       startDate,
@@ -133,7 +143,10 @@ export default function TripModal({ isOpen, onClose, trip }: TripModalProps) {
       budget: budget === "" ? null : Number(budget),
       cost: cost === "" ? null : Number(cost),
       isHalfDay,
-      halfDayType: isHalfDay ? halfDayType : null
+      halfDayType: isHalfDay ? halfDayType : null,
+      startDayType: isMultiDay ? startDayType : (isHalfDay ? "HALF" : "FULL"),
+      endDayType: isMultiDay ? endDayType : (isHalfDay ? "HALF" : "FULL"),
+      secondaryType: isHalfDay && secondaryType ? secondaryType : null
     }
 
     try {
@@ -148,14 +161,15 @@ export default function TripModal({ isOpen, onClose, trip }: TripModalProps) {
         useStore.getState().setTrips([...currentTrips, savedTrip])
       }
 
-      // Optimistic Cleanup of overlapping entries in the store
+      // Optimistic Cleanup of overlapping entries in the store (preserve sick days K and 3)
       const blockingStatuses = ["In Planung", "Gebucht", "Abgeschlossen"]
       if (blockingStatuses.includes(savedTrip.status)) {
         const currentEntries = useStore.getState().entries
         const filteredEntries = currentEntries.filter(e => {
           const inRange = e.date >= savedTrip.startDate && e.date <= savedTrip.endDate
           const inProfile = savedTrip.profiles.some(p => p.id === e.profileId)
-          return !(inRange && inProfile)
+          const isSick = e.type.includes('K') || e.type.includes('3')
+          return isSick || !(inRange && inProfile)
         })
         useStore.getState().setEntries(filteredEntries)
       }
@@ -324,6 +338,20 @@ export default function TripModal({ isOpen, onClose, trip }: TripModalProps) {
                     type="date" 
                     className="bg-white dark:bg-[#070c12]/70 border border-slate-200 dark:border-white/10 text-slate-800 dark:text-slate-100 focus:border-brand-500/80 focus:ring-2 focus:ring-brand-500/20 rounded-xl px-3.5 py-2.5 text-sm transition-all outline-none font-mono" 
                   />
+                  {startDate && endDate && startDate !== endDate && (
+                    <div className="relative mt-0.5">
+                      <select
+                        value={startDayType}
+                        onChange={e => updateForm({ startDayType: e.target.value as "FULL" | "NONE" | "HALF" })}
+                        className="w-full appearance-none bg-slate-50/90 dark:bg-[#070c12]/70 border border-slate-200/90 dark:border-white/10 text-slate-700 dark:text-slate-300 focus:border-brand-500/80 focus:ring-2 focus:ring-brand-500/20 rounded-xl px-3 py-1.5 pr-8 text-xs font-medium transition-all outline-none cursor-pointer"
+                      >
+                        <option value="FULL">Ganzer Tag Urlaub</option>
+                        <option value="NONE">Abreise nach Feierabend (0 Urlaubstage)</option>
+                        <option value="HALF">Halber Tag Urlaub (0.5)</option>
+                      </select>
+                      <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
+                    </div>
+                  )}
                 </div>
                 
                 <div className="flex flex-col gap-1.5">
@@ -338,44 +366,107 @@ export default function TripModal({ isOpen, onClose, trip }: TripModalProps) {
                     type="date" 
                     className="bg-white dark:bg-[#070c12]/70 border border-slate-200 dark:border-white/10 text-slate-800 dark:text-slate-100 focus:border-brand-500/80 focus:ring-2 focus:ring-brand-500/20 rounded-xl px-3.5 py-2.5 text-sm transition-all outline-none font-mono" 
                   />
+                  {startDate && endDate && startDate !== endDate && (
+                    <div className="relative mt-0.5">
+                      <select
+                        value={endDayType}
+                        onChange={e => updateForm({ endDayType: e.target.value as "FULL" | "NONE" | "HALF" })}
+                        className="w-full appearance-none bg-slate-50/90 dark:bg-[#070c12]/70 border border-slate-200/90 dark:border-white/10 text-slate-700 dark:text-slate-300 focus:border-brand-500/80 focus:ring-2 focus:ring-brand-500/20 rounded-xl px-3 py-1.5 pr-8 text-xs font-medium transition-all outline-none cursor-pointer"
+                      >
+                        <option value="FULL">Ganzer Tag Urlaub</option>
+                        <option value="NONE">Vor Arbeitsbeginn zurück (0 Urlaubstage)</option>
+                        <option value="HALF">Halber Tag Urlaub (0.5)</option>
+                      </select>
+                      <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
+                    </div>
+                  )}
                 </div>
 
                 <div className="flex flex-col gap-1 md:col-span-2">
-                  <div className="flex flex-wrap items-center justify-between gap-3 p-3.5 bg-slate-50/80 dark:bg-[#070c12]/50 rounded-2xl border border-slate-200/80 dark:border-white/10">
-                    <label className="flex items-center gap-2.5 cursor-pointer font-semibold text-xs sm:text-sm text-slate-700 dark:text-slate-200 select-none">
-                      <input 
-                        type="checkbox"
-                        checked={isHalfDay}
-                        onChange={e => updateForm({ isHalfDay: e.target.checked })}
-                        className="w-4 h-4 rounded text-brand-600 focus:ring-brand-500 cursor-pointer"
-                      />
-                      <span>Halber Urlaubstag (0.5)</span>
-                    </label>
+                  <div className="flex flex-col gap-3 p-3.5 bg-slate-50/80 dark:bg-[#070c12]/50 rounded-2xl border border-slate-200/80 dark:border-white/10">
+                    <div className="flex flex-wrap items-center justify-between gap-3">
+                      <label className="flex items-center gap-2.5 cursor-pointer font-semibold text-xs sm:text-sm text-slate-700 dark:text-slate-200 select-none">
+                        <input 
+                          type="checkbox"
+                          checked={isHalfDay}
+                          onChange={e => updateForm({ isHalfDay: e.target.checked })}
+                          className="w-4 h-4 rounded text-brand-600 focus:ring-brand-500 cursor-pointer"
+                        />
+                        <span>
+                          {startDate && endDate && startDate !== endDate 
+                            ? "Halbe Urlaubstage während der Reise (0.5 je Werktag)" 
+                            : "Halber Urlaubstag (0.5)"}
+                        </span>
+                      </label>
+
+                      {isHalfDay && (
+                        <div className="flex items-center gap-1.5">
+                          <button
+                            type="button"
+                            onClick={() => updateForm({ halfDayType: "VORMITTAG" })}
+                            className={`px-3 py-1 text-xs font-bold rounded-lg transition-all cursor-pointer ${
+                              halfDayType === "VORMITTAG" || !halfDayType
+                                ? 'bg-brand-600 text-white shadow-xs'
+                                : 'bg-slate-200/80 dark:bg-[#161f28] text-slate-600 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-[#1e2a36]'
+                            }`}
+                          >
+                            Vormittag (AM)
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => updateForm({ halfDayType: "NACHMITTAG" })}
+                            className={`px-3 py-1 text-xs font-bold rounded-lg transition-all cursor-pointer ${
+                              halfDayType === "NACHMITTAG"
+                                ? 'bg-brand-600 text-white shadow-xs'
+                                : 'bg-slate-200/80 dark:bg-[#161f28] text-slate-600 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-[#1e2a36]'
+                            }`}
+                          >
+                            Nachmittag (PM)
+                          </button>
+                        </div>
+                      )}
+                    </div>
 
                     {isHalfDay && (
-                      <div className="flex items-center gap-1.5">
-                        <button
-                          type="button"
-                          onClick={() => updateForm({ halfDayType: "VORMITTAG" })}
-                          className={`px-3 py-1 text-xs font-bold rounded-lg transition-all cursor-pointer ${
-                            halfDayType === "VORMITTAG" || !halfDayType
-                              ? 'bg-brand-600 text-white shadow-xs'
-                              : 'bg-slate-200/80 dark:bg-[#161f28] text-slate-600 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-[#1e2a36]'
-                          }`}
-                        >
-                          Vormittag (AM)
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => updateForm({ halfDayType: "NACHMITTAG" })}
-                          className={`px-3 py-1 text-xs font-bold rounded-lg transition-all cursor-pointer ${
-                            halfDayType === "NACHMITTAG"
-                              ? 'bg-brand-600 text-white shadow-xs'
-                              : 'bg-slate-200/80 dark:bg-[#161f28] text-slate-600 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-[#1e2a36]'
-                          }`}
-                        >
-                          Nachmittag (PM)
-                        </button>
+                      <div className="pt-2 border-t border-slate-200/60 dark:border-white/5 flex flex-wrap items-center justify-between gap-2 text-xs">
+                        <span className="font-medium text-slate-500 dark:text-slate-400">
+                          Zweite Tageshälfte (an Arbeitstagen):
+                        </span>
+                        <div className="flex items-center gap-1.5">
+                          <button
+                            type="button"
+                            onClick={() => updateForm({ secondaryType: "" })}
+                            className={`px-2.5 py-1 rounded-lg font-semibold transition-all cursor-pointer ${
+                              !secondaryType
+                                ? 'bg-brand-600 text-white shadow-xs'
+                                : 'bg-slate-200/80 dark:bg-[#161f28] text-slate-600 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-[#1e2a36]'
+                            }`}
+                          >
+                            Frei / Normal
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => updateForm({ secondaryType: "M" })}
+                            className={`px-2.5 py-1 rounded-lg font-semibold transition-all cursor-pointer ${
+                              secondaryType === "M"
+                                ? 'bg-brand-600 text-white shadow-xs'
+                                : 'bg-slate-200/80 dark:bg-[#161f28] text-slate-600 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-[#1e2a36]'
+                            }`}
+                          >
+                            Mobiles Arbeiten (M)
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => updateForm({ secondaryType: "Ü" })}
+                            className={`px-2.5 py-1 rounded-lg font-semibold transition-all cursor-pointer ${
+                              secondaryType === "Ü"
+                                ? 'bg-brand-600 text-white shadow-xs'
+                                : 'bg-slate-200/80 dark:bg-[#161f28] text-slate-600 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-[#1e2a36]'
+                            }`}
+                          >
+                            Überstunden (Ü)
+                          </button>
+                        </div>
                       </div>
                     )}
                   </div>
