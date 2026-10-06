@@ -41,10 +41,10 @@ export default function TripCard({ trip, onClick }: TripCardProps) {
       case "In Planung":
         return "text-[#ea580c] dark:text-[#ff9f43] bg-[#ea580c]/10 dark:bg-[#ff9f43]/10 border-[#ea580c]/25 dark:border-[#ff9f43]/20"
       case "Idee":
-        return "text-[#d97706] dark:text-[#facc15] bg-[#d97706]/10 dark:bg-[#facc15]/10 border-[#d97706]/25 dark:border-[#facc15]/20"
+        return "text-[#ca8a04] dark:text-[#facc15] bg-[#eab308]/15 dark:bg-[#facc15]/15 border-[#eab308]/30 dark:border-[#facc15]/25"
       case "Abgeschlossen":
       default:
-        return "text-[#0284c7] dark:text-[#38bdf8] bg-[#0284c7]/10 dark:bg-[#38bdf8]/10 border-[#0284c7]/25 dark:border-[#38bdf8]/20"
+        return "text-slate-600 dark:text-slate-400 bg-slate-500/10 dark:bg-slate-500/15 border-slate-500/20 dark:border-slate-500/20"
     }
   }
 

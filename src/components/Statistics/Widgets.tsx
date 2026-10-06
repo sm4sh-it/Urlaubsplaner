@@ -165,9 +165,9 @@ export function StatusWidget() {
     })
 
     const STATUS_COLORS: Record<string, string> = {
-      'Idee': '#f59e0b',
-      'In Planung': '#ff9f43',
-      'Gebucht': '#1b8a5a',
+      'Idee': '#eab308',
+      'In Planung': '#ea580c',
+      'Gebucht': '#15803d',
       'Abgeschlossen': '#64748b'
     }
 

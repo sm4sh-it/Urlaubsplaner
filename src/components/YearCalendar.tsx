@@ -4,7 +4,7 @@ import * as React from "react"
 import { useStore } from "@/store/useStore"
 import { SHORT_MONTHS, getMonthDays } from "@/lib/dateUtils"
 import { cn } from "@/lib/utils"
-import { EntryType } from "@/types"
+import { EntryType, TripStatus } from "@/types"
 
 import { toggleEntry, getCalendarData } from "@/app/actions"
 import { isVacationCostingDay } from "@/lib/tripUtils"
@@ -121,7 +121,7 @@ export default function YearCalendar() {
     const validTripStatuses = ["In Planung", "Gebucht", "Abgeschlossen", "Idee"]
     const activeTrips = trips.filter(t => validTripStatuses.includes(t.status))
     
-    const lookup: Record<string, { type: EntryType, title: string, isIdea: boolean, isFeierabend?: boolean }> = {}
+    const lookup: Record<string, { type: EntryType, title: string, status: TripStatus, isIdea: boolean, isPlanning: boolean, isFeierabend?: boolean }> = {}
     for (const t of activeTrips) {
       const start = new Date(t.startDate)
       const end = new Date(t.endDate)
@@ -183,14 +183,18 @@ export default function YearCalendar() {
             lookup[key] = {
               type: combinedType as EntryType,
               title: `${existing.title} / ${dayTitle}`,
+              status: existing.status === "Idee" && t.status === "Idee" ? "Idee" : (t.status === "In Planung" || existing.status === "In Planung" ? "In Planung" : "Gebucht"),
               isIdea: existing.isIdea && (t.status === "Idee"),
+              isPlanning: existing.isPlanning || (t.status === "In Planung"),
               isFeierabend: false
             }
           } else {
             lookup[key] = { 
               type: dayType, 
               title: dayTitle, 
+              status: t.status,
               isIdea: t.status === "Idee",
+              isPlanning: t.status === "In Planung",
               isFeierabend
             }
           }
@@ -507,23 +511,37 @@ export default function YearCalendar() {
                                 const parts = entryType.split(',').map(normalizeEntryCode)
 
                                 const isIdea = Boolean(tripEntry?.isIdea)
+                                const isPlanning = Boolean(tripEntry?.isPlanning)
 
                                 // Render stacked half-days (from manual entries or merged half-day trips / workations)
                                 if (parts.length === 2) {
-                                  const typeClass1 = ENTRY_CLASSES[HALF_TO_FULL[parts[0]] || parts[0]] || "bg-slate-200 text-slate-700 dark:text-slate-200"
-                                  const typeClass2 = ENTRY_CLASSES[HALF_TO_FULL[parts[1]] || parts[1]] || "bg-slate-200 text-slate-700 dark:text-slate-200"
+                                  const getStackedClass = (part: string) => {
+                                    const fullPart = HALF_TO_FULL[part] || part
+                                    if (isIdea && (part === '2' || part === '1' || part === 'U')) return "trip-idea"
+                                    if (isPlanning && (part === '2' || part === '1' || part === 'U')) return "trip-planning"
+                                    return ENTRY_CLASSES[fullPart] || "bg-slate-200 text-slate-700 dark:text-slate-200"
+                                  }
+                                  const getStackedLabel = (part: string) => {
+                                    if (isCompact) return ""
+                                    const baseLbl = HALF_TO_LABEL[part] || part
+                                    if (isIdea && (part === '2' || part === '1' || part === 'U')) return `${baseLbl}?`
+                                    return baseLbl
+                                  }
+
+                                  const typeClass1 = getStackedClass(parts[0])
+                                  const typeClass2 = getStackedClass(parts[1])
                                   return (
                                     <div key={profileId} className={cn("flex flex-col rounded-sm overflow-hidden border-solid shadow-sm w-full h-full", 
                                       isCompact ? "border-[1px] flex-1" : "border-2 shrink-0 flex-1",
-                                      isIdea ? "border-dashed opacity-90" : (tripEntry ? "opacity-90" : "")
-                                    )} style={{ borderColor: isIdea ? 'var(--color-idea)' : profile.color }}
+                                      tripEntry ? "opacity-95" : ""
+                                    )} style={{ borderColor: profile.color }}
                                       title={cellTitle}
                                     >
                                       <div className={cn("flex-1 flex items-center justify-center font-bold w-full leading-none", typeClass1, isCompact ? "text-[0px]" : "text-[8px]")}>
-                                        {!isCompact && (HALF_TO_LABEL[parts[0]] || parts[0])}
+                                        {getStackedLabel(parts[0])}
                                       </div>
                                       <div className={cn("flex-1 flex items-center justify-center font-bold w-full leading-none", typeClass2, isCompact ? "text-[0px]" : "text-[8px]")}>
-                                        {!isCompact && (HALF_TO_LABEL[parts[1]] || parts[1])}
+                                        {getStackedLabel(parts[1])}
                                       </div>
                                     </div>
                                   )
@@ -531,14 +549,18 @@ export default function YearCalendar() {
                                 
                                 const normType = normalizeEntryCode(entryType)
                                 let typeClass: string
+                                let label = HALF_TO_LABEL[normType] || normType
+
                                 if (isFeierabend) {
                                   typeClass = ENTRY_CLASSES['TRIP_NONE']
                                 } else if (isIdea) {
                                   typeClass = (normType === '2' || normType === '5' || normType === '4' || normType === '6') ? "trip-idea-2" : "trip-idea"
+                                  label = `${label}?`
+                                } else if (isPlanning) {
+                                  typeClass = (normType === '2' || normType === '5' || normType === '4' || normType === '6') ? "trip-planning-2" : "trip-planning"
                                 } else {
                                   typeClass = ENTRY_CLASSES[normType] || "bg-slate-200 text-slate-700 dark:text-slate-200"
                                 }
-                                const label = HALF_TO_LABEL[normType] || normType
                                 
                                 return (
                                   <div 
@@ -547,10 +569,10 @@ export default function YearCalendar() {
                                       "flex items-center justify-center font-bold rounded-sm border-solid shadow-sm w-full h-full",
                                       isCompact ? "border-[1px] text-[0px] flex-1" : "border-2 shrink-0 flex-1 text-[10px]",
                                       typeClass,
-                                      isIdea ? "border-dashed opacity-95" : (tripEntry ? "opacity-90" : ""),
+                                      tripEntry ? "opacity-95" : "",
                                       isFeierabend && "border-2"
                                     )}
-                                    style={{ borderColor: isIdea ? 'var(--color-idea)' : profile.color }}
+                                    style={{ borderColor: profile.color }}
                                     title={cellTitle}
                                   >
                                     {!isCompact && !isFeierabend && label}

@@ -80,7 +80,7 @@ export default function YearlyContributionGraph() {
       let fullColor: string | null = null
       let amColor: string | null = null
       let pmColor: string | null = null
-      let isIdea = false
+      let tripClass: string | null = null
       let labelText = ""
 
       if (isCurrentYear && activeProfileIds.length > 0) {
@@ -106,23 +106,23 @@ export default function YearlyContributionGraph() {
             const isFeierabend = isStartNone || isEndNone
 
             if (isFeierabend) {
-              fullColor = 'color-mix(in srgb, var(--color-vacation) 35%, transparent)'
+              tripClass = 'trip-feierabend'
               labelText = isStartNone 
                 ? `${trip.title || trip.type} (Abreise nach Feierabend)` 
                 : `${trip.title || trip.type} (Rückreise vor Arbeitsbeginn)`
             } else {
-              if (trip.status === "Idee") isIdea = true
-
               const isStartHalf = dateStr === trip.startDate && trip.startDayType === "HALF"
               const isEndHalf = dateStr === trip.endDate && trip.endDayType === "HALF"
               const isHalf = trip.isHalfDay || isStartHalf || isEndHalf
 
-              const baseColor = trip.status === "Idee" 
-                ? 'color-mix(in srgb, var(--color-idea) 45%, transparent)' 
-                : getStatusColor(trip.type)
-
-              if (!isHalf) {
-                fullColor = baseColor
+              if (trip.status === "Idee") {
+                tripClass = isHalf ? 'trip-idea-2' : 'trip-idea'
+                labelText = `${trip.title || trip.type} (Idee)`
+              } else if (trip.status === "In Planung") {
+                tripClass = isHalf ? 'trip-planning-2' : 'trip-planning'
+                labelText = `${trip.title || trip.type} (In Planung)`
+              } else if (!isHalf) {
+                fullColor = getStatusColor(trip.type)
                 labelText = trip.title || trip.type
               } else {
                 // Prüfung ob Workation (secondaryType) an einem Arbeitstag vorliegt
@@ -134,6 +134,7 @@ export default function YearlyContributionGraph() {
                   secondaryColor = trip.secondaryType === 'M' ? getStatusColor('m') : getStatusColor('ue')
                 }
 
+                const baseColor = getStatusColor(trip.type)
                 if (trip.halfDayType === "NACHMITTAG") {
                   pmColor = baseColor
                   amColor = secondaryColor || 'var(--surface-bright)'
@@ -183,7 +184,7 @@ export default function YearlyContributionGraph() {
         fullColor,
         amColor,
         pmColor,
-        isIdea,
+        tripClass,
         labelText
       })
 
@@ -197,30 +198,29 @@ export default function YearlyContributionGraph() {
   const getDayStyle = (day: typeof days[0]) => {
     if (!day.isCurrentYear) return {}
 
-    const outline = day.isIdea ? '1px dashed var(--color-idea)' : undefined
+    if (day.tripClass) {
+      return {}
+    }
 
     if (day.fullColor) {
-      return { background: day.fullColor, outline }
+      return { background: day.fullColor }
     }
 
     if (day.amColor && day.pmColor) {
       return {
-        background: `linear-gradient(135deg, ${day.amColor} 50%, ${day.pmColor} 50%)`,
-        outline
+        background: `linear-gradient(135deg, ${day.amColor} 50%, ${day.pmColor} 50%)`
       }
     }
 
     if (day.amColor) {
       return {
-        background: `linear-gradient(135deg, ${day.amColor} 50%, var(--surface-bright) 50%)`,
-        outline
+        background: `linear-gradient(135deg, ${day.amColor} 50%, var(--surface-bright) 50%)`
       }
     }
 
     if (day.pmColor) {
       return {
-        background: `linear-gradient(135deg, var(--surface-bright) 50%, ${day.pmColor} 50%)`,
-        outline
+        background: `linear-gradient(135deg, var(--surface-bright) 50%, ${day.pmColor} 50%)`
       }
     }
 
@@ -229,6 +229,7 @@ export default function YearlyContributionGraph() {
 
   const getDayClass = (day: typeof days[0]) => {
     if (!day.isCurrentYear) return 'bg-transparent pointer-events-none opacity-0 shadow-none'
+    if (day.tripClass) return day.tripClass
     if (!day.fullColor && !day.amColor && !day.pmColor) {
       return day.monthIndex % 2 === 0 
         ? 'bg-slate-100 dark:bg-slate-800/40' 
@@ -254,14 +255,18 @@ export default function YearlyContributionGraph() {
         <div className="flex flex-wrap items-center gap-3 text-[11px] font-medium text-slate-500 dark:text-slate-400">
           <div className="flex items-center gap-1.5">
             <span className="w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: 'var(--color-vacation)' }} />
-            <span>Urlaub</span>
+            <span>Urlaub (Gebucht)</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-sm border border-dashed border-amber-500" style={{ backgroundColor: 'color-mix(in srgb, var(--color-idea) 45%, transparent)' }} />
+            <span className="w-2.5 h-2.5 rounded-sm trip-planning" />
+            <span>In Planung</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <span className="w-2.5 h-2.5 rounded-sm trip-idea" />
             <span>Idee</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: 'color-mix(in srgb, var(--color-vacation) 35%, transparent)' }} />
+            <span className="w-2.5 h-2.5 rounded-sm trip-feierabend border border-slate-300 dark:border-slate-700" />
             <span>Feierabend</span>
           </div>
           <div className="flex items-center gap-1.5">

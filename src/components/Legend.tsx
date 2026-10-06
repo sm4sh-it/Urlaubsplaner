@@ -93,6 +93,31 @@ export default function Legend() {
         </div>
       </div>
 
+      {/* Reisen & Buchungsstatus */}
+      <div className="flex flex-col gap-2.5">
+        <div className="text-[11px] uppercase tracking-wider text-brand-600 dark:text-brand-400 font-bold border-b border-slate-100 dark:border-white/10 pb-1.5">
+          Reisen &amp; Buchungsstatus
+        </div>
+        <div className="flex flex-col gap-2">
+          <div className="flex items-center gap-2.5 text-xs text-slate-700 dark:text-slate-200">
+            <div className="w-7 h-6 rounded-md flex items-center justify-center text-[10px] font-mono font-bold status-u shrink-0 shadow-xs">U</div>
+            <span className="font-medium">Gebucht (100% Deckkraft)</span>
+          </div>
+          <div className="flex items-center gap-2.5 text-xs text-slate-700 dark:text-slate-200">
+            <div className="w-7 h-6 rounded-md flex items-center justify-center text-[10px] font-mono font-bold trip-planning shrink-0 shadow-xs">U</div>
+            <span className="font-medium">In Planung (Grün-Orange)</span>
+          </div>
+          <div className="flex items-center gap-2.5 text-xs text-slate-700 dark:text-slate-200">
+            <div className="w-7 h-6 rounded-md flex items-center justify-center text-[10px] font-mono font-bold trip-idea shrink-0 shadow-xs">U?</div>
+            <span className="font-medium">Idee (Grün-Gelb)</span>
+          </div>
+          <div className="flex items-center gap-2.5 text-xs text-slate-700 dark:text-slate-200">
+            <div className="w-7 h-6 rounded-md flex items-center justify-center text-[10px] font-mono font-bold trip-feierabend border border-slate-300 dark:border-slate-700 shrink-0 shadow-xs" />
+            <span className="font-medium">Feierabend (An-/Abreisetag)</span>
+          </div>
+        </div>
+      </div>
+
       {/* Info Card */}
       <div className="text-[11px] leading-relaxed text-slate-500 dark:text-slate-400 p-3 rounded-xl bg-slate-50/80 dark:bg-[#070c12]/60 border border-slate-200/80 dark:border-white/10">
         <p><strong className="text-slate-700 dark:text-slate-200">Eintragen:</strong> Taste gedrückt halten (z. B. <Kbd>U</Kbd>) und auf den Tag klicken. Für halbe Tage zusätzlich <Kbd>Shift</Kbd> halten.</p>

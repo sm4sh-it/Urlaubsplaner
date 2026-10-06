@@ -93,12 +93,26 @@ export default function AboutPage() {
             </h2>
 
             <div className="space-y-8">
-              {/* V 1.9.1 */}
+              {/* V 1.9.2 */}
               <div className="relative pl-7 border-l-2 border-brand-500">
                 <div className="absolute -left-[9px] top-1.5 h-4 w-4 rounded-full bg-brand-500 ring-4 ring-white dark:ring-[#0d141d] shadow-sm shadow-brand-500/50" />
                 <div className="flex items-center gap-3 mb-3">
-                  <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100 m-0">Version 1.9.1</h3>
+                  <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100 m-0">Version 1.9.2</h3>
                   <span className="text-xs px-2.5 py-0.5 bg-brand-500/15 border border-brand-500/20 text-brand-600 dark:text-brand-400 rounded-full font-bold">Aktuell</span>
+                </div>
+                <ul className="list-disc list-outside ml-4 mt-2 space-y-1.5 text-sm text-slate-600 dark:text-slate-300">
+                  <li><strong>Diagonale Streifenschraffur für „In Planung“ &amp; „Idee“:</strong> Reisetage im Status <em>„In Planung“</em> werden im Kalender und in der Dashboard-Heatmap mit einer Diagonalschraffur aus Urlaubsgrün und Orange bei 50 % Deckkraft dargestellt. Reisetage im Status <em>„Idee“</em> tragen eine Diagonalschraffur aus Urlaubsgrün und Gelb mit dem unverbindlichen Kürzel <code>U?</code>.</li>
+                  <li><strong>Solide Profilfarben-Rahmen:</strong> Beide Status behalten den durchgehenden, soliden Profilfarben-Rahmen für sofortige Personen-Zuordnung.</li>
+                  <li><strong>Status-Harmonisierung:</strong> Reisekarten (`TripCard`) und das Statistik-Kreisdiagramm nutzen identische Farbtöne für <em>Gebucht</em> (Grün), <em>In Planung</em> (Orange), <em>Idee</em> (Gelb) und <em>Abgeschlossen</em> (Schiefergrau).</li>
+                  <li><strong>Erweiterte Legende:</strong> Die Kalender-Seitenleiste und die Dashboard-Aktivitätsübersicht enthalten nun eine vollständige Übersicht aller Reisemuster.</li>
+                </ul>
+              </div>
+
+              {/* V 1.9.1 */}
+              <div className="relative pl-7 border-l-2 border-slate-200 dark:border-white/10">
+                <div className="absolute -left-[9px] top-1.5 h-4 w-4 rounded-full bg-slate-300 dark:bg-slate-700 ring-4 ring-white dark:ring-[#0d141d]" />
+                <div className="flex items-center gap-3 mb-3">
+                  <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100 m-0">Version 1.9.1</h3>
                 </div>
                 <ul className="list-disc list-outside ml-4 mt-2 space-y-1.5 text-sm text-slate-600 dark:text-slate-300">
                   <li><strong>Harmonisierte Bernsteingold-Farbe (Amber) für „Idee“-Reisen:</strong> Reiseentwürfe im Status <em>„Idee“</em> werden systemweit einheitlich in bernsteinfarbenem Midnight-Glass dargestellt – im Kalender, auf Reisekarten, im Statistik-Donut und in der Jahresübersicht.</li>

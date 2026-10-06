@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.9.2] - 2026-10-06
+### Added & Improved
+- **Diagonale Streifenschraffur für Reise-Status im Kalender & Dashboard:**
+  - **„In Planung“ mit Grün-Orange Schraffur (50 % Deckkraft):** Reisetage im Status *„In Planung“* werden im Jahreskalender und auf der Dashboard-Aktivitätsübersicht mit einer diagonalen Streifenschraffur aus Urlaubsgrün und Orange bei 50 % Deckkraft dargestellt. Die Zellen behalten ihren soliden Profilfarben-Rahmen und das reguläre Kürzel `U` (bzw. `2`).
+  - **„Idee“ mit Grün-Gelb Schraffur (50 % Deckkraft) & `U?`:** Reisetage im Status *„Idee“* erhalten eine Diagonalschraffur aus Urlaubsgrün und Gelb (`#eab308`), behalten den soliden Profilfarben-Rahmen (ohne gestrichelten Rand) und tragen das Kennzeichen `U?` (bzw. `2?`), sodass Entwürfe auf einen Blick als unverbindlich erkennbar sind.
+  - **Gebucht:** 100 % sattes Urlaubsgrün mit solidem Profilrahmen und Kürzel `U`.
+  - **Feierabend (Randtage):** Dezent 30 % Urlaubsgrün ohne Schraffur und ohne Textlabel.
+- **Harmonisiertes Farbsystem über alle Ansichten:**
+  - **Reisekarten (`TripCard`):** Status-Badges synchronisiert auf *Gebucht* (Grün), *In Planung* (Orange), *Idee* (Klares Gelb) und *Abgeschlossen* (Schiefergrau).
+  - **Statistik-Donut (`DualDonutChart`):** 100 % identische Farbgebung im Kreisdiagramm für Buchungsstatus.
+  - **Legenden (`Legend.tsx` & Dashboard-Heatmap):** Eigener Bereich für Reisestatus mit visuellen Mustern und einheitlicher Beschriftung.
+
 ## [1.9.1] - 2026-10-05
 ### Added & Improved
 - **CI-Farbe für „Idee“-Reisen & visuelle Differenzierung:**
