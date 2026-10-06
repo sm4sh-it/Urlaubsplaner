@@ -3,8 +3,9 @@
 ## [1.9.2] - 2026-10-06
 ### Added & Improved
 - **Diagonale Streifenschraffur für Reise-Status im Kalender & Dashboard:**
-  - **„In Planung“ mit Grün-Orange Schraffur (50 % Deckkraft):** Reisetage im Status *„In Planung“* werden im Jahreskalender und auf der Dashboard-Aktivitätsübersicht mit einer diagonalen Streifenschraffur aus Urlaubsgrün und Orange bei 50 % Deckkraft dargestellt. Die Zellen behalten ihren soliden Profilfarben-Rahmen und das reguläre Kürzel `U` (bzw. `2`).
-  - **„Idee“ mit Grün-Gelb Schraffur (50 % Deckkraft) & `U?`:** Reisetage im Status *„Idee“* erhalten eine Diagonalschraffur aus Urlaubsgrün und Gelb (`#eab308`), behalten den soliden Profilfarben-Rahmen (ohne gestrichelten Rand) und tragen das Kennzeichen `U?` (bzw. `2?`), sodass Entwürfe auf einen Blick als unverbindlich erkennbar sind.
+  - **Einheitliche Streifenrichtung (45°):** Schraffuren laufen nun parallel zu Wochenenden (`.cell-weekend`) und Blockiert-Tagen (`.status-x`) im 45°-Winkel von links unten nach rechts oben, wodurch unruhige Moiré- und Kreuzschraffur-Muster verhindert werden.
+  - **Beruhigte Deckkraft (60 % Grün / 30 % Akzent):** 60 % Urlaubsgrün dient als dominanter, ruhiger Farb-Anker, während 30 % Orange (*In Planung*) bzw. 30 % Gelb (*Idee*) als dezenter Akzentton eingemischt werden.
+  - **Optimierter Textkontrast im Light-Mode:** Das Label `U?` (bzw. `U`) wird im hellen Modus in kontrastreichem Dunkelschiefer (`var(--status-text)`) ohne störenden Schlagschatten dargestellt, sodass es auf hellem Grund gestochen scharf lesbar bleibt. Im Dark-Mode leuchtet es weiß mit dezentem Schatten.
   - **Gebucht:** 100 % sattes Urlaubsgrün mit solidem Profilrahmen und Kürzel `U`.
   - **Feierabend (Randtage):** Dezent 30 % Urlaubsgrün ohne Schraffur und ohne Textlabel.
 - **Harmonisiertes Farbsystem über alle Ansichten:**

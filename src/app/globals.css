@@ -206,56 +206,60 @@ body {
   color: transparent !important; 
 }
 
-/* Idee: Diagonale Streifenschraffur aus Grün und Gelb (~50% Deckkraft) */
+/* Idee: Diagonale Streifenschraffur aus 60% Grün und 30% Gelb */
 .trip-idea { 
   background: repeating-linear-gradient(
-    -45deg,
-    color-mix(in srgb, var(--color-vacation) 50%, transparent),
-    color-mix(in srgb, var(--color-vacation) 50%, transparent) 4px,
-    color-mix(in srgb, #eab308 50%, transparent) 4px,
-    color-mix(in srgb, #eab308 50%, transparent) 8px
+    45deg,
+    color-mix(in srgb, var(--color-vacation) 60%, transparent),
+    color-mix(in srgb, var(--color-vacation) 60%, transparent) 4px,
+    color-mix(in srgb, #eab308 30%, transparent) 4px,
+    color-mix(in srgb, #eab308 30%, transparent) 8px
   ) !important; 
-  color: #ffffff !important;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
+  color: var(--status-text) !important;
 }
 .trip-idea-2 { 
   background: 
     linear-gradient(135deg, transparent 50%, var(--surface) 50%),
     repeating-linear-gradient(
-      -45deg,
-      color-mix(in srgb, var(--color-vacation) 50%, transparent),
-      color-mix(in srgb, var(--color-vacation) 50%, transparent) 4px,
-      color-mix(in srgb, #eab308 50%, transparent) 4px,
-      color-mix(in srgb, #eab308 50%, transparent) 8px
+      45deg,
+      color-mix(in srgb, var(--color-vacation) 60%, transparent),
+      color-mix(in srgb, var(--color-vacation) 60%, transparent) 4px,
+      color-mix(in srgb, #eab308 30%, transparent) 4px,
+      color-mix(in srgb, #eab308 30%, transparent) 8px
     ) !important; 
-  color: #ffffff !important;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
+  color: var(--status-text) !important;
 }
 
-/* In Planung: Diagonale Streifenschraffur aus Grün und Orange (50% Deckkraft) */
+/* In Planung: Diagonale Streifenschraffur aus 60% Grün und 30% Orange */
 .trip-planning { 
   background: repeating-linear-gradient(
-    -45deg,
-    color-mix(in srgb, var(--color-vacation) 50%, transparent),
-    color-mix(in srgb, var(--color-vacation) 50%, transparent) 4px,
-    color-mix(in srgb, #ea580c 50%, transparent) 4px,
-    color-mix(in srgb, #ea580c 50%, transparent) 8px
+    45deg,
+    color-mix(in srgb, var(--color-vacation) 60%, transparent),
+    color-mix(in srgb, var(--color-vacation) 60%, transparent) 4px,
+    color-mix(in srgb, #ea580c 30%, transparent) 4px,
+    color-mix(in srgb, #ea580c 30%, transparent) 8px
   ) !important; 
-  color: #ffffff !important;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
+  color: var(--status-text) !important;
 }
 .trip-planning-2 { 
   background: 
     linear-gradient(135deg, transparent 50%, var(--surface) 50%),
     repeating-linear-gradient(
-      -45deg,
-      color-mix(in srgb, var(--color-vacation) 50%, transparent),
-      color-mix(in srgb, var(--color-vacation) 50%, transparent) 4px,
-      color-mix(in srgb, #ea580c 50%, transparent) 4px,
-      color-mix(in srgb, #ea580c 50%, transparent) 8px
+      45deg,
+      color-mix(in srgb, var(--color-vacation) 60%, transparent),
+      color-mix(in srgb, var(--color-vacation) 60%, transparent) 4px,
+      color-mix(in srgb, #ea580c 30%, transparent) 4px,
+      color-mix(in srgb, #ea580c 30%, transparent) 8px
     ) !important; 
+  color: var(--status-text) !important;
+}
+
+.dark .trip-idea,
+.dark .trip-idea-2,
+.dark .trip-planning,
+.dark .trip-planning-2 {
   color: #ffffff !important;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
 }
 
 .status-x   { 
