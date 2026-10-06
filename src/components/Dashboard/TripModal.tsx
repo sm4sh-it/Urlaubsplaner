@@ -336,6 +336,7 @@ export default function TripModal({ isOpen, onClose, trip }: TripModalProps) {
                       }
                     }} 
                     type="date" 
+                    lang="de-DE"
                     className="bg-white dark:bg-[#070c12]/70 border border-slate-200 dark:border-white/10 text-slate-800 dark:text-slate-100 focus:border-brand-500/80 focus:ring-2 focus:ring-brand-500/20 rounded-xl px-3.5 py-2.5 text-sm transition-all outline-none font-mono" 
                   />
                   {startDate && endDate && startDate !== endDate && (
@@ -364,6 +365,7 @@ export default function TripModal({ isOpen, onClose, trip }: TripModalProps) {
                     min={startDate || undefined}
                     onChange={e => updateForm({ endDate: e.target.value })} 
                     type="date" 
+                    lang="de-DE"
                     className="bg-white dark:bg-[#070c12]/70 border border-slate-200 dark:border-white/10 text-slate-800 dark:text-slate-100 focus:border-brand-500/80 focus:ring-2 focus:ring-brand-500/20 rounded-xl px-3.5 py-2.5 text-sm transition-all outline-none font-mono" 
                   />
                   {startDate && endDate && startDate !== endDate && (
@@ -428,45 +430,50 @@ export default function TripModal({ isOpen, onClose, trip }: TripModalProps) {
                     </div>
 
                     {isHalfDay && (
-                      <div className="pt-2 border-t border-slate-200/60 dark:border-white/5 flex flex-wrap items-center justify-between gap-2 text-xs">
-                        <span className="font-medium text-slate-500 dark:text-slate-400">
-                          Zweite Tageshälfte (an Arbeitstagen):
-                        </span>
-                        <div className="flex items-center gap-1.5">
-                          <button
-                            type="button"
-                            onClick={() => updateForm({ secondaryType: "" })}
-                            className={`px-2.5 py-1 rounded-lg font-semibold transition-all cursor-pointer ${
-                              !secondaryType
-                                ? 'bg-brand-600 text-white shadow-xs'
-                                : 'bg-slate-200/80 dark:bg-[#161f28] text-slate-600 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-[#1e2a36]'
-                            }`}
-                          >
-                            Frei / Normal
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => updateForm({ secondaryType: "M" })}
-                            className={`px-2.5 py-1 rounded-lg font-semibold transition-all cursor-pointer ${
-                              secondaryType === "M"
-                                ? 'bg-brand-600 text-white shadow-xs'
-                                : 'bg-slate-200/80 dark:bg-[#161f28] text-slate-600 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-[#1e2a36]'
-                            }`}
-                          >
-                            Mobiles Arbeiten (M)
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => updateForm({ secondaryType: "Ü" })}
-                            className={`px-2.5 py-1 rounded-lg font-semibold transition-all cursor-pointer ${
-                              secondaryType === "Ü"
-                                ? 'bg-brand-600 text-white shadow-xs'
-                                : 'bg-slate-200/80 dark:bg-[#161f28] text-slate-600 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-[#1e2a36]'
-                            }`}
-                          >
-                            Überstunden (Ü)
-                          </button>
+                      <div className="pt-2 border-t border-slate-200/60 dark:border-white/5 flex flex-col gap-1.5 text-xs">
+                        <div className="flex flex-wrap items-center justify-between gap-2">
+                          <span className="font-medium text-slate-500 dark:text-slate-400">
+                            Zweite Tageshälfte (an Arbeitstagen):
+                          </span>
+                          <div className="flex items-center gap-1.5">
+                            <button
+                              type="button"
+                              onClick={() => updateForm({ secondaryType: "" })}
+                              className={`px-2.5 py-1 rounded-lg font-semibold transition-all cursor-pointer ${
+                                !secondaryType
+                                  ? 'bg-brand-600 text-white shadow-xs'
+                                  : 'bg-slate-200/80 dark:bg-[#161f28] text-slate-600 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-[#1e2a36]'
+                              }`}
+                            >
+                              Reguläre Arbeit
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => updateForm({ secondaryType: "M" })}
+                              className={`px-2.5 py-1 rounded-lg font-semibold transition-all cursor-pointer ${
+                                secondaryType === "M"
+                                  ? 'bg-brand-600 text-white shadow-xs'
+                                  : 'bg-slate-200/80 dark:bg-[#161f28] text-slate-600 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-[#1e2a36]'
+                              }`}
+                            >
+                              Mobiles Arbeiten (M)
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => updateForm({ secondaryType: "Ü" })}
+                              className={`px-2.5 py-1 rounded-lg font-semibold transition-all cursor-pointer ${
+                                secondaryType === "Ü"
+                                  ? 'bg-brand-600 text-white shadow-xs'
+                                  : 'bg-slate-200/80 dark:bg-[#161f28] text-slate-600 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-[#1e2a36]'
+                              }`}
+                            >
+                              Überstunden (Ü)
+                            </button>
+                          </div>
                         </div>
+                        <p className="text-[11px] text-slate-400 dark:text-slate-500">
+                          Exakt 0.5 Tage Urlaubsabzug je Arbeitstag. Die verbleibende Hälfte ist reguläre Arbeitszeit oder wird mit mobiler Arbeit bzw. Überstundenabbau belegt.
+                        </p>
                       </div>
                     )}
                   </div>

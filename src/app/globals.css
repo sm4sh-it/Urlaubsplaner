@@ -41,6 +41,8 @@
   --color-mobile: var(--c-mobile);
   --color-ferien: var(--c-ferien);
   --color-auszeit: var(--c-auszeit);
+  --color-idea: var(--c-idea);
+  --color-idea-text: var(--c-idea-text);
 
   --color-status-confirmed: #23d160;
   --color-status-planning: #ff9f43;
@@ -73,6 +75,8 @@
     --c-dienstreise: #64748b;
     --c-special: #ea580c;
     --c-ferien: #ff9f43;
+    --c-idea: #f59e0b;
+    --c-idea-text: #b45309;
     --radius: 12px;
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
@@ -100,6 +104,8 @@
     --c-dienstreise: #475569;
     --c-special: #c2410c;
     --c-ferien: #ff9f43;
+    --c-idea: #facc15;
+    --c-idea-text: #fde047;
   }
 }
 
@@ -195,8 +201,19 @@ body {
 .status-a   { background: var(--color-auszeit) !important; color: var(--status-text) !important; }
 .status-a-2 { background: linear-gradient(135deg, var(--color-auszeit) 50%, var(--surface) 50%) !important; color: var(--status-text) !important; }
 .status-m   { background: var(--color-mobile) !important; color: var(--status-text) !important; }
-.status-m-2 { background: linear-gradient(135deg, var(--color-mobile) 50%, var(--surface) 50%) !important; color: var(--status-text) !important; }
 .trip-feierabend { background: color-mix(in srgb, var(--color-vacation) 35%, transparent) !important; color: transparent !important; }
+.trip-idea { 
+  background: color-mix(in srgb, var(--color-idea) 35%, transparent) !important; 
+  color: var(--color-idea-text) !important; 
+  border-style: dashed !important;
+  border-color: var(--color-idea) !important;
+}
+.trip-idea-2 { 
+  background: linear-gradient(135deg, color-mix(in srgb, var(--color-idea) 35%, transparent) 50%, var(--surface) 50%) !important; 
+  color: var(--color-idea-text) !important; 
+  border-style: dashed !important;
+  border-color: var(--color-idea) !important;
+}
 
 .status-x   { 
   background: repeating-linear-gradient(

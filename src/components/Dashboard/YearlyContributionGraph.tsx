@@ -2,6 +2,7 @@
 
 import { useStore } from "@/store/useStore"
 import { useMemo } from "react"
+import { isVacationCostingDay } from "@/lib/tripUtils"
 
 export default function YearlyContributionGraph() {
   const selectedYear = useStore(state => state.selectedYear)
@@ -83,6 +84,10 @@ export default function YearlyContributionGraph() {
       let labelText = ""
 
       if (isCurrentYear && activeProfileIds.length > 0) {
+        // Manuelle Einträge prüfen (Krankmeldung bricht Urlaub)
+        const manualEntries = entries.filter(e => e.date === dateStr && activeProfileIds.includes(e.profileId))
+        const sickEntry = manualEntries.find(e => e.type.includes('K') || e.type.includes('3'))
+
         const blockingStatuses = ["In Planung", "Gebucht", "Abgeschlossen", "Idee"]
         const blockingTrips = trips.filter(t => 
           blockingStatuses.includes(t.status) &&
@@ -91,51 +96,82 @@ export default function YearlyContributionGraph() {
           t.profiles.some(p => activeProfileIds.includes(p.id))
         )
         
-        if (blockingTrips.length > 0) {
+        if (sickEntry) {
+          fullColor = getStatusColor('k')
+          labelText = 'Krankmeldung'
+        } else if (blockingTrips.length > 0) {
           for (const trip of blockingTrips) {
-            if (trip.status === "Idee") isIdea = true
-            const color = getStatusColor(trip.type)
-            if (!trip.isHalfDay) {
-              fullColor = color
-              labelText = trip.title || trip.type
+            const isStartNone = dateStr === trip.startDate && trip.startDayType === "NONE"
+            const isEndNone = dateStr === trip.endDate && trip.endDayType === "NONE"
+            const isFeierabend = isStartNone || isEndNone
+
+            if (isFeierabend) {
+              fullColor = 'color-mix(in srgb, var(--color-vacation) 35%, transparent)'
+              labelText = isStartNone 
+                ? `${trip.title || trip.type} (Abreise nach Feierabend)` 
+                : `${trip.title || trip.type} (Rückreise vor Arbeitsbeginn)`
             } else {
-              if (trip.halfDayType === "NACHMITTAG") {
-                pmColor = color
+              if (trip.status === "Idee") isIdea = true
+
+              const isStartHalf = dateStr === trip.startDate && trip.startDayType === "HALF"
+              const isEndHalf = dateStr === trip.endDate && trip.endDayType === "HALF"
+              const isHalf = trip.isHalfDay || isStartHalf || isEndHalf
+
+              const baseColor = trip.status === "Idee" 
+                ? 'color-mix(in srgb, var(--color-idea) 45%, transparent)' 
+                : getStatusColor(trip.type)
+
+              if (!isHalf) {
+                fullColor = baseColor
+                labelText = trip.title || trip.type
               } else {
-                amColor = color
+                // Prüfung ob Workation (secondaryType) an einem Arbeitstag vorliegt
+                const tripProfile = profiles.find(p => trip.profiles.some(tp => tp.id === p.id && activeProfileIds.includes(p.id)))
+                const isWorkDay = tripProfile ? isVacationCostingDay(dateStr, tripProfile, holidays) : true
+
+                let secondaryColor: string | null = null
+                if (trip.secondaryType && isWorkDay) {
+                  secondaryColor = trip.secondaryType === 'M' ? getStatusColor('m') : getStatusColor('ue')
+                }
+
+                if (trip.halfDayType === "NACHMITTAG") {
+                  pmColor = baseColor
+                  amColor = secondaryColor || 'var(--surface-bright)'
+                } else {
+                  amColor = baseColor
+                  pmColor = secondaryColor || 'var(--surface-bright)'
+                }
+                labelText = labelText 
+                  ? `${labelText} / ${trip.title || trip.type}` 
+                  : (secondaryColor ? `${trip.title || trip.type} (Workation)` : `${trip.title || trip.type} (Halber Tag)`)
               }
-              labelText = labelText ? `${labelText} / ${trip.title || trip.type}` : `${trip.title || trip.type} (Halber Tag)`
             }
           }
-        } else {
-          // Check manual entries
-          const manualEntries = entries.filter(e => e.date === dateStr && activeProfileIds.includes(e.profileId))
-          if (manualEntries.length > 0) {
-            const parts = manualEntries[0].type.split(',').map(p => p.trim())
-            
-            const mapHalfDayCodeToColor = (code: string): string | null => {
-              switch (code) {
-                case '2': return getStatusColor('u')   // Halber Tag Urlaub (U/2)
-                case '5': return getStatusColor('m')   // Halber Tag Mobiles Arbeiten (M/2)
-                case '6': return getStatusColor('s')   // Halber Tag Sonderurlaub (S/2)
-                case '4': return getStatusColor('ue')  // Halber Tag Überstunden (Ü/2)
-                case '3': return getStatusColor('k')   // Halber Tag Krankheit (K/2)
-                default: return null
-              }
+        } else if (manualEntries.length > 0) {
+          const parts = manualEntries[0].type.split(',').map(p => p.trim())
+          
+          const mapHalfDayCodeToColor = (code: string): string | null => {
+            switch (code) {
+              case '2': return getStatusColor('u')   // Halber Tag Urlaub (U/2)
+              case '5': return getStatusColor('m')   // Halber Tag Mobiles Arbeiten (M/2)
+              case '6': return getStatusColor('s')   // Halber Tag Sonderurlaub (S/2)
+              case '4': return getStatusColor('ue')  // Halber Tag Überstunden (Ü/2)
+              case '3': return getStatusColor('k')   // Halber Tag Krankheit (K/2)
+              default: return null
             }
+          }
 
-            if (parts.length === 1) {
-              const code = parts[0]
-              const halfColor = mapHalfDayCodeToColor(code)
-              if (halfColor) {
-                amColor = halfColor
-              } else {
-                fullColor = getStatusColor(code)
-              }
-            } else if (parts.length >= 2) {
-              amColor = mapHalfDayCodeToColor(parts[0]) || getStatusColor(parts[0])
-              pmColor = mapHalfDayCodeToColor(parts[1]) || getStatusColor(parts[1])
+          if (parts.length === 1) {
+            const code = parts[0]
+            const halfColor = mapHalfDayCodeToColor(code)
+            if (halfColor) {
+              amColor = halfColor
+            } else {
+              fullColor = getStatusColor(code)
             }
+          } else if (parts.length >= 2) {
+            amColor = mapHalfDayCodeToColor(parts[0]) || getStatusColor(parts[0])
+            pmColor = mapHalfDayCodeToColor(parts[1]) || getStatusColor(parts[1])
           }
         }
       }
@@ -161,28 +197,30 @@ export default function YearlyContributionGraph() {
   const getDayStyle = (day: typeof days[0]) => {
     if (!day.isCurrentYear) return {}
 
+    const outline = day.isIdea ? '1px dashed var(--color-idea)' : undefined
+
     if (day.fullColor) {
-      return { background: day.fullColor, opacity: day.isIdea ? 0.5 : 1 }
+      return { background: day.fullColor, outline }
     }
 
     if (day.amColor && day.pmColor) {
       return {
         background: `linear-gradient(135deg, ${day.amColor} 50%, ${day.pmColor} 50%)`,
-        opacity: day.isIdea ? 0.5 : 1
+        outline
       }
     }
 
     if (day.amColor) {
       return {
         background: `linear-gradient(135deg, ${day.amColor} 50%, var(--surface-bright) 50%)`,
-        opacity: day.isIdea ? 0.5 : 1
+        outline
       }
     }
 
     if (day.pmColor) {
       return {
         background: `linear-gradient(135deg, var(--surface-bright) 50%, ${day.pmColor} 50%)`,
-        opacity: day.isIdea ? 0.5 : 1
+        outline
       }
     }
 
@@ -217,6 +255,14 @@ export default function YearlyContributionGraph() {
           <div className="flex items-center gap-1.5">
             <span className="w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: 'var(--color-vacation)' }} />
             <span>Urlaub</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <span className="w-2.5 h-2.5 rounded-sm border border-dashed border-amber-500" style={{ backgroundColor: 'color-mix(in srgb, var(--color-idea) 45%, transparent)' }} />
+            <span>Idee</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <span className="w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: 'color-mix(in srgb, var(--color-vacation) 35%, transparent)' }} />
+            <span>Feierabend</span>
           </div>
           <div className="flex items-center gap-1.5">
             <span className="w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: 'var(--color-mobile)' }} />

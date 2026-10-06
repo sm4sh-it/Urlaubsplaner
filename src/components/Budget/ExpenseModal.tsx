@@ -354,6 +354,7 @@ export default function ExpenseModal({
               </label>
               <input
                 type="date"
+                lang="de-DE"
                 required
                 value={date}
                 onChange={(e) => setDate(e.target.value)}

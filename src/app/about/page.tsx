@@ -93,12 +93,26 @@ export default function AboutPage() {
             </h2>
 
             <div className="space-y-8">
-              {/* V 1.9.0 */}
+              {/* V 1.9.1 */}
               <div className="relative pl-7 border-l-2 border-brand-500">
                 <div className="absolute -left-[9px] top-1.5 h-4 w-4 rounded-full bg-brand-500 ring-4 ring-white dark:ring-[#0d141d] shadow-sm shadow-brand-500/50" />
                 <div className="flex items-center gap-3 mb-3">
-                  <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100 m-0">Version 1.9.0</h3>
+                  <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100 m-0">Version 1.9.1</h3>
                   <span className="text-xs px-2.5 py-0.5 bg-brand-500/15 border border-brand-500/20 text-brand-600 dark:text-brand-400 rounded-full font-bold">Aktuell</span>
+                </div>
+                <ul className="list-disc list-outside ml-4 mt-2 space-y-1.5 text-sm text-slate-600 dark:text-slate-300">
+                  <li><strong>Harmonisierte Bernsteingold-Farbe (Amber) für „Idee“-Reisen:</strong> Reiseentwürfe im Status <em>„Idee“</em> werden systemweit einheitlich in bernsteinfarbenem Midnight-Glass dargestellt – im Kalender, auf Reisekarten, im Statistik-Donut und in der Jahresübersicht.</li>
+                  <li><strong>Volle Dashboard-Heatmap-Parität:</strong> Feierabend-Abreisen (35 % Deckkraft), Workation-Splits (diagonale Zellen) und Krankheitsvorrang werden nun auch in der 53-Wochen-Jahresübersicht auf der Startseite exakt abgebildet.</li>
+                  <li><strong>Wochenstart am Montag für Kalender-Dropdowns:</strong> Umstellung auf <code>lang="de-DE"</code> für das gesamte HTML-Dokument und alle Datums-Inputs garantiert den deutschen DIN-1355 / ISO-8601 Standard mit Montag als erstem Wochentag.</li>
+                  <li><strong>Klareres Wording &amp; Transparenz:</strong> Umbenennung von <em>„Frei / Normal“</em> in <em>„Reguläre Arbeit“</em> bei Halbtags-Trips mit Bestätigungshinweis für 0.5 Tage Urlaub.</li>
+                </ul>
+              </div>
+
+              {/* V 1.9.0 */}
+              <div className="relative pl-7 border-l-2 border-slate-200 dark:border-white/10">
+                <div className="absolute -left-[9px] top-1.5 h-4 w-4 rounded-full bg-slate-300 dark:bg-slate-700 ring-4 ring-white dark:ring-[#0d141d]" />
+                <div className="flex items-center gap-3 mb-3">
+                  <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100 m-0">Version 1.9.0</h3>
                 </div>
                 <ul className="list-disc list-outside ml-4 mt-2 space-y-1.5 text-sm text-slate-600 dark:text-slate-300">
                   <li><strong>Dynamische Reisetage &amp; Randtage-Management:</strong> Start- und Endtage können flexibel als <em>„Abreise nach Feierabend (0 Urlaubstage)“</em> oder <em>„Vor Arbeitsbeginn zurück“</em> definiert werden. Der reale Reisezeitraum bleibt für Kalender, ICS-Export und Budget erhalten, verbraucht aber 0 Urlaubstage.</li>

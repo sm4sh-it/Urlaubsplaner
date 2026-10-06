@@ -506,6 +506,8 @@ export default function YearCalendar() {
                                 if (!entryType) return null
                                 const parts = entryType.split(',').map(normalizeEntryCode)
 
+                                const isIdea = Boolean(tripEntry?.isIdea)
+
                                 // Render stacked half-days (from manual entries or merged half-day trips / workations)
                                 if (parts.length === 2) {
                                   const typeClass1 = ENTRY_CLASSES[HALF_TO_FULL[parts[0]] || parts[0]] || "bg-slate-200 text-slate-700 dark:text-slate-200"
@@ -513,8 +515,8 @@ export default function YearCalendar() {
                                   return (
                                     <div key={profileId} className={cn("flex flex-col rounded-sm overflow-hidden border-solid shadow-sm w-full h-full", 
                                       isCompact ? "border-[1px] flex-1" : "border-2 shrink-0 flex-1",
-                                      tripEntry ? (tripEntry.isIdea ? "opacity-50 border-dashed" : "opacity-90") : ""
-                                    )} style={{ borderColor: profile.color }}
+                                      isIdea ? "border-dashed opacity-90" : (tripEntry ? "opacity-90" : "")
+                                    )} style={{ borderColor: isIdea ? 'var(--color-idea)' : profile.color }}
                                       title={cellTitle}
                                     >
                                       <div className={cn("flex-1 flex items-center justify-center font-bold w-full leading-none", typeClass1, isCompact ? "text-[0px]" : "text-[8px]")}>
@@ -528,7 +530,14 @@ export default function YearCalendar() {
                                 }
                                 
                                 const normType = normalizeEntryCode(entryType)
-                                const typeClass = ENTRY_CLASSES[normType] || "bg-slate-200 text-slate-700 dark:text-slate-200"
+                                let typeClass: string
+                                if (isFeierabend) {
+                                  typeClass = ENTRY_CLASSES['TRIP_NONE']
+                                } else if (isIdea) {
+                                  typeClass = (normType === '2' || normType === '5' || normType === '4' || normType === '6') ? "trip-idea-2" : "trip-idea"
+                                } else {
+                                  typeClass = ENTRY_CLASSES[normType] || "bg-slate-200 text-slate-700 dark:text-slate-200"
+                                }
                                 const label = HALF_TO_LABEL[normType] || normType
                                 
                                 return (
@@ -538,10 +547,10 @@ export default function YearCalendar() {
                                       "flex items-center justify-center font-bold rounded-sm border-solid shadow-sm w-full h-full",
                                       isCompact ? "border-[1px] text-[0px] flex-1" : "border-2 shrink-0 flex-1 text-[10px]",
                                       typeClass,
-                                      tripEntry ? (tripEntry.isIdea ? "opacity-50 border-dashed" : "opacity-90") : "",
+                                      isIdea ? "border-dashed opacity-95" : (tripEntry ? "opacity-90" : ""),
                                       isFeierabend && "border-2"
                                     )}
-                                    style={{ borderColor: profile.color }}
+                                    style={{ borderColor: isIdea ? 'var(--color-idea)' : profile.color }}
                                     title={cellTitle}
                                   >
                                     {!isCompact && !isFeierabend && label}

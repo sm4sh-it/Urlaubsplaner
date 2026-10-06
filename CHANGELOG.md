@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.9.1] - 2026-10-05
+### Added & Improved
+- **CI-Farbe für „Idee“-Reisen & visuelle Differenzierung:**
+  - **Einheitliches Bernsteingold (Amber):** Buchungsstatus *„Idee“* wird nun systemweit in einem harmonischen Bernsteingold (`#f59e0b` Light / `#facc15` Dark) dargestellt – 100 % einheitlich über Reisekarten, Kalender, Jahres-Heatmap und Statistik-Donut (`StatusWidget`).
+  - **Perfekte Unterscheidung zu Feierabendtagen:** Im Kalender und in der Heatmap sind Feierabend-Randtage (dezent 35 % Smaragdgrün, leer) und Urlaubs-Ideen (35 % Bernsteingold mit gestricheltem Rahmen und Label `U`) sofort und unverwechselbar unterscheidbar.
+- **Vollständige Parität in der Jahresübersicht (`YearlyContributionGraph.tsx`):**
+  - Feierabendtage werden auch auf dem Dashboard dezent mit 35 % Deckkraft gerendert.
+  - Workations mit Mobiler Arbeit oder Überstundenabbau werden als zweifarbiger Diagonalschnitt dargestellt.
+  - Gesetzlicher Krankheitsvorrang: Manuelle Krankmeldungen auf Reisetagen brechen den Urlaub nun auch in der Heatmap zuverlässig.
+  - Ergänzung von *„Idee“* und *„Feierabend“* in der Schnelllegende des Dashboards.
+- **Wochenstart auf Montag (ISO-8601 / DIN-1355) für alle Datums-Dropdowns:**
+  - Globales HTML-Gebietsschema in `src/app/layout.tsx` auf `lang="de-DE"` spezifiziert.
+  - Alle nativen `<input type="date">`-Elemente (`TripModal`, `CreateBudgetModal`, `ExpenseModal`) mit explizitem `lang="de-DE"` versehen, sodass das Kalender-Popup in allen Browsern verlässlich montags beginnt.
+- **Klareres Wording & Transparenzhinweis im Reise-Modal:**
+  - Erste Auswahl bei Halbtags-Auffüllung von *„Frei / Normal“* umbenannt in *„Reguläre Arbeit“*.
+  - Klarstellender Hinweistext im Formular bestätigt, dass exakt 0.5 Tage Urlaub je Arbeitstag berechnet werden.
+
 ## [1.9.0] - 2026-10-04
 ### Added & Improved
 - **Dynamische Reisetage & Randtage-Management (`startDayType`, `endDayType`):**

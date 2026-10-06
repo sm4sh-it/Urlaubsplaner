@@ -392,6 +392,7 @@ export default function CreateBudgetModal({
               </label>
               <input
                 type="date"
+                lang="de-DE"
                 value={startDate}
                 onChange={(e) => {
                   const newStart = e.target.value
@@ -409,6 +410,7 @@ export default function CreateBudgetModal({
               </label>
               <input
                 type="date"
+                lang="de-DE"
                 value={endDate}
                 min={startDate || undefined}
                 onChange={(e) => setEndDate(e.target.value)}

@@ -32,7 +32,7 @@ export default function RootLayout({
 }>) {
   return (
     // suppressHydrationWarning is needed for next-themes
-    <html lang="de" suppressHydrationWarning className="h-screen h-[100dvh] overflow-hidden">
+    <html lang="de-DE" suppressHydrationWarning className="h-screen h-[100dvh] overflow-hidden">
       <body suppressHydrationWarning className={`${inter.variable} font-sans flex flex-col h-full h-[100dvh] transition-colors`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <Navbar />
