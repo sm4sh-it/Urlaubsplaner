@@ -20,3 +20,15 @@ workfiles
 Workfiles
 scratch
 docker-compose*.yml
+Webseite-avada
+public/screenshots
+scripts
+AGENTS.md
+CLAUDE.md
+GEMINI.md
+CHANGELOG.md
+LICENSE
+*.log
+.turbo
+.cache
+*.tsbuildinfo

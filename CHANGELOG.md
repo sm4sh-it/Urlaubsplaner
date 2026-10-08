@@ -1,17 +1,24 @@
 # Changelog
 
+## [1.9.3] - 2026-10-08
+### Added & Improved
+- **Streifenfreies, ruhiges Farbsystem:** Vollständiger Verzicht auf diagonale Schraffuren zugunsten ruhiger, homogener Glass-Flächen ohne Bildschirmflimmern.
+- **Harmonisierte Statusfarben & maximale Trennschärfe:**
+  - *In Planung:* Warmes Bernstein-Orange (`#f97316` Light / `#ff9f43` Dark), abgestimmt auf Reisekarten und Widgets.
+  - *Idee:* Sonniges Klargelb (`#eab308` Light / `#facc15` Dark) mit unverbindlichem Kürzel `U?`.
+  - *Krankheit:* Klares Signalrot (`#dc2626` Light / `#ef4444` Dark) für sofortige Unterscheidbarkeit im Dark-Mode.
+  - *Sonderurlaub:* Strahlendes Türkis / Aquamarin (`#00c5d4` Light / `#06b6d4` Dark), klar abgegrenzt von Überstunden (Lila) und Bildungsurlaub (Azur).
+
 ## [1.9.2] - 2026-10-06
 ### Added & Improved
 - **Diagonale Streifenschraffur für Reise-Status im Kalender & Dashboard:**
-  - **Einheitliche Streifenrichtung (45°):** Schraffuren laufen nun parallel zu Wochenenden (`.cell-weekend`) und Blockiert-Tagen (`.status-x`) im 45°-Winkel von links unten nach rechts oben, wodurch unruhige Moiré- und Kreuzschraffur-Muster verhindert werden.
-  - **Beruhigte Deckkraft (60 % Grün / 30 % Akzent):** 60 % Urlaubsgrün dient als dominanter, ruhiger Farb-Anker, während 30 % Orange (*In Planung*) bzw. 30 % Gelb (*Idee*) als dezenter Akzentton eingemischt werden.
-  - **Optimierter Textkontrast im Light-Mode:** Das Label `U?` (bzw. `U`) wird im hellen Modus in kontrastreichem Dunkelschiefer (`var(--status-text)`) ohne störenden Schlagschatten dargestellt, sodass es auf hellem Grund gestochen scharf lesbar bleibt. Im Dark-Mode leuchtet es weiß mit dezentem Schatten.
-  - **Gebucht:** 100 % sattes Urlaubsgrün mit solidem Profilrahmen und Kürzel `U`.
-  - **Feierabend (Randtage):** Dezent 30 % Urlaubsgrün ohne Schraffur und ohne Textlabel.
+  - **Einheitliche Streifenrichtung (45°):** Schraffuren parallel zu Wochenenden (`.cell-weekend`) und Blockiert-Tagen (`.status-x`).
+  - **Farbbalance (60 % Grün / 30 % Akzent):** Urlaubsgrün mit Orange (*In Planung*) bzw. Gelb (*Idee*).
+  - **Optimierter Textkontrast im Light-Mode:** `var(--status-text)` für scharfe Lesbarkeit.
+  - **Gebucht & Feierabend:** 100 % sattes Grün (`U`) bzw. dezent 30 % Grün ohne Text.
 - **Harmonisiertes Farbsystem über alle Ansichten:**
-  - **Reisekarten (`TripCard`):** Status-Badges synchronisiert auf *Gebucht* (Grün), *In Planung* (Orange), *Idee* (Klares Gelb) und *Abgeschlossen* (Schiefergrau).
-  - **Statistik-Donut (`DualDonutChart`):** 100 % identische Farbgebung im Kreisdiagramm für Buchungsstatus.
-  - **Legenden (`Legend.tsx` & Dashboard-Heatmap):** Eigener Bereich für Reisestatus mit visuellen Mustern und einheitlicher Beschriftung.
+  - **Reisekarten & Statistik-Donut:** Synchronisierte Statusfarben für *Gebucht*, *In Planung*, *Idee* und *Abgeschlossen*.
+  - **Legenden:** Aktualisierte Reisemuster in Kalender-Sidebar und Dashboard-Heatmap.
 
 ## [1.9.1] - 2026-10-05
 ### Added & Improved

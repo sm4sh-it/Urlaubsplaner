@@ -30,7 +30,8 @@
 .DS_Store
 *.pem
 
-# debug
+# debug & logs
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
@@ -42,19 +43,24 @@ debug_script.ts
 .env*
 !.env.sample
 
-# vercel
+# vercel & turbopack
 .vercel
+.turbo/
+.cache/
 
 # typescript
 *.tsbuildinfo
 next-env.d.ts
 
-# Database
+# Database & dumps
 *.db
 *.db-journal
 *.db-shm
 *.db-wal
 *.db.test
+*.sqlite
+*.sqlite3
+*.sql
 prisma/*.db*
 
 # Docker SQLite data folder
@@ -74,6 +80,24 @@ scratch/
 /backups/
 /backup/
 .tempmediaStorage/
+
+# Archives & Temporary files
+*.zip
+*.tar.gz
+*.tgz
+*.tmp
+*.temp
+
+# IDE & OS
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+Thumbs.db
+ehthumbs.db
+*.key
+*.crt
 
 # AI Agent Instructions
 AGENTS.md

@@ -93,19 +93,34 @@ export default function AboutPage() {
             </h2>
 
             <div className="space-y-8">
-              {/* V 1.9.2 */}
+              {/* V 1.9.3 */}
               <div className="relative pl-7 border-l-2 border-brand-500">
                 <div className="absolute -left-[9px] top-1.5 h-4 w-4 rounded-full bg-brand-500 ring-4 ring-white dark:ring-[#0d141d] shadow-sm shadow-brand-500/50" />
                 <div className="flex items-center gap-3 mb-3">
-                  <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100 m-0">Version 1.9.2</h3>
+                  <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100 m-0">Version 1.9.3</h3>
                   <span className="text-xs px-2.5 py-0.5 bg-brand-500/15 border border-brand-500/20 text-brand-600 dark:text-brand-400 rounded-full font-bold">Aktuell</span>
                 </div>
                 <ul className="list-disc list-outside ml-4 mt-2 space-y-1.5 text-sm text-slate-600 dark:text-slate-300">
-                  <li><strong>Diagonale Streifenschraffur für „In Planung“ &amp; „Idee“:</strong> Reisetage im Status <em>„In Planung“</em> (60 % Grün / 30 % Orange) und <em>„Idee“</em> (60 % Grün / 30 % Gelb) verlaufen einheitlich im 45°-Winkel parallel zu Wochenenden und Sperrzeiten. Reisetage im Status <em>„Idee“</em> tragen das unverbindliche Kürzel <code>U?</code>.</li>
-                  <li><strong>Kontrastoptimiertes Textlabel:</strong> Das Kürzel <code>U?</code> bzw. <code>U</code> wechselt im Light-Mode auf kontrastreiches Dunkelschiefer für perfekte Lesbarkeit auf hellem Grund.</li>
-                  <li><strong>Solide Profilfarben-Rahmen:</strong> Beide Status behalten den durchgehenden, soliden Profilfarben-Rahmen für sofortige Personen-Zuordnung.</li>
-                  <li><strong>Status-Harmonisierung:</strong> Reisekarten (`TripCard`) und das Statistik-Kreisdiagramm nutzen identische Farbtöne für <em>Gebucht</em> (Grün), <em>In Planung</em> (Orange), <em>Idee</em> (Gelb) und <em>Abgeschlossen</em> (Schiefergrau).</li>
-                  <li><strong>Erweiterte Legende:</strong> Die Kalender-Seitenleiste und die Dashboard-Aktivitätsübersicht enthalten nun eine vollständige Übersicht aller Reisemuster.</li>
+                  <li><strong>Streifenfreies, ruhiges Farbsystem:</strong> Vollständiger Verzicht auf unruhige Schraffuren zugunsten beruhigter, flächiger Glass-Farben ohne Bildschirmflimmern.</li>
+                  <li><strong>Harmonisierte Statusfarben &amp; maximale Trennschärfe:</strong>
+                    <em> In Planung</em> in warmem Bernstein-Orange (`#f97316` / `#ff9f43`), 
+                    <em> Idee</em> in sonnigem Klargelb (`#eab308` / `#facc15`) mit Label <code>U?</code>, 
+                    <em> Krank</em> in Signalrot (`#dc2626` / `#ef4444`) sowie 
+                    <em> Sonderurlaub (S)</em> in strahlendem Aquamarin (`#00c5d4` Light / `#06b6d4` Dark) – perfekt abgegrenzt von Überstunden (Lila) und Bildungsurlaub (Azur).
+                  </li>
+                  <li><strong>Kontrastoptimiertes Textlabel &amp; Legenden:</strong> Optimierte Kontraste im Light-Mode (`var(--status-text)`) und synchronisierte Statusfarben über Kalender, Dashboard, Reisekarten und Widgets.</li>
+                </ul>
+              </div>
+
+              {/* V 1.9.2 */}
+              <div className="relative pl-7 border-l-2 border-slate-200 dark:border-white/10">
+                <div className="absolute -left-[9px] top-1.5 h-4 w-4 rounded-full bg-slate-300 dark:bg-slate-700 ring-4 ring-white dark:ring-[#0d141d]" />
+                <div className="flex items-center gap-3 mb-3">
+                  <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100 m-0">Version 1.9.2</h3>
+                </div>
+                <ul className="list-disc list-outside ml-4 mt-2 space-y-1.5 text-sm text-slate-600 dark:text-slate-300">
+                  <li><strong>Status-Differenzierung &amp; Legenden-Erweiterung:</strong> Initiale Überarbeitung der visuellen Kennzeichnung von Reise-Status und Erweiterung der Kalender- und Dashboard-Legenden.</li>
+                  <li><strong>Farb-Synchronisation:</strong> Angleichung der Status-Indikatoren in Reisekarten (`TripCard`) und Statistik-Widgets.</li>
                 </ul>
               </div>
 

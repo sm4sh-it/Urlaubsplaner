@@ -73,7 +73,7 @@
     --c-mobile: #3b82f6;
     --c-bildungsurlaub: #0284c7;
     --c-dienstreise: #64748b;
-    --c-special: #ea580c;
+    --c-special: #00c5d4; /* Türkis / Aquamarin (#00c5d4 im Light-Mode für strahlenden Kontrast zu Bildungsurlaub) */
     --c-ferien: #ff9f43;
     --c-idea: #eab308;
     --c-idea-text: #854d0e;
@@ -94,15 +94,15 @@
     --feiertag-bg: rgba(255, 123, 114, 0.12);
     --blocked: #374151;
 
-    /* Darkmode Status Colors (Original) */
+    /* Darkmode Status Colors */
     --c-vacation: #059669;
-    --c-sick: #b0413e;
+    --c-sick: #ef4444; /* Clean vibrant red instead of murky brick-red #b0413e */
     --c-overtime: #7c3aed;
     --c-auszeit: #0f766e;
     --c-mobile: #2563eb;
     --c-bildungsurlaub: #0369a1;
     --c-dienstreise: #475569;
-    --c-special: #c2410c;
+    --c-special: #06b6d4; /* Türkis / Aquamarin */
     --c-ferien: #ff9f43;
     --c-idea: #facc15;
     --c-idea-text: #fde047;
@@ -206,60 +206,44 @@ body {
   color: transparent !important; 
 }
 
-/* Idee: Diagonale Streifenschraffur aus 60% Grün und 30% Gelb */
+/* Idee: Ruhiges, klares Sonnengelb (Glass) mit solidem Profilrahmen */
 .trip-idea { 
-  background: repeating-linear-gradient(
-    45deg,
-    color-mix(in srgb, var(--color-vacation) 60%, transparent),
-    color-mix(in srgb, var(--color-vacation) 60%, transparent) 4px,
-    color-mix(in srgb, #eab308 30%, transparent) 4px,
-    color-mix(in srgb, #eab308 30%, transparent) 8px
-  ) !important; 
-  color: var(--status-text) !important;
+  background: color-mix(in srgb, #eab308 45%, transparent) !important; 
+  color: var(--status-text) !important; 
 }
 .trip-idea-2 { 
-  background: 
-    linear-gradient(135deg, transparent 50%, var(--surface) 50%),
-    repeating-linear-gradient(
-      45deg,
-      color-mix(in srgb, var(--color-vacation) 60%, transparent),
-      color-mix(in srgb, var(--color-vacation) 60%, transparent) 4px,
-      color-mix(in srgb, #eab308 30%, transparent) 4px,
-      color-mix(in srgb, #eab308 30%, transparent) 8px
-    ) !important; 
-  color: var(--status-text) !important;
+  background: linear-gradient(135deg, color-mix(in srgb, #eab308 45%, transparent) 50%, var(--surface) 50%) !important; 
+  color: var(--status-text) !important; 
+}
+.dark .trip-idea {
+  background: color-mix(in srgb, #facc15 35%, transparent) !important;
+  color: #ffffff !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+.dark .trip-idea-2 {
+  background: linear-gradient(135deg, color-mix(in srgb, #facc15 35%, transparent) 50%, var(--surface) 50%) !important;
+  color: #ffffff !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
 }
 
-/* In Planung: Diagonale Streifenschraffur aus 60% Grün und 30% Orange */
+/* In Planung: Ruhiges, warmes Bernstein-Orange (Glass, abgestimmt auf Reisekarten #ff9f43) */
 .trip-planning { 
-  background: repeating-linear-gradient(
-    45deg,
-    color-mix(in srgb, var(--color-vacation) 60%, transparent),
-    color-mix(in srgb, var(--color-vacation) 60%, transparent) 4px,
-    color-mix(in srgb, #ea580c 30%, transparent) 4px,
-    color-mix(in srgb, #ea580c 30%, transparent) 8px
-  ) !important; 
-  color: var(--status-text) !important;
+  background: color-mix(in srgb, #f97316 45%, transparent) !important; 
+  color: var(--status-text) !important; 
 }
 .trip-planning-2 { 
-  background: 
-    linear-gradient(135deg, transparent 50%, var(--surface) 50%),
-    repeating-linear-gradient(
-      45deg,
-      color-mix(in srgb, var(--color-vacation) 60%, transparent),
-      color-mix(in srgb, var(--color-vacation) 60%, transparent) 4px,
-      color-mix(in srgb, #ea580c 30%, transparent) 4px,
-      color-mix(in srgb, #ea580c 30%, transparent) 8px
-    ) !important; 
-  color: var(--status-text) !important;
+  background: linear-gradient(135deg, color-mix(in srgb, #f97316 45%, transparent) 50%, var(--surface) 50%) !important; 
+  color: var(--status-text) !important; 
 }
-
-.dark .trip-idea,
-.dark .trip-idea-2,
-.dark .trip-planning,
-.dark .trip-planning-2 {
+.dark .trip-planning {
+  background: color-mix(in srgb, #ff9f43 55%, transparent) !important;
   color: #ffffff !important;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+.dark .trip-planning-2 {
+  background: linear-gradient(135deg, color-mix(in srgb, #ff9f43 55%, transparent) 50%, var(--surface) 50%) !important;
+  color: #ffffff !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
 }
 
 .status-x   { 

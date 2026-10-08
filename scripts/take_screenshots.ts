@@ -7,7 +7,7 @@ const EDGE_PATH = "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge
 const CHROME_PATH = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
 const BROWSER_PATH = fs.existsSync(CHROME_PATH) ? CHROME_PATH : EDGE_PATH
 
-const OUTPUT_DIR = path.resolve(process.cwd(), "Workfiles", "screenshots")
+const OUTPUT_DIR = path.resolve(process.cwd(), "_Work", "screenshots")
 
 async function ensureDir(dir: string) {
   if (!fs.existsSync(dir)) {

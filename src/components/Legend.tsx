@@ -105,11 +105,11 @@ export default function Legend() {
           </div>
           <div className="flex items-center gap-2.5 text-xs text-slate-700 dark:text-slate-200">
             <div className="w-7 h-6 rounded-md flex items-center justify-center text-[10px] font-mono font-bold trip-planning shrink-0 shadow-xs">U</div>
-            <span className="font-medium">In Planung (Grün-Orange)</span>
+            <span className="font-medium">In Planung (Orange)</span>
           </div>
           <div className="flex items-center gap-2.5 text-xs text-slate-700 dark:text-slate-200">
             <div className="w-7 h-6 rounded-md flex items-center justify-center text-[10px] font-mono font-bold trip-idea shrink-0 shadow-xs">U?</div>
-            <span className="font-medium">Idee (Grün-Gelb)</span>
+            <span className="font-medium">Idee (Klargelb)</span>
           </div>
           <div className="flex items-center gap-2.5 text-xs text-slate-700 dark:text-slate-200">
             <div className="w-7 h-6 rounded-md flex items-center justify-center text-[10px] font-mono font-bold trip-feierabend border border-slate-300 dark:border-slate-700 shrink-0 shadow-xs" />
