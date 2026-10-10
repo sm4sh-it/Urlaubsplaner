@@ -4,6 +4,22 @@ import { useStore } from "@/store/useStore"
 import { useMemo } from "react"
 import { isVacationCostingDay } from "@/lib/tripUtils"
 
+const ENTRY_ALIASES: Record<string, string> = {
+  'UE': 'Ü',
+  'ue': 'Ü',
+  'U-2': '2',
+  'u-2': '2',
+  'K-2': '3',
+  'k-2': '3',
+  'Ü-2': '4',
+  'UE-2': '4',
+  'ue-2': '4',
+  'M-2': '5',
+  'm-2': '5',
+  'S-2': '6',
+  's-2': '6',
+}
+
 export default function YearlyContributionGraph() {
   const selectedYear = useStore(state => state.selectedYear)
   const entries = useStore(state => state.entries)
@@ -149,8 +165,6 @@ export default function YearlyContributionGraph() {
             }
           }
         } else if (manualEntries.length > 0) {
-          const parts = manualEntries[0].type.split(',').map(p => p.trim())
-          
           const mapHalfDayCodeToColor = (code: string): string | null => {
             switch (code) {
               case '2': return getStatusColor('u')   // Halber Tag Urlaub (U/2)
@@ -162,17 +176,47 @@ export default function YearlyContributionGraph() {
             }
           }
 
-          if (parts.length === 1) {
-            const code = parts[0]
+          const getCodeLabel = (code: string): string => {
+            switch (code) {
+              case 'U': return 'Urlaub'
+              case '2': return 'Urlaub (Halbtag)'
+              case 'M': return 'Mobiles Arbeiten'
+              case '5': return 'Mobiles Arbeiten (Halbtag)'
+              case 'K': return 'Krank'
+              case '3': return 'Krank (Halbtag)'
+              case 'Ü': case 'ue': return 'Überstunden'
+              case '4': return 'Überstunden (Halbtag)'
+              case 'S': return 'Sonderurlaub'
+              case '6': return 'Sonderurlaub (Halbtag)'
+              case 'B': return 'Bildungsurlaub'
+              case 'D': return 'Dienstreise'
+              case 'A': return 'Auszeit'
+              default: return code
+            }
+          }
+
+          // Sammle alle Sub-Codes über alle Einträge aktiver Profile hinweg
+          const allCodes: string[] = []
+          for (const me of manualEntries) {
+            const subCodes = me.type.split(',').map(p => p.trim())
+            for (const sc of subCodes) {
+              allCodes.push(ENTRY_ALIASES[sc] || sc)
+            }
+          }
+
+          if (allCodes.length === 1) {
+            const code = allCodes[0]
             const halfColor = mapHalfDayCodeToColor(code)
             if (halfColor) {
               amColor = halfColor
             } else {
               fullColor = getStatusColor(code)
             }
-          } else if (parts.length >= 2) {
-            amColor = mapHalfDayCodeToColor(parts[0]) || getStatusColor(parts[0])
-            pmColor = mapHalfDayCodeToColor(parts[1]) || getStatusColor(parts[1])
+            labelText = getCodeLabel(code)
+          } else if (allCodes.length >= 2) {
+            amColor = mapHalfDayCodeToColor(allCodes[0]) || getStatusColor(allCodes[0])
+            pmColor = mapHalfDayCodeToColor(allCodes[1]) || getStatusColor(allCodes[1])
+            labelText = `${getCodeLabel(allCodes[0])} / ${getCodeLabel(allCodes[1])}`
           }
         }
       }
