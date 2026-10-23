@@ -1,4 +1,5 @@
-FROM node:22-alpine AS base
+# Pin the Node.js patch release: 22.23.4 fixes CVE-2026-111497 (Node2Shell).
+FROM node:22.23.4-alpine AS base
 RUN apk add --no-cache libc6-compat openssl
 ENV NPM_CONFIG_UPDATE_NOTIFIER=false
 
