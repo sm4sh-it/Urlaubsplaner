@@ -28,8 +28,13 @@ export async function proxy(request: NextRequest) {
 
   // Check for the auth cookie
   const authCookie = request.cookies.get('sm4sh_auth')
-  const correctPassword = process.env.APP_PASSWORD || ""
-  
+  const correctPassword = process.env.APP_PASSWORD
+
+  if (!correctPassword || !correctPassword.trim()) {
+    const loginUrl = new URL('/login', request.url)
+    return NextResponse.redirect(loginUrl)
+  }
+
   const expectedHash = await sha256(correctPassword + '_sm4sh_salt')
   
   if (authCookie?.value !== expectedHash) {

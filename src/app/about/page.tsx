@@ -93,12 +93,25 @@ export default function AboutPage() {
             </h2>
 
             <div className="space-y-8">
-              {/* V 1.9.3 */}
+              {/* V 1.9.4 */}
               <div className="relative pl-7 border-l-2 border-brand-500">
                 <div className="absolute -left-[9px] top-1.5 h-4 w-4 rounded-full bg-brand-500 ring-4 ring-white dark:ring-[#0d141d] shadow-sm shadow-brand-500/50" />
                 <div className="flex items-center gap-3 mb-3">
-                  <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100 m-0">Version 1.9.3</h3>
+                  <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100 m-0">Version 1.9.4</h3>
                   <span className="text-xs px-2.5 py-0.5 bg-brand-500/15 border border-brand-500/20 text-brand-600 dark:text-brand-400 rounded-full font-bold">Aktuell</span>
+                </div>
+                <ul className="list-disc list-outside ml-4 mt-2 space-y-1.5 text-sm text-slate-600 dark:text-slate-300">
+                  <li><strong>Next.js &amp; React Security-Update:</strong> <code>next</code> und <code>eslint-config-next</code> auf <code>16.4.6</code>, <code>react</code> und <code>react-dom</code> auf <code>19.3.1</code> sowie <code>sharp</code> auf <code>0.35.5</code> aktualisiert (inkl. RSC-Runtime gegen <code>CVE-2026-126187</code> und <code>GHSA-pc58-hwjq-p385</code>).</li>
+                  <li><strong>Container-Runtime gehärtet:</strong> Docker-Basisimage auf <code>node:22.23.5-alpine</code> aktualisiert (<code>CVE-2026-111497</code> / Node2Shell sowie Node.js-Sicherheitsupdates vom 11. November 2026).</li>
+                  <li><strong>Auth- &amp; Dependency-Härtung:</strong> <code>zod</code> auf <code>4.6.7</code> aktualisiert; Login-Action und Proxy weisen leere <code>APP_PASSWORD</code>-Werte bei aktivem Passwortschutz direkt ab.</li>
+                </ul>
+              </div>
+
+              {/* V 1.9.3 */}
+              <div className="relative pl-7 border-l-2 border-slate-200 dark:border-white/10">
+                <div className="absolute -left-[9px] top-1.5 h-4 w-4 rounded-full bg-slate-300 dark:bg-slate-700 ring-4 ring-white dark:ring-[#0d141d]" />
+                <div className="flex items-center gap-3 mb-3">
+                  <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100 m-0">Version 1.9.3</h3>
                 </div>
                 <ul className="list-disc list-outside ml-4 mt-2 space-y-1.5 text-sm text-slate-600 dark:text-slate-300">
                   <li><strong>Streifenfreies, ruhiges Farbsystem:</strong> Vollständiger Verzicht auf unruhige Schraffuren zugunsten beruhigter, flächiger Glass-Farben ohne Bildschirmflimmern.</li>

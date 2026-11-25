@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.9.4] - 2026-11-26
+### Security & Maintenance
+- **Next.js & React Security-Update:** `next` und `eslint-config-next` auf `16.4.6`, `react` und `react-dom` auf `19.3.1` sowie `sharp` auf `0.35.5` aktualisiert (inkl. der gebündelten RSC-Runtime gegen `CVE-2026-126187` und `GHSA-pc58-hwjq-p385`).
+- **Node.js Runtime im Container gehärtet:** `Dockerfile` auf `node:22.23.5-alpine` aktualisiert (`CVE-2026-111497` / Node2Shell sowie Node.js-Sicherheitsupdates vom 11. November 2026).
+- **Auth- & Dependency-Härtung:** `zod` auf `4.6.7` aktualisiert (`GHSA-mrhx-c7xc-m3w5`); Login-Action (`src/app/actions.ts`) und Proxy (`src/proxy.ts`) lehnen leere oder nur aus Leerzeichen bestehende `APP_PASSWORD`-Werte bei aktiviertem Passwortschutz direkt ab.
+
 ## [1.9.3] - 2026-10-08
 ### Added & Improved
 - **Streifenfreies, ruhiges Farbsystem:** Vollständiger Verzicht auf diagonale Schraffuren zugunsten ruhiger, homogener Glass-Flächen ohne Bildschirmflimmern.

@@ -70,7 +70,7 @@ export async function authenticate(password: string) {
   }
 
   // Ab hier ist Authentifizierung Pflicht!
-  if (!correctPassword) {
+  if (!correctPassword || !correctPassword.trim()) {
     return { success: false, error: "Server-Konfigurationsfehler: Kein Passwort in .env gesetzt." };
   }
   
